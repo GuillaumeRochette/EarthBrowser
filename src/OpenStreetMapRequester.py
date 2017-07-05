@@ -1,4 +1,5 @@
 from osgeo import gdal
+import os
 import overpass
 import json
 # import gzip
@@ -11,8 +12,6 @@ def get_corner_coordinates(ds):
     rows = ds.RasterYSize
 
     west, xres, xskew, north, yskew, yres = geoinformation
-    xres = 0.5
-    yres = -0.5
 
     east = west + cols * xres
     south = north + rows * yres
@@ -26,14 +25,17 @@ def get_geojson_map(img_path):
 
     api = overpass.API(timeout=600)
     map_query = overpass.MapQuery(south, west, north, east)
+    print map_query
     response = api.Get(map_query)
     return response
 
 
 if __name__ == '__main__':
-    root_dir = "../data/"
-    img_path = root_dir + "Tiles/Tile_10528_3584.tif"
+    root_dir = "/home/guillaume/Documents/SegNet/data"
+    img_path = os.path.join(root_dir, "Tiles_1024x1024/Tile_9216_15360.tif")
+    print img_path
     geojson_obj = get_geojson_map(img_path)
-
-    with open(root_dir + "Tile_10528_3584.geojson", "w") as output_file:
+    json_path = os.path.join(root_dir, "Tile_9216_15360.geojson")
+    print json_path
+    with open(json_path, "w") as output_file:
         json.dump(geojson_obj, output_file)

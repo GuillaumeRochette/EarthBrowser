@@ -1,6 +1,8 @@
 import os
 from osgeo import gdal
 
+gdal.UseExceptions()
+
 
 def split(img_path, tiles_dir, tile_shape, tile_prefix="Tile"):
     ds = gdal.Open(img_path)
@@ -16,12 +18,12 @@ def split(img_path, tiles_dir, tile_shape, tile_prefix="Tile"):
 
 
 if __name__ == '__main__':
-    root_dir = "../data/"
+    root_dir = "/home/guillaume/Documents/SegNet/data"
     img_name = "Oakland.tif"
 
     img_path = os.path.join(root_dir, img_name)
 
-    tiles_dir = os.path.join(root_dir, "Tiles/")
+    tiles_dir = os.path.join(root_dir, "Tiles_1024x1024")
     if not os.path.isdir(tiles_dir):
         os.mkdir(tiles_dir)
-    split(img_path, tiles_dir, (224, 224))
+    split(img_path, tiles_dir, (2**10, 2**10))
