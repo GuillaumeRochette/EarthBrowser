@@ -3,23 +3,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-source = gdal.Open("/home/guillaume/Documents/SegNet/data/Oakland_224x224/InputTiles/Tile_8512_8512.tif")
+# source = gdal.Open("/home/guillaume/Documents/SegNet/data/Oakland_224x224/OutlineTiles/Outline_16128_18144.tif")
+source = gdal.Open("/home/guillaume/Documents/SegNet/data/Oakland_224x224/MaskTiles/Mask_16128_18144.tif")
 print gdal.Info(source)
 
-img = source.ReadAsArray()
-img = np.array(img)
+mask = np.array(source.ReadAsArray())
 
-print img.shape
-print img.dtype
-
-img = img.transpose([2, 1, 0])
-
-print img.shape
-
-img_vis = img[..., :-1]
-
-print img_vis.shape
-
+print mask.shape
+print mask.dtype
+print mask.max()
+print mask.min()
 plt.figure()
-plt.imshow(img_vis)
+plt.imshow(mask)
 plt.show()
