@@ -1,11 +1,12 @@
 from osgeo import gdal
+import glob
 import os
 import overpass
 import json
 import numpy as np
 
 
-def get_corner_coordinates(ds):
+def get_coordinates(ds):
     geoinformation = ds.GetGeoTransform()
     cols = ds.RasterXSize
     rows = ds.RasterYSize
@@ -18,27 +19,36 @@ def get_corner_coordinates(ds):
     return north, east, south, west
 
 
-def get_geojson_obj(img_path):
+def get_geospatial_data(img_path):
     ds = gdal.Open(img_path)
-    north, east, south, west = get_corner_coordinates(ds)
-    print north, east, south, west
+    north, east, south, west = get_coordinates(ds)
+    # print north, east, south, west
 
     api = overpass.API(timeout=600)
     map_query = overpass.MapQuery(south, west, north, east)
-    response = api.Get(map_query)
-    return response
+    geospatial_data = api.Get(map_query)
+    return geospatial_data
 
 
 if __name__ == '__main__':
-    root_dir = "/home/guillaume/Documents/SegNet/data"
-    img_name = "Oakland_224x224/InputTiles/Tile_16128_18144.tif"
-    img_path = os.path.join(root_dir, img_name)
-    print img_path
+    root_dir = "/home/guillaume/Documents/SegNet/data/Oakland_3200x3200"
 
-    geojson_obj = get_geojson_obj(img_path)
-    json_name = "Oakland_224x224/GeoJSONVectors/Tile_16128_18144.geojson"
-    json_path = os.path.join(root_dir, json_name)
-    print json_path
+    tiles_dir = os.path.join(root_dir, "Tiles")
+    tile_names = os.listdir(tiles_dir)
 
-    with open(json_path, "w") as output_file:
-        json.dump(geojson_obj, output_file)
+    json_dir = os.path.join(root_dir, "GeoJSONs")
+    if not os.path.isdir(json_dir):
+        os.makedirs(json_dir)
+
+    for index, tile_name in enumerate(sorted(tile_names)[78:]):
+        print index
+        tile_path = os.path.join(tiles_dir, tile_name)
+        print tile_path
+        geojson_obj = get_geospatial_data(tile_path)
+
+        json_name = tile_name.replace(".tif", ".geojson")
+        json_path = os.path.join(json_dir, json_name)
+        print json_path
+
+        with open(json_path, "w") as output_file:
+            json.dump(geojson_obj, output_file)
