@@ -40,7 +40,7 @@ if __name__ == '__main__':
     if not os.path.isdir(json_dir):
         os.makedirs(json_dir)
 
-    for index, tile_name in enumerate(sorted(tile_names)[78:]):
+    for index, tile_name in enumerate(sorted(tile_names)):
         print index
         tile_path = os.path.join(tiles_dir, tile_name)
         print tile_path
