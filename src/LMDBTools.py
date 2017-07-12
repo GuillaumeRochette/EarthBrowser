@@ -2,7 +2,6 @@ import os
 import lmdb
 import numpy as np
 from osgeo import gdal
-from caffe.proto import caffe_pb2
 from caffe.io import datum_to_array, array_to_datum
 
 gdal.UseExceptions()
@@ -76,6 +75,10 @@ root_dir = "/home/guillaume/Documents/SegNet/data/Oakland_224x224"
 tile_dir = os.path.join(root_dir, "Tiles")
 heatmap_dir = os.path.join(root_dir, "Heatmaps")
 tile_db_dir = os.path.join(root_dir, "OaklandLMDB/Tiles")
+if not os.path.isdir(tile_db_dir):
+    os.makedirs(tile_db_dir)
 heatmap_db_dir = os.path.join(root_dir, "OaklandLMDB/Heatmaps")
+if not os.path.isdir(heatmap_db_dir):
+    os.makedirs(heatmap_db_dir)
 write_tile_lmdb(tile_dir, tile_db_dir)
 write_heatmap_lmdb(heatmap_dir, heatmap_db_dir)
