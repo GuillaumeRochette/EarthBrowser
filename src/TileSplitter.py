@@ -26,8 +26,8 @@ if __name__ == '__main__':
     img_names = ["Oakland.dec.tif"]
     # img_names = ["Oakland.dec.tif", "Fremont.dec.tif", "Concord.dec.tif"]
 
-    tile_shape = (3200, 3200)
-    # strides = (64, 64)
+    tile_shape = (224, 224)
+    strides = (112, 112)
 
     for img_name in img_names:
         img_path = os.path.join(root_dir, img_name)
@@ -37,5 +37,5 @@ if __name__ == '__main__':
         print dst_dir
         if not os.path.isdir(dst_dir):
             os.makedirs(dst_dir)
-        # split(img_path, dst_dir, tile_shape, strides)
-        split(img_path, dst_dir, tile_shape)
+        split(img_path, dst_dir, tile_shape, strides)
+        # split(img_path, dst_dir, tile_shape)

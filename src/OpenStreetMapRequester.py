@@ -31,7 +31,7 @@ def get_geospatial_data(img_path):
 
 
 if __name__ == '__main__':
-    root_dir = "/home/guillaume/Documents/SegNet/data/Oakland_3200x3200"
+    root_dir = "/home/guillaume/Documents/SegNet/data/Oakland_2240x2240"
 
     tiles_dir = os.path.join(root_dir, "Tiles")
     tile_names = os.listdir(tiles_dir)
@@ -40,7 +40,7 @@ if __name__ == '__main__':
     if not os.path.isdir(json_dir):
         os.makedirs(json_dir)
 
-    for index, tile_name in enumerate(sorted(tile_names)):
+    for index, tile_name in enumerate(sorted(tile_names)[:]):
         print index
         tile_path = os.path.join(tiles_dir, tile_name)
         print tile_path

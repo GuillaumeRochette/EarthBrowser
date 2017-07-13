@@ -33,7 +33,8 @@ if __name__ == '__main__':
     print xpix_translation, ypix_translation
 
     root_dir = "/home/guillaume/Documents/SegNet/data"
-    src_names = ["Oakland.tif", "Fremont.tif", "Concord.tif"]
+    # src_names = ["Oakland.tif", "Fremont.tif", "Concord.tif"]
+    src_names = ["Oakland.tif"]
     src_paths = [os.path.join(root_dir, src_name) for src_name in src_names]
     dst_paths = [src_path.replace(".tif", ".dec.tif") for src_path in src_paths]
     for src_path, dst_path in zip(src_paths, dst_paths):

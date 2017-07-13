@@ -80,15 +80,15 @@ if __name__ == '__main__':
     if not os.path.isdir(heatmap_dir):
         os.makedirs(heatmap_dir)
 
-    vectors_dir = "/home/guillaume/Documents/SegNet/data/Oakland_3200x3200/GeoJSONs"
+    vectors_dir = "/home/guillaume/Documents/SegNet/data/Oakland_2240x2240/GeoJSONs"
 
     raster_filenames = os.listdir(raster_dir)
     for raster_filename in sorted(raster_filenames):
         raster_fp = os.path.join(raster_dir, raster_filename)
         print raster_fp
         i, j = [int(e) for e in raster_filename.replace("Tile_", "").replace(".tif", "").split("_")]
-        i -= i % 3200
-        j -= j % 3200
+        i -= i % 2240
+        j -= j % 2240
         vector_filename = "Tile_{:05d}_{:05d}.geojson".format(i, j)
         vector_fp = os.path.join(vectors_dir, vector_filename)
         print vector_fp
