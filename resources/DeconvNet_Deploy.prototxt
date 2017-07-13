@@ -22,6 +22,20 @@ layer {
 		num_output: 64
 		pad: 1
 		kernel_size: 3
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -48,6 +62,20 @@ layer {
 		num_output: 64
 		pad: 1
 		kernel_size: 3
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -87,6 +115,20 @@ layer {
 		num_output: 128
 		pad: 1
 		kernel_size: 3
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -113,6 +155,20 @@ layer {
 		num_output: 128
 		pad: 1
 		kernel_size: 3
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -152,6 +208,20 @@ layer {
 		num_output: 256
 		pad: 1
 		kernel_size: 3
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -178,6 +248,20 @@ layer {
 		num_output: 256
 		pad: 1
 		kernel_size: 3
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -204,6 +288,20 @@ layer {
 		num_output: 256
 		pad: 1
 		kernel_size: 3
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -243,6 +341,20 @@ layer {
 		num_output: 512
 		pad: 1
 		kernel_size: 3
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -269,6 +381,20 @@ layer {
 		num_output: 512
 		pad: 1
 		kernel_size: 3
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -295,6 +421,20 @@ layer {
 		num_output: 512
 		pad: 1
 		kernel_size: 3
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -334,6 +474,20 @@ layer {
 		num_output: 512
 		pad: 1
 		kernel_size: 3
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -360,6 +514,20 @@ layer {
 		num_output: 512
 		pad: 1
 		kernel_size: 3
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -386,6 +554,20 @@ layer {
 		num_output: 512
 		pad: 1
 		kernel_size: 3
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -425,6 +607,20 @@ layer {
 		num_output: 4096
 		kernel_size: 7
 		pad: 0
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -448,9 +644,23 @@ layer {
 	bottom: "conv6"
 	top: "conv7"
 	convolution_param {
-		kernel_size: 1
 		num_output: 4096
+		kernel_size: 1
 		pad: 0
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -477,6 +687,20 @@ layer {
 		num_output: 512
 		kernel_size: 7
 		pad: 0
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -515,7 +739,21 @@ layer {
 	convolution_param {
 		num_output: 512
 		pad: 1
-		kernel_size: 3			
+		kernel_size: 3	
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}		
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -541,7 +779,21 @@ layer {
 	convolution_param {
 		num_output: 512
 		pad: 1
-		kernel_size: 3			
+		kernel_size: 3	
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}		
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -567,7 +819,21 @@ layer {
 	convolution_param {
 		num_output: 512
 		pad: 1
-		kernel_size: 3			
+		kernel_size: 3	
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}		
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -607,6 +873,20 @@ layer {
 		num_output: 512
 		pad: 1
 		kernel_size: 3
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -633,6 +913,20 @@ layer {
 		num_output: 512
 		pad: 1
 		kernel_size: 3
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -659,6 +953,20 @@ layer {
 		num_output: 512
 		pad: 1
 		kernel_size: 3
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -698,6 +1006,20 @@ layer {
 		num_output: 256
 		pad: 1
 		kernel_size: 3
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -724,6 +1046,20 @@ layer {
 		num_output: 256
 		pad: 1
 		kernel_size: 3
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -750,6 +1086,20 @@ layer {
 		num_output: 256
 		pad: 1
 		kernel_size: 3
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -789,6 +1139,20 @@ layer {
 		num_output: 128
 		pad: 1
 		kernel_size: 3
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -815,6 +1179,20 @@ layer {
 		num_output: 128
 		pad: 1
 		kernel_size: 3
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -854,6 +1232,20 @@ layer {
 		num_output: 64
 		pad: 1
 		kernel_size: 3
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -880,6 +1272,20 @@ layer {
 		num_output: 64
 		pad: 1
 		kernel_size: 3
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
@@ -906,6 +1312,20 @@ layer {
 		num_output: 1
 		pad: 0
 		kernel_size: 1
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
 	}
 }
 
