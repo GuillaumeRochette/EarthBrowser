@@ -1,16 +1,38 @@
 name: "DeconvNet"
 layer {
-	name: "input"
-	type: "Input"
+	name: "data"
+	type: "Data"
 	top: "data"
-	input_param {
-		shape {
-			dim: 1
-			dim: 3
-			dim: 224
-			dim: 224
-		}
+	include {
+	    phase: TRAIN
 	}
+	data_param {
+	    batch_size: 1
+	    backend: LMDB
+	}
+}
+
+layer {
+	name: "label"
+	type: "Data"
+	top: "label"
+	include {
+	    phase: TRAIN
+	}
+	data_param {
+	    batch_size: 1
+	    backend: LMDB
+	}
+}
+
+layer {
+    name: "mean_shift"
+    type: "Power"
+    bottom: "data"
+    top: "data"
+    power_param {
+        shift: -116.0
+    }
 }
 
 layer {
