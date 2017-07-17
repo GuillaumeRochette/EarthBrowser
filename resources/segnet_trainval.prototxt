@@ -1,92 +1,36 @@
-name: "DeconvNet"
-#layer {
-#	name: "data"
-#	type: "Data"
-#	top: "data"
-#	include {
-#	    phase: TRAIN
-#	}
-#	data_param {
-#	    batch_size: 8
-#	    backend: LMDB
-#	}
-#}
-
-#layer {
-#	name: "labels"
-#	type: "Data"
-#	top: "labels"
-#	include {
-#	    phase: TRAIN
-#	}
-#	data_param {
-#	    batch_size: 8
-#	    backend: LMDB
-#	}
-#}
-
-#layer {
-#	name: "data"
-#	type: "Data"
-#	top: "data"
-#	include {
-#	    phase: TEST
-#	}
-#	data_param {
-#	    batch_size: 1
-#	    backend: LMDB
-#	}
-#}
-
-#layer {
-#	name: "labels"
-#	type: "Data"
-#	top: "labels"
-#	include {
-#	    phase: TEST
-#	}
-#	data_param {
-#	    batch_size: 1
-#	    backend: LMDB
-#	}
-#}
-
+name: "SegNet"
 layer {
-    name: "data"
-    type: "Input"
-    top: "data"
-    input_param {
-        shape {
-            dim: 1
-            dim: 3
-            dim: 224
-            dim: 224
-        }
-    }
-}
-
-layer {
-	name: "labels"
-	type: "Input"
-	top: "labels"
-	input_param {
-		shape {
-			dim: 1
-			dim: 1
-			dim: 224
-			dim: 224
-		}
+	name: "data"
+	type: "Data"
+	top: "data"
+	include {
+	    phase: TRAIN
+	}
+	data_param {
+		source: "/home/guillaume/Documents/SegNet/data/Oakland_224x224/OaklandLMDB/Tiles"
+	    batch_size: 4
+	    backend: LMDB
+	}
+	transform_param {
+		scale : 0.0625
+		mean_value: 103.939
+		mean_value: 116.779
+		mean_value: 123.68
 	}
 }
 
 layer {
-    name: "mean_shift"
-    type: "Power"
-    bottom: "data"
-    top: "data"
-    power_param {
-        shift: -116.0
-    }
+	name: "labels"
+	type: "Data"
+	top: "labels"
+	include {
+	    phase: TRAIN
+	}
+	data_param {
+		source: "/home/guillaume/Documents/SegNet/data/Oakland_224x224/OaklandLMDB/Heatmaps"	
+	    batch_size: 4
+	    backend: LMDB
+	}
 }
 
 layer {
@@ -1566,10 +1510,10 @@ layer {
 }
 
 layer {
-	name: "heatmap"
+	name: "seg_maps"
 	type: "Convolution"
 	bottom: "deconv1_3"
-	top: "heatmap"
+	top: "seg_maps"
 	convolution_param {
 		num_output: 1
 		pad: 0
@@ -1592,23 +1536,23 @@ layer {
 }
 
 layer {
-	name: "softmax_data"
-	type: "Softmax"
-	bottom: "heatmap"
-	top: "softmax_data"
+	name: "flat_maps"
+	type: "Flatten"
+	bottom: "seg_maps"
+	top: "flat_maps"
 }
 
 layer {
-	name: "softmax_labels"
-	type: "Softmax"
+	name: "flat_labels"
+	type: "Flatten"
 	bottom: "labels"
-	top: "softmax_labels"
+	top: "flat_labels"
 }
 
 layer {
 	name: "loss"
-	type: "InfogainLoss"
-	bottom: "softmax_data"
-	bottom: "softmax_labels"
+	type: "EuclideanLoss"
+	bottom: "flat_maps"
+	bottom: "flat_labels"
 	top: "loss"
 }
