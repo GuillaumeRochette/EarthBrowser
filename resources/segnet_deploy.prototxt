@@ -88,8 +88,8 @@ layer {
 	top: "conv1_3"
 	convolution_param {
 		num_output: 64
-		pad: 1
-		kernel_size: 4
+		pad: 0
+		kernel_size: 2
 		stride: 2
 	}
 }
@@ -169,8 +169,8 @@ layer {
 	top: "conv2_3"
 	convolution_param {
 		num_output: 128
-		pad: 1
-		kernel_size: 4
+		pad: 0
+		kernel_size: 2
 		stride: 2
 	}
 }
@@ -277,8 +277,8 @@ layer {
 	top: "conv3_4"
 	convolution_param {
 		num_output: 256
-		pad: 1
-		kernel_size: 4
+		pad: 0
+		kernel_size: 2
 		stride: 2
 	}
 }
@@ -385,8 +385,8 @@ layer {
 	top: "conv4_4"
 	convolution_param {
 		num_output: 512
-		pad: 1
-		kernel_size: 4
+		pad: 0
+		kernel_size: 2
 		stride: 2
 	}
 }
@@ -493,8 +493,8 @@ layer {
 	top: "conv5_4"
 	convolution_param {
 		num_output: 512
-		pad: 1
-		kernel_size: 4
+		pad: 0
+		kernel_size: 2
 		stride: 2
 	}
 }
@@ -520,8 +520,8 @@ layer {
 	top: "deconv5_1"
 	convolution_param {
 		num_output: 512
-		pad: 1
-		kernel_size: 4
+		pad: 0
+		kernel_size: 2
 		stride: 2
 	}
 }
@@ -628,8 +628,8 @@ layer {
 	top: "deconv4_1"
 	convolution_param {
 		num_output: 512
-		pad: 1
-		kernel_size: 4
+		pad: 0
+		kernel_size: 2
 		stride: 2
 	}
 }
@@ -736,8 +736,8 @@ layer {
 	top: "deconv3_1"
 	convolution_param {
 		num_output: 256
-		pad: 1
-		kernel_size: 4
+		pad: 0
+		kernel_size: 2
 		stride: 2
 	}
 }
@@ -844,8 +844,8 @@ layer {
 	top: "deconv2_1"
 	convolution_param {
 		num_output: 128
-		pad: 1
-		kernel_size: 4
+		pad: 0
+		kernel_size: 2
 		stride: 2
 	}
 }
@@ -925,8 +925,8 @@ layer {
 	top: "deconv1_1"
 	convolution_param {
 		num_output: 64
-		pad: 1
-		kernel_size: 4
+		pad: 0
+		kernel_size: 2
 		stride: 2
 	}
 }
@@ -1000,10 +1000,10 @@ layer {
 }
 
 layer {
-	name: "heatmap"
+	name: "heatmaps"
 	type: "Convolution"
 	bottom: "deconv1_3"
-	top: "heatmap"
+	top: "heatmaps"
 	convolution_param {
 		num_output: 1
 		pad: 0
@@ -1011,24 +1011,3 @@ layer {
 	}
 }
 
-layer {
-	name: "softmax_data"
-	type: "Softmax"
-	bottom: "heatmap"
-	top: "softmax_data"
-}
-
-layer {
-	name: "softmax_labels"
-	type: "Softmax"
-	bottom: "labels"
-	top: "softmax_labels"
-}
-
-layer {
-	name: "loss"
-	type: "InfogainLoss"
-	bottom: "softmax_data"
-	bottom: "softmax_labels"
-	top: "loss"
-}

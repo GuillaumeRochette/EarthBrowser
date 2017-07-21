@@ -63,8 +63,8 @@ layer {
 }
 
 layer {
-	name: "relu1_1"
-	type: "ReLU"
+	name: "elu1_1"
+	type: "ELU"
 	bottom: "conv1_1"
 	top: "conv1_1"
 }
@@ -104,8 +104,8 @@ layer {
 }
 
 layer {
-	name: "relu1_2"
-	type: "ReLU"
+	name: "elu1_2"
+	type: "ELU"
 	bottom: "conv1_2"
 	top: "conv1_2"
 }
@@ -145,8 +145,8 @@ layer {
 }
 
 layer {
-	name: "relu1_3"
-	type: "ReLU"
+	name: "elu1_3"
+	type: "ELU"
 	bottom: "conv1_3"
 	top: "conv1_3"
 }
@@ -186,8 +186,8 @@ layer {
 }
 
 layer {
-	name: "relu2_1"
-	type: "ReLU"
+	name: "elu2_1"
+	type: "ELU"
 	bottom: "conv2_1"
 	top: "conv2_1"
 }
@@ -227,8 +227,8 @@ layer {
 }
 
 layer {
-	name: "relu2_2"
-	type: "ReLU"
+	name: "elu2_2"
+	type: "ELU"
 	bottom: "conv2_2"
 	top: "conv2_2"
 }
@@ -268,8 +268,8 @@ layer {
 }
 
 layer {
-	name: "relu2_3"
-	type: "ReLU"
+	name: "elu2_3"
+	type: "ELU"
 	bottom: "conv2_3"
 	top: "conv2_3"
 }
@@ -309,8 +309,8 @@ layer {
 }
 
 layer {
-	name: "relu3_1"
-	type: "ReLU"
+	name: "elu3_1"
+	type: "ELU"
 	bottom: "conv3_1"
 	top: "conv3_1"
 }
@@ -350,8 +350,8 @@ layer {
 }
 
 layer {
-	name: "relu3_2"
-	type: "ReLU"
+	name: "elu3_2"
+	type: "ELU"
 	bottom: "conv3_2"
 	top: "conv3_2"
 }
@@ -391,8 +391,8 @@ layer {
 }
 
 layer {
-	name: "relu3_3"
-	type: "ReLU"
+	name: "elu3_3"
+	type: "ELU"
 	bottom: "conv3_3"
 	top: "conv3_3"
 }
@@ -432,8 +432,8 @@ layer {
 }
 
 layer {
-	name: "relu3_4"
-	type: "ReLU"
+	name: "elu3_4"
+	type: "ELU"
 	bottom: "conv3_4"
 	top: "conv3_4"
 }
@@ -473,8 +473,8 @@ layer {
 }
 
 layer {
-	name: "relu4_1"
-	type: "ReLU"
+	name: "elu4_1"
+	type: "ELU"
 	bottom: "conv4_1"
 	top: "conv4_1"
 }
@@ -514,8 +514,8 @@ layer {
 }
 
 layer {
-	name: "relu4_2"
-	type: "ReLU"
+	name: "elu4_2"
+	type: "ELU"
 	bottom: "conv4_2"
 	top: "conv4_2"
 }
@@ -555,8 +555,8 @@ layer {
 }
 
 layer {
-	name: "relu4_3"
-	type: "ReLU"
+	name: "elu4_3"
+	type: "ELU"
 	bottom: "conv4_3"
 	top: "conv4_3"
 }
@@ -596,8 +596,8 @@ layer {
 }
 
 layer {
-	name: "relu4_4"
-	type: "ReLU"
+	name: "elu4_4"
+	type: "ELU"
 	bottom: "conv4_4"
 	top: "conv4_4"
 }
@@ -637,8 +637,8 @@ layer {
 }
 
 layer {
-	name: "relu5_1"
-	type: "ReLU"
+	name: "elu5_1"
+	type: "ELU"
 	bottom: "conv5_1"
 	top: "conv5_1"
 }
@@ -678,8 +678,8 @@ layer {
 }
 
 layer {
-	name: "relu5_2"
-	type: "ReLU"
+	name: "elu5_2"
+	type: "ELU"
 	bottom: "conv5_2"
 	top: "conv5_2"
 }
@@ -719,8 +719,8 @@ layer {
 }
 
 layer {
-	name: "relu5_3"
-	type: "ReLU"
+	name: "elu5_3"
+	type: "ELU"
 	bottom: "conv5_3"
 	top: "conv5_3"
 }
@@ -760,8 +760,8 @@ layer {
 }
 
 layer {
-	name: "relu5_4"
-	type: "ReLU"
+	name: "elu5_4"
+	type: "ELU"
 	bottom: "conv5_4"
 	top: "conv5_4"
 }
@@ -801,8 +801,8 @@ layer {
 }
 
 layer {
-	name: "derelu5_1"
-	type: "ReLU"
+	name: "deelu5_1"
+	type: "ELU"
 	bottom: "deconv5_1"
 	top: "deconv5_1"
 }
@@ -842,8 +842,8 @@ layer {
 }
 
 layer {
-	name: "derelu5_2"
-	type: "ReLU"
+	name: "deelu5_2"
+	type: "ELU"
 	bottom: "deconv5_2"
 	top: "deconv5_2"
 }
@@ -883,8 +883,8 @@ layer {
 }
 
 layer {
-	name: "derelu5_3"
-	type: "ReLU"
+	name: "deelu5_3"
+	type: "ELU"
 	bottom: "deconv5_3"
 	top: "deconv5_3"
 }
@@ -924,8 +924,8 @@ layer {
 }
 
 layer {
-	name: "derelu5_4"
-	type: "ReLU"
+	name: "deelu5_4"
+	type: "ELU"
 	bottom: "deconv5_4"
 	top: "deconv5_4"
 }
@@ -965,8 +965,8 @@ layer {
 }
 
 layer {
-	name: "derelu4_1"
-	type: "ReLU"
+	name: "deelu4_1"
+	type: "ELU"
 	bottom: "deconv4_1"
 	top: "deconv4_1"
 }
@@ -1006,8 +1006,8 @@ layer {
 }
 
 layer {
-	name: "derelu4_2"
-	type: "ReLU"
+	name: "deelu4_2"
+	type: "ELU"
 	bottom: "deconv4_2"
 	top: "deconv4_2"
 }
@@ -1047,8 +1047,8 @@ layer {
 }
 
 layer {
-	name: "derelu4_3"
-	type: "ReLU"
+	name: "deelu4_3"
+	type: "ELU"
 	bottom: "deconv4_3"
 	top: "deconv4_3"
 }
@@ -1088,8 +1088,8 @@ layer {
 }
 
 layer {
-	name: "derelu4_4"
-	type: "ReLU"
+	name: "deelu4_4"
+	type: "ELU"
 	bottom: "deconv4_4"
 	top: "deconv4_4"
 }
@@ -1129,8 +1129,8 @@ layer {
 }
 
 layer {
-	name: "derelu3_1"
-	type: "ReLU"
+	name: "deelu3_1"
+	type: "ELU"
 	bottom: "deconv3_1"
 	top: "deconv3_1"
 }
@@ -1170,8 +1170,8 @@ layer {
 }
 
 layer {
-	name: "derelu3_2"
-	type: "ReLU"
+	name: "deelu3_2"
+	type: "ELU"
 	bottom: "deconv3_2"
 	top: "deconv3_2"
 }
@@ -1211,8 +1211,8 @@ layer {
 }
 
 layer {
-	name: "derelu3_3"
-	type: "ReLU"
+	name: "deelu3_3"
+	type: "ELU"
 	bottom: "deconv3_3"
 	top: "deconv3_3"
 }
@@ -1252,8 +1252,8 @@ layer {
 }
 
 layer {
-	name: "derelu3_4"
-	type: "ReLU"
+	name: "deelu3_4"
+	type: "ELU"
 	bottom: "deconv3_4"
 	top: "deconv3_4"
 }
@@ -1293,8 +1293,8 @@ layer {
 }
 
 layer {
-	name: "derelu2_1"
-	type: "ReLU"
+	name: "deelu2_1"
+	type: "ELU"
 	bottom: "deconv2_1"
 	top: "deconv2_1"
 }
@@ -1334,8 +1334,8 @@ layer {
 }
 
 layer {
-	name: "derelu2_2"
-	type: "ReLU"
+	name: "deelu2_2"
+	type: "ELU"
 	bottom: "deconv2_2"
 	top: "deconv2_2"
 }
@@ -1375,8 +1375,8 @@ layer {
 }
 
 layer {
-	name: "derelu2_3"
-	type: "ReLU"
+	name: "deelu2_3"
+	type: "ELU"
 	bottom: "deconv2_3"
 	top: "deconv2_3"
 }
@@ -1416,8 +1416,8 @@ layer {
 }
 
 layer {
-	name: "derelu1_1"
-	type: "ReLU"
+	name: "deelu1_1"
+	type: "ELU"
 	bottom: "deconv1_1"
 	top: "deconv1_1"
 }
@@ -1457,8 +1457,8 @@ layer {
 }
 
 layer {
-	name: "derelu1_2"
-	type: "ReLU"
+	name: "deelu1_2"
+	type: "ELU"
 	bottom: "deconv1_2"
 	top: "deconv1_2"
 }
@@ -1498,8 +1498,8 @@ layer {
 }
 
 layer {
-	name: "derelu1_3"
-	type: "ReLU"
+	name: "deelu1_3"
+	type: "ELU"
 	bottom: "deconv1_3"
 	top: "deconv1_3"
 }
