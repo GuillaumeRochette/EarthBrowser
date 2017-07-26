@@ -1,6 +1,7 @@
 import os
 from osgeo import gdal, ogr, gdalnumeric
 import numpy as np
+import spaceNetUtilities.labelTools
 
 gdal.UseExceptions()
 
@@ -22,6 +23,69 @@ def outline_rasterization(vector_fp, raster_fp, output_fp):
     band = output_ds.GetRasterBand(1)
     band.SetNoDataValue(no_data_value)
     gdal.RasterizeLayer(output_ds, [1], vector_layer, options=["ALL_TOUCHED=TRUE"])
+
+
+# def PASCALVOC2012_rasterization():
+#     srcRaster = gdal.Open(rasterImageName)
+#     outputRaster = rasterImageName
+#     if segment:
+#         NoData_value = -9999
+#
+#         source_ds = ogr.Open(geoJson)
+#         source_layer = source_ds.GetLayer()
+#         srs = source_layer.GetSpatialRef()
+#         memDriver = ogr.GetDriverByName('MEMORY')
+#         outerBuffer=memDriver.CreateDataSource('outer')
+#         outerBufferLayer = outerBuffer.CreateLayer("test", srs, geom_type=ogr.wkbPolygon)
+#         innerBuffer = memDriver.CreateDataSource('inner')
+#         innerBufferLayer = innerBuffer.CreateLayer("test2", srs, geom_type=ogr.wkbPolygon)
+#
+#         idField = ogr.FieldDefn("objid", ogr.OFTInteger)
+#         innerBufferLayer.CreateField(idField)
+#
+#         featureDefn = innerBufferLayer.GetLayerDefn()
+#         bufferDist = srcRaster.GetGeoTransform()[1]*bufferSizePix
+#         for idx, feature in enumerate(source_layer):
+#             ingeom = feature.GetGeometryRef()
+#             geomBufferOut = ingeom.Buffer(bufferDist)
+#             geomBufferIn  = ingeom.Buffer(-bufferDist)
+#             print(geomBufferIn.ExportToWkt())
+#             print(geomBufferIn.IsEmpty())
+#             print(geomBufferIn.IsSimple())
+#
+#             if geomBufferIn.GetArea()>0.0:
+#                 outBufFeature = ogr.Feature(featureDefn)
+#                 outBufFeature.SetGeometry(geomBufferOut)
+#
+#                 outerBufferLayer.CreateFeature(outBufFeature)
+#
+#                 inBufFeature = ogr.Feature(featureDefn)
+#                 inBufFeature.SetGeometry(geomBufferIn)
+#                 inBufFeature.SetField('objid', idx)
+#                 innerBufferLayer.CreateFeature(inBufFeature)
+#
+#                 outBufFeature = None
+#                 inBufFeature = None
+#
+#
+#
+#         print('writing GTIFF sgcls')
+#         print('rasterToWrite = {}'.format(xmlFileName.replace('.xml', 'segcls.tif')))
+#         target_ds = gdal.GetDriverByName('GTiff').Create(xmlFileName.replace('.xml', 'segcls.tif'), srcRaster.RasterXSize, srcRaster.RasterYSize, 1, gdal.GDT_Byte)
+#         print('setTransform')
+#         target_ds.SetGeoTransform(srcRaster.GetGeoTransform())
+#         print('setProjection')
+#         target_ds.SetProjection(srcRaster.GetProjection())
+#         print('getBand')
+#         band = target_ds.GetRasterBand(1)
+#         print('setnodata')
+#         band.SetNoDataValue(NoData_value)
+#
+#         # Rasterize
+#         print('rasterize outer buffer')
+#         gdal.RasterizeLayer(target_ds, [1], outerBufferLayer, burn_values=[255])
+#         print('rasterize inner buffer')
+#         gdal.RasterizeLayer(target_ds, [1], innerBufferLayer, burn_values=[1])
 
 
 def heatmap_rasterization(vector_fp, raster_fp, output_fp):
