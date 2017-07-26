@@ -24,7 +24,6 @@ def split(src_path, dst_dir, patch_shape, strides=None, tile_prefix="Tile"):
 
 def split_SpaceNet(src_dir, dst_dir, patch_shape, strides=None, tile_prefix="Tile"):
     src_names = sorted(os.listdir(src_dir))
-
     for i, src_name in enumerate(src_names):
         src_path = os.path.join(src_dir, src_name)
         current_tile_prefix = tile_prefix + "_{:05d}".format(i)
@@ -33,16 +32,22 @@ def split_SpaceNet(src_dir, dst_dir, patch_shape, strides=None, tile_prefix="Til
 
 if __name__ == '__main__':
     root_dir = "/home/guillaume/Documents/SegNet/data"
-    data_dir = os.path.join(root_dir, "RawData/Data")
-    label_dir = os.path.join(root_dir, "RawData/Labels")
+    city = "Rio"
+    # city = "Paris"
+    data_dir = os.path.join(root_dir, "RawData/{}/Data".format(city))
+    label_dir = os.path.join(root_dir, "RawData/{}/Labels".format(city))
+    print data_dir
+    print label_dir
 
     tile_shape = (224, 224)
     strides = (224, 224)
 
     output_dir = os.path.join(root_dir, "Data_{:d}x{:d}").format(tile_shape[0], tile_shape[1])
     out_data_dir = os.path.join(output_dir, "Data")
-    os.makedirs(out_data_dir)
+    if not os.path.isdir(out_data_dir):
+        os.makedirs(out_data_dir)
     out_label_dir = os.path.join(output_dir, "Labels")
-    os.makedirs(out_label_dir)
-    split_SpaceNet(data_dir, out_data_dir, tile_shape, strides, "RGB_PAN_Paris")
-    split_SpaceNet(label_dir, out_label_dir, tile_shape, strides, "CLASS_SEG_Paris")
+    if not os.path.isdir(out_label_dir):
+        os.makedirs(out_label_dir)
+    split_SpaceNet(data_dir, out_data_dir, tile_shape, strides, "RGB_PAN_{}".format(city))
+    split_SpaceNet(label_dir, out_label_dir, tile_shape, strides, "CLASS_SEG_{}".format(city))

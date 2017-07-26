@@ -89,6 +89,6 @@ if __name__ == '__main__':
     data_paths = list_filepaths(data_dir)
     labels_paths = list_filepaths(labels_dir)
 
-    train_set, val_set = split_train_val_sets(data_paths, labels_paths, 0.85)
+    train_set, val_set = split_train_val_sets(data_paths, labels_paths, 0.80)
     create_HDF5(train_set, train_dir, max_data_per_file=500, symmetry=True)
     create_HDF5(val_set, val_dir, max_data_per_file=2000, symmetry=False)
