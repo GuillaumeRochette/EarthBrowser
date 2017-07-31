@@ -586,14 +586,14 @@ layer {
 	}
 }
 layer {
-	name: "conv6"
+	name: "fc6"
 	type: "Convolution"
 	bottom: "pool5"
-	top: "conv6"
+	top: "fc6"
 	convolution_param {
-		num_output: 512
+		num_output: 4096
 		pad: 0
-		kernel_size: 1
+		kernel_size: 7
 		stride: 1
 		weight_filler {
 			type: "xavier"
@@ -614,19 +614,95 @@ layer {
 layer {
 	name: "batchnorm6"
 	type: "BatchNorm"
-	bottom: "conv6"
-	top: "conv6"
+	bottom: "fc6"
+	top: "fc6"
 }
 layer {
 	name: "relu6"
 	type: "ReLU"
-	bottom: "conv6"
-	top: "conv6"
+	bottom: "fc6"
+	top: "fc6"
+}
+layer {
+	name: "fc7"
+	type: "Convolution"
+	bottom: "fc6"
+	top: "fc7"
+	convolution_param {
+		num_output: 4096
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
+	}
+}
+layer {
+	name: "batchnorm7"
+	type: "BatchNorm"
+	bottom: "fc7"
+	top: "fc7"
+}
+layer {
+	name: "relu7"
+	type: "ReLU"
+	bottom: "fc7"
+	top: "fc7"
+}
+layer {
+	name: "fc6-deconv"
+	type: "Deconvolution"
+	bottom: "fc7"
+	top: "fc6-deconv"
+	convolution_param {
+		num_output: 512
+		pad: 0
+		kernel_size: 7
+		stride: 1
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "constant"
+		}
+	}
+	param {
+		lr_mult: 1
+		decay_mult: 1
+	}
+	param {
+		lr_mult: 2
+		decay_mult: 0
+	}
+}
+layer {
+	name: "fc6-deconv-bn"
+	type: "BatchNorm"
+	bottom: "fc6-deconv"
+	top: "fc6-deconv"
+}
+layer {
+	name: "fc6-deconv-relu"
+	type: "ReLU"
+	bottom: "fc6-deconv"
+	top: "fc6-deconv"
 }
 layer {
 	name: "unpool5"
 	type: "Unpooling"
-	bottom: "conv6"
+	bottom: "fc6-deconv"
 	bottom: "pool5_mask"
 	bottom: "pool5_argmax_count"
 	top: "unpool5"
