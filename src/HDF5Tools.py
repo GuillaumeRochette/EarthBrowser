@@ -47,7 +47,7 @@ def create_HDF5(data_set, hdf5_dir, max_data_per_file=2500, symmetry=False):
             label = np.array(gdal.Open(label_path).ReadAsArray(), dtype=np.uint8)
 
             datum = datum[::-1, ...]  # switch from RGB to BGR
-            datum = mean_centered_datum(datum)
+            # datum = mean_centered_datum(datum)
 
             label = np.expand_dims(label, axis=0)
 

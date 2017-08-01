@@ -14,12 +14,18 @@ def split(src_path, dst_dir, patch_shape, strides=None, tile_prefix="Tile"):
     else:
         x_stride, y_stride = strides
     for j in range(0, y_size, y_stride):
+        if j + y_patch > y_size:
+            j = y_size - y_patch
+
         for i in range(0, x_size, x_stride):
+            if i + x_patch > x_size:
+                i = x_size - x_patch
+
             tile_name = tile_prefix + "_{:03d}_{:03d}.tif".format(i, j)
             tile_path = os.path.join(dst_dir, tile_name)
             print tile_path
             gdal.Translate(tile_path, ds, format='GTiff', srcWin=[i, j, x_patch, y_patch], noData=0,
-                           options=['COMPRESS=LZW'])
+                           options=['COMPRESS=DEFLATE'])
 
 
 def split_SpaceNet(src_dir, dst_dir, patch_shape, strides=None, tile_prefix="Tile"):

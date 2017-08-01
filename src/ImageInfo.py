@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 
 data_dir = "/home/guillaume/Documents/SegNet/data/Data_224x224/Data"
 i = 555
-s1 = gdal.Open("/home/guillaume/Documents/SegNet/data/RawData/Rio/Data/3band_AOI_1_RIO_img8.tif")
-s2 = gdal.Open("/home/guillaume/Documents/SegNet/data/RawData/Rio/Labels/3band_AOI_1_RIO_img8segcls.tif")
+s1 = gdal.Open("/home/guillaume/Documents/SegNet/data/RawData/Rio/Data/3band_AOI_1_RIO_img1669.tif")
+s2 = gdal.Open("/home/guillaume/Documents/SegNet/data/RawData/Rio/Labels/3band_AOI_1_RIO_img1669segcls.tif")
 print gdal.Info(s1)
 
 img_1 = np.array(s1.ReadAsArray())
