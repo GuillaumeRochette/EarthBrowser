@@ -13,6 +13,12 @@ layer {
   }
 }
 layer {
+    name: "batchnorm0"
+    type: "BatchNorm"
+    bottom: "data"
+    top: "data"
+}
+layer {
 	name: "conv1_1"
 	type: "Convolution"
 	bottom: "data"
@@ -22,20 +28,6 @@ layer {
 		pad: 1
 		kernel_size: 3
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
 	}
 }
 layer {
@@ -60,20 +52,6 @@ layer {
 		pad: 1
 		kernel_size: 3
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
 	}
 }
 layer {
@@ -111,20 +89,6 @@ layer {
 		pad: 1
 		kernel_size: 3
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
 	}
 }
 layer {
@@ -149,20 +113,6 @@ layer {
 		pad: 1
 		kernel_size: 3
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
 	}
 }
 layer {
@@ -200,20 +150,6 @@ layer {
 		pad: 1
 		kernel_size: 3
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
 	}
 }
 layer {
@@ -238,20 +174,6 @@ layer {
 		pad: 1
 		kernel_size: 3
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
 	}
 }
 layer {
@@ -276,20 +198,6 @@ layer {
 		pad: 1
 		kernel_size: 3
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-	lr_mult: 0
-	decay_mult: 0
-	}
-	param {
-	lr_mult: 0
-	decay_mult: 0
 	}
 }
 layer {
@@ -327,20 +235,6 @@ layer {
 		pad: 1
 		kernel_size: 3
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
 	}
 }
 layer {
@@ -365,20 +259,6 @@ layer {
 		pad: 1
 		kernel_size: 3
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
 	}
 }
 layer {
@@ -403,20 +283,6 @@ layer {
 		pad: 1
 		kernel_size: 3
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
 	}
 }
 layer {
@@ -454,20 +320,6 @@ layer {
 		pad: 1
 		kernel_size: 3
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
 	}
 }
 layer {
@@ -492,20 +344,6 @@ layer {
 		pad: 1
 		kernel_size: 3
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
 	}
 }
 layer {
@@ -530,20 +368,6 @@ layer {
 		pad: 1
 		kernel_size: 3
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
 	}
 }
 layer {
@@ -581,20 +405,6 @@ layer {
 		pad: 0
 		kernel_size: 7
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
 	}
 }
 layer {
@@ -619,20 +429,6 @@ layer {
 		pad: 0
 		kernel_size: 1
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
 	}
 }
 layer {
@@ -657,20 +453,6 @@ layer {
 		pad: 0
 		kernel_size: 7
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
 	}
 }
 layer {
@@ -708,20 +490,6 @@ layer {
 		pad: 1
 		kernel_size: 3
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
 	}
 }
 layer {
@@ -746,20 +514,6 @@ layer {
 		pad: 1
 		kernel_size: 3
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
 	}
 }
 layer {
@@ -784,20 +538,6 @@ layer {
 		pad: 1
 		kernel_size: 3
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
 	}
 }
 layer {
@@ -835,20 +575,6 @@ layer {
 		pad: 1
 		kernel_size: 3
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
 	}
 }
 layer {
@@ -873,20 +599,6 @@ layer {
 		pad: 1
 		kernel_size: 3
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
 	}
 }
 layer {
@@ -911,20 +623,6 @@ layer {
 		pad: 1
 		kernel_size: 3
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
 	}
 }
 layer {
@@ -962,20 +660,6 @@ layer {
 		pad: 1
 		kernel_size: 3
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
 	}
 }
 layer {
@@ -1000,20 +684,6 @@ layer {
 		pad: 1
 		kernel_size: 3
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
 	}
 }
 layer {
@@ -1038,20 +708,6 @@ layer {
 		pad: 1
 		kernel_size: 3
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
 	}
 }
 layer {
@@ -1089,20 +745,6 @@ layer {
 		pad: 1
 		kernel_size: 3
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
 	}
 }
 layer {
@@ -1127,20 +769,6 @@ layer {
 		pad: 1
 		kernel_size: 3
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
 	}
 }
 layer {
@@ -1178,20 +806,6 @@ layer {
 		pad: 1
 		kernel_size: 3
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
 	}
 }
 layer {
@@ -1216,20 +830,6 @@ layer {
 		pad: 1
 		kernel_size: 3
 		stride: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
-	}
-	param {
-		lr_mult: 0
-		decay_mult: 0
 	}
 }
 layer {
@@ -1245,27 +845,13 @@ layer {
 	top: "deconv1_2"
 }
 layer {
-	name: "logits"
+	name: "segmentation"
 	type: "Convolution"
 	bottom: "deconv1_2"
-	top: "logits"
+	top: "segmentation"
 	convolution_param {
 		num_output: 1
 		pad: 0
 		kernel_size: 1
-		weight_filler {
-			type: "xavier"
-		}
-		bias_filler {
-			type: "constant"
-		}
-	}
-	param {
-		lr_mult: 1
-		decay_mult: 1
-	}
-	param {
-		lr_mult: 2
-		decay_mult: 0
 	}
 }

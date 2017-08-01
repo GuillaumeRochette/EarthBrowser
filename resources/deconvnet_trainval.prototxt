@@ -27,6 +27,12 @@ layer {
 	}
 }
 layer {
+    name: "batchnorm0"
+    type: "BatchNorm"
+    bottom: "data"
+    top: "data"
+}
+layer {
 	name: "conv1_1"
 	type: "Convolution"
 	bottom: "data"
@@ -1259,10 +1265,10 @@ layer {
 	top: "deconv1_2"
 }
 layer {
-	name: "logits"
+	name: "segmentation"
 	type: "Convolution"
 	bottom: "deconv1_2"
-	top: "logits"
+	top: "segmentation"
 	convolution_param {
 		num_output: 1
 		pad: 0
@@ -1286,7 +1292,7 @@ layer {
 layer {
 	name: "loss"
 	type: "SigmoidCrossEntropyLoss"
-	bottom: "logits"
+	bottom: "segmentation"
 	bottom: "labels"
 	top: "loss"
 	loss_param {
