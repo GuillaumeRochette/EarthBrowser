@@ -3,13 +3,13 @@ layer {
 	name: "data"
 	type: "HDF5Data"
 	top: "data"
-	top: "label"
+	top: "labels"
 	include {
 		phase: TRAIN
 	}
 	hdf5_data_param {
 		source : "/home/guillaume/Documents/SegNet/data/Data_224x224/HDF5/Train/hdf5_list.txt"
-		batch_size: 4
+		batch_size: 1
 		shuffle: true
 	}
 }
@@ -17,13 +17,13 @@ layer {
 	name: "data"
 	type: "HDF5Data"
 	top: "data"
-	top: "label"
+	top: "labels"
 	include {
 		phase: TEST
 	}
 	hdf5_data_param {
 		source : "/home/guillaume/Documents/SegNet/data/Data_224x224/HDF5/Validation/hdf5_list.txt"
-		batch_size: 4
+		batch_size: 1
 	}
 }
 layer {
@@ -44,12 +44,12 @@ layer {
 		}
 	}
 	param {
-		lr_mult: 0
-		decay_mult: 0
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-		lr_mult: 0
-		decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
@@ -82,12 +82,12 @@ layer {
 		}
 	}
 	param {
-		lr_mult: 0
-		decay_mult: 0
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-		lr_mult: 0
-		decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
@@ -133,12 +133,12 @@ layer {
 		}
 	}
 	param {
-		lr_mult: 0
-		decay_mult: 0
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-		lr_mult: 0
-		decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
@@ -171,12 +171,12 @@ layer {
 		}
 	}
 	param {
-		lr_mult: 0
-		decay_mult: 0
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-		lr_mult: 0
-		decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
@@ -222,12 +222,12 @@ layer {
 		}
 	}
 	param {
-		lr_mult: 0
-		decay_mult: 0
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-		lr_mult: 0
-		decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
@@ -260,12 +260,12 @@ layer {
 		}
 	}
 	param {
-		lr_mult: 0
-		decay_mult: 0
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-		lr_mult: 0
-		decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
@@ -298,12 +298,12 @@ layer {
 		}
 	}
 	param {
-	lr_mult: 0
-	decay_mult: 0
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-	lr_mult: 0
-	decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
@@ -349,12 +349,12 @@ layer {
 		}
 	}
 	param {
-		lr_mult: 0
-		decay_mult: 0
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-		lr_mult: 0
-		decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
@@ -387,12 +387,12 @@ layer {
 		}
 	}
 	param {
-		lr_mult: 0
-		decay_mult: 0
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-		lr_mult: 0
-		decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
@@ -425,12 +425,12 @@ layer {
 		}
 	}
 	param {
-		lr_mult: 0
-		decay_mult: 0
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-		lr_mult: 0
-		decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
@@ -476,12 +476,12 @@ layer {
 		}
 	}
 	param {
-		lr_mult: 0
-		decay_mult: 0
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-		lr_mult: 0
-		decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
@@ -514,12 +514,12 @@ layer {
 		}
 	}
 	param {
-		lr_mult: 0
-		decay_mult: 0
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-		lr_mult: 0
-		decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
@@ -552,12 +552,12 @@ layer {
 		}
 	}
 	param {
-		lr_mult: 0
-		decay_mult: 0
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-		lr_mult: 0
-		decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
@@ -603,12 +603,12 @@ layer {
 		}
 	}
 	param {
-		lr_mult: 1
-		decay_mult: 1
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-		lr_mult: 2
-		decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
@@ -641,12 +641,12 @@ layer {
 		}
 	}
 	param {
-		lr_mult: 1
-		decay_mult: 1
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-		lr_mult: 2
-		decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
@@ -679,16 +679,16 @@ layer {
 		}
 	}
 	param {
-		lr_mult: 1
-		decay_mult: 1
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-		lr_mult: 2
-		decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
-	name: "fc6-deconv-bn"
+	name: "batchnormfc6-deconv"
 	type: "BatchNorm"
 	bottom: "fc6-deconv"
 	top: "fc6-deconv"
@@ -730,12 +730,12 @@ layer {
 		}
 	}
 	param {
-		lr_mult: 1
-		decay_mult: 1
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-		lr_mult: 2
-		decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
@@ -768,12 +768,12 @@ layer {
 		}
 	}
 	param {
-		lr_mult: 1
-		decay_mult: 1
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-		lr_mult: 2
-		decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
@@ -806,12 +806,12 @@ layer {
 		}
 	}
 	param {
-		lr_mult: 1
-		decay_mult: 1
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-		lr_mult: 2
-		decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
@@ -857,12 +857,12 @@ layer {
 		}
 	}
 	param {
-		lr_mult: 1
-		decay_mult: 1
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-		lr_mult: 2
-		decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
@@ -895,12 +895,12 @@ layer {
 		}
 	}
 	param {
-		lr_mult: 1
-		decay_mult: 1
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-		lr_mult: 2
-		decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
@@ -933,12 +933,12 @@ layer {
 		}
 	}
 	param {
-		lr_mult: 1
-		decay_mult: 1
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-		lr_mult: 2
-		decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
@@ -984,12 +984,12 @@ layer {
 		}
 	}
 	param {
-		lr_mult: 1
-		decay_mult: 1
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-		lr_mult: 2
-		decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
@@ -1022,12 +1022,12 @@ layer {
 		}
 	}
 	param {
-		lr_mult: 1
-		decay_mult: 1
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-		lr_mult: 2
-		decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
@@ -1060,12 +1060,12 @@ layer {
 		}
 	}
 	param {
-		lr_mult: 1
-		decay_mult: 1
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-		lr_mult: 2
-		decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
@@ -1111,12 +1111,12 @@ layer {
 		}
 	}
 	param {
-		lr_mult: 1
-		decay_mult: 1
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-		lr_mult: 2
-		decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
@@ -1149,12 +1149,12 @@ layer {
 		}
 	}
 	param {
-		lr_mult: 1
-		decay_mult: 1
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-		lr_mult: 2
-		decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
@@ -1200,12 +1200,12 @@ layer {
 		}
 	}
 	param {
-		lr_mult: 1
-		decay_mult: 1
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-		lr_mult: 2
-		decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
@@ -1238,12 +1238,12 @@ layer {
 		}
 	}
 	param {
-		lr_mult: 1
-		decay_mult: 1
+		lr_mult: 0.01
+		decay_mult: 0.01
 	}
 	param {
-		lr_mult: 2
-		decay_mult: 0
+		lr_mult: 0.02
+		decay_mult: 0.0
 	}
 }
 layer {
@@ -1285,9 +1285,9 @@ layer {
 }
 layer {
 	name: "loss"
-	type: "SoftmaxWithLoss"
+	type: "SigmoidCrossEntropyLoss"
 	bottom: "logits"
-	bottom: "label"
+	bottom: "labels"
 	top: "loss"
 	loss_param {
 		ignore_label: 255
