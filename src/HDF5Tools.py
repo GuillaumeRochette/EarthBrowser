@@ -49,6 +49,8 @@ def create_HDF5(data_set, hdf5_dir, max_data_per_file=2500, symmetry=False):
             datum = datum[::-1, ...]  # switch from RGB to BGR
             datum = mean_centered_datum(datum)
 
+            label = np.expand_dims(label, axis=0)
+
             data.append(datum)
             labels.append(label)
 
@@ -60,7 +62,9 @@ def create_HDF5(data_set, hdf5_dir, max_data_per_file=2500, symmetry=False):
                 labels.append(v_sym_label), labels.append(h_sym_label), labels.append(a_sym_label)
         data = np.array(data)
         labels = np.array(labels)
-        print "Done."
+        print data.shape
+        print labels.shape
+        print "Done, {:d} data and labels processed.".format(len(data))
         print "Writing in {}.".format(hdf5_name)
         with h5py.File(hdf5_path, "w") as hdf5_file:
             hdf5_file.create_dataset("data", data=data)
@@ -90,5 +94,5 @@ if __name__ == '__main__':
     labels_paths = list_filepaths(labels_dir)
 
     train_set, val_set = split_train_val_sets(data_paths, labels_paths, 0.80)
-    create_HDF5(train_set, train_dir, max_data_per_file=500, symmetry=True)
+    create_HDF5(train_set, train_dir, max_data_per_file=750, symmetry=True)
     create_HDF5(val_set, val_dir, max_data_per_file=2000, symmetry=False)
