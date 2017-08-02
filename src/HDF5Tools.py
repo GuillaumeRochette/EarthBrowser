@@ -44,11 +44,11 @@ def create_HDF5(data_set, hdf5_dir, max_data_per_file=2500, symmetry=False):
             datum_path, label_path = set_paths
 
             datum = np.array(gdal.Open(datum_path).ReadAsArray(), dtype=np.float32)
-            label = np.array(gdal.Open(label_path).ReadAsArray(), dtype=np.uint8)
-
             datum = datum[::-1, ...]  # switch from RGB to BGR
             # datum = mean_centered_datum(datum)
 
+            label = np.array(gdal.Open(label_path).ReadAsArray(), dtype=np.uint8)
+            label[label>2]=2
             label = np.expand_dims(label, axis=0)
 
             data.append(datum)
@@ -78,7 +78,7 @@ def create_HDF5(data_set, hdf5_dir, max_data_per_file=2500, symmetry=False):
 
 
 if __name__ == '__main__':
-    root_dir = "/home/guillaume/Documents/SegNet/data/Data_224x224"
+    root_dir = "/home/guillaume/Documents/SegNet/data/CleanData"
     data_dir = os.path.join(root_dir, "Data")
     labels_dir = os.path.join(root_dir, "Labels")
 
@@ -94,5 +94,6 @@ if __name__ == '__main__':
     labels_paths = list_filepaths(labels_dir)
 
     train_set, val_set = split_train_val_sets(data_paths, labels_paths, 0.80)
-    create_HDF5(train_set, train_dir, max_data_per_file=750, symmetry=True)
+    # create_HDF5(train_set, train_dir, max_data_per_file=500, symmetry=True)
+    create_HDF5(train_set, train_dir, max_data_per_file=2000, symmetry=False)
     create_HDF5(val_set, val_dir, max_data_per_file=2000, symmetry=False)
