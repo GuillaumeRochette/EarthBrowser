@@ -28,7 +28,6 @@ seg_result = out["prob"]
 print seg_result.shape, seg_result.dtype
 
 img = np.transpose(data, axes=[1, 2, 0])
-# prediction = 1. / (1. + np.exp(-logits[0, 0]))
 prediction = seg_result[0, 0]
 plt.figure()
 plt.subplot(1, 3, 1)

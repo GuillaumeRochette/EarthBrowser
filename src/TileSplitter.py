@@ -24,14 +24,15 @@ def split(src_path, dst_dir, patch_shape, strides=None, tile_prefix="Tile"):
             tile_name = tile_prefix + "_{:03d}_{:03d}.tif".format(i, j)
             tile_path = os.path.join(dst_dir, tile_name)
             print tile_path
-            gdal.Translate(tile_path, ds, format='GTiff', srcWin=[i, j, x_patch, y_patch], noData=0, options=['COMPRESS=DEFLATE'])
+            gdal.Translate(tile_path, ds, format='GTiff', srcWin=[i, j, x_patch, y_patch], noData=0,
+                           options=['COMPRESS=DEFLATE'])
 
 
 def split_SpaceNet(src_dir, dst_dir, patch_shape, strides=None):
     src_names = sorted(os.listdir(src_dir))
     for src_name in src_names:
         src_path = os.path.join(src_dir, src_name)
-        split(src_path, dst_dir, patch_shape, strides, src_name.replace(".tif",""))
+        split(src_path, dst_dir, patch_shape, strides, src_name.replace(".tif", ""))
 
 
 if __name__ == '__main__':
