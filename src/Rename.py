@@ -18,7 +18,7 @@ if __name__ == '__main__':
         data_path = os.path.join(data_dir, data_name)
         new_path = os.path.join(data_dir, new_name)
         print data_path, new_path
-        os.rename(data_path, new_path)
+        # os.rename(data_path, new_path)
 
     label_names = os.listdir(label_dir)
     for label_name in label_names:
@@ -29,4 +29,4 @@ if __name__ == '__main__':
         label_path = os.path.join(label_dir, label_name)
         new_path = os.path.join(label_dir, new_name)
         print label_path, new_path
-        os.rename(label_path, new_path)
+        # os.rename(label_path, new_path)
