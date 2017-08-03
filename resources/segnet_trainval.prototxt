@@ -8,7 +8,7 @@ layer {
 		phase: TRAIN
 	}
 	hdf5_data_param {
-		source : "/home/guillaume/Documents/SegNet/data/Data_224x224/HDF5/Train/hdf5_list.txt"
+		source : "/home/guillaume/Documents/SegNet/data/CleanData/HDF5/Train/hdf5_list.txt"
 		batch_size: 1
 		shuffle: true
 	}
@@ -22,7 +22,7 @@ layer {
 		phase: TEST
 	}
 	hdf5_data_param {
-		source : "/home/guillaume/Documents/SegNet/data/Data_224x224/HDF5/Validation/hdf5_list.txt"
+		source : "/home/guillaume/Documents/SegNet/data/CleanData/HDF5/Validation/hdf5_list.txt"
 		batch_size: 1
 	}
 }
