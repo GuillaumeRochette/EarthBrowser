@@ -6,12 +6,12 @@ import matplotlib.pyplot as plt
 
 root_dir = "/home/guillaume/Documents/SegNet"
 model_def = os.path.join(root_dir, "resources/segnet_deploy.prototxt")
-model_weights = os.path.join(root_dir, "resources/segnet_iter_500.caffemodel")
+model_weights = os.path.join(root_dir, "resources/segnet_iter_1603.caffemodel")
 
 net = caffe.Net(model_def, caffe.TEST, weights=model_weights)
-i = 1
-data_path = "/home/guillaume/Documents/SegNet/data/Data_224x224/Data/RGB_PAN_Paris_{:05d}_224_224.tif".format(i)
-label_path = "/home/guillaume/Documents/SegNet/data/Data_224x224/Labels/CLASS_SEG_Paris_{:05d}_224_224.tif".format(i)
+i = 597
+data_path = "/home/guillaume/Documents/SegNet/data/CleanData/Data/RGB_PAN_Paris_{:05d}_224_224.tif".format(i)
+label_path = "/home/guillaume/Documents/SegNet/data/CleanData/Labels/CLASS_SEG_Paris_{:05d}_224_224.tif".format(i)
 print data_path
 print label_path
 # data_path = "/home/guillaume/Documents/SegNet/data/Data_224x224/Data/RGB_PAN_Paris_00524_224_224.tif"
@@ -29,7 +29,9 @@ print seg_result.shape, seg_result.dtype
 
 img = np.transpose(data, axes=[1, 2, 0])
 # prediction = 1. / (1. + np.exp(-logits[0, 0]))
-prediction = seg_result[0, 0]
+prediction = seg_result[0, 1]
+print prediction.min()
+print prediction.max()
 plt.figure()
 plt.subplot(1, 3, 1)
 plt.imshow(img)
