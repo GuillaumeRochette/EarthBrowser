@@ -28,27 +28,25 @@ def mean_centered_datum(datum):
     return datum
 
 
-def create_HDF5(data_set, hdf5_dir, max_data_per_file=2500, symmetry=False):
+def create_HDF5(set_paths, hdf5_dir, max_data_per_file=2500, symmetry=False):
     print "Output directory : {}".format(hdf5_dir)
     hdf5_paths = []
-    batches = [data_set[i:i + max_data_per_file] for i in range(0, len(data_set), max_data_per_file)]
-    for i, batch in enumerate(batches):
-        data = []
-        labels = []
-        hdf5_name = "File_{:d}.h5".format(i)
-        hdf5_path = os.path.join(hdf5_dir, hdf5_name)
-        hdf5_paths.append(hdf5_path)
-        print hdf5_name
-        print "Processing {:d} data and labels".format(len(batch))
-        for j, set_paths in enumerate(batch):
-            datum_path, label_path = set_paths
-
-            datum = np.array(gdal.Open(datum_path).ReadAsArray(), dtype=np.float32)
-            datum = datum[::-1, ...]  # switch from RGB to BGR
-            # datum = mean_centered_datum(datum)
-
-            label = np.array(gdal.Open(label_path).ReadAsArray(), dtype=np.uint8)
-            label[label>2]=2
+    hfd5_file_number = 0
+    data = []
+    labels = []
+    rejected = 0
+    for i, set_path in enumerate(set_paths):
+        datum_path, label_path = set_path
+        datum = np.array(gdal.Open(datum_path).ReadAsArray(), dtype=np.float32)
+        datum = datum[::-1, ...]  # switch from RGB to BGR
+        # datum = mean_centered_datum(datum)
+        label = np.array(gdal.Open(label_path).ReadAsArray(), dtype=np.uint8)
+        classes = np.unique(label)
+        if len(classes) < 3:
+            rejected += 1
+        else:
+            label[label == 100] = 1
+            label[label == 255] = 2
             label = np.expand_dims(label, axis=0)
 
             data.append(datum)
@@ -60,21 +58,30 @@ def create_HDF5(data_set, hdf5_dir, max_data_per_file=2500, symmetry=False):
                 a_sym_datum, a_sym_label = datum[..., ::-1, ::-1], label[..., ::-1, ::-1]  # linear axial symmetry
                 data.append(v_sym_datum), data.append(h_sym_datum), data.append(a_sym_datum)
                 labels.append(v_sym_label), labels.append(h_sym_label), labels.append(a_sym_label)
-        data = np.array(data)
-        labels = np.array(labels)
-        print data.shape
-        print labels.shape
-        print "Done, {:d} data and labels processed.".format(len(data))
-        print "Writing in {}.".format(hdf5_name)
-        with h5py.File(hdf5_path, "w") as hdf5_file:
-            hdf5_file.create_dataset("data", data=data)
-            hdf5_file.create_dataset("labels", data=labels)
-        print "Done."
+        if len(data) >= max_data_per_file or i + 1 == len(set_paths):
+            data = np.array(data)
+            labels = np.array(labels)
+            print data.shape
+            print labels.shape
+            print "{:d} data and labels processed.".format(len(data))
+            hdf5_name = "File_{:d}.h5".format(hfd5_file_number)
+            hdf5_path = os.path.join(hdf5_dir, hdf5_name)
+            hdf5_paths.append(hdf5_path)
+            print hdf5_name
+            print "Writing in {}.".format(hdf5_name)
+            with h5py.File(hdf5_path, "w") as hdf5_file:
+                hdf5_file.create_dataset("data", data=data)
+                hdf5_file.create_dataset("labels", data=labels)
+            print "Done."
+            data = []
+            labels = []
+            hfd5_file_number += 1
     hdf5_list_path = os.path.join(hdf5_dir, "hdf5_list.txt")
     print "HDF5 Files indexed in {}.".format(hdf5_list_path)
     with open(hdf5_list_path, "w") as list_of_files:
         for hdf5_path in hdf5_paths:
             list_of_files.write(hdf5_path + "\n")
+    print rejected
 
 
 if __name__ == '__main__':
@@ -94,6 +101,5 @@ if __name__ == '__main__':
     labels_paths = list_filepaths(labels_dir)
 
     train_set, val_set = split_train_val_sets(data_paths, labels_paths, 0.80)
-    # create_HDF5(train_set, train_dir, max_data_per_file=500, symmetry=True)
     create_HDF5(train_set, train_dir, max_data_per_file=2000, symmetry=False)
     create_HDF5(val_set, val_dir, max_data_per_file=2000, symmetry=False)
