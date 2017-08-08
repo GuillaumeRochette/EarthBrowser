@@ -45,8 +45,8 @@ def create_HDF5(set_paths, hdf5_dir, max_data_per_file=2500, symmetry=False):
         if len(classes) < 3:
             rejected += 1
         else:
-            label[label == 100] = 1
-            label[label == 255] = 2
+            for i in range(3):
+                label[label == classes[i]]= i
             label = np.expand_dims(label, axis=0)
 
             data.append(datum)
