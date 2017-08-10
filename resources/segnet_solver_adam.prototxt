@@ -1,0 +1,22 @@
+net: "segnet_trainval.prototxt"
+
+solver_mode: GPU
+
+type: "Adam"
+base_lr: 0.001
+momentum: 0.9
+momentum2: 0.999
+weight_decay: 0.0005
+lr_policy: "fixed"
+
+iter_size: 64
+max_iter: 10000
+
+test_iter: 1024
+test_interval: 200
+
+display: 1
+
+snapshot: 500
+snapshot_prefix: "segnet"
+
