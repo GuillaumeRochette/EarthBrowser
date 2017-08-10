@@ -61,8 +61,8 @@ def create_HDF5(set_paths, hdf5_dir, max_data_per_file=2500, symmetry=False):
         if len(data) >= max_data_per_file or i + 1 == len(set_paths):
             data = np.array(data)
             labels = np.array(labels)
-            print data.shape
-            print labels.shape
+            print data.shape, labels.shape
+            print data.mean(axis=(0,2,3)), labels.mean(axis=(0,2,3))
             print "{:d} data and labels processed.".format(len(data))
             hdf5_name = "File_{:d}.h5".format(hfd5_file_number)
             hdf5_path = os.path.join(hdf5_dir, hdf5_name)

@@ -1264,58 +1264,58 @@ layer {
 	bottom: "deconv1_2"
 	top: "deconv1_2"
 }
-layer {
-	name: "segmentation"
-	type: "Convolution"
-	bottom: "deconv1_2"
-	top: "segmentation"
-	convolution_param {
-		num_output: 3
-		pad: 0
-		kernel_size: 1
-		bias_term: false
-		weight_filler {
-			type: "xavier"
-		}
-	}
-	param {
-		lr_mult: 1
-		decay_mult: 1
-	}
-}
-layer {
-	name: "loss"
-	type: "SoftmaxWithLoss"
-	bottom: "segmentation"
-	bottom: "labels"
-	top: "loss"
-}
 #layer {
-# 	name: "segmentation"
-# 	type: "Convolution"
-# 	bottom: "deconv1_2"
-# 	top: "segmentation"
-# 	convolution_param {
-# 		num_output: 2
-# 		pad: 0
-# 		kernel_size: 1
-# 		bias_term: false
-# 		weight_filler {
-# 			type: "xavier"
-# 		}
-# 	}
-# 	param {
-# 		lr_mult: 1
-# 		decay_mult: 1
-# 	}
-# }
-# layer {
-# 	name: "loss"
-# 	type: "SoftmaxWithLoss"
-# 	bottom: "segmentation"
-# 	bottom: "labels"
-# 	top: "loss"
-# 	loss_param {
-# 		ignore_label: 2
-# 	}
-# }
+#	name: "segmentation"
+#	type: "Convolution"
+#	bottom: "deconv1_2"
+#	top: "segmentation"
+#	convolution_param {
+#		num_output: 3
+#		pad: 0
+#		kernel_size: 1
+#		bias_term: false
+#		weight_filler {
+#			type: "xavier"
+#		}
+#	}
+#	param {
+#		lr_mult: 1
+#		decay_mult: 1
+#	}
+#}
+#layer {
+#	name: "loss"
+#	type: "SoftmaxWithLoss"
+#	bottom: "segmentation"
+#	bottom: "labels"
+#	top: "loss"
+#}
+layer {
+ 	name: "segmentation"
+ 	type: "Convolution"
+ 	bottom: "deconv1_2"
+ 	top: "segmentation"
+ 	convolution_param {
+ 		num_output: 2
+ 		pad: 0
+ 		kernel_size: 1
+ 		bias_term: false
+ 		weight_filler {
+ 			type: "xavier"
+ 		}
+ 	}
+ 	param {
+ 		lr_mult: 1
+ 		decay_mult: 1
+ 	}
+}
+layer {
+ 	name: "loss"
+ 	type: "SoftmaxWithLoss"
+ 	bottom: "segmentation"
+ 	bottom: "labels"
+ 	top: "loss"
+ 	loss_param {
+ 		ignore_label: 2
+ 	}
+}

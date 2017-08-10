@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 root_dir = "/home/guillaume/Documents/SegNet"
 model_def = os.path.join(root_dir, "resources/segnet_deploy.prototxt")
-model_weights = os.path.join(root_dir, "resources/segnet_iter_500.caffemodel")
+model_weights = os.path.join(root_dir, "resources/segnet_iter_1223.caffemodel")
 
 net = caffe.Net(model_def, caffe.TEST, weights=model_weights)
 i = 725
@@ -24,10 +24,18 @@ print label.shape, label.dtype
 
 out = net.forward_all(data=np.expand_dims(data, axis=0))
 seg_result = out["prob"]
-# prediction = np.argmax(seg_result[0], axis=0).astype(np.uint8)
-prediction = np.transpose(seg_result[0], axes=[1, 2, 0])
+# seg_result[seg_result <= seg_mean] = 0
+prediction = seg_result[0, 1]
+pred_mean = prediction.mean()
+prediction[prediction > pred_mean] = 1
+prediction[prediction <= pred_mean] = 0
+
+
+# prediction = np.argmax(seg_result[0], axis=0).astype(np.float32)
+# prediction = np.transpose(seg_result[0], axes=[1, 2, 0])
 print prediction.shape, prediction.dtype
-print prediction.min(axis=(0,1)), prediction.max(axis=(0,1))
+# print prediction.min(axis=(0,1)), prediction.max(axis=(0,1))
+print prediction.min(), prediction.max()
 
 img = np.transpose(data, axes=[1, 2, 0])
 
