@@ -34,30 +34,20 @@ def create_HDF5(set_paths, hdf5_dir, max_data_per_file=2500, symmetry=False):
     hfd5_file_number = 0
     data = []
     labels = []
-    rejected = 0
     for i, set_path in enumerate(set_paths):
         datum_path, label_path = set_path
         datum = np.array(gdal.Open(datum_path).ReadAsArray(), dtype=np.float32)
         datum = datum[::-1, ...]  # switch from RGB to BGR
         # datum = mean_centered_datum(datum)
         label = np.array(gdal.Open(label_path).ReadAsArray(), dtype=np.uint8)
-        classes = np.unique(label)
-        if len(classes) < 3:
-            rejected += 1
-        else:
-            for i in range(3):
-                label[label == classes[i]]= i
-            label = np.expand_dims(label, axis=0)
 
-            data.append(datum)
-            labels.append(label)
+        if symmetry:
+            v_sym_datum, v_sym_label = datum[..., ::-1, :], label[..., ::-1, :]  # vertical symmetry
+            h_sym_datum, h_sym_label = datum[..., ::-1], label[..., ::-1]  # horizontal symmetry
+            a_sym_datum, a_sym_label = datum[..., ::-1, ::-1], label[..., ::-1, ::-1]  # linear axial symmetry
+            data.append(v_sym_datum), data.append(h_sym_datum), data.append(a_sym_datum)
+            labels.append(v_sym_label), labels.append(h_sym_label), labels.append(a_sym_label)
 
-            if symmetry:
-                v_sym_datum, v_sym_label = datum[..., ::-1, :], label[..., ::-1, :]  # vertical symmetry
-                h_sym_datum, h_sym_label = datum[..., ::-1], label[..., ::-1]  # horizontal symmetry
-                a_sym_datum, a_sym_label = datum[..., ::-1, ::-1], label[..., ::-1, ::-1]  # linear axial symmetry
-                data.append(v_sym_datum), data.append(h_sym_datum), data.append(a_sym_datum)
-                labels.append(v_sym_label), labels.append(h_sym_label), labels.append(a_sym_label)
         if len(data) >= max_data_per_file or i + 1 == len(set_paths):
             data = np.array(data)
             labels = np.array(labels)
@@ -81,11 +71,10 @@ def create_HDF5(set_paths, hdf5_dir, max_data_per_file=2500, symmetry=False):
     with open(hdf5_list_path, "w") as list_of_files:
         for hdf5_path in hdf5_paths:
             list_of_files.write(hdf5_path + "\n")
-    print rejected
 
 
 if __name__ == '__main__':
-    root_dir = "/home/guillaume/Documents/SegNet/data/CleanData"
+    root_dir = "/home/grochette/Documents/SegNet/data/CleanData"
     data_dir = os.path.join(root_dir, "Data")
     labels_dir = os.path.join(root_dir, "Labels")
 
@@ -101,5 +90,5 @@ if __name__ == '__main__':
     labels_paths = list_filepaths(labels_dir)
 
     train_set, val_set = split_train_val_sets(data_paths, labels_paths, 0.80)
-    create_HDF5(train_set, train_dir, max_data_per_file=2000, symmetry=True)
-    create_HDF5(val_set, val_dir, max_data_per_file=2000, symmetry=False)
+    create_HDF5(train_set, train_dir, max_data_per_file=1000, symmetry=True)
+    create_HDF5(val_set, val_dir, max_data_per_file=1000, symmetry=False)

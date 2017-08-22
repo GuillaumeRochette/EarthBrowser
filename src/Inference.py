@@ -4,18 +4,21 @@ from osgeo import gdal
 import caffe
 import matplotlib.pyplot as plt
 
-root_dir = "/home/guillaume/Documents/SegNet"
+root_dir = "/home/grochette/Documents/SegNet"
 model_def = os.path.join(root_dir, "resources/segnet_deploy.prototxt")
-model_weights = os.path.join(root_dir, "resources/segnet_iter_1223.caffemodel")
+model_weights = os.path.join(root_dir, "resources/Snapshots/segnet_iter_30000.caffemodel")
 
 net = caffe.Net(model_def, caffe.TEST, weights=model_weights)
-i = 725
-data_path = "/home/guillaume/Documents/SegNet/data/CleanData/Data/RGB_PAN_Paris_{:05d}_224_224.tif".format(i)
-label_path = "/home/guillaume/Documents/SegNet/data/CleanData/Labels/CLASS_SEG_Paris_{:05d}_224_224.tif".format(i)
-print data_path
-print label_path
-# data_path = "/home/guillaume/Documents/SegNet/data/Data_224x224/Data/RGB_PAN_Paris_00524_224_224.tif"
-# label_path = "/home/guillaume/Documents/SegNet/data/Data_224x224/Labels/CLASS_SEG_Paris_00524_224_224.tif"
+data_dir = os.path.join(root_dir, "data/CleanData/Data")
+data_names = sorted(os.listdir(data_dir))
+label_dir = os.path.join(root_dir, "data/CleanData/Labels")
+label_names = sorted(os.listdir(label_dir))
+i = 27898
+# i = 65235
+print data_names[i], label_names[i]
+data_path = os.path.join(data_dir, data_names[i])
+label_path = os.path.join(label_dir, label_names[i])
+
 data = np.array(gdal.Open(data_path).ReadAsArray())
 label = np.array(gdal.Open(label_path).ReadAsArray())
 
@@ -24,17 +27,8 @@ print label.shape, label.dtype
 
 out = net.forward_all(data=np.expand_dims(data, axis=0))
 seg_result = out["prob"]
-# seg_result[seg_result <= seg_mean] = 0
 prediction = seg_result[0, 1]
-pred_mean = prediction.mean()
-prediction[prediction > pred_mean] = 1
-prediction[prediction <= pred_mean] = 0
-
-
-# prediction = np.argmax(seg_result[0], axis=0).astype(np.float32)
-# prediction = np.transpose(seg_result[0], axes=[1, 2, 0])
 print prediction.shape, prediction.dtype
-# print prediction.min(axis=(0,1)), prediction.max(axis=(0,1))
 print prediction.min(), prediction.max()
 
 img = np.transpose(data, axes=[1, 2, 0])

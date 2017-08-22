@@ -36,8 +36,8 @@ def split_SpaceNet(src_dir, dst_dir, patch_shape, strides=None):
 
 
 if __name__ == '__main__':
-    root_dir = "/home/guillaume/Documents/SegNet/data"
-    cities = ["Rio", "Paris"]
+    root_dir = "/home/grochette/Documents/SegNet/data"
+    cities = ["Rio", "Vegas", "Paris", "Shanghai", "Khartoum"]
     for city in cities:
         data_dir = os.path.join(root_dir, "RawData/{}/Data".format(city))
         label_dir = os.path.join(root_dir, "RawData/{}/Labels".format(city))
