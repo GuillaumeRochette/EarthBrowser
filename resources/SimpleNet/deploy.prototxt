@@ -315,7 +315,6 @@ layer {
 		num_output: 2
 		pad: 0
 		kernel_size: 1
-		bias_term: false
 	}
 }
 layer {
