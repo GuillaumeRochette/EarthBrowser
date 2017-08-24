@@ -40,6 +40,11 @@ def create_HDF5(set_paths, hdf5_dir, max_data_per_file=2500, symmetry=False):
         datum = datum[::-1, ...]  # switch from RGB to BGR
         # datum = mean_centered_datum(datum)
         label = np.array(gdal.Open(label_path).ReadAsArray(), dtype=np.uint8)
+        label[label == 255]=2
+        if label.ndim < 4:
+            label = np.expand_dims(label, 0)
+        data.append(datum)
+        labels.append(label)
 
         if symmetry:
             v_sym_datum, v_sym_label = datum[..., ::-1, :], label[..., ::-1, :]  # vertical symmetry
@@ -89,6 +94,6 @@ if __name__ == '__main__':
     data_paths = list_filepaths(data_dir)
     labels_paths = list_filepaths(labels_dir)
 
-    train_set, val_set = split_train_val_sets(data_paths, labels_paths, 0.80)
-    create_HDF5(train_set, train_dir, max_data_per_file=1000, symmetry=True)
+    train_set, val_set = split_train_val_sets(data_paths, labels_paths, 0.90)
+    create_HDF5(train_set, train_dir, max_data_per_file=1000, symmetry=False)
     create_HDF5(val_set, val_dir, max_data_per_file=1000, symmetry=False)

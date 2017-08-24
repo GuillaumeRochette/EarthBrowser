@@ -5,8 +5,10 @@ import caffe
 import matplotlib.pyplot as plt
 
 root_dir = "/home/grochette/Documents/SegNet"
-model_def = os.path.join(root_dir, "resources/segnet_deploy.prototxt")
-model_weights = os.path.join(root_dir, "resources/Snapshots/segnet_iter_30000.caffemodel")
+# model_def = os.path.join(root_dir, "resources/segnet_deploy.prototxt")
+# model_weights = os.path.join(root_dir, "resources/segnet_iter_1895.caffemodel")
+model_def = "/home/grochette/Documents/SegNet/resources/fcn32/deploy.prototxt"
+model_weights = "/home/grochette/Documents/SegNet/resources/fcn32/snapshot_iter_260.caffemodel"
 
 net = caffe.Net(model_def, caffe.TEST, weights=model_weights)
 data_dir = os.path.join(root_dir, "data/CleanData/Data")
@@ -26,8 +28,9 @@ print data.shape, data.dtype
 print label.shape, label.dtype
 
 out = net.forward_all(data=np.expand_dims(data, axis=0))
-seg_result = out["prob"]
-prediction = seg_result[0, 1]
+# seg_result = out["prob"]
+seg_result = out["score"]
+prediction = seg_result
 print prediction.shape, prediction.dtype
 print prediction.min(), prediction.max()
 
