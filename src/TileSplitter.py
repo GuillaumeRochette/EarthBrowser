@@ -21,12 +21,10 @@ def split(src_path, dst_dir, patch_shape, strides=None, tile_prefix="Tile"):
             if i + x_patch > x_size:
                 i = x_size - x_patch
 
-            tile_name = tile_prefix + "_{:03d}_{:03d}.png".format(i, j)
-            # tile_name = tile_prefix + "_{:03d}_{:03d}.tif".format(i, j)
+            tile_name = "{}_{:03d}_{:03d}.tif".format(tile_prefix, i, j)
             tile_path = os.path.join(dst_dir, tile_name)
             print tile_path
-            gdal.Translate(tile_path, ds, format='PNG', srcWin=[i, j, x_patch, y_patch], noData=0, options=['COMPRESS=DEFLATE'])
-            # gdal.Translate(tile_path, ds, format='GTiff', srcWin=[i, j, x_patch, y_patch], noData=0, options=['COMPRESS=DEFLATE'])
+            gdal.Translate(tile_path, ds, format='GTiff', srcWin=[i, j, x_patch, y_patch], noData=0, options=['COMPRESS=DEFLATE'])
 
 
 def split_SpaceNet(src_dir, dst_dir, patch_shape, strides=None):
@@ -38,22 +36,29 @@ def split_SpaceNet(src_dir, dst_dir, patch_shape, strides=None):
 
 if __name__ == '__main__':
     root_dir = "/home/grochette/Documents/SegNet/data"
-    cities = ["Rio", "Vegas", "Paris", "Shanghai", "Khartoum"]
+    # cities = ["Rio", "Vegas", "Paris", "Shanghai", "Khartoum"]
+    cities = ["Vegas", "Paris", "Shanghai", "Khartoum"] # Rio doesn't have MUL_PAN (50cm), only MUL (2m).
     for city in cities:
-        data_dir = os.path.join(root_dir, "RawData/{}/Data".format(city))
+        mul_pan_dir = os.path.join(root_dir, "RawData/{}/MUL_PAN".format(city))
+        rgb_pan_dir = os.path.join(root_dir, "RawData/{}/RGB_PAN".format(city))
         label_dir = os.path.join(root_dir, "RawData/{}/Labels".format(city))
-        print data_dir
+        print mul_pan_dir
+        print rgb_pan_dir
         print label_dir
 
         tile_shape = (224, 224)
         strides = (224, 224)
 
-        output_dir = os.path.join(root_dir, "CleanData")
-        out_data_dir = os.path.join(output_dir, "Data")
-        if not os.path.isdir(out_data_dir):
-            os.makedirs(out_data_dir)
-        out_label_dir = os.path.join(output_dir, "Labels")
+        out_rgb_pan_dir = os.path.join(root_dir, "CleanData/RGB_PAN")
+        if not os.path.isdir(out_rgb_pan_dir):
+            os.makedirs(out_rgb_pan_dir)
+        out_mul_pan_dir = os.path.join(root_dir, "CleanData/MUL_PAN")
+        if not os.path.isdir(out_mul_pan_dir):
+            os.makedirs(out_mul_pan_dir)
+        out_label_dir = os.path.join(root_dir, "CleanData/Labels")
         if not os.path.isdir(out_label_dir):
             os.makedirs(out_label_dir)
-        split_SpaceNet(data_dir, out_data_dir, tile_shape, strides)
+
+        split_SpaceNet(mul_pan_dir, out_mul_pan_dir, tile_shape, strides)
+        split_SpaceNet(rgb_pan_dir, out_rgb_pan_dir, tile_shape, strides)
         split_SpaceNet(label_dir, out_label_dir, tile_shape, strides)

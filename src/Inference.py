@@ -8,15 +8,15 @@ root_dir = "/home/grochette/Documents/SegNet"
 # model_def = os.path.join(root_dir, "resources/segnet_deploy.prototxt")
 # model_weights = os.path.join(root_dir, "resources/segnet_iter_1895.caffemodel")
 model_def = "/home/grochette/Documents/SegNet/resources/SimpleNet/deploy.prototxt"
-model_weights = "/home/grochette/Documents/SegNet/resources/SimpleNet/snapshots/simplenet_iter_264.caffemodel"
+model_weights = "/home/grochette/Documents/SegNet/resources/SimpleNet/snapshots/simplenet_iter_3820.caffemodel"
 
 net = caffe.Net(model_def, caffe.TEST, weights=model_weights)
 data_dir = os.path.join(root_dir, "data/CleanData/Data")
 data_names = sorted(os.listdir(data_dir))
 label_dir = os.path.join(root_dir, "data/CleanData/Labels")
 label_names = sorted(os.listdir(label_dir))
-i = 27898
-# i = 65235
+# i = 27898
+i = 98533
 print data_names[i], label_names[i]
 data_path = os.path.join(data_dir, data_names[i])
 label_path = os.path.join(label_dir, label_names[i])
@@ -30,18 +30,22 @@ print label.shape, label.dtype
 out = net.forward_all(data=np.expand_dims(data, axis=0))
 seg_result = out["prob"]
 prediction = seg_result[0, 1]
-# prediction[prediction > 0.5] = 1
-# prediction[prediction <= 0.5] = 0
+classification = np.array(prediction)
+classification[classification > 0.5] = 1
+classification[classification < 0.5] = 0
 print prediction.shape, prediction.dtype
 print prediction.min(), prediction.max()
 
 img = np.transpose(data, axes=[1, 2, 0])
 
 plt.figure()
-plt.subplot(1, 3, 1)
+plt.subplot(2, 2, 1)
 plt.imshow(img)
-plt.subplot(1, 3, 2)
+plt.subplot(2, 2, 2)
 plt.imshow(label)
-plt.subplot(1, 3, 3)
+plt.subplot(2, 2, 3)
 plt.imshow(prediction)
+plt.subplot(2, 2, 4)
+plt.imshow(classification)
+
 plt.show()

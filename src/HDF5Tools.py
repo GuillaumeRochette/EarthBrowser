@@ -37,7 +37,7 @@ def create_HDF5(set_paths, hdf5_dir, max_data_per_file=2500, symmetry=False):
     for i, set_path in enumerate(set_paths):
         datum_path, label_path = set_path
         datum = np.array(gdal.Open(datum_path).ReadAsArray(), dtype=np.float32)
-        datum = datum[::-1, ...]  # switch from RGB to BGR
+        # datum = datum[::-1, ...]  # switch from RGB to BGR
         # datum = mean_centered_datum(datum)
         label = np.array(gdal.Open(label_path).ReadAsArray(), dtype=np.uint8)
         label[label == 255]=2
@@ -79,9 +79,9 @@ def create_HDF5(set_paths, hdf5_dir, max_data_per_file=2500, symmetry=False):
 
 
 if __name__ == '__main__':
-    root_dir = "/home/grochette/Documents/SegNet/data/CleanData"
-    data_dir = os.path.join(root_dir, "Data")
-    labels_dir = os.path.join(root_dir, "Labels")
+    root_dir = "/home/grochette/Documents/SegNet/data"
+    data_dir = os.path.join(root_dir, "CleanData/MUL_PAN")
+    labels_dir = os.path.join(root_dir, "CleanData/Labels")
 
     h5_dir = os.path.join(root_dir, "HDF5")
     train_dir = os.path.join(h5_dir, "Train")
@@ -95,5 +95,8 @@ if __name__ == '__main__':
     labels_paths = list_filepaths(labels_dir)
 
     train_set, val_set = split_train_val_sets(data_paths, labels_paths, 0.90)
+    print "Whole set contains {} files".format(len(data_paths))
+    print "Train set contains {} files.".format(len(train_set))
+    print "Validation set contains {} files.".format(len(val_set))
     create_HDF5(train_set, train_dir, max_data_per_file=1000, symmetry=False)
     create_HDF5(val_set, val_dir, max_data_per_file=1000, symmetry=False)
