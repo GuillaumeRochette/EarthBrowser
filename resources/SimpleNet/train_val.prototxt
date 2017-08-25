@@ -1,4 +1,4 @@
-name: "SegNet"
+name: "SimpleNet"
 layer {
 	name: "data"
 	type: "HDF5Data"
