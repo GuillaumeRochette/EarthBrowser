@@ -1,0 +1,2684 @@
+I0828 15:17:27.165637   727 caffe.cpp:218] Using GPUs 0
+I0828 15:17:27.320719   727 caffe.cpp:223] GPU 0: Quadro M1000M
+I0828 15:17:27.562938   727 solver.cpp:44] Initializing solver from parameters: 
+test_iter: 9534
+test_interval: 500
+base_lr: 0.001
+display: 250
+max_iter: 25000
+lr_policy: "fixed"
+momentum: 0.9
+weight_decay: 0.0005
+snapshot: 500
+snapshot_prefix: "snapshots/segnet"
+solver_mode: GPU
+device_id: 0
+net: "train_val.prototxt"
+train_state {
+  level: 0
+  stage: ""
+}
+iter_size: 16
+momentum2: 0.999
+type: "Adam"
+I0828 15:17:27.563073   727 solver.cpp:87] Creating training net from net file: train_val.prototxt
+I0828 15:17:27.563525   727 net.cpp:294] The NetState phase (0) differed from the phase (1) specified by a rule in layer data
+I0828 15:17:27.563555   727 net.cpp:294] The NetState phase (0) differed from the phase (1) specified by a rule in layer accuracy
+I0828 15:17:27.563807   727 net.cpp:51] Initializing net from parameters: 
+name: "SegNet"
+state {
+  phase: TRAIN
+  level: 0
+  stage: ""
+}
+layer {
+  name: "data"
+  type: "HDF5Data"
+  top: "data"
+  top: "labels"
+  include {
+    phase: TRAIN
+  }
+  hdf5_data_param {
+    source: "/home/grochette/Documents/SegNet/data/HDF5/Train/hdf5_list.txt"
+    batch_size: 4
+    shuffle: true
+  }
+}
+layer {
+  name: "batchnorm0"
+  type: "BatchNorm"
+  bottom: "data"
+  top: "data"
+}
+layer {
+  name: "conv1_1"
+  type: "Convolution"
+  bottom: "data"
+  top: "conv1_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm1_1"
+  type: "BatchNorm"
+  bottom: "conv1_1"
+  top: "conv1_1"
+}
+layer {
+  name: "elu1_1"
+  type: "ELU"
+  bottom: "conv1_1"
+  top: "conv1_1"
+}
+layer {
+  name: "conv1_2"
+  type: "Convolution"
+  bottom: "conv1_1"
+  top: "conv1_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm1_2"
+  type: "BatchNorm"
+  bottom: "conv1_2"
+  top: "conv1_2"
+}
+layer {
+  name: "elu1_2"
+  type: "ELU"
+  bottom: "conv1_2"
+  top: "conv1_2"
+}
+layer {
+  name: "pool1"
+  type: "Pooling"
+  bottom: "conv1_2"
+  top: "pool1"
+  top: "pool1_mask"
+  top: "pool1_argmax_count"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "conv2_1"
+  type: "Convolution"
+  bottom: "pool1"
+  top: "conv2_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm2_1"
+  type: "BatchNorm"
+  bottom: "conv2_1"
+  top: "conv2_1"
+}
+layer {
+  name: "elu2_1"
+  type: "ELU"
+  bottom: "conv2_1"
+  top: "conv2_1"
+}
+layer {
+  name: "conv2_2"
+  type: "Convolution"
+  bottom: "conv2_1"
+  top: "conv2_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm2_2"
+  type: "BatchNorm"
+  bottom: "conv2_2"
+  top: "conv2_2"
+}
+layer {
+  name: "elu2_2"
+  type: "ELU"
+  bottom: "conv2_2"
+  top: "conv2_2"
+}
+layer {
+  name: "pool2"
+  type: "Pooling"
+  bottom: "conv2_2"
+  top: "pool2"
+  top: "pool2_mask"
+  top: "pool2_argmax_count"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "conv3_1"
+  type: "Convolution"
+  bottom: "pool2"
+  top: "conv3_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm3_1"
+  type: "BatchNorm"
+  bottom: "conv3_1"
+  top: "conv3_1"
+}
+layer {
+  name: "elu3_1"
+  type: "ELU"
+  bottom: "conv3_1"
+  top: "conv3_1"
+}
+layer {
+  name: "conv3_2"
+  type: "Convolution"
+  bottom: "conv3_1"
+  top: "conv3_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm3_2"
+  type: "BatchNorm"
+  bottom: "conv3_2"
+  top: "conv3_2"
+}
+layer {
+  name: "elu3_2"
+  type: "ELU"
+  bottom: "conv3_2"
+  top: "conv3_2"
+}
+layer {
+  name: "conv3_3"
+  type: "Convolution"
+  bottom: "conv3_2"
+  top: "conv3_3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm3_3"
+  type: "BatchNorm"
+  bottom: "conv3_3"
+  top: "conv3_3"
+}
+layer {
+  name: "elu3_3"
+  type: "ELU"
+  bottom: "conv3_3"
+  top: "conv3_3"
+}
+layer {
+  name: "pool3"
+  type: "Pooling"
+  bottom: "conv3_3"
+  top: "pool3"
+  top: "pool3_mask"
+  top: "pool3_argmax_count"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "conv4_1"
+  type: "Convolution"
+  bottom: "pool3"
+  top: "conv4_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm4_1"
+  type: "BatchNorm"
+  bottom: "conv4_1"
+  top: "conv4_1"
+}
+layer {
+  name: "elu4_1"
+  type: "ELU"
+  bottom: "conv4_1"
+  top: "conv4_1"
+}
+layer {
+  name: "conv4_2"
+  type: "Convolution"
+  bottom: "conv4_1"
+  top: "conv4_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm4_2"
+  type: "BatchNorm"
+  bottom: "conv4_2"
+  top: "conv4_2"
+}
+layer {
+  name: "elu4_2"
+  type: "ELU"
+  bottom: "conv4_2"
+  top: "conv4_2"
+}
+layer {
+  name: "conv4_3"
+  type: "Convolution"
+  bottom: "conv4_2"
+  top: "conv4_3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm4_3"
+  type: "BatchNorm"
+  bottom: "conv4_3"
+  top: "conv4_3"
+}
+layer {
+  name: "elu4_3"
+  type: "ELU"
+  bottom: "conv4_3"
+  top: "conv4_3"
+}
+layer {
+  name: "unpool3"
+  type: "Unpooling"
+  bottom: "conv4_3"
+  bottom: "pool3_mask"
+  bottom: "pool3_argmax_count"
+  top: "unpool3"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "deconv3_1"
+  type: "Deconvolution"
+  bottom: "unpool3"
+  top: "deconv3_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "debatchnorm3_1"
+  type: "BatchNorm"
+  bottom: "deconv3_1"
+  top: "deconv3_1"
+}
+layer {
+  name: "deelu3_1"
+  type: "ELU"
+  bottom: "deconv3_1"
+  top: "deconv3_1"
+}
+layer {
+  name: "deconv3_2"
+  type: "Deconvolution"
+  bottom: "deconv3_1"
+  top: "deconv3_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "debatchnorm3_2"
+  type: "BatchNorm"
+  bottom: "deconv3_2"
+  top: "deconv3_2"
+}
+layer {
+  name: "deelu3_2"
+  type: "ELU"
+  bottom: "deconv3_2"
+  top: "deconv3_2"
+}
+layer {
+  name: "deconv3_3"
+  type: "Deconvolution"
+  bottom: "deconv3_2"
+  top: "deconv3_3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "debatchnorm3_3"
+  type: "BatchNorm"
+  bottom: "deconv3_3"
+  top: "deconv3_3"
+}
+layer {
+  name: "deelu3_3"
+  type: "ELU"
+  bottom: "deconv3_3"
+  top: "deconv3_3"
+}
+layer {
+  name: "unpool2"
+  type: "Unpooling"
+  bottom: "deconv3_3"
+  bottom: "pool2_mask"
+  bottom: "pool2_argmax_count"
+  top: "unpool2"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "deconv2_1"
+  type: "Deconvolution"
+  bottom: "unpool2"
+  top: "deconv2_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "debatchnorm2_1"
+  type: "BatchNorm"
+  bottom: "deconv2_1"
+  top: "deconv2_1"
+}
+layer {
+  name: "deelu2_1"
+  type: "ELU"
+  bottom: "deconv2_1"
+  top: "deconv2_1"
+}
+layer {
+  name: "deconv2_2"
+  type: "Deconvolution"
+  bottom: "deconv2_1"
+  top: "deconv2_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "debatchnorm2_2"
+  type: "BatchNorm"
+  bottom: "deconv2_2"
+  top: "deconv2_2"
+}
+layer {
+  name: "deelu2_2"
+  type: "ELU"
+  bottom: "deconv2_2"
+  top: "deconv2_2"
+}
+layer {
+  name: "unpool1"
+  type: "Unpooling"
+  bottom: "deconv2_2"
+  bottom: "pool1_mask"
+  bottom: "pool1_argmax_count"
+  top: "unpool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "deconv1_1"
+  type: "Deconvolution"
+  bottom: "unpool1"
+  top: "deconv1_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "debatchnorm1_1"
+  type: "BatchNorm"
+  bottom: "deconv1_1"
+  top: "deconv1_1"
+}
+layer {
+  name: "deelu1_1"
+  type: "ELU"
+  bottom: "deconv1_1"
+  top: "deconv1_1"
+}
+layer {
+  name: "deconv1_2"
+  type: "Deconvolution"
+  bottom: "deconv1_1"
+  top: "deconv1_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "debatchnorm1_2"
+  type: "BatchNorm"
+  bottom: "deconv1_2"
+  top: "deconv1_2"
+}
+layer {
+  name: "deelu1_2"
+  type: "ELU"
+  bottom: "deconv1_2"
+  top: "deconv1_2"
+}
+layer {
+  name: "segmentation"
+  type: "Convolution"
+  bottom: "deconv1_2"
+  top: "segmentation"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 2
+    pad: 0
+    kernel_size: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "loss"
+  type: "SoftmaxWithLoss"
+  bottom: "segmentation"
+  bottom: "labels"
+  top: "loss"
+  loss_param {
+    ignore_label: 2
+  }
+}
+I0828 15:17:27.563982   727 layer_factory.hpp:77] Creating layer data
+I0828 15:17:27.563992   727 net.cpp:84] Creating Layer data
+I0828 15:17:27.564004   727 net.cpp:380] data -> data
+I0828 15:17:27.564020   727 net.cpp:380] data -> labels
+I0828 15:17:27.564029   727 hdf5_data_layer.cpp:80] Loading list of HDF5 filenames from: /home/grochette/Documents/SegNet/data/HDF5/Train/hdf5_list.txt
+I0828 15:17:27.564085   727 hdf5_data_layer.cpp:94] Number of HDF5 files: 86
+I0828 15:17:27.564971   727 hdf5.cpp:32] Datatype class: H5T_FLOAT
+I0828 15:17:28.291695   727 hdf5.cpp:35] Datatype class: H5T_INTEGER
+I0828 15:17:28.413311   727 net.cpp:122] Setting up data
+I0828 15:17:28.413332   727 net.cpp:129] Top shape: 4 8 224 224 (1605632)
+I0828 15:17:28.413337   727 net.cpp:129] Top shape: 4 1 224 224 (200704)
+I0828 15:17:28.413339   727 net.cpp:137] Memory required for data: 7225344
+I0828 15:17:28.413345   727 layer_factory.hpp:77] Creating layer batchnorm0
+I0828 15:17:28.413357   727 net.cpp:84] Creating Layer batchnorm0
+I0828 15:17:28.413362   727 net.cpp:406] batchnorm0 <- data
+I0828 15:17:28.413372   727 net.cpp:367] batchnorm0 -> data (in-place)
+I0828 15:17:28.414065   727 net.cpp:122] Setting up batchnorm0
+I0828 15:17:28.414073   727 net.cpp:129] Top shape: 4 8 224 224 (1605632)
+I0828 15:17:28.414077   727 net.cpp:137] Memory required for data: 13647872
+I0828 15:17:28.414094   727 layer_factory.hpp:77] Creating layer conv1_1
+I0828 15:17:28.414108   727 net.cpp:84] Creating Layer conv1_1
+I0828 15:17:28.414111   727 net.cpp:406] conv1_1 <- data
+I0828 15:17:28.414116   727 net.cpp:380] conv1_1 -> conv1_1
+I0828 15:17:28.883445   727 net.cpp:122] Setting up conv1_1
+I0828 15:17:28.883468   727 net.cpp:129] Top shape: 4 64 224 224 (12845056)
+I0828 15:17:28.883471   727 net.cpp:137] Memory required for data: 65028096
+I0828 15:17:28.883484   727 layer_factory.hpp:77] Creating layer batchnorm1_1
+I0828 15:17:28.883492   727 net.cpp:84] Creating Layer batchnorm1_1
+I0828 15:17:28.883496   727 net.cpp:406] batchnorm1_1 <- conv1_1
+I0828 15:17:28.883502   727 net.cpp:367] batchnorm1_1 -> conv1_1 (in-place)
+I0828 15:17:28.883708   727 net.cpp:122] Setting up batchnorm1_1
+I0828 15:17:28.883713   727 net.cpp:129] Top shape: 4 64 224 224 (12845056)
+I0828 15:17:28.883716   727 net.cpp:137] Memory required for data: 116408320
+I0828 15:17:28.883721   727 layer_factory.hpp:77] Creating layer elu1_1
+I0828 15:17:28.883728   727 net.cpp:84] Creating Layer elu1_1
+I0828 15:17:28.883729   727 net.cpp:406] elu1_1 <- conv1_1
+I0828 15:17:28.883733   727 net.cpp:367] elu1_1 -> conv1_1 (in-place)
+I0828 15:17:28.883736   727 net.cpp:122] Setting up elu1_1
+I0828 15:17:28.883740   727 net.cpp:129] Top shape: 4 64 224 224 (12845056)
+I0828 15:17:28.883743   727 net.cpp:137] Memory required for data: 167788544
+I0828 15:17:28.883744   727 layer_factory.hpp:77] Creating layer conv1_2
+I0828 15:17:28.883754   727 net.cpp:84] Creating Layer conv1_2
+I0828 15:17:28.883755   727 net.cpp:406] conv1_2 <- conv1_1
+I0828 15:17:28.883759   727 net.cpp:380] conv1_2 -> conv1_2
+I0828 15:17:28.885624   727 net.cpp:122] Setting up conv1_2
+I0828 15:17:28.885633   727 net.cpp:129] Top shape: 4 64 224 224 (12845056)
+I0828 15:17:28.885637   727 net.cpp:137] Memory required for data: 219168768
+I0828 15:17:28.885644   727 layer_factory.hpp:77] Creating layer batchnorm1_2
+I0828 15:17:28.885649   727 net.cpp:84] Creating Layer batchnorm1_2
+I0828 15:17:28.885653   727 net.cpp:406] batchnorm1_2 <- conv1_2
+I0828 15:17:28.885658   727 net.cpp:367] batchnorm1_2 -> conv1_2 (in-place)
+I0828 15:17:28.886286   727 net.cpp:122] Setting up batchnorm1_2
+I0828 15:17:28.886293   727 net.cpp:129] Top shape: 4 64 224 224 (12845056)
+I0828 15:17:28.886296   727 net.cpp:137] Memory required for data: 270548992
+I0828 15:17:28.886303   727 layer_factory.hpp:77] Creating layer elu1_2
+I0828 15:17:28.886307   727 net.cpp:84] Creating Layer elu1_2
+I0828 15:17:28.886309   727 net.cpp:406] elu1_2 <- conv1_2
+I0828 15:17:28.886313   727 net.cpp:367] elu1_2 -> conv1_2 (in-place)
+I0828 15:17:28.886318   727 net.cpp:122] Setting up elu1_2
+I0828 15:17:28.886322   727 net.cpp:129] Top shape: 4 64 224 224 (12845056)
+I0828 15:17:28.886323   727 net.cpp:137] Memory required for data: 321929216
+I0828 15:17:28.886343   727 layer_factory.hpp:77] Creating layer pool1
+I0828 15:17:28.886346   727 layer_factory.cpp:91] cuDNN does not support multiple tops. Using Caffe's own pooling layer.
+I0828 15:17:28.886351   727 net.cpp:84] Creating Layer pool1
+I0828 15:17:28.886354   727 net.cpp:406] pool1 <- conv1_2
+I0828 15:17:28.886358   727 net.cpp:380] pool1 -> pool1
+I0828 15:17:28.886365   727 net.cpp:380] pool1 -> pool1_mask
+I0828 15:17:28.886370   727 net.cpp:380] pool1 -> pool1_argmax_count
+I0828 15:17:28.886425   727 net.cpp:122] Setting up pool1
+I0828 15:17:28.886430   727 net.cpp:129] Top shape: 4 64 112 112 (3211264)
+I0828 15:17:28.886433   727 net.cpp:129] Top shape: 4 64 112 112 (3211264)
+I0828 15:17:28.886440   727 net.cpp:129] Top shape: 4 64 224 224 (12845056)
+I0828 15:17:28.886441   727 net.cpp:137] Memory required for data: 398999552
+I0828 15:17:28.886443   727 layer_factory.hpp:77] Creating layer conv2_1
+I0828 15:17:28.886452   727 net.cpp:84] Creating Layer conv2_1
+I0828 15:17:28.886454   727 net.cpp:406] conv2_1 <- pool1
+I0828 15:17:28.886458   727 net.cpp:380] conv2_1 -> conv2_1
+I0828 15:17:28.888970   727 net.cpp:122] Setting up conv2_1
+I0828 15:17:28.888983   727 net.cpp:129] Top shape: 4 128 112 112 (6422528)
+I0828 15:17:28.888984   727 net.cpp:137] Memory required for data: 424689664
+I0828 15:17:28.888990   727 layer_factory.hpp:77] Creating layer batchnorm2_1
+I0828 15:17:28.888994   727 net.cpp:84] Creating Layer batchnorm2_1
+I0828 15:17:28.888998   727 net.cpp:406] batchnorm2_1 <- conv2_1
+I0828 15:17:28.889003   727 net.cpp:367] batchnorm2_1 -> conv2_1 (in-place)
+I0828 15:17:28.889194   727 net.cpp:122] Setting up batchnorm2_1
+I0828 15:17:28.889199   727 net.cpp:129] Top shape: 4 128 112 112 (6422528)
+I0828 15:17:28.889201   727 net.cpp:137] Memory required for data: 450379776
+I0828 15:17:28.889214   727 layer_factory.hpp:77] Creating layer elu2_1
+I0828 15:17:28.889217   727 net.cpp:84] Creating Layer elu2_1
+I0828 15:17:28.889219   727 net.cpp:406] elu2_1 <- conv2_1
+I0828 15:17:28.889223   727 net.cpp:367] elu2_1 -> conv2_1 (in-place)
+I0828 15:17:28.889227   727 net.cpp:122] Setting up elu2_1
+I0828 15:17:28.889230   727 net.cpp:129] Top shape: 4 128 112 112 (6422528)
+I0828 15:17:28.889232   727 net.cpp:137] Memory required for data: 476069888
+I0828 15:17:28.889235   727 layer_factory.hpp:77] Creating layer conv2_2
+I0828 15:17:28.889243   727 net.cpp:84] Creating Layer conv2_2
+I0828 15:17:28.889245   727 net.cpp:406] conv2_2 <- conv2_1
+I0828 15:17:28.889250   727 net.cpp:380] conv2_2 -> conv2_2
+I0828 15:17:28.891724   727 net.cpp:122] Setting up conv2_2
+I0828 15:17:28.891733   727 net.cpp:129] Top shape: 4 128 112 112 (6422528)
+I0828 15:17:28.891736   727 net.cpp:137] Memory required for data: 501760000
+I0828 15:17:28.891741   727 layer_factory.hpp:77] Creating layer batchnorm2_2
+I0828 15:17:28.891747   727 net.cpp:84] Creating Layer batchnorm2_2
+I0828 15:17:28.891751   727 net.cpp:406] batchnorm2_2 <- conv2_2
+I0828 15:17:28.891757   727 net.cpp:367] batchnorm2_2 -> conv2_2 (in-place)
+I0828 15:17:28.891947   727 net.cpp:122] Setting up batchnorm2_2
+I0828 15:17:28.891952   727 net.cpp:129] Top shape: 4 128 112 112 (6422528)
+I0828 15:17:28.891954   727 net.cpp:137] Memory required for data: 527450112
+I0828 15:17:28.891959   727 layer_factory.hpp:77] Creating layer elu2_2
+I0828 15:17:28.891963   727 net.cpp:84] Creating Layer elu2_2
+I0828 15:17:28.891965   727 net.cpp:406] elu2_2 <- conv2_2
+I0828 15:17:28.891969   727 net.cpp:367] elu2_2 -> conv2_2 (in-place)
+I0828 15:17:28.891973   727 net.cpp:122] Setting up elu2_2
+I0828 15:17:28.891976   727 net.cpp:129] Top shape: 4 128 112 112 (6422528)
+I0828 15:17:28.891978   727 net.cpp:137] Memory required for data: 553140224
+I0828 15:17:28.891980   727 layer_factory.hpp:77] Creating layer pool2
+I0828 15:17:28.891984   727 layer_factory.cpp:91] cuDNN does not support multiple tops. Using Caffe's own pooling layer.
+I0828 15:17:28.891990   727 net.cpp:84] Creating Layer pool2
+I0828 15:17:28.891993   727 net.cpp:406] pool2 <- conv2_2
+I0828 15:17:28.892009   727 net.cpp:380] pool2 -> pool2
+I0828 15:17:28.892016   727 net.cpp:380] pool2 -> pool2_mask
+I0828 15:17:28.892020   727 net.cpp:380] pool2 -> pool2_argmax_count
+I0828 15:17:28.892066   727 net.cpp:122] Setting up pool2
+I0828 15:17:28.892072   727 net.cpp:129] Top shape: 4 128 56 56 (1605632)
+I0828 15:17:28.892076   727 net.cpp:129] Top shape: 4 128 56 56 (1605632)
+I0828 15:17:28.892078   727 net.cpp:129] Top shape: 4 128 112 112 (6422528)
+I0828 15:17:28.892081   727 net.cpp:137] Memory required for data: 591675392
+I0828 15:17:28.892082   727 layer_factory.hpp:77] Creating layer conv3_1
+I0828 15:17:28.892091   727 net.cpp:84] Creating Layer conv3_1
+I0828 15:17:28.892094   727 net.cpp:406] conv3_1 <- pool2
+I0828 15:17:28.892101   727 net.cpp:380] conv3_1 -> conv3_1
+I0828 15:17:28.896212   727 net.cpp:122] Setting up conv3_1
+I0828 15:17:28.896221   727 net.cpp:129] Top shape: 4 256 56 56 (3211264)
+I0828 15:17:28.896224   727 net.cpp:137] Memory required for data: 604520448
+I0828 15:17:28.896230   727 layer_factory.hpp:77] Creating layer batchnorm3_1
+I0828 15:17:28.896235   727 net.cpp:84] Creating Layer batchnorm3_1
+I0828 15:17:28.896237   727 net.cpp:406] batchnorm3_1 <- conv3_1
+I0828 15:17:28.896242   727 net.cpp:367] batchnorm3_1 -> conv3_1 (in-place)
+I0828 15:17:28.896437   727 net.cpp:122] Setting up batchnorm3_1
+I0828 15:17:28.896442   727 net.cpp:129] Top shape: 4 256 56 56 (3211264)
+I0828 15:17:28.896445   727 net.cpp:137] Memory required for data: 617365504
+I0828 15:17:28.896450   727 layer_factory.hpp:77] Creating layer elu3_1
+I0828 15:17:28.896456   727 net.cpp:84] Creating Layer elu3_1
+I0828 15:17:28.896457   727 net.cpp:406] elu3_1 <- conv3_1
+I0828 15:17:28.896461   727 net.cpp:367] elu3_1 -> conv3_1 (in-place)
+I0828 15:17:28.896464   727 net.cpp:122] Setting up elu3_1
+I0828 15:17:28.896468   727 net.cpp:129] Top shape: 4 256 56 56 (3211264)
+I0828 15:17:28.896471   727 net.cpp:137] Memory required for data: 630210560
+I0828 15:17:28.896472   727 layer_factory.hpp:77] Creating layer conv3_2
+I0828 15:17:28.896478   727 net.cpp:84] Creating Layer conv3_2
+I0828 15:17:28.896481   727 net.cpp:406] conv3_2 <- conv3_1
+I0828 15:17:28.896486   727 net.cpp:380] conv3_2 -> conv3_2
+I0828 15:17:28.902004   727 net.cpp:122] Setting up conv3_2
+I0828 15:17:28.902014   727 net.cpp:129] Top shape: 4 256 56 56 (3211264)
+I0828 15:17:28.902017   727 net.cpp:137] Memory required for data: 643055616
+I0828 15:17:28.902024   727 layer_factory.hpp:77] Creating layer batchnorm3_2
+I0828 15:17:28.902029   727 net.cpp:84] Creating Layer batchnorm3_2
+I0828 15:17:28.902031   727 net.cpp:406] batchnorm3_2 <- conv3_2
+I0828 15:17:28.902035   727 net.cpp:367] batchnorm3_2 -> conv3_2 (in-place)
+I0828 15:17:28.902235   727 net.cpp:122] Setting up batchnorm3_2
+I0828 15:17:28.902240   727 net.cpp:129] Top shape: 4 256 56 56 (3211264)
+I0828 15:17:28.902241   727 net.cpp:137] Memory required for data: 655900672
+I0828 15:17:28.902251   727 layer_factory.hpp:77] Creating layer elu3_2
+I0828 15:17:28.902254   727 net.cpp:84] Creating Layer elu3_2
+I0828 15:17:28.902257   727 net.cpp:406] elu3_2 <- conv3_2
+I0828 15:17:28.902261   727 net.cpp:367] elu3_2 -> conv3_2 (in-place)
+I0828 15:17:28.902266   727 net.cpp:122] Setting up elu3_2
+I0828 15:17:28.902269   727 net.cpp:129] Top shape: 4 256 56 56 (3211264)
+I0828 15:17:28.902271   727 net.cpp:137] Memory required for data: 668745728
+I0828 15:17:28.902273   727 layer_factory.hpp:77] Creating layer conv3_3
+I0828 15:17:28.902281   727 net.cpp:84] Creating Layer conv3_3
+I0828 15:17:28.902284   727 net.cpp:406] conv3_3 <- conv3_2
+I0828 15:17:28.902288   727 net.cpp:380] conv3_3 -> conv3_3
+I0828 15:17:28.907832   727 net.cpp:122] Setting up conv3_3
+I0828 15:17:28.907845   727 net.cpp:129] Top shape: 4 256 56 56 (3211264)
+I0828 15:17:28.907847   727 net.cpp:137] Memory required for data: 681590784
+I0828 15:17:28.907852   727 layer_factory.hpp:77] Creating layer batchnorm3_3
+I0828 15:17:28.907860   727 net.cpp:84] Creating Layer batchnorm3_3
+I0828 15:17:28.907862   727 net.cpp:406] batchnorm3_3 <- conv3_3
+I0828 15:17:28.907882   727 net.cpp:367] batchnorm3_3 -> conv3_3 (in-place)
+I0828 15:17:28.908080   727 net.cpp:122] Setting up batchnorm3_3
+I0828 15:17:28.908087   727 net.cpp:129] Top shape: 4 256 56 56 (3211264)
+I0828 15:17:28.908089   727 net.cpp:137] Memory required for data: 694435840
+I0828 15:17:28.908095   727 layer_factory.hpp:77] Creating layer elu3_3
+I0828 15:17:28.908098   727 net.cpp:84] Creating Layer elu3_3
+I0828 15:17:28.908102   727 net.cpp:406] elu3_3 <- conv3_3
+I0828 15:17:28.908104   727 net.cpp:367] elu3_3 -> conv3_3 (in-place)
+I0828 15:17:28.908108   727 net.cpp:122] Setting up elu3_3
+I0828 15:17:28.908112   727 net.cpp:129] Top shape: 4 256 56 56 (3211264)
+I0828 15:17:28.908113   727 net.cpp:137] Memory required for data: 707280896
+I0828 15:17:28.908116   727 layer_factory.hpp:77] Creating layer pool3
+I0828 15:17:28.908119   727 layer_factory.cpp:91] cuDNN does not support multiple tops. Using Caffe's own pooling layer.
+I0828 15:17:28.908123   727 net.cpp:84] Creating Layer pool3
+I0828 15:17:28.908125   727 net.cpp:406] pool3 <- conv3_3
+I0828 15:17:28.908130   727 net.cpp:380] pool3 -> pool3
+I0828 15:17:28.908135   727 net.cpp:380] pool3 -> pool3_mask
+I0828 15:17:28.908143   727 net.cpp:380] pool3 -> pool3_argmax_count
+I0828 15:17:28.908192   727 net.cpp:122] Setting up pool3
+I0828 15:17:28.908198   727 net.cpp:129] Top shape: 4 256 28 28 (802816)
+I0828 15:17:28.908203   727 net.cpp:129] Top shape: 4 256 28 28 (802816)
+I0828 15:17:28.908206   727 net.cpp:129] Top shape: 4 256 56 56 (3211264)
+I0828 15:17:28.908208   727 net.cpp:137] Memory required for data: 726548480
+I0828 15:17:28.908211   727 layer_factory.hpp:77] Creating layer conv4_1
+I0828 15:17:28.908218   727 net.cpp:84] Creating Layer conv4_1
+I0828 15:17:28.908221   727 net.cpp:406] conv4_1 <- pool3
+I0828 15:17:28.908226   727 net.cpp:380] conv4_1 -> conv4_1
+I0828 15:17:28.911267   727 net.cpp:122] Setting up conv4_1
+I0828 15:17:28.911278   727 net.cpp:129] Top shape: 4 512 28 28 (1605632)
+I0828 15:17:28.911279   727 net.cpp:137] Memory required for data: 732971008
+I0828 15:17:28.911284   727 layer_factory.hpp:77] Creating layer batchnorm4_1
+I0828 15:17:28.911290   727 net.cpp:84] Creating Layer batchnorm4_1
+I0828 15:17:28.911293   727 net.cpp:406] batchnorm4_1 <- conv4_1
+I0828 15:17:28.911298   727 net.cpp:367] batchnorm4_1 -> conv4_1 (in-place)
+I0828 15:17:28.911489   727 net.cpp:122] Setting up batchnorm4_1
+I0828 15:17:28.911494   727 net.cpp:129] Top shape: 4 512 28 28 (1605632)
+I0828 15:17:28.911496   727 net.cpp:137] Memory required for data: 739393536
+I0828 15:17:28.911501   727 layer_factory.hpp:77] Creating layer elu4_1
+I0828 15:17:28.911504   727 net.cpp:84] Creating Layer elu4_1
+I0828 15:17:28.911507   727 net.cpp:406] elu4_1 <- conv4_1
+I0828 15:17:28.911511   727 net.cpp:367] elu4_1 -> conv4_1 (in-place)
+I0828 15:17:28.911514   727 net.cpp:122] Setting up elu4_1
+I0828 15:17:28.911519   727 net.cpp:129] Top shape: 4 512 28 28 (1605632)
+I0828 15:17:28.911520   727 net.cpp:137] Memory required for data: 745816064
+I0828 15:17:28.911522   727 layer_factory.hpp:77] Creating layer conv4_2
+I0828 15:17:28.911530   727 net.cpp:84] Creating Layer conv4_2
+I0828 15:17:28.911532   727 net.cpp:406] conv4_2 <- conv4_1
+I0828 15:17:28.911537   727 net.cpp:380] conv4_2 -> conv4_2
+I0828 15:17:28.914795   727 net.cpp:122] Setting up conv4_2
+I0828 15:17:28.914804   727 net.cpp:129] Top shape: 4 512 28 28 (1605632)
+I0828 15:17:28.914808   727 net.cpp:137] Memory required for data: 752238592
+I0828 15:17:28.914813   727 layer_factory.hpp:77] Creating layer batchnorm4_2
+I0828 15:17:28.914818   727 net.cpp:84] Creating Layer batchnorm4_2
+I0828 15:17:28.914820   727 net.cpp:406] batchnorm4_2 <- conv4_2
+I0828 15:17:28.914825   727 net.cpp:367] batchnorm4_2 -> conv4_2 (in-place)
+I0828 15:17:28.915019   727 net.cpp:122] Setting up batchnorm4_2
+I0828 15:17:28.915024   727 net.cpp:129] Top shape: 4 512 28 28 (1605632)
+I0828 15:17:28.915026   727 net.cpp:137] Memory required for data: 758661120
+I0828 15:17:28.915031   727 layer_factory.hpp:77] Creating layer elu4_2
+I0828 15:17:28.915047   727 net.cpp:84] Creating Layer elu4_2
+I0828 15:17:28.915050   727 net.cpp:406] elu4_2 <- conv4_2
+I0828 15:17:28.915055   727 net.cpp:367] elu4_2 -> conv4_2 (in-place)
+I0828 15:17:28.915058   727 net.cpp:122] Setting up elu4_2
+I0828 15:17:28.915062   727 net.cpp:129] Top shape: 4 512 28 28 (1605632)
+I0828 15:17:28.915065   727 net.cpp:137] Memory required for data: 765083648
+I0828 15:17:28.915066   727 layer_factory.hpp:77] Creating layer conv4_3
+I0828 15:17:28.915076   727 net.cpp:84] Creating Layer conv4_3
+I0828 15:17:28.915081   727 net.cpp:406] conv4_3 <- conv4_2
+I0828 15:17:28.915084   727 net.cpp:380] conv4_3 -> conv4_3
+I0828 15:17:28.924554   727 net.cpp:122] Setting up conv4_3
+I0828 15:17:28.924569   727 net.cpp:129] Top shape: 4 256 28 28 (802816)
+I0828 15:17:28.924573   727 net.cpp:137] Memory required for data: 768294912
+I0828 15:17:28.924579   727 layer_factory.hpp:77] Creating layer batchnorm4_3
+I0828 15:17:28.924587   727 net.cpp:84] Creating Layer batchnorm4_3
+I0828 15:17:28.924590   727 net.cpp:406] batchnorm4_3 <- conv4_3
+I0828 15:17:28.924595   727 net.cpp:367] batchnorm4_3 -> conv4_3 (in-place)
+I0828 15:17:28.924799   727 net.cpp:122] Setting up batchnorm4_3
+I0828 15:17:28.924804   727 net.cpp:129] Top shape: 4 256 28 28 (802816)
+I0828 15:17:28.924806   727 net.cpp:137] Memory required for data: 771506176
+I0828 15:17:28.924813   727 layer_factory.hpp:77] Creating layer elu4_3
+I0828 15:17:28.924815   727 net.cpp:84] Creating Layer elu4_3
+I0828 15:17:28.924818   727 net.cpp:406] elu4_3 <- conv4_3
+I0828 15:17:28.924821   727 net.cpp:367] elu4_3 -> conv4_3 (in-place)
+I0828 15:17:28.924825   727 net.cpp:122] Setting up elu4_3
+I0828 15:17:28.924829   727 net.cpp:129] Top shape: 4 256 28 28 (802816)
+I0828 15:17:28.924831   727 net.cpp:137] Memory required for data: 774717440
+I0828 15:17:28.924834   727 layer_factory.hpp:77] Creating layer unpool3
+I0828 15:17:28.924839   727 net.cpp:84] Creating Layer unpool3
+I0828 15:17:28.924841   727 net.cpp:406] unpool3 <- conv4_3
+I0828 15:17:28.924845   727 net.cpp:406] unpool3 <- pool3_mask
+I0828 15:17:28.924849   727 net.cpp:406] unpool3 <- pool3_argmax_count
+I0828 15:17:28.924854   727 net.cpp:380] unpool3 -> unpool3
+I0828 15:17:28.924882   727 net.cpp:122] Setting up unpool3
+I0828 15:17:28.924886   727 net.cpp:129] Top shape: 4 256 56 56 (3211264)
+I0828 15:17:28.924888   727 net.cpp:137] Memory required for data: 787562496
+I0828 15:17:28.924891   727 layer_factory.hpp:77] Creating layer deconv3_1
+I0828 15:17:28.924898   727 net.cpp:84] Creating Layer deconv3_1
+I0828 15:17:28.924901   727 net.cpp:406] deconv3_1 <- unpool3
+I0828 15:17:28.924907   727 net.cpp:380] deconv3_1 -> deconv3_1
+I0828 15:17:28.928951   727 net.cpp:122] Setting up deconv3_1
+I0828 15:17:28.928961   727 net.cpp:129] Top shape: 4 256 56 56 (3211264)
+I0828 15:17:28.928962   727 net.cpp:137] Memory required for data: 800407552
+I0828 15:17:28.928967   727 layer_factory.hpp:77] Creating layer debatchnorm3_1
+I0828 15:17:28.928973   727 net.cpp:84] Creating Layer debatchnorm3_1
+I0828 15:17:28.928977   727 net.cpp:406] debatchnorm3_1 <- deconv3_1
+I0828 15:17:28.928980   727 net.cpp:367] debatchnorm3_1 -> deconv3_1 (in-place)
+I0828 15:17:28.929185   727 net.cpp:122] Setting up debatchnorm3_1
+I0828 15:17:28.929190   727 net.cpp:129] Top shape: 4 256 56 56 (3211264)
+I0828 15:17:28.929193   727 net.cpp:137] Memory required for data: 813252608
+I0828 15:17:28.929198   727 layer_factory.hpp:77] Creating layer deelu3_1
+I0828 15:17:28.929203   727 net.cpp:84] Creating Layer deelu3_1
+I0828 15:17:28.929205   727 net.cpp:406] deelu3_1 <- deconv3_1
+I0828 15:17:28.929208   727 net.cpp:367] deelu3_1 -> deconv3_1 (in-place)
+I0828 15:17:28.929213   727 net.cpp:122] Setting up deelu3_1
+I0828 15:17:28.929215   727 net.cpp:129] Top shape: 4 256 56 56 (3211264)
+I0828 15:17:28.929219   727 net.cpp:137] Memory required for data: 826097664
+I0828 15:17:28.929220   727 layer_factory.hpp:77] Creating layer deconv3_2
+I0828 15:17:28.929224   727 net.cpp:84] Creating Layer deconv3_2
+I0828 15:17:28.929244   727 net.cpp:406] deconv3_2 <- deconv3_1
+I0828 15:17:28.929250   727 net.cpp:380] deconv3_2 -> deconv3_2
+I0828 15:17:28.933287   727 net.cpp:122] Setting up deconv3_2
+I0828 15:17:28.933297   727 net.cpp:129] Top shape: 4 256 56 56 (3211264)
+I0828 15:17:28.933300   727 net.cpp:137] Memory required for data: 838942720
+I0828 15:17:28.933305   727 layer_factory.hpp:77] Creating layer debatchnorm3_2
+I0828 15:17:28.933310   727 net.cpp:84] Creating Layer debatchnorm3_2
+I0828 15:17:28.933312   727 net.cpp:406] debatchnorm3_2 <- deconv3_2
+I0828 15:17:28.933317   727 net.cpp:367] debatchnorm3_2 -> deconv3_2 (in-place)
+I0828 15:17:28.933523   727 net.cpp:122] Setting up debatchnorm3_2
+I0828 15:17:28.933528   727 net.cpp:129] Top shape: 4 256 56 56 (3211264)
+I0828 15:17:28.933531   727 net.cpp:137] Memory required for data: 851787776
+I0828 15:17:28.933535   727 layer_factory.hpp:77] Creating layer deelu3_2
+I0828 15:17:28.933539   727 net.cpp:84] Creating Layer deelu3_2
+I0828 15:17:28.933542   727 net.cpp:406] deelu3_2 <- deconv3_2
+I0828 15:17:28.933544   727 net.cpp:367] deelu3_2 -> deconv3_2 (in-place)
+I0828 15:17:28.933548   727 net.cpp:122] Setting up deelu3_2
+I0828 15:17:28.933552   727 net.cpp:129] Top shape: 4 256 56 56 (3211264)
+I0828 15:17:28.933554   727 net.cpp:137] Memory required for data: 864632832
+I0828 15:17:28.933557   727 layer_factory.hpp:77] Creating layer deconv3_3
+I0828 15:17:28.933562   727 net.cpp:84] Creating Layer deconv3_3
+I0828 15:17:28.933565   727 net.cpp:406] deconv3_3 <- deconv3_2
+I0828 15:17:28.933568   727 net.cpp:380] deconv3_3 -> deconv3_3
+I0828 15:17:28.935801   727 net.cpp:122] Setting up deconv3_3
+I0828 15:17:28.935808   727 net.cpp:129] Top shape: 4 128 56 56 (1605632)
+I0828 15:17:28.935811   727 net.cpp:137] Memory required for data: 871055360
+I0828 15:17:28.935825   727 layer_factory.hpp:77] Creating layer debatchnorm3_3
+I0828 15:17:28.935829   727 net.cpp:84] Creating Layer debatchnorm3_3
+I0828 15:17:28.935832   727 net.cpp:406] debatchnorm3_3 <- deconv3_3
+I0828 15:17:28.935838   727 net.cpp:367] debatchnorm3_3 -> deconv3_3 (in-place)
+I0828 15:17:28.936035   727 net.cpp:122] Setting up debatchnorm3_3
+I0828 15:17:28.936044   727 net.cpp:129] Top shape: 4 128 56 56 (1605632)
+I0828 15:17:28.936046   727 net.cpp:137] Memory required for data: 877477888
+I0828 15:17:28.936053   727 layer_factory.hpp:77] Creating layer deelu3_3
+I0828 15:17:28.936055   727 net.cpp:84] Creating Layer deelu3_3
+I0828 15:17:28.936058   727 net.cpp:406] deelu3_3 <- deconv3_3
+I0828 15:17:28.936061   727 net.cpp:367] deelu3_3 -> deconv3_3 (in-place)
+I0828 15:17:28.936066   727 net.cpp:122] Setting up deelu3_3
+I0828 15:17:28.936069   727 net.cpp:129] Top shape: 4 128 56 56 (1605632)
+I0828 15:17:28.936071   727 net.cpp:137] Memory required for data: 883900416
+I0828 15:17:28.936072   727 layer_factory.hpp:77] Creating layer unpool2
+I0828 15:17:28.936077   727 net.cpp:84] Creating Layer unpool2
+I0828 15:17:28.936080   727 net.cpp:406] unpool2 <- deconv3_3
+I0828 15:17:28.936084   727 net.cpp:406] unpool2 <- pool2_mask
+I0828 15:17:28.936086   727 net.cpp:406] unpool2 <- pool2_argmax_count
+I0828 15:17:28.936090   727 net.cpp:380] unpool2 -> unpool2
+I0828 15:17:28.936113   727 net.cpp:122] Setting up unpool2
+I0828 15:17:28.936118   727 net.cpp:129] Top shape: 4 128 112 112 (6422528)
+I0828 15:17:28.936120   727 net.cpp:137] Memory required for data: 909590528
+I0828 15:17:28.936122   727 layer_factory.hpp:77] Creating layer deconv2_1
+I0828 15:17:28.936127   727 net.cpp:84] Creating Layer deconv2_1
+I0828 15:17:28.936131   727 net.cpp:406] deconv2_1 <- unpool2
+I0828 15:17:28.936136   727 net.cpp:380] deconv2_1 -> deconv2_1
+I0828 15:17:28.937582   727 net.cpp:122] Setting up deconv2_1
+I0828 15:17:28.937590   727 net.cpp:129] Top shape: 4 128 112 112 (6422528)
+I0828 15:17:28.937593   727 net.cpp:137] Memory required for data: 935280640
+I0828 15:17:28.937597   727 layer_factory.hpp:77] Creating layer debatchnorm2_1
+I0828 15:17:28.937602   727 net.cpp:84] Creating Layer debatchnorm2_1
+I0828 15:17:28.937605   727 net.cpp:406] debatchnorm2_1 <- deconv2_1
+I0828 15:17:28.937623   727 net.cpp:367] debatchnorm2_1 -> deconv2_1 (in-place)
+I0828 15:17:28.937827   727 net.cpp:122] Setting up debatchnorm2_1
+I0828 15:17:28.937834   727 net.cpp:129] Top shape: 4 128 112 112 (6422528)
+I0828 15:17:28.937836   727 net.cpp:137] Memory required for data: 960970752
+I0828 15:17:28.937841   727 layer_factory.hpp:77] Creating layer deelu2_1
+I0828 15:17:28.937844   727 net.cpp:84] Creating Layer deelu2_1
+I0828 15:17:28.937847   727 net.cpp:406] deelu2_1 <- deconv2_1
+I0828 15:17:28.937850   727 net.cpp:367] deelu2_1 -> deconv2_1 (in-place)
+I0828 15:17:28.937855   727 net.cpp:122] Setting up deelu2_1
+I0828 15:17:28.937857   727 net.cpp:129] Top shape: 4 128 112 112 (6422528)
+I0828 15:17:28.937860   727 net.cpp:137] Memory required for data: 986660864
+I0828 15:17:28.937861   727 layer_factory.hpp:77] Creating layer deconv2_2
+I0828 15:17:28.937866   727 net.cpp:84] Creating Layer deconv2_2
+I0828 15:17:28.937868   727 net.cpp:406] deconv2_2 <- deconv2_1
+I0828 15:17:28.937873   727 net.cpp:380] deconv2_2 -> deconv2_2
+I0828 15:17:28.938500   727 net.cpp:122] Setting up deconv2_2
+I0828 15:17:28.938506   727 net.cpp:129] Top shape: 4 64 112 112 (3211264)
+I0828 15:17:28.938508   727 net.cpp:137] Memory required for data: 999505920
+I0828 15:17:28.938513   727 layer_factory.hpp:77] Creating layer debatchnorm2_2
+I0828 15:17:28.938518   727 net.cpp:84] Creating Layer debatchnorm2_2
+I0828 15:17:28.938520   727 net.cpp:406] debatchnorm2_2 <- deconv2_2
+I0828 15:17:28.938524   727 net.cpp:367] debatchnorm2_2 -> deconv2_2 (in-place)
+I0828 15:17:28.938730   727 net.cpp:122] Setting up debatchnorm2_2
+I0828 15:17:28.938735   727 net.cpp:129] Top shape: 4 64 112 112 (3211264)
+I0828 15:17:28.938737   727 net.cpp:137] Memory required for data: 1012350976
+I0828 15:17:28.938741   727 layer_factory.hpp:77] Creating layer deelu2_2
+I0828 15:17:28.938745   727 net.cpp:84] Creating Layer deelu2_2
+I0828 15:17:28.938747   727 net.cpp:406] deelu2_2 <- deconv2_2
+I0828 15:17:28.938750   727 net.cpp:367] deelu2_2 -> deconv2_2 (in-place)
+I0828 15:17:28.938755   727 net.cpp:122] Setting up deelu2_2
+I0828 15:17:28.938758   727 net.cpp:129] Top shape: 4 64 112 112 (3211264)
+I0828 15:17:28.938760   727 net.cpp:137] Memory required for data: 1025196032
+I0828 15:17:28.938761   727 layer_factory.hpp:77] Creating layer unpool1
+I0828 15:17:28.938766   727 net.cpp:84] Creating Layer unpool1
+I0828 15:17:28.938768   727 net.cpp:406] unpool1 <- deconv2_2
+I0828 15:17:28.938771   727 net.cpp:406] unpool1 <- pool1_mask
+I0828 15:17:28.938776   727 net.cpp:406] unpool1 <- pool1_argmax_count
+I0828 15:17:28.938781   727 net.cpp:380] unpool1 -> unpool1
+I0828 15:17:28.938802   727 net.cpp:122] Setting up unpool1
+I0828 15:17:28.938808   727 net.cpp:129] Top shape: 4 64 224 224 (12845056)
+I0828 15:17:28.938810   727 net.cpp:137] Memory required for data: 1076576256
+I0828 15:17:28.938812   727 layer_factory.hpp:77] Creating layer deconv1_1
+I0828 15:17:28.938817   727 net.cpp:84] Creating Layer deconv1_1
+I0828 15:17:28.938819   727 net.cpp:406] deconv1_1 <- unpool1
+I0828 15:17:28.938827   727 net.cpp:380] deconv1_1 -> deconv1_1
+I0828 15:17:28.939280   727 net.cpp:122] Setting up deconv1_1
+I0828 15:17:28.939286   727 net.cpp:129] Top shape: 4 64 224 224 (12845056)
+I0828 15:17:28.939290   727 net.cpp:137] Memory required for data: 1127956480
+I0828 15:17:28.939293   727 layer_factory.hpp:77] Creating layer debatchnorm1_1
+I0828 15:17:28.939296   727 net.cpp:84] Creating Layer debatchnorm1_1
+I0828 15:17:28.939299   727 net.cpp:406] debatchnorm1_1 <- deconv1_1
+I0828 15:17:28.939304   727 net.cpp:367] debatchnorm1_1 -> deconv1_1 (in-place)
+I0828 15:17:28.939524   727 net.cpp:122] Setting up debatchnorm1_1
+I0828 15:17:28.939528   727 net.cpp:129] Top shape: 4 64 224 224 (12845056)
+I0828 15:17:28.939532   727 net.cpp:137] Memory required for data: 1179336704
+I0828 15:17:28.939535   727 layer_factory.hpp:77] Creating layer deelu1_1
+I0828 15:17:28.939539   727 net.cpp:84] Creating Layer deelu1_1
+I0828 15:17:28.939541   727 net.cpp:406] deelu1_1 <- deconv1_1
+I0828 15:17:28.939553   727 net.cpp:367] deelu1_1 -> deconv1_1 (in-place)
+I0828 15:17:28.939556   727 net.cpp:122] Setting up deelu1_1
+I0828 15:17:28.939559   727 net.cpp:129] Top shape: 4 64 224 224 (12845056)
+I0828 15:17:28.939561   727 net.cpp:137] Memory required for data: 1230716928
+I0828 15:17:28.939564   727 layer_factory.hpp:77] Creating layer deconv1_2
+I0828 15:17:28.939569   727 net.cpp:84] Creating Layer deconv1_2
+I0828 15:17:28.939573   727 net.cpp:406] deconv1_2 <- deconv1_1
+I0828 15:17:28.939575   727 net.cpp:380] deconv1_2 -> deconv1_2
+I0828 15:17:28.940464   727 net.cpp:122] Setting up deconv1_2
+I0828 15:17:28.940470   727 net.cpp:129] Top shape: 4 64 224 224 (12845056)
+I0828 15:17:28.940474   727 net.cpp:137] Memory required for data: 1282097152
+I0828 15:17:28.940477   727 layer_factory.hpp:77] Creating layer debatchnorm1_2
+I0828 15:17:28.940485   727 net.cpp:84] Creating Layer debatchnorm1_2
+I0828 15:17:28.940486   727 net.cpp:406] debatchnorm1_2 <- deconv1_2
+I0828 15:17:28.940490   727 net.cpp:367] debatchnorm1_2 -> deconv1_2 (in-place)
+I0828 15:17:28.940717   727 net.cpp:122] Setting up debatchnorm1_2
+I0828 15:17:28.940723   727 net.cpp:129] Top shape: 4 64 224 224 (12845056)
+I0828 15:17:28.940726   727 net.cpp:137] Memory required for data: 1333477376
+I0828 15:17:28.940731   727 layer_factory.hpp:77] Creating layer deelu1_2
+I0828 15:17:28.940733   727 net.cpp:84] Creating Layer deelu1_2
+I0828 15:17:28.940737   727 net.cpp:406] deelu1_2 <- deconv1_2
+I0828 15:17:28.940739   727 net.cpp:367] deelu1_2 -> deconv1_2 (in-place)
+I0828 15:17:28.940743   727 net.cpp:122] Setting up deelu1_2
+I0828 15:17:28.940747   727 net.cpp:129] Top shape: 4 64 224 224 (12845056)
+I0828 15:17:28.940749   727 net.cpp:137] Memory required for data: 1384857600
+I0828 15:17:28.940752   727 layer_factory.hpp:77] Creating layer segmentation
+I0828 15:17:28.940759   727 net.cpp:84] Creating Layer segmentation
+I0828 15:17:28.940762   727 net.cpp:406] segmentation <- deconv1_2
+I0828 15:17:28.940767   727 net.cpp:380] segmentation -> segmentation
+I0828 15:17:28.942654   727 net.cpp:122] Setting up segmentation
+I0828 15:17:28.942663   727 net.cpp:129] Top shape: 4 2 224 224 (401408)
+I0828 15:17:28.942665   727 net.cpp:137] Memory required for data: 1386463232
+I0828 15:17:28.942672   727 layer_factory.hpp:77] Creating layer loss
+I0828 15:17:28.942680   727 net.cpp:84] Creating Layer loss
+I0828 15:17:28.942683   727 net.cpp:406] loss <- segmentation
+I0828 15:17:28.942687   727 net.cpp:406] loss <- labels
+I0828 15:17:28.942700   727 net.cpp:380] loss -> loss
+I0828 15:17:28.942718   727 layer_factory.hpp:77] Creating layer loss
+I0828 15:17:28.943980   727 net.cpp:122] Setting up loss
+I0828 15:17:28.943989   727 net.cpp:129] Top shape: (1)
+I0828 15:17:28.943991   727 net.cpp:132]     with loss weight 1
+I0828 15:17:28.944010   727 net.cpp:137] Memory required for data: 1386463236
+I0828 15:17:28.944012   727 net.cpp:198] loss needs backward computation.
+I0828 15:17:28.944018   727 net.cpp:198] segmentation needs backward computation.
+I0828 15:17:28.944021   727 net.cpp:198] deelu1_2 needs backward computation.
+I0828 15:17:28.944025   727 net.cpp:198] debatchnorm1_2 needs backward computation.
+I0828 15:17:28.944026   727 net.cpp:198] deconv1_2 needs backward computation.
+I0828 15:17:28.944028   727 net.cpp:198] deelu1_1 needs backward computation.
+I0828 15:17:28.944031   727 net.cpp:198] debatchnorm1_1 needs backward computation.
+I0828 15:17:28.944033   727 net.cpp:198] deconv1_1 needs backward computation.
+I0828 15:17:28.944036   727 net.cpp:198] unpool1 needs backward computation.
+I0828 15:17:28.944038   727 net.cpp:198] deelu2_2 needs backward computation.
+I0828 15:17:28.944041   727 net.cpp:198] debatchnorm2_2 needs backward computation.
+I0828 15:17:28.944043   727 net.cpp:198] deconv2_2 needs backward computation.
+I0828 15:17:28.944046   727 net.cpp:198] deelu2_1 needs backward computation.
+I0828 15:17:28.944047   727 net.cpp:198] debatchnorm2_1 needs backward computation.
+I0828 15:17:28.944051   727 net.cpp:198] deconv2_1 needs backward computation.
+I0828 15:17:28.944066   727 net.cpp:198] unpool2 needs backward computation.
+I0828 15:17:28.944069   727 net.cpp:198] deelu3_3 needs backward computation.
+I0828 15:17:28.944072   727 net.cpp:198] debatchnorm3_3 needs backward computation.
+I0828 15:17:28.944075   727 net.cpp:198] deconv3_3 needs backward computation.
+I0828 15:17:28.944079   727 net.cpp:198] deelu3_2 needs backward computation.
+I0828 15:17:28.944082   727 net.cpp:198] debatchnorm3_2 needs backward computation.
+I0828 15:17:28.944084   727 net.cpp:198] deconv3_2 needs backward computation.
+I0828 15:17:28.944087   727 net.cpp:198] deelu3_1 needs backward computation.
+I0828 15:17:28.944092   727 net.cpp:198] debatchnorm3_1 needs backward computation.
+I0828 15:17:28.944094   727 net.cpp:198] deconv3_1 needs backward computation.
+I0828 15:17:28.944097   727 net.cpp:198] unpool3 needs backward computation.
+I0828 15:17:28.944100   727 net.cpp:198] elu4_3 needs backward computation.
+I0828 15:17:28.944103   727 net.cpp:198] batchnorm4_3 needs backward computation.
+I0828 15:17:28.944105   727 net.cpp:198] conv4_3 needs backward computation.
+I0828 15:17:28.944108   727 net.cpp:198] elu4_2 needs backward computation.
+I0828 15:17:28.944110   727 net.cpp:198] batchnorm4_2 needs backward computation.
+I0828 15:17:28.944113   727 net.cpp:198] conv4_2 needs backward computation.
+I0828 15:17:28.944115   727 net.cpp:198] elu4_1 needs backward computation.
+I0828 15:17:28.944118   727 net.cpp:198] batchnorm4_1 needs backward computation.
+I0828 15:17:28.944120   727 net.cpp:198] conv4_1 needs backward computation.
+I0828 15:17:28.944123   727 net.cpp:198] pool3 needs backward computation.
+I0828 15:17:28.944125   727 net.cpp:198] elu3_3 needs backward computation.
+I0828 15:17:28.944128   727 net.cpp:198] batchnorm3_3 needs backward computation.
+I0828 15:17:28.944130   727 net.cpp:198] conv3_3 needs backward computation.
+I0828 15:17:28.944133   727 net.cpp:198] elu3_2 needs backward computation.
+I0828 15:17:28.944135   727 net.cpp:198] batchnorm3_2 needs backward computation.
+I0828 15:17:28.944138   727 net.cpp:198] conv3_2 needs backward computation.
+I0828 15:17:28.944140   727 net.cpp:198] elu3_1 needs backward computation.
+I0828 15:17:28.944142   727 net.cpp:198] batchnorm3_1 needs backward computation.
+I0828 15:17:28.944144   727 net.cpp:198] conv3_1 needs backward computation.
+I0828 15:17:28.944147   727 net.cpp:198] pool2 needs backward computation.
+I0828 15:17:28.944150   727 net.cpp:198] elu2_2 needs backward computation.
+I0828 15:17:28.944154   727 net.cpp:198] batchnorm2_2 needs backward computation.
+I0828 15:17:28.944155   727 net.cpp:198] conv2_2 needs backward computation.
+I0828 15:17:28.944157   727 net.cpp:198] elu2_1 needs backward computation.
+I0828 15:17:28.944160   727 net.cpp:198] batchnorm2_1 needs backward computation.
+I0828 15:17:28.944162   727 net.cpp:198] conv2_1 needs backward computation.
+I0828 15:17:28.944165   727 net.cpp:198] pool1 needs backward computation.
+I0828 15:17:28.944167   727 net.cpp:198] elu1_2 needs backward computation.
+I0828 15:17:28.944170   727 net.cpp:198] batchnorm1_2 needs backward computation.
+I0828 15:17:28.944172   727 net.cpp:198] conv1_2 needs backward computation.
+I0828 15:17:28.944175   727 net.cpp:198] elu1_1 needs backward computation.
+I0828 15:17:28.944177   727 net.cpp:198] batchnorm1_1 needs backward computation.
+I0828 15:17:28.944180   727 net.cpp:198] conv1_1 needs backward computation.
+I0828 15:17:28.944182   727 net.cpp:198] batchnorm0 needs backward computation.
+I0828 15:17:28.944185   727 net.cpp:200] data does not need backward computation.
+I0828 15:17:28.944187   727 net.cpp:242] This network produces output loss
+I0828 15:17:28.944219   727 net.cpp:255] Network initialization done.
+I0828 15:17:28.944664   727 solver.cpp:172] Creating test net (#0) specified by net file: train_val.prototxt
+I0828 15:17:28.944712   727 net.cpp:294] The NetState phase (1) differed from the phase (0) specified by a rule in layer data
+I0828 15:17:28.945000   727 net.cpp:51] Initializing net from parameters: 
+name: "SegNet"
+state {
+  phase: TEST
+}
+layer {
+  name: "data"
+  type: "HDF5Data"
+  top: "data"
+  top: "labels"
+  include {
+    phase: TEST
+  }
+  hdf5_data_param {
+    source: "/home/grochette/Documents/SegNet/data/HDF5/Validation/hdf5_list.txt"
+    batch_size: 1
+  }
+}
+layer {
+  name: "batchnorm0"
+  type: "BatchNorm"
+  bottom: "data"
+  top: "data"
+}
+layer {
+  name: "conv1_1"
+  type: "Convolution"
+  bottom: "data"
+  top: "conv1_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm1_1"
+  type: "BatchNorm"
+  bottom: "conv1_1"
+  top: "conv1_1"
+}
+layer {
+  name: "elu1_1"
+  type: "ELU"
+  bottom: "conv1_1"
+  top: "conv1_1"
+}
+layer {
+  name: "conv1_2"
+  type: "Convolution"
+  bottom: "conv1_1"
+  top: "conv1_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm1_2"
+  type: "BatchNorm"
+  bottom: "conv1_2"
+  top: "conv1_2"
+}
+layer {
+  name: "elu1_2"
+  type: "ELU"
+  bottom: "conv1_2"
+  top: "conv1_2"
+}
+layer {
+  name: "pool1"
+  type: "Pooling"
+  bottom: "conv1_2"
+  top: "pool1"
+  top: "pool1_mask"
+  top: "pool1_argmax_count"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "conv2_1"
+  type: "Convolution"
+  bottom: "pool1"
+  top: "conv2_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm2_1"
+  type: "BatchNorm"
+  bottom: "conv2_1"
+  top: "conv2_1"
+}
+layer {
+  name: "elu2_1"
+  type: "ELU"
+  bottom: "conv2_1"
+  top: "conv2_1"
+}
+layer {
+  name: "conv2_2"
+  type: "Convolution"
+  bottom: "conv2_1"
+  top: "conv2_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm2_2"
+  type: "BatchNorm"
+  bottom: "conv2_2"
+  top: "conv2_2"
+}
+layer {
+  name: "elu2_2"
+  type: "ELU"
+  bottom: "conv2_2"
+  top: "conv2_2"
+}
+layer {
+  name: "pool2"
+  type: "Pooling"
+  bottom: "conv2_2"
+  top: "pool2"
+  top: "pool2_mask"
+  top: "pool2_argmax_count"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "conv3_1"
+  type: "Convolution"
+  bottom: "pool2"
+  top: "conv3_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm3_1"
+  type: "BatchNorm"
+  bottom: "conv3_1"
+  top: "conv3_1"
+}
+layer {
+  name: "elu3_1"
+  type: "ELU"
+  bottom: "conv3_1"
+  top: "conv3_1"
+}
+layer {
+  name: "conv3_2"
+  type: "Convolution"
+  bottom: "conv3_1"
+  top: "conv3_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm3_2"
+  type: "BatchNorm"
+  bottom: "conv3_2"
+  top: "conv3_2"
+}
+layer {
+  name: "elu3_2"
+  type: "ELU"
+  bottom: "conv3_2"
+  top: "conv3_2"
+}
+layer {
+  name: "conv3_3"
+  type: "Convolution"
+  bottom: "conv3_2"
+  top: "conv3_3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm3_3"
+  type: "BatchNorm"
+  bottom: "conv3_3"
+  top: "conv3_3"
+}
+layer {
+  name: "elu3_3"
+  type: "ELU"
+  bottom: "conv3_3"
+  top: "conv3_3"
+}
+layer {
+  name: "pool3"
+  type: "Pooling"
+  bottom: "conv3_3"
+  top: "pool3"
+  top: "pool3_mask"
+  top: "pool3_argmax_count"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "conv4_1"
+  type: "Convolution"
+  bottom: "pool3"
+  top: "conv4_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm4_1"
+  type: "BatchNorm"
+  bottom: "conv4_1"
+  top: "conv4_1"
+}
+layer {
+  name: "elu4_1"
+  type: "ELU"
+  bottom: "conv4_1"
+  top: "conv4_1"
+}
+layer {
+  name: "conv4_2"
+  type: "Convolution"
+  bottom: "conv4_1"
+  top: "conv4_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm4_2"
+  type: "BatchNorm"
+  bottom: "conv4_2"
+  top: "conv4_2"
+}
+layer {
+  name: "elu4_2"
+  type: "ELU"
+  bottom: "conv4_2"
+  top: "conv4_2"
+}
+layer {
+  name: "conv4_3"
+  type: "Convolution"
+  bottom: "conv4_2"
+  top: "conv4_3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm4_3"
+  type: "BatchNorm"
+  bottom: "conv4_3"
+  top: "conv4_3"
+}
+layer {
+  name: "elu4_3"
+  type: "ELU"
+  bottom: "conv4_3"
+  top: "conv4_3"
+}
+layer {
+  name: "unpool3"
+  type: "Unpooling"
+  bottom: "conv4_3"
+  bottom: "pool3_mask"
+  bottom: "pool3_argmax_count"
+  top: "unpool3"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "deconv3_1"
+  type: "Deconvolution"
+  bottom: "unpool3"
+  top: "deconv3_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "debatchnorm3_1"
+  type: "BatchNorm"
+  bottom: "deconv3_1"
+  top: "deconv3_1"
+}
+layer {
+  name: "deelu3_1"
+  type: "ELU"
+  bottom: "deconv3_1"
+  top: "deconv3_1"
+}
+layer {
+  name: "deconv3_2"
+  type: "Deconvolution"
+  bottom: "deconv3_1"
+  top: "deconv3_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "debatchnorm3_2"
+  type: "BatchNorm"
+  bottom: "deconv3_2"
+  top: "deconv3_2"
+}
+layer {
+  name: "deelu3_2"
+  type: "ELU"
+  bottom: "deconv3_2"
+  top: "deconv3_2"
+}
+layer {
+  name: "deconv3_3"
+  type: "Deconvolution"
+  bottom: "deconv3_2"
+  top: "deconv3_3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "debatchnorm3_3"
+  type: "BatchNorm"
+  bottom: "deconv3_3"
+  top: "deconv3_3"
+}
+layer {
+  name: "deelu3_3"
+  type: "ELU"
+  bottom: "deconv3_3"
+  top: "deconv3_3"
+}
+layer {
+  name: "unpool2"
+  type: "Unpooling"
+  bottom: "deconv3_3"
+  bottom: "pool2_mask"
+  bottom: "pool2_argmax_count"
+  top: "unpool2"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "deconv2_1"
+  type: "Deconvolution"
+  bottom: "unpool2"
+  top: "deconv2_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "debatchnorm2_1"
+  type: "BatchNorm"
+  bottom: "deconv2_1"
+  top: "deconv2_1"
+}
+layer {
+  name: "deelu2_1"
+  type: "ELU"
+  bottom: "deconv2_1"
+  top: "deconv2_1"
+}
+layer {
+  name: "deconv2_2"
+  type: "Deconvolution"
+  bottom: "deconv2_1"
+  top: "deconv2_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "debatchnorm2_2"
+  type: "BatchNorm"
+  bottom: "deconv2_2"
+  top: "deconv2_2"
+}
+layer {
+  name: "deelu2_2"
+  type: "ELU"
+  bottom: "deconv2_2"
+  top: "deconv2_2"
+}
+layer {
+  name: "unpool1"
+  type: "Unpooling"
+  bottom: "deconv2_2"
+  bottom: "pool1_mask"
+  bottom: "pool1_argmax_count"
+  top: "unpool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "deconv1_1"
+  type: "Deconvolution"
+  bottom: "unpool1"
+  top: "deconv1_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "debatchnorm1_1"
+  type: "BatchNorm"
+  bottom: "deconv1_1"
+  top: "deconv1_1"
+}
+layer {
+  name: "deelu1_1"
+  type: "ELU"
+  bottom: "deconv1_1"
+  top: "deconv1_1"
+}
+layer {
+  name: "deconv1_2"
+  type: "Deconvolution"
+  bottom: "deconv1_1"
+  top: "deconv1_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "debatchnorm1_2"
+  type: "BatchNorm"
+  bottom: "deconv1_2"
+  top: "deconv1_2"
+}
+layer {
+  name: "deelu1_2"
+  type: "ELU"
+  bottom: "deconv1_2"
+  top: "deconv1_2"
+}
+layer {
+  name: "segmentation"
+  type: "Convolution"
+  bottom: "deconv1_2"
+  top: "segmentation"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 2
+    pad: 0
+    kernel_size: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "loss"
+  type: "SoftmaxWithLoss"
+  bottom: "segmentation"
+  bottom: "labels"
+  top: "loss"
+  loss_param {
+    ignore_label: 2
+  }
+}
+layer {
+  name: "accuracy"
+  type: "Accuracy"
+  bottom: "segmentation"
+  bottom: "labels"
+  top: "accuracy"
+  include {
+    phase: TEST
+  }
+  accuracy_param {
+    ignore_label: 2
+  }
+}
+I0828 15:17:28.945188   727 layer_factory.hpp:77] Creating layer data
+I0828 15:17:28.945194   727 net.cpp:84] Creating Layer data
+I0828 15:17:28.945197   727 net.cpp:380] data -> data
+I0828 15:17:28.945204   727 net.cpp:380] data -> labels
+I0828 15:17:28.945210   727 hdf5_data_layer.cpp:80] Loading list of HDF5 filenames from: /home/grochette/Documents/SegNet/data/HDF5/Validation/hdf5_list.txt
+I0828 15:17:28.945236   727 hdf5_data_layer.cpp:94] Number of HDF5 files: 10
+I0828 15:17:29.796510   727 net.cpp:122] Setting up data
+I0828 15:17:29.796531   727 net.cpp:129] Top shape: 1 8 224 224 (401408)
+I0828 15:17:29.796536   727 net.cpp:129] Top shape: 1 1 224 224 (50176)
+I0828 15:17:29.796538   727 net.cpp:137] Memory required for data: 1806336
+I0828 15:17:29.796543   727 layer_factory.hpp:77] Creating layer labels_data_1_split
+I0828 15:17:29.796576   727 net.cpp:84] Creating Layer labels_data_1_split
+I0828 15:17:29.796581   727 net.cpp:406] labels_data_1_split <- labels
+I0828 15:17:29.796586   727 net.cpp:380] labels_data_1_split -> labels_data_1_split_0
+I0828 15:17:29.796593   727 net.cpp:380] labels_data_1_split -> labels_data_1_split_1
+I0828 15:17:29.796635   727 net.cpp:122] Setting up labels_data_1_split
+I0828 15:17:29.796641   727 net.cpp:129] Top shape: 1 1 224 224 (50176)
+I0828 15:17:29.796644   727 net.cpp:129] Top shape: 1 1 224 224 (50176)
+I0828 15:17:29.796646   727 net.cpp:137] Memory required for data: 2207744
+I0828 15:17:29.796648   727 layer_factory.hpp:77] Creating layer batchnorm0
+I0828 15:17:29.796654   727 net.cpp:84] Creating Layer batchnorm0
+I0828 15:17:29.796656   727 net.cpp:406] batchnorm0 <- data
+I0828 15:17:29.796660   727 net.cpp:367] batchnorm0 -> data (in-place)
+I0828 15:17:29.796895   727 net.cpp:122] Setting up batchnorm0
+I0828 15:17:29.796900   727 net.cpp:129] Top shape: 1 8 224 224 (401408)
+I0828 15:17:29.796902   727 net.cpp:137] Memory required for data: 3813376
+I0828 15:17:29.796912   727 layer_factory.hpp:77] Creating layer conv1_1
+I0828 15:17:29.796921   727 net.cpp:84] Creating Layer conv1_1
+I0828 15:17:29.796924   727 net.cpp:406] conv1_1 <- data
+I0828 15:17:29.796929   727 net.cpp:380] conv1_1 -> conv1_1
+I0828 15:17:29.798928   727 net.cpp:122] Setting up conv1_1
+I0828 15:17:29.798938   727 net.cpp:129] Top shape: 1 64 224 224 (3211264)
+I0828 15:17:29.798941   727 net.cpp:137] Memory required for data: 16658432
+I0828 15:17:29.798949   727 layer_factory.hpp:77] Creating layer batchnorm1_1
+I0828 15:17:29.798955   727 net.cpp:84] Creating Layer batchnorm1_1
+I0828 15:17:29.798957   727 net.cpp:406] batchnorm1_1 <- conv1_1
+I0828 15:17:29.798962   727 net.cpp:367] batchnorm1_1 -> conv1_1 (in-place)
+I0828 15:17:29.799639   727 net.cpp:122] Setting up batchnorm1_1
+I0828 15:17:29.799648   727 net.cpp:129] Top shape: 1 64 224 224 (3211264)
+I0828 15:17:29.799650   727 net.cpp:137] Memory required for data: 29503488
+I0828 15:17:29.799657   727 layer_factory.hpp:77] Creating layer elu1_1
+I0828 15:17:29.799661   727 net.cpp:84] Creating Layer elu1_1
+I0828 15:17:29.799664   727 net.cpp:406] elu1_1 <- conv1_1
+I0828 15:17:29.799667   727 net.cpp:367] elu1_1 -> conv1_1 (in-place)
+I0828 15:17:29.799672   727 net.cpp:122] Setting up elu1_1
+I0828 15:17:29.799675   727 net.cpp:129] Top shape: 1 64 224 224 (3211264)
+I0828 15:17:29.799677   727 net.cpp:137] Memory required for data: 42348544
+I0828 15:17:29.799679   727 layer_factory.hpp:77] Creating layer conv1_2
+I0828 15:17:29.799686   727 net.cpp:84] Creating Layer conv1_2
+I0828 15:17:29.799688   727 net.cpp:406] conv1_2 <- conv1_1
+I0828 15:17:29.799693   727 net.cpp:380] conv1_2 -> conv1_2
+I0828 15:17:29.801661   727 net.cpp:122] Setting up conv1_2
+I0828 15:17:29.801671   727 net.cpp:129] Top shape: 1 64 224 224 (3211264)
+I0828 15:17:29.801672   727 net.cpp:137] Memory required for data: 55193600
+I0828 15:17:29.801681   727 layer_factory.hpp:77] Creating layer batchnorm1_2
+I0828 15:17:29.801686   727 net.cpp:84] Creating Layer batchnorm1_2
+I0828 15:17:29.801688   727 net.cpp:406] batchnorm1_2 <- conv1_2
+I0828 15:17:29.801692   727 net.cpp:367] batchnorm1_2 -> conv1_2 (in-place)
+I0828 15:17:29.801921   727 net.cpp:122] Setting up batchnorm1_2
+I0828 15:17:29.801926   727 net.cpp:129] Top shape: 1 64 224 224 (3211264)
+I0828 15:17:29.801929   727 net.cpp:137] Memory required for data: 68038656
+I0828 15:17:29.801934   727 layer_factory.hpp:77] Creating layer elu1_2
+I0828 15:17:29.801939   727 net.cpp:84] Creating Layer elu1_2
+I0828 15:17:29.801941   727 net.cpp:406] elu1_2 <- conv1_2
+I0828 15:17:29.801945   727 net.cpp:367] elu1_2 -> conv1_2 (in-place)
+I0828 15:17:29.801949   727 net.cpp:122] Setting up elu1_2
+I0828 15:17:29.801952   727 net.cpp:129] Top shape: 1 64 224 224 (3211264)
+I0828 15:17:29.801954   727 net.cpp:137] Memory required for data: 80883712
+I0828 15:17:29.801957   727 layer_factory.hpp:77] Creating layer pool1
+I0828 15:17:29.801960   727 layer_factory.cpp:91] cuDNN does not support multiple tops. Using Caffe's own pooling layer.
+I0828 15:17:29.801975   727 net.cpp:84] Creating Layer pool1
+I0828 15:17:29.801976   727 net.cpp:406] pool1 <- conv1_2
+I0828 15:17:29.801981   727 net.cpp:380] pool1 -> pool1
+I0828 15:17:29.801985   727 net.cpp:380] pool1 -> pool1_mask
+I0828 15:17:29.801990   727 net.cpp:380] pool1 -> pool1_argmax_count
+I0828 15:17:29.802043   727 net.cpp:122] Setting up pool1
+I0828 15:17:29.802049   727 net.cpp:129] Top shape: 1 64 112 112 (802816)
+I0828 15:17:29.802052   727 net.cpp:129] Top shape: 1 64 112 112 (802816)
+I0828 15:17:29.802055   727 net.cpp:129] Top shape: 1 64 224 224 (3211264)
+I0828 15:17:29.802057   727 net.cpp:137] Memory required for data: 100151296
+I0828 15:17:29.802060   727 layer_factory.hpp:77] Creating layer conv2_1
+I0828 15:17:29.802068   727 net.cpp:84] Creating Layer conv2_1
+I0828 15:17:29.802070   727 net.cpp:406] conv2_1 <- pool1
+I0828 15:17:29.802074   727 net.cpp:380] conv2_1 -> conv2_1
+I0828 15:17:29.804242   727 net.cpp:122] Setting up conv2_1
+I0828 15:17:29.804252   727 net.cpp:129] Top shape: 1 128 112 112 (1605632)
+I0828 15:17:29.804255   727 net.cpp:137] Memory required for data: 106573824
+I0828 15:17:29.804260   727 layer_factory.hpp:77] Creating layer batchnorm2_1
+I0828 15:17:29.804265   727 net.cpp:84] Creating Layer batchnorm2_1
+I0828 15:17:29.804268   727 net.cpp:406] batchnorm2_1 <- conv2_1
+I0828 15:17:29.804273   727 net.cpp:367] batchnorm2_1 -> conv2_1 (in-place)
+I0828 15:17:29.804492   727 net.cpp:122] Setting up batchnorm2_1
+I0828 15:17:29.804502   727 net.cpp:129] Top shape: 1 128 112 112 (1605632)
+I0828 15:17:29.804503   727 net.cpp:137] Memory required for data: 112996352
+I0828 15:17:29.804512   727 layer_factory.hpp:77] Creating layer elu2_1
+I0828 15:17:29.804515   727 net.cpp:84] Creating Layer elu2_1
+I0828 15:17:29.804518   727 net.cpp:406] elu2_1 <- conv2_1
+I0828 15:17:29.804522   727 net.cpp:367] elu2_1 -> conv2_1 (in-place)
+I0828 15:17:29.804527   727 net.cpp:122] Setting up elu2_1
+I0828 15:17:29.804529   727 net.cpp:129] Top shape: 1 128 112 112 (1605632)
+I0828 15:17:29.804533   727 net.cpp:137] Memory required for data: 119418880
+I0828 15:17:29.804533   727 layer_factory.hpp:77] Creating layer conv2_2
+I0828 15:17:29.804541   727 net.cpp:84] Creating Layer conv2_2
+I0828 15:17:29.804544   727 net.cpp:406] conv2_2 <- conv2_1
+I0828 15:17:29.804548   727 net.cpp:380] conv2_2 -> conv2_2
+I0828 15:17:29.807576   727 net.cpp:122] Setting up conv2_2
+I0828 15:17:29.807586   727 net.cpp:129] Top shape: 1 128 112 112 (1605632)
+I0828 15:17:29.807588   727 net.cpp:137] Memory required for data: 125841408
+I0828 15:17:29.807595   727 layer_factory.hpp:77] Creating layer batchnorm2_2
+I0828 15:17:29.807600   727 net.cpp:84] Creating Layer batchnorm2_2
+I0828 15:17:29.807603   727 net.cpp:406] batchnorm2_2 <- conv2_2
+I0828 15:17:29.807606   727 net.cpp:367] batchnorm2_2 -> conv2_2 (in-place)
+I0828 15:17:29.807832   727 net.cpp:122] Setting up batchnorm2_2
+I0828 15:17:29.807837   727 net.cpp:129] Top shape: 1 128 112 112 (1605632)
+I0828 15:17:29.807838   727 net.cpp:137] Memory required for data: 132263936
+I0828 15:17:29.807844   727 layer_factory.hpp:77] Creating layer elu2_2
+I0828 15:17:29.807848   727 net.cpp:84] Creating Layer elu2_2
+I0828 15:17:29.807850   727 net.cpp:406] elu2_2 <- conv2_2
+I0828 15:17:29.807853   727 net.cpp:367] elu2_2 -> conv2_2 (in-place)
+I0828 15:17:29.807857   727 net.cpp:122] Setting up elu2_2
+I0828 15:17:29.807862   727 net.cpp:129] Top shape: 1 128 112 112 (1605632)
+I0828 15:17:29.807863   727 net.cpp:137] Memory required for data: 138686464
+I0828 15:17:29.807865   727 layer_factory.hpp:77] Creating layer pool2
+I0828 15:17:29.807868   727 layer_factory.cpp:91] cuDNN does not support multiple tops. Using Caffe's own pooling layer.
+I0828 15:17:29.807874   727 net.cpp:84] Creating Layer pool2
+I0828 15:17:29.807878   727 net.cpp:406] pool2 <- conv2_2
+I0828 15:17:29.807881   727 net.cpp:380] pool2 -> pool2
+I0828 15:17:29.807886   727 net.cpp:380] pool2 -> pool2_mask
+I0828 15:17:29.807891   727 net.cpp:380] pool2 -> pool2_argmax_count
+I0828 15:17:29.807955   727 net.cpp:122] Setting up pool2
+I0828 15:17:29.807960   727 net.cpp:129] Top shape: 1 128 56 56 (401408)
+I0828 15:17:29.807963   727 net.cpp:129] Top shape: 1 128 56 56 (401408)
+I0828 15:17:29.807967   727 net.cpp:129] Top shape: 1 128 112 112 (1605632)
+I0828 15:17:29.807970   727 net.cpp:137] Memory required for data: 148320256
+I0828 15:17:29.807971   727 layer_factory.hpp:77] Creating layer conv3_1
+I0828 15:17:29.807981   727 net.cpp:84] Creating Layer conv3_1
+I0828 15:17:29.807984   727 net.cpp:406] conv3_1 <- pool2
+I0828 15:17:29.807988   727 net.cpp:380] conv3_1 -> conv3_1
+I0828 15:17:29.811803   727 net.cpp:122] Setting up conv3_1
+I0828 15:17:29.811812   727 net.cpp:129] Top shape: 1 256 56 56 (802816)
+I0828 15:17:29.811815   727 net.cpp:137] Memory required for data: 151531520
+I0828 15:17:29.811820   727 layer_factory.hpp:77] Creating layer batchnorm3_1
+I0828 15:17:29.811826   727 net.cpp:84] Creating Layer batchnorm3_1
+I0828 15:17:29.811830   727 net.cpp:406] batchnorm3_1 <- conv3_1
+I0828 15:17:29.811835   727 net.cpp:367] batchnorm3_1 -> conv3_1 (in-place)
+I0828 15:17:29.812060   727 net.cpp:122] Setting up batchnorm3_1
+I0828 15:17:29.812067   727 net.cpp:129] Top shape: 1 256 56 56 (802816)
+I0828 15:17:29.812068   727 net.cpp:137] Memory required for data: 154742784
+I0828 15:17:29.812074   727 layer_factory.hpp:77] Creating layer elu3_1
+I0828 15:17:29.812078   727 net.cpp:84] Creating Layer elu3_1
+I0828 15:17:29.812080   727 net.cpp:406] elu3_1 <- conv3_1
+I0828 15:17:29.812083   727 net.cpp:367] elu3_1 -> conv3_1 (in-place)
+I0828 15:17:29.812088   727 net.cpp:122] Setting up elu3_1
+I0828 15:17:29.812091   727 net.cpp:129] Top shape: 1 256 56 56 (802816)
+I0828 15:17:29.812093   727 net.cpp:137] Memory required for data: 157954048
+I0828 15:17:29.812095   727 layer_factory.hpp:77] Creating layer conv3_2
+I0828 15:17:29.812103   727 net.cpp:84] Creating Layer conv3_2
+I0828 15:17:29.812104   727 net.cpp:406] conv3_2 <- conv3_1
+I0828 15:17:29.812110   727 net.cpp:380] conv3_2 -> conv3_2
+I0828 15:17:29.817705   727 net.cpp:122] Setting up conv3_2
+I0828 15:17:29.817715   727 net.cpp:129] Top shape: 1 256 56 56 (802816)
+I0828 15:17:29.817719   727 net.cpp:137] Memory required for data: 161165312
+I0828 15:17:29.817724   727 layer_factory.hpp:77] Creating layer batchnorm3_2
+I0828 15:17:29.817729   727 net.cpp:84] Creating Layer batchnorm3_2
+I0828 15:17:29.817733   727 net.cpp:406] batchnorm3_2 <- conv3_2
+I0828 15:17:29.817737   727 net.cpp:367] batchnorm3_2 -> conv3_2 (in-place)
+I0828 15:17:29.817970   727 net.cpp:122] Setting up batchnorm3_2
+I0828 15:17:29.817975   727 net.cpp:129] Top shape: 1 256 56 56 (802816)
+I0828 15:17:29.817977   727 net.cpp:137] Memory required for data: 164376576
+I0828 15:17:29.817991   727 layer_factory.hpp:77] Creating layer elu3_2
+I0828 15:17:29.817994   727 net.cpp:84] Creating Layer elu3_2
+I0828 15:17:29.817996   727 net.cpp:406] elu3_2 <- conv3_2
+I0828 15:17:29.818002   727 net.cpp:367] elu3_2 -> conv3_2 (in-place)
+I0828 15:17:29.818006   727 net.cpp:122] Setting up elu3_2
+I0828 15:17:29.818009   727 net.cpp:129] Top shape: 1 256 56 56 (802816)
+I0828 15:17:29.818011   727 net.cpp:137] Memory required for data: 167587840
+I0828 15:17:29.818014   727 layer_factory.hpp:77] Creating layer conv3_3
+I0828 15:17:29.818022   727 net.cpp:84] Creating Layer conv3_3
+I0828 15:17:29.818024   727 net.cpp:406] conv3_3 <- conv3_2
+I0828 15:17:29.818028   727 net.cpp:380] conv3_3 -> conv3_3
+I0828 15:17:29.823663   727 net.cpp:122] Setting up conv3_3
+I0828 15:17:29.823673   727 net.cpp:129] Top shape: 1 256 56 56 (802816)
+I0828 15:17:29.823676   727 net.cpp:137] Memory required for data: 170799104
+I0828 15:17:29.823681   727 layer_factory.hpp:77] Creating layer batchnorm3_3
+I0828 15:17:29.823688   727 net.cpp:84] Creating Layer batchnorm3_3
+I0828 15:17:29.823691   727 net.cpp:406] batchnorm3_3 <- conv3_3
+I0828 15:17:29.823695   727 net.cpp:367] batchnorm3_3 -> conv3_3 (in-place)
+I0828 15:17:29.823927   727 net.cpp:122] Setting up batchnorm3_3
+I0828 15:17:29.823951   727 net.cpp:129] Top shape: 1 256 56 56 (802816)
+I0828 15:17:29.823952   727 net.cpp:137] Memory required for data: 174010368
+I0828 15:17:29.823958   727 layer_factory.hpp:77] Creating layer elu3_3
+I0828 15:17:29.823961   727 net.cpp:84] Creating Layer elu3_3
+I0828 15:17:29.823964   727 net.cpp:406] elu3_3 <- conv3_3
+I0828 15:17:29.823968   727 net.cpp:367] elu3_3 -> conv3_3 (in-place)
+I0828 15:17:29.823972   727 net.cpp:122] Setting up elu3_3
+I0828 15:17:29.823976   727 net.cpp:129] Top shape: 1 256 56 56 (802816)
+I0828 15:17:29.823977   727 net.cpp:137] Memory required for data: 177221632
+I0828 15:17:29.823979   727 layer_factory.hpp:77] Creating layer pool3
+I0828 15:17:29.823985   727 layer_factory.cpp:91] cuDNN does not support multiple tops. Using Caffe's own pooling layer.
+I0828 15:17:29.823992   727 net.cpp:84] Creating Layer pool3
+I0828 15:17:29.823995   727 net.cpp:406] pool3 <- conv3_3
+I0828 15:17:29.823998   727 net.cpp:380] pool3 -> pool3
+I0828 15:17:29.824004   727 net.cpp:380] pool3 -> pool3_mask
+I0828 15:17:29.824009   727 net.cpp:380] pool3 -> pool3_argmax_count
+I0828 15:17:29.824069   727 net.cpp:122] Setting up pool3
+I0828 15:17:29.824074   727 net.cpp:129] Top shape: 1 256 28 28 (200704)
+I0828 15:17:29.824076   727 net.cpp:129] Top shape: 1 256 28 28 (200704)
+I0828 15:17:29.824079   727 net.cpp:129] Top shape: 1 256 56 56 (802816)
+I0828 15:17:29.824081   727 net.cpp:137] Memory required for data: 182038528
+I0828 15:17:29.824084   727 layer_factory.hpp:77] Creating layer conv4_1
+I0828 15:17:29.824091   727 net.cpp:84] Creating Layer conv4_1
+I0828 15:17:29.824093   727 net.cpp:406] conv4_1 <- pool3
+I0828 15:17:29.824100   727 net.cpp:380] conv4_1 -> conv4_1
+I0828 15:17:29.826773   727 net.cpp:122] Setting up conv4_1
+I0828 15:17:29.826782   727 net.cpp:129] Top shape: 1 512 28 28 (401408)
+I0828 15:17:29.826786   727 net.cpp:137] Memory required for data: 183644160
+I0828 15:17:29.826792   727 layer_factory.hpp:77] Creating layer batchnorm4_1
+I0828 15:17:29.826797   727 net.cpp:84] Creating Layer batchnorm4_1
+I0828 15:17:29.826798   727 net.cpp:406] batchnorm4_1 <- conv4_1
+I0828 15:17:29.826803   727 net.cpp:367] batchnorm4_1 -> conv4_1 (in-place)
+I0828 15:17:29.827026   727 net.cpp:122] Setting up batchnorm4_1
+I0828 15:17:29.827031   727 net.cpp:129] Top shape: 1 512 28 28 (401408)
+I0828 15:17:29.827033   727 net.cpp:137] Memory required for data: 185249792
+I0828 15:17:29.827039   727 layer_factory.hpp:77] Creating layer elu4_1
+I0828 15:17:29.827042   727 net.cpp:84] Creating Layer elu4_1
+I0828 15:17:29.827044   727 net.cpp:406] elu4_1 <- conv4_1
+I0828 15:17:29.827049   727 net.cpp:367] elu4_1 -> conv4_1 (in-place)
+I0828 15:17:29.827052   727 net.cpp:122] Setting up elu4_1
+I0828 15:17:29.827056   727 net.cpp:129] Top shape: 1 512 28 28 (401408)
+I0828 15:17:29.827059   727 net.cpp:137] Memory required for data: 186855424
+I0828 15:17:29.827060   727 layer_factory.hpp:77] Creating layer conv4_2
+I0828 15:17:29.827067   727 net.cpp:84] Creating Layer conv4_2
+I0828 15:17:29.827069   727 net.cpp:406] conv4_2 <- conv4_1
+I0828 15:17:29.827075   727 net.cpp:380] conv4_2 -> conv4_2
+I0828 15:17:29.830785   727 net.cpp:122] Setting up conv4_2
+I0828 15:17:29.830795   727 net.cpp:129] Top shape: 1 512 28 28 (401408)
+I0828 15:17:29.830797   727 net.cpp:137] Memory required for data: 188461056
+I0828 15:17:29.830803   727 layer_factory.hpp:77] Creating layer batchnorm4_2
+I0828 15:17:29.830809   727 net.cpp:84] Creating Layer batchnorm4_2
+I0828 15:17:29.830812   727 net.cpp:406] batchnorm4_2 <- conv4_2
+I0828 15:17:29.830817   727 net.cpp:367] batchnorm4_2 -> conv4_2 (in-place)
+I0828 15:17:29.831044   727 net.cpp:122] Setting up batchnorm4_2
+I0828 15:17:29.831049   727 net.cpp:129] Top shape: 1 512 28 28 (401408)
+I0828 15:17:29.831051   727 net.cpp:137] Memory required for data: 190066688
+I0828 15:17:29.831058   727 layer_factory.hpp:77] Creating layer elu4_2
+I0828 15:17:29.831064   727 net.cpp:84] Creating Layer elu4_2
+I0828 15:17:29.831068   727 net.cpp:406] elu4_2 <- conv4_2
+I0828 15:17:29.831071   727 net.cpp:367] elu4_2 -> conv4_2 (in-place)
+I0828 15:17:29.831086   727 net.cpp:122] Setting up elu4_2
+I0828 15:17:29.831090   727 net.cpp:129] Top shape: 1 512 28 28 (401408)
+I0828 15:17:29.831092   727 net.cpp:137] Memory required for data: 191672320
+I0828 15:17:29.831094   727 layer_factory.hpp:77] Creating layer conv4_3
+I0828 15:17:29.831102   727 net.cpp:84] Creating Layer conv4_3
+I0828 15:17:29.831104   727 net.cpp:406] conv4_3 <- conv4_2
+I0828 15:17:29.831110   727 net.cpp:380] conv4_3 -> conv4_3
+I0828 15:17:29.840425   727 net.cpp:122] Setting up conv4_3
+I0828 15:17:29.840445   727 net.cpp:129] Top shape: 1 256 28 28 (200704)
+I0828 15:17:29.840447   727 net.cpp:137] Memory required for data: 192475136
+I0828 15:17:29.840454   727 layer_factory.hpp:77] Creating layer batchnorm4_3
+I0828 15:17:29.840461   727 net.cpp:84] Creating Layer batchnorm4_3
+I0828 15:17:29.840463   727 net.cpp:406] batchnorm4_3 <- conv4_3
+I0828 15:17:29.840468   727 net.cpp:367] batchnorm4_3 -> conv4_3 (in-place)
+I0828 15:17:29.840708   727 net.cpp:122] Setting up batchnorm4_3
+I0828 15:17:29.840713   727 net.cpp:129] Top shape: 1 256 28 28 (200704)
+I0828 15:17:29.840715   727 net.cpp:137] Memory required for data: 193277952
+I0828 15:17:29.840720   727 layer_factory.hpp:77] Creating layer elu4_3
+I0828 15:17:29.840723   727 net.cpp:84] Creating Layer elu4_3
+I0828 15:17:29.840726   727 net.cpp:406] elu4_3 <- conv4_3
+I0828 15:17:29.840730   727 net.cpp:367] elu4_3 -> conv4_3 (in-place)
+I0828 15:17:29.840734   727 net.cpp:122] Setting up elu4_3
+I0828 15:17:29.840737   727 net.cpp:129] Top shape: 1 256 28 28 (200704)
+I0828 15:17:29.840739   727 net.cpp:137] Memory required for data: 194080768
+I0828 15:17:29.840742   727 layer_factory.hpp:77] Creating layer unpool3
+I0828 15:17:29.840746   727 net.cpp:84] Creating Layer unpool3
+I0828 15:17:29.840749   727 net.cpp:406] unpool3 <- conv4_3
+I0828 15:17:29.840752   727 net.cpp:406] unpool3 <- pool3_mask
+I0828 15:17:29.840756   727 net.cpp:406] unpool3 <- pool3_argmax_count
+I0828 15:17:29.840760   727 net.cpp:380] unpool3 -> unpool3
+I0828 15:17:29.840786   727 net.cpp:122] Setting up unpool3
+I0828 15:17:29.840790   727 net.cpp:129] Top shape: 1 256 56 56 (802816)
+I0828 15:17:29.840793   727 net.cpp:137] Memory required for data: 197292032
+I0828 15:17:29.840795   727 layer_factory.hpp:77] Creating layer deconv3_1
+I0828 15:17:29.840802   727 net.cpp:84] Creating Layer deconv3_1
+I0828 15:17:29.840806   727 net.cpp:406] deconv3_1 <- unpool3
+I0828 15:17:29.840811   727 net.cpp:380] deconv3_1 -> deconv3_1
+I0828 15:17:29.844895   727 net.cpp:122] Setting up deconv3_1
+I0828 15:17:29.844904   727 net.cpp:129] Top shape: 1 256 56 56 (802816)
+I0828 15:17:29.844907   727 net.cpp:137] Memory required for data: 200503296
+I0828 15:17:29.844913   727 layer_factory.hpp:77] Creating layer debatchnorm3_1
+I0828 15:17:29.844918   727 net.cpp:84] Creating Layer debatchnorm3_1
+I0828 15:17:29.844920   727 net.cpp:406] debatchnorm3_1 <- deconv3_1
+I0828 15:17:29.844924   727 net.cpp:367] debatchnorm3_1 -> deconv3_1 (in-place)
+I0828 15:17:29.845161   727 net.cpp:122] Setting up debatchnorm3_1
+I0828 15:17:29.845166   727 net.cpp:129] Top shape: 1 256 56 56 (802816)
+I0828 15:17:29.845168   727 net.cpp:137] Memory required for data: 203714560
+I0828 15:17:29.845173   727 layer_factory.hpp:77] Creating layer deelu3_1
+I0828 15:17:29.845178   727 net.cpp:84] Creating Layer deelu3_1
+I0828 15:17:29.845180   727 net.cpp:406] deelu3_1 <- deconv3_1
+I0828 15:17:29.845183   727 net.cpp:367] deelu3_1 -> deconv3_1 (in-place)
+I0828 15:17:29.845187   727 net.cpp:122] Setting up deelu3_1
+I0828 15:17:29.845191   727 net.cpp:129] Top shape: 1 256 56 56 (802816)
+I0828 15:17:29.845193   727 net.cpp:137] Memory required for data: 206925824
+I0828 15:17:29.845196   727 layer_factory.hpp:77] Creating layer deconv3_2
+I0828 15:17:29.845201   727 net.cpp:84] Creating Layer deconv3_2
+I0828 15:17:29.845206   727 net.cpp:406] deconv3_2 <- deconv3_1
+I0828 15:17:29.845209   727 net.cpp:380] deconv3_2 -> deconv3_2
+I0828 15:17:29.849262   727 net.cpp:122] Setting up deconv3_2
+I0828 15:17:29.849288   727 net.cpp:129] Top shape: 1 256 56 56 (802816)
+I0828 15:17:29.849292   727 net.cpp:137] Memory required for data: 210137088
+I0828 15:17:29.849295   727 layer_factory.hpp:77] Creating layer debatchnorm3_2
+I0828 15:17:29.849303   727 net.cpp:84] Creating Layer debatchnorm3_2
+I0828 15:17:29.849305   727 net.cpp:406] debatchnorm3_2 <- deconv3_2
+I0828 15:17:29.849309   727 net.cpp:367] debatchnorm3_2 -> deconv3_2 (in-place)
+I0828 15:17:29.849541   727 net.cpp:122] Setting up debatchnorm3_2
+I0828 15:17:29.849546   727 net.cpp:129] Top shape: 1 256 56 56 (802816)
+I0828 15:17:29.849548   727 net.cpp:137] Memory required for data: 213348352
+I0828 15:17:29.849555   727 layer_factory.hpp:77] Creating layer deelu3_2
+I0828 15:17:29.849560   727 net.cpp:84] Creating Layer deelu3_2
+I0828 15:17:29.849562   727 net.cpp:406] deelu3_2 <- deconv3_2
+I0828 15:17:29.849565   727 net.cpp:367] deelu3_2 -> deconv3_2 (in-place)
+I0828 15:17:29.849570   727 net.cpp:122] Setting up deelu3_2
+I0828 15:17:29.849572   727 net.cpp:129] Top shape: 1 256 56 56 (802816)
+I0828 15:17:29.849575   727 net.cpp:137] Memory required for data: 216559616
+I0828 15:17:29.849576   727 layer_factory.hpp:77] Creating layer deconv3_3
+I0828 15:17:29.849582   727 net.cpp:84] Creating Layer deconv3_3
+I0828 15:17:29.849584   727 net.cpp:406] deconv3_3 <- deconv3_2
+I0828 15:17:29.849589   727 net.cpp:380] deconv3_3 -> deconv3_3
+I0828 15:17:29.851852   727 net.cpp:122] Setting up deconv3_3
+I0828 15:17:29.851861   727 net.cpp:129] Top shape: 1 128 56 56 (401408)
+I0828 15:17:29.851863   727 net.cpp:137] Memory required for data: 218165248
+I0828 15:17:29.851878   727 layer_factory.hpp:77] Creating layer debatchnorm3_3
+I0828 15:17:29.851883   727 net.cpp:84] Creating Layer debatchnorm3_3
+I0828 15:17:29.851887   727 net.cpp:406] debatchnorm3_3 <- deconv3_3
+I0828 15:17:29.851891   727 net.cpp:367] debatchnorm3_3 -> deconv3_3 (in-place)
+I0828 15:17:29.852121   727 net.cpp:122] Setting up debatchnorm3_3
+I0828 15:17:29.852125   727 net.cpp:129] Top shape: 1 128 56 56 (401408)
+I0828 15:17:29.852128   727 net.cpp:137] Memory required for data: 219770880
+I0828 15:17:29.852133   727 layer_factory.hpp:77] Creating layer deelu3_3
+I0828 15:17:29.852136   727 net.cpp:84] Creating Layer deelu3_3
+I0828 15:17:29.852139   727 net.cpp:406] deelu3_3 <- deconv3_3
+I0828 15:17:29.852144   727 net.cpp:367] deelu3_3 -> deconv3_3 (in-place)
+I0828 15:17:29.852147   727 net.cpp:122] Setting up deelu3_3
+I0828 15:17:29.852151   727 net.cpp:129] Top shape: 1 128 56 56 (401408)
+I0828 15:17:29.852152   727 net.cpp:137] Memory required for data: 221376512
+I0828 15:17:29.852155   727 layer_factory.hpp:77] Creating layer unpool2
+I0828 15:17:29.852159   727 net.cpp:84] Creating Layer unpool2
+I0828 15:17:29.852161   727 net.cpp:406] unpool2 <- deconv3_3
+I0828 15:17:29.852165   727 net.cpp:406] unpool2 <- pool2_mask
+I0828 15:17:29.852169   727 net.cpp:406] unpool2 <- pool2_argmax_count
+I0828 15:17:29.852172   727 net.cpp:380] unpool2 -> unpool2
+I0828 15:17:29.852197   727 net.cpp:122] Setting up unpool2
+I0828 15:17:29.852202   727 net.cpp:129] Top shape: 1 128 112 112 (1605632)
+I0828 15:17:29.852205   727 net.cpp:137] Memory required for data: 227799040
+I0828 15:17:29.852206   727 layer_factory.hpp:77] Creating layer deconv2_1
+I0828 15:17:29.852212   727 net.cpp:84] Creating Layer deconv2_1
+I0828 15:17:29.852216   727 net.cpp:406] deconv2_1 <- unpool2
+I0828 15:17:29.852221   727 net.cpp:380] deconv2_1 -> deconv2_1
+I0828 15:17:29.853740   727 net.cpp:122] Setting up deconv2_1
+I0828 15:17:29.853749   727 net.cpp:129] Top shape: 1 128 112 112 (1605632)
+I0828 15:17:29.853751   727 net.cpp:137] Memory required for data: 234221568
+I0828 15:17:29.853756   727 layer_factory.hpp:77] Creating layer debatchnorm2_1
+I0828 15:17:29.853760   727 net.cpp:84] Creating Layer debatchnorm2_1
+I0828 15:17:29.853763   727 net.cpp:406] debatchnorm2_1 <- deconv2_1
+I0828 15:17:29.853768   727 net.cpp:367] debatchnorm2_1 -> deconv2_1 (in-place)
+I0828 15:17:29.853999   727 net.cpp:122] Setting up debatchnorm2_1
+I0828 15:17:29.854018   727 net.cpp:129] Top shape: 1 128 112 112 (1605632)
+I0828 15:17:29.854020   727 net.cpp:137] Memory required for data: 240644096
+I0828 15:17:29.854025   727 layer_factory.hpp:77] Creating layer deelu2_1
+I0828 15:17:29.854030   727 net.cpp:84] Creating Layer deelu2_1
+I0828 15:17:29.854032   727 net.cpp:406] deelu2_1 <- deconv2_1
+I0828 15:17:29.854037   727 net.cpp:367] deelu2_1 -> deconv2_1 (in-place)
+I0828 15:17:29.854040   727 net.cpp:122] Setting up deelu2_1
+I0828 15:17:29.854044   727 net.cpp:129] Top shape: 1 128 112 112 (1605632)
+I0828 15:17:29.854046   727 net.cpp:137] Memory required for data: 247066624
+I0828 15:17:29.854048   727 layer_factory.hpp:77] Creating layer deconv2_2
+I0828 15:17:29.854053   727 net.cpp:84] Creating Layer deconv2_2
+I0828 15:17:29.854056   727 net.cpp:406] deconv2_2 <- deconv2_1
+I0828 15:17:29.854059   727 net.cpp:380] deconv2_2 -> deconv2_2
+I0828 15:17:29.854732   727 net.cpp:122] Setting up deconv2_2
+I0828 15:17:29.854737   727 net.cpp:129] Top shape: 1 64 112 112 (802816)
+I0828 15:17:29.854740   727 net.cpp:137] Memory required for data: 250277888
+I0828 15:17:29.854744   727 layer_factory.hpp:77] Creating layer debatchnorm2_2
+I0828 15:17:29.854748   727 net.cpp:84] Creating Layer debatchnorm2_2
+I0828 15:17:29.854750   727 net.cpp:406] debatchnorm2_2 <- deconv2_2
+I0828 15:17:29.854755   727 net.cpp:367] debatchnorm2_2 -> deconv2_2 (in-place)
+I0828 15:17:29.855000   727 net.cpp:122] Setting up debatchnorm2_2
+I0828 15:17:29.855005   727 net.cpp:129] Top shape: 1 64 112 112 (802816)
+I0828 15:17:29.855006   727 net.cpp:137] Memory required for data: 253489152
+I0828 15:17:29.855011   727 layer_factory.hpp:77] Creating layer deelu2_2
+I0828 15:17:29.855015   727 net.cpp:84] Creating Layer deelu2_2
+I0828 15:17:29.855018   727 net.cpp:406] deelu2_2 <- deconv2_2
+I0828 15:17:29.855021   727 net.cpp:367] deelu2_2 -> deconv2_2 (in-place)
+I0828 15:17:29.855026   727 net.cpp:122] Setting up deelu2_2
+I0828 15:17:29.855028   727 net.cpp:129] Top shape: 1 64 112 112 (802816)
+I0828 15:17:29.855031   727 net.cpp:137] Memory required for data: 256700416
+I0828 15:17:29.855032   727 layer_factory.hpp:77] Creating layer unpool1
+I0828 15:17:29.855037   727 net.cpp:84] Creating Layer unpool1
+I0828 15:17:29.855039   727 net.cpp:406] unpool1 <- deconv2_2
+I0828 15:17:29.855042   727 net.cpp:406] unpool1 <- pool1_mask
+I0828 15:17:29.855046   727 net.cpp:406] unpool1 <- pool1_argmax_count
+I0828 15:17:29.855049   727 net.cpp:380] unpool1 -> unpool1
+I0828 15:17:29.855074   727 net.cpp:122] Setting up unpool1
+I0828 15:17:29.855079   727 net.cpp:129] Top shape: 1 64 224 224 (3211264)
+I0828 15:17:29.855082   727 net.cpp:137] Memory required for data: 269545472
+I0828 15:17:29.855084   727 layer_factory.hpp:77] Creating layer deconv1_1
+I0828 15:17:29.855089   727 net.cpp:84] Creating Layer deconv1_1
+I0828 15:17:29.855093   727 net.cpp:406] deconv1_1 <- unpool1
+I0828 15:17:29.855096   727 net.cpp:380] deconv1_1 -> deconv1_1
+I0828 15:17:29.856000   727 net.cpp:122] Setting up deconv1_1
+I0828 15:17:29.856009   727 net.cpp:129] Top shape: 1 64 224 224 (3211264)
+I0828 15:17:29.856010   727 net.cpp:137] Memory required for data: 282390528
+I0828 15:17:29.856015   727 layer_factory.hpp:77] Creating layer debatchnorm1_1
+I0828 15:17:29.856020   727 net.cpp:84] Creating Layer debatchnorm1_1
+I0828 15:17:29.856022   727 net.cpp:406] debatchnorm1_1 <- deconv1_1
+I0828 15:17:29.856027   727 net.cpp:367] debatchnorm1_1 -> deconv1_1 (in-place)
+I0828 15:17:29.856286   727 net.cpp:122] Setting up debatchnorm1_1
+I0828 15:17:29.856290   727 net.cpp:129] Top shape: 1 64 224 224 (3211264)
+I0828 15:17:29.856292   727 net.cpp:137] Memory required for data: 295235584
+I0828 15:17:29.856297   727 layer_factory.hpp:77] Creating layer deelu1_1
+I0828 15:17:29.856302   727 net.cpp:84] Creating Layer deelu1_1
+I0828 15:17:29.856304   727 net.cpp:406] deelu1_1 <- deconv1_1
+I0828 15:17:29.856307   727 net.cpp:367] deelu1_1 -> deconv1_1 (in-place)
+I0828 15:17:29.856312   727 net.cpp:122] Setting up deelu1_1
+I0828 15:17:29.856314   727 net.cpp:129] Top shape: 1 64 224 224 (3211264)
+I0828 15:17:29.856325   727 net.cpp:137] Memory required for data: 308080640
+I0828 15:17:29.856328   727 layer_factory.hpp:77] Creating layer deconv1_2
+I0828 15:17:29.856333   727 net.cpp:84] Creating Layer deconv1_2
+I0828 15:17:29.856336   727 net.cpp:406] deconv1_2 <- deconv1_1
+I0828 15:17:29.856341   727 net.cpp:380] deconv1_2 -> deconv1_2
+I0828 15:17:29.856827   727 net.cpp:122] Setting up deconv1_2
+I0828 15:17:29.856833   727 net.cpp:129] Top shape: 1 64 224 224 (3211264)
+I0828 15:17:29.856835   727 net.cpp:137] Memory required for data: 320925696
+I0828 15:17:29.856840   727 layer_factory.hpp:77] Creating layer debatchnorm1_2
+I0828 15:17:29.856845   727 net.cpp:84] Creating Layer debatchnorm1_2
+I0828 15:17:29.856848   727 net.cpp:406] debatchnorm1_2 <- deconv1_2
+I0828 15:17:29.856851   727 net.cpp:367] debatchnorm1_2 -> deconv1_2 (in-place)
+I0828 15:17:29.857107   727 net.cpp:122] Setting up debatchnorm1_2
+I0828 15:17:29.857112   727 net.cpp:129] Top shape: 1 64 224 224 (3211264)
+I0828 15:17:29.857115   727 net.cpp:137] Memory required for data: 333770752
+I0828 15:17:29.857120   727 layer_factory.hpp:77] Creating layer deelu1_2
+I0828 15:17:29.857125   727 net.cpp:84] Creating Layer deelu1_2
+I0828 15:17:29.857126   727 net.cpp:406] deelu1_2 <- deconv1_2
+I0828 15:17:29.857130   727 net.cpp:367] deelu1_2 -> deconv1_2 (in-place)
+I0828 15:17:29.857133   727 net.cpp:122] Setting up deelu1_2
+I0828 15:17:29.857137   727 net.cpp:129] Top shape: 1 64 224 224 (3211264)
+I0828 15:17:29.857139   727 net.cpp:137] Memory required for data: 346615808
+I0828 15:17:29.857141   727 layer_factory.hpp:77] Creating layer segmentation
+I0828 15:17:29.857148   727 net.cpp:84] Creating Layer segmentation
+I0828 15:17:29.857151   727 net.cpp:406] segmentation <- deconv1_2
+I0828 15:17:29.857156   727 net.cpp:380] segmentation -> segmentation
+I0828 15:17:29.859526   727 net.cpp:122] Setting up segmentation
+I0828 15:17:29.859536   727 net.cpp:129] Top shape: 1 2 224 224 (100352)
+I0828 15:17:29.859539   727 net.cpp:137] Memory required for data: 347017216
+I0828 15:17:29.859544   727 layer_factory.hpp:77] Creating layer segmentation_segmentation_0_split
+I0828 15:17:29.859549   727 net.cpp:84] Creating Layer segmentation_segmentation_0_split
+I0828 15:17:29.859552   727 net.cpp:406] segmentation_segmentation_0_split <- segmentation
+I0828 15:17:29.859558   727 net.cpp:380] segmentation_segmentation_0_split -> segmentation_segmentation_0_split_0
+I0828 15:17:29.859565   727 net.cpp:380] segmentation_segmentation_0_split -> segmentation_segmentation_0_split_1
+I0828 15:17:29.859614   727 net.cpp:122] Setting up segmentation_segmentation_0_split
+I0828 15:17:29.859619   727 net.cpp:129] Top shape: 1 2 224 224 (100352)
+I0828 15:17:29.859623   727 net.cpp:129] Top shape: 1 2 224 224 (100352)
+I0828 15:17:29.859625   727 net.cpp:137] Memory required for data: 347820032
+I0828 15:17:29.859627   727 layer_factory.hpp:77] Creating layer loss
+I0828 15:17:29.859638   727 net.cpp:84] Creating Layer loss
+I0828 15:17:29.859642   727 net.cpp:406] loss <- segmentation_segmentation_0_split_0
+I0828 15:17:29.859645   727 net.cpp:406] loss <- labels_data_1_split_0
+I0828 15:17:29.859650   727 net.cpp:380] loss -> loss
+I0828 15:17:29.859658   727 layer_factory.hpp:77] Creating layer loss
+I0828 15:17:29.860034   727 net.cpp:122] Setting up loss
+I0828 15:17:29.860040   727 net.cpp:129] Top shape: (1)
+I0828 15:17:29.860044   727 net.cpp:132]     with loss weight 1
+I0828 15:17:29.860050   727 net.cpp:137] Memory required for data: 347820036
+I0828 15:17:29.860054   727 layer_factory.hpp:77] Creating layer accuracy
+I0828 15:17:29.860059   727 net.cpp:84] Creating Layer accuracy
+I0828 15:17:29.860061   727 net.cpp:406] accuracy <- segmentation_segmentation_0_split_1
+I0828 15:17:29.860065   727 net.cpp:406] accuracy <- labels_data_1_split_1
+I0828 15:17:29.860071   727 net.cpp:380] accuracy -> accuracy
+I0828 15:17:29.860079   727 net.cpp:122] Setting up accuracy
+I0828 15:17:29.860081   727 net.cpp:129] Top shape: (1)
+I0828 15:17:29.860083   727 net.cpp:137] Memory required for data: 347820040
+I0828 15:17:29.860098   727 net.cpp:200] accuracy does not need backward computation.
+I0828 15:17:29.860101   727 net.cpp:198] loss needs backward computation.
+I0828 15:17:29.860105   727 net.cpp:198] segmentation_segmentation_0_split needs backward computation.
+I0828 15:17:29.860107   727 net.cpp:198] segmentation needs backward computation.
+I0828 15:17:29.860110   727 net.cpp:198] deelu1_2 needs backward computation.
+I0828 15:17:29.860113   727 net.cpp:198] debatchnorm1_2 needs backward computation.
+I0828 15:17:29.860116   727 net.cpp:198] deconv1_2 needs backward computation.
+I0828 15:17:29.860117   727 net.cpp:198] deelu1_1 needs backward computation.
+I0828 15:17:29.860121   727 net.cpp:198] debatchnorm1_1 needs backward computation.
+I0828 15:17:29.860122   727 net.cpp:198] deconv1_1 needs backward computation.
+I0828 15:17:29.860124   727 net.cpp:198] unpool1 needs backward computation.
+I0828 15:17:29.860128   727 net.cpp:198] deelu2_2 needs backward computation.
+I0828 15:17:29.860131   727 net.cpp:198] debatchnorm2_2 needs backward computation.
+I0828 15:17:29.860133   727 net.cpp:198] deconv2_2 needs backward computation.
+I0828 15:17:29.860136   727 net.cpp:198] deelu2_1 needs backward computation.
+I0828 15:17:29.860137   727 net.cpp:198] debatchnorm2_1 needs backward computation.
+I0828 15:17:29.860141   727 net.cpp:198] deconv2_1 needs backward computation.
+I0828 15:17:29.860142   727 net.cpp:198] unpool2 needs backward computation.
+I0828 15:17:29.860146   727 net.cpp:198] deelu3_3 needs backward computation.
+I0828 15:17:29.860147   727 net.cpp:198] debatchnorm3_3 needs backward computation.
+I0828 15:17:29.860150   727 net.cpp:198] deconv3_3 needs backward computation.
+I0828 15:17:29.860153   727 net.cpp:198] deelu3_2 needs backward computation.
+I0828 15:17:29.860155   727 net.cpp:198] debatchnorm3_2 needs backward computation.
+I0828 15:17:29.860157   727 net.cpp:198] deconv3_2 needs backward computation.
+I0828 15:17:29.860160   727 net.cpp:198] deelu3_1 needs backward computation.
+I0828 15:17:29.860162   727 net.cpp:198] debatchnorm3_1 needs backward computation.
+I0828 15:17:29.860164   727 net.cpp:198] deconv3_1 needs backward computation.
+I0828 15:17:29.860167   727 net.cpp:198] unpool3 needs backward computation.
+I0828 15:17:29.860172   727 net.cpp:198] elu4_3 needs backward computation.
+I0828 15:17:29.860173   727 net.cpp:198] batchnorm4_3 needs backward computation.
+I0828 15:17:29.860177   727 net.cpp:198] conv4_3 needs backward computation.
+I0828 15:17:29.860178   727 net.cpp:198] elu4_2 needs backward computation.
+I0828 15:17:29.860182   727 net.cpp:198] batchnorm4_2 needs backward computation.
+I0828 15:17:29.860183   727 net.cpp:198] conv4_2 needs backward computation.
+I0828 15:17:29.860186   727 net.cpp:198] elu4_1 needs backward computation.
+I0828 15:17:29.860189   727 net.cpp:198] batchnorm4_1 needs backward computation.
+I0828 15:17:29.860193   727 net.cpp:198] conv4_1 needs backward computation.
+I0828 15:17:29.860195   727 net.cpp:198] pool3 needs backward computation.
+I0828 15:17:29.860198   727 net.cpp:198] elu3_3 needs backward computation.
+I0828 15:17:29.860200   727 net.cpp:198] batchnorm3_3 needs backward computation.
+I0828 15:17:29.860203   727 net.cpp:198] conv3_3 needs backward computation.
+I0828 15:17:29.860205   727 net.cpp:198] elu3_2 needs backward computation.
+I0828 15:17:29.860208   727 net.cpp:198] batchnorm3_2 needs backward computation.
+I0828 15:17:29.860209   727 net.cpp:198] conv3_2 needs backward computation.
+I0828 15:17:29.860213   727 net.cpp:198] elu3_1 needs backward computation.
+I0828 15:17:29.860215   727 net.cpp:198] batchnorm3_1 needs backward computation.
+I0828 15:17:29.860218   727 net.cpp:198] conv3_1 needs backward computation.
+I0828 15:17:29.860220   727 net.cpp:198] pool2 needs backward computation.
+I0828 15:17:29.860224   727 net.cpp:198] elu2_2 needs backward computation.
+I0828 15:17:29.860225   727 net.cpp:198] batchnorm2_2 needs backward computation.
+I0828 15:17:29.860229   727 net.cpp:198] conv2_2 needs backward computation.
+I0828 15:17:29.860235   727 net.cpp:198] elu2_1 needs backward computation.
+I0828 15:17:29.860239   727 net.cpp:198] batchnorm2_1 needs backward computation.
+I0828 15:17:29.860240   727 net.cpp:198] conv2_1 needs backward computation.
+I0828 15:17:29.860244   727 net.cpp:198] pool1 needs backward computation.
+I0828 15:17:29.860245   727 net.cpp:198] elu1_2 needs backward computation.
+I0828 15:17:29.860249   727 net.cpp:198] batchnorm1_2 needs backward computation.
+I0828 15:17:29.860251   727 net.cpp:198] conv1_2 needs backward computation.
+I0828 15:17:29.860254   727 net.cpp:198] elu1_1 needs backward computation.
+I0828 15:17:29.860255   727 net.cpp:198] batchnorm1_1 needs backward computation.
+I0828 15:17:29.860258   727 net.cpp:198] conv1_1 needs backward computation.
+I0828 15:17:29.860261   727 net.cpp:198] batchnorm0 needs backward computation.
+I0828 15:17:29.860265   727 net.cpp:200] labels_data_1_split does not need backward computation.
+I0828 15:17:29.860267   727 net.cpp:200] data does not need backward computation.
+I0828 15:17:29.860270   727 net.cpp:242] This network produces output accuracy
+I0828 15:17:29.860272   727 net.cpp:242] This network produces output loss
+I0828 15:17:29.860307   727 net.cpp:255] Network initialization done.
+I0828 15:17:29.860450   727 solver.cpp:56] Solver scaffolding done.
+I0828 15:17:29.865766   727 caffe.cpp:242] Resuming from snapshots/segnet_iter_11107.solverstate
+I0828 15:17:29.892515   727 upgrade_proto.cpp:77] Attempting to upgrade batch norm layers using deprecated params: snapshots/segnet_iter_11107.caffemodel
+I0828 15:17:29.892555   727 upgrade_proto.cpp:80] Successfully upgraded batch norm layers using deprecated params.
+I0828 15:17:29.896234   727 sgd_solver.cpp:318] SGDSolver: restoring history
+I0828 15:17:29.917840   727 caffe.cpp:248] Starting Optimization
+I0828 15:17:29.917858   727 solver.cpp:272] Solving SegNet
+I0828 15:17:29.917861   727 solver.cpp:273] Learning Rate Policy: fixed
