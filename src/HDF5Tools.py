@@ -28,7 +28,7 @@ def mean_centered_datum(datum):
     return datum
 
 
-def create_HDF5(set_paths, hdf5_dir, max_data_per_file=2500, symmetry=False):
+def create_HDF5(set_paths, hdf5_dir, max_data_per_file=2500, symmetry=False, channels=None):
     print "Output directory : {}".format(hdf5_dir)
     hdf5_paths = []
     hfd5_file_number = 0
@@ -37,10 +37,10 @@ def create_HDF5(set_paths, hdf5_dir, max_data_per_file=2500, symmetry=False):
     for i, set_path in enumerate(set_paths):
         datum_path, label_path = set_path
         datum = np.array(gdal.Open(datum_path).ReadAsArray(), dtype=np.float32)
-        # datum = datum[::-1, ...]  # switch from RGB to BGR
-        # datum = mean_centered_datum(datum)
+        if channels:
+            datum = datum[channels, ...]
         label = np.array(gdal.Open(label_path).ReadAsArray(), dtype=np.uint8)
-        label[label == 255]=2
+        label[label == 255] = 2
         if label.ndim < 4:
             label = np.expand_dims(label, 0)
         data.append(datum)
@@ -57,7 +57,7 @@ def create_HDF5(set_paths, hdf5_dir, max_data_per_file=2500, symmetry=False):
             data = np.array(data)
             labels = np.array(labels)
             print data.shape, labels.shape
-            print data.mean(axis=(0,2,3)), labels.mean(axis=(0,2,3))
+            print data.mean(axis=(0, 2, 3)), labels.mean(axis=(0, 2, 3))
             print "{:d} data and labels processed.".format(len(data))
             hdf5_name = "File_{:d}.h5".format(hfd5_file_number)
             hdf5_path = os.path.join(hdf5_dir, hdf5_name)
@@ -98,5 +98,5 @@ if __name__ == '__main__':
     print "Whole set contains {} files".format(len(data_paths))
     print "Train set contains {} files.".format(len(train_set))
     print "Validation set contains {} files.".format(len(val_set))
-    create_HDF5(train_set, train_dir, max_data_per_file=1000, symmetry=False)
-    create_HDF5(val_set, val_dir, max_data_per_file=1000, symmetry=False)
+    create_HDF5(train_set, train_dir, max_data_per_file=1000, symmetry=False, channels=[1, 2, 4, 6])
+    create_HDF5(val_set, val_dir, max_data_per_file=1000, symmetry=False, channels=[1, 2, 4, 6])

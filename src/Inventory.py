@@ -20,7 +20,7 @@ for label_name in label_names:
     for value in values:
         if value not in all_values:
             all_values.append(value)
-    # label[label == 255]=2
-    # band.WriteArray(label)
+            # label[label == 255]=2
+            # band.WriteArray(label)
 
 print all_values
