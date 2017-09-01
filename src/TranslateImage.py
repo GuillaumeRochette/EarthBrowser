@@ -4,6 +4,15 @@ from osgeo import gdal
 
 
 def translate_output_bounds(src_path, dst_path, pix_translation):
+    """Create a translated copy of the input image along the x, y axes (pixel unit) to a specified location.
+    It was used to realign Pleiades images with OpenStreetMap data.
+    It uses gdal.Translate() in a similar way as gdal_translate binary.
+
+    :param src_path: Path of the source image.
+    :param dst_path: Path for the output.
+    :param pix_translation: Couple of int or float, containing the translation vector.
+    :return:
+    """
     src_ds = gdal.Open(src_path)
     xpix_translation, ypix_translation = pix_translation
 
@@ -33,10 +42,9 @@ if __name__ == '__main__':
     print xpix_translation, ypix_translation
 
     root_dir = "/home/guillaume/Documents/SegNet/data"
-    # src_names = ["Oakland.tif", "Fremont.tif", "Concord.tif"]
-    src_names = ["Oakland.tif"]
+    src_names = ["Oakland.tif", "Fremont.tif", "Concord.tif"]
     src_paths = [os.path.join(root_dir, src_name) for src_name in src_names]
     dst_paths = [src_path.replace(".tif", ".dec.tif") for src_path in src_paths]
     for src_path, dst_path in zip(src_paths, dst_paths):
-        # print src_path, dst_path
+        print src_path, dst_path
         translate_output_bounds(src_path, dst_path, [xpix_translation, ypix_translation])

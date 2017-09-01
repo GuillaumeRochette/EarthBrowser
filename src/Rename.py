@@ -1,7 +1,21 @@
 import os
 
 
-def rename_files(file_dir, old_prefix, old_suffix, new_pattern, file_extension, verbose=True, rename=False):
+def rename_files(file_dir, old_prefix, old_suffix, new_pattern, file_extension, rename=False):
+    """
+    Small script made orignally to rename SpaceNet files, because they are not named to be sorted in
+    the same order for data and labels ... It is because they added a suffix for the labels.
+    They also didn't add {:05d} when indexing the files, but {:d} only.
+
+    :param file_dir: Directory where the files are located.
+    :param old_prefix: Old prefix that needs to be removed.
+    :param old_suffix: Old suffix that needs to be removed.
+    :param new_pattern: New pattern to name the files after.
+    :param file_extension: File extension.
+    :param rename: When set to True, it actually renames the files, but you can test without renaming
+    with this flag set to False.
+    :return:
+    """
     print file_dir
     file_names = os.listdir(file_dir)
     for file_name in file_names:
@@ -13,8 +27,7 @@ def rename_files(file_dir, old_prefix, old_suffix, new_pattern, file_extension, 
             new_file_name = "{}_{:05d}.{}".format(new_pattern, num, file_extension)
             old_path = os.path.join(file_dir, file_name)
             new_path = os.path.join(file_dir, new_file_name)
-            if verbose:
-                print file_name, new_file_name
+            print file_name, new_file_name
             if rename:
                 os.rename(old_path, new_path)
 
