@@ -1,4 +1,4 @@
-name: "SegNet"
+name: "SegNet7"
 layer {
   name: "input"
   type: "Input"
@@ -6,7 +6,7 @@ layer {
   input_param {
     shape {
       dim: 1
-      dim: 8
+      dim: 4
       dim: 224
       dim: 224
     }
@@ -232,8 +232,8 @@ layer {
 	top: "conv4_1"
 	convolution_param {
 		num_output: 512
-		pad: 0
-		kernel_size: 1
+		pad: 1
+		kernel_size: 3
 		stride: 1
 	}
 }
@@ -256,8 +256,8 @@ layer {
 	top: "conv4_2"
 	convolution_param {
 		num_output: 512
-		pad: 0
-		kernel_size: 1
+		pad: 1
+		kernel_size: 3
 		stride: 1
 	}
 }
@@ -274,10 +274,10 @@ layer {
 	top: "conv4_2"
 }
 layer {
-	name: "conv4_3"
-	type: "Convolution"
+	name: "deconv4_3"
+	type: "Deconvolution"
 	bottom: "conv4_2"
-	top: "conv4_3"
+	top: "deconv4_3"
 	convolution_param {
 		num_output: 256
 		pad: 1
@@ -286,21 +286,21 @@ layer {
 	}
 }
 layer {
-	name: "batchnorm4_3"
+	name: "debatchnorm4_3"
 	type: "BatchNorm"
-	bottom: "conv4_3"
-	top: "conv4_3"
+	bottom: "deconv4_3"
+	top: "deconv4_3"
 }
 layer {
-	name: "elu4_3"
+	name: "deelu4_3"
 	type: "ELU"
-	bottom: "conv4_3"
-	top: "conv4_3"
+	bottom: "deconv4_3"
+	top: "deconv4_3"
 }
 layer {
 	name: "unpool3"
 	type: "Unpooling"
-	bottom: "conv4_3"
+	bottom: "deconv4_3"
 	bottom: "pool3_mask"
 	bottom: "pool3_argmax_count"
 	top: "unpool3"

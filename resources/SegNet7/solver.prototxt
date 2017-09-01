@@ -18,4 +18,4 @@ test_interval: 500
 display: 250
 
 snapshot: 500
-snapshot_prefix: "snapshots/segnet"
+snapshot_prefix: "snapshots/segnet_infogain"
