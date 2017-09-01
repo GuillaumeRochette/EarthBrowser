@@ -781,16 +781,29 @@ layer {
 		decay_mult: 0
 	}
 }
-layer {
-  name: "loss"
-  type: "SoftmaxWithLoss"
-  bottom: "segmentation"
-  bottom: "labels"
-  top: "loss"
-  loss_param {
-    ignore_label: 2
+#layer {
+#  name: "loss"
+#  type: "SoftmaxWithLoss"
+#  bottom: "segmentation"
+#  bottom: "labels"
+#  top: "loss"
+#  loss_param {
+#    ignore_label: 2
 #    normalize: false
-  }
+#  }
+#}
+layer {
+    name: "infogainLoss"
+    type: "InfogainLoss"
+    bottom: "segmentation"
+    bottom: "labels"
+    top: "loss"
+    loss_param {
+        ignore_label: 2
+    }
+    infogain_loss_param {
+        source: "/home/grochette/Documents/SegNet/data/CleanData/infogainH.binaryproto"
+    }
 }
 layer {
   name: "accuracy"
