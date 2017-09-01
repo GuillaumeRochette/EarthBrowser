@@ -4,12 +4,13 @@ from osgeo import gdal
 import caffe
 import matplotlib.pyplot as plt
 
-root_dir = "/home/grochette/Documents/SegNet"
 model_def = "/home/grochette/Documents/SegNet/resources/SegNet11/deploy.prototxt"
 model_weights = "/home/grochette/Documents/SegNet/resources/SegNet11/snapshots/segnet_iter_1500.caffemodel"
-
+# Load the model, a .prototxt containing the model definition, and a .caffemodel (proto binary)
+# containing the weight values are needed.
 net = caffe.Net(model_def, caffe.TEST, weights=model_weights)
 
+root_dir = "/home/grochette/Documents/SegNet"
 mul_pan_dir = os.path.join(root_dir, "data/CleanData/MUL_PAN")
 mul_pan_names = sorted(os.listdir(mul_pan_dir))
 rgb_pan_dir = os.path.join(root_dir, "data/CleanData/RGB_PAN")
