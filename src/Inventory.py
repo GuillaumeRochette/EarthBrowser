@@ -1,4 +1,5 @@
 import os
+import glob
 from osgeo import gdal
 import numpy as np
 import caffe
@@ -6,18 +7,10 @@ import caffe
 gdal.UseExceptions()
 
 
-def infogain_matrix(frequencies):
-    L = len(frequencies)
-    H = np.eye(L) - np.diag(frequencies)
-    return H
-
-
-def get_frequencies(label_dir):
-    label_names = sorted(os.listdir(label_dir))
-    print "{} labels.".format(len(label_names))
+def compute_distribution(label_paths):
+    print "{} labels.".format(len(label_paths))
     occurrences = {}
-    for i, label_name in enumerate(label_names):
-        label_path = os.path.join(label_dir, label_name)
+    for i, label_path in enumerate(label_paths):
         print i, label_path
         label_ds = gdal.Open(label_path)
         band = label_ds.GetRasterBand(1)
@@ -28,16 +21,27 @@ def get_frequencies(label_dir):
                 occurrences[value] = count
             else:
                 occurrences[value] += count
-    print occurrences
+    return occurrences
 
 
-root_dir = "/home/grochette/Documents/SegNet/data/"
-label_dir = os.path.join(root_dir, "CleanData/Labels")
-get_frequencies(label_dir)
+if __name__ == '__main__':
+    root_dir = "/home/grochette/Documents/SegNet"
+    clean_data_dir = os.path.join(root_dir, "data/CleanData")
+    cities = ["Vegas", "Paris", "Shanghai", "Khartoum"]
+    label_paths = []
+    for city in cities:
+        label_dir = os.path.join(clean_data_dir, "{}/Labels".format(city))
+        label_paths += sorted(glob.glob(os.path.join(label_dir, "*")))
 
-# print frequencies
-# H = infogain_matrix(frequencies)
-# print H
-# blob = caffe.io.array_to_blobproto(H.reshape((1, 1, L, L)))
-# with open('infogainH.binaryproto', 'wb') as f:
-#     f.write(blob.SerializeToString())
+    dist = compute_distribution(label_paths)
+    occurences = np.array(dist.values(), dtype=np.float32)
+    occurences = occurences[:-1]
+    frequencies = occurences / occurences.sum()
+    print frequencies
+    weights = 1 / frequencies
+    L = len(weights)
+    H = np.diag(weights)
+    print H
+    blob = caffe.io.array_to_blobproto(H.reshape((1, 1, L, L)))
+    with open(os.path.join(clean_data_dir, "infogainH.binaryproto"), 'wb') as f:
+        f.write(blob.SerializeToString())

@@ -61,26 +61,20 @@ if __name__ == '__main__':
     cities = ["Vegas", "Paris", "Shanghai", "Khartoum"]  # Rio doesn't have MUL_PAN (50cm), only MUL (2m).
     for city in cities:
         mul_pan_dir = os.path.join(root_dir, "RawData/{}/MUL_PAN".format(city))
-        rgb_pan_dir = os.path.join(root_dir, "RawData/{}/RGB_PAN".format(city))
         label_dir = os.path.join(root_dir, "RawData/{}/Labels".format(city))
         print mul_pan_dir
-        print rgb_pan_dir
         print label_dir
 
         tile_shape = (224, 224)
         strides = (224, 224)
 
         # Creates output directories if they don't already exists.
-        out_rgb_pan_dir = os.path.join(root_dir, "CleanData/RGB_PAN")
-        if not os.path.isdir(out_rgb_pan_dir):
-            os.makedirs(out_rgb_pan_dir)
-        out_mul_pan_dir = os.path.join(root_dir, "CleanData/MUL_PAN")
+        out_mul_pan_dir = os.path.join(root_dir, "CleanData/{}/MUL_PAN".format(city))
         if not os.path.isdir(out_mul_pan_dir):
             os.makedirs(out_mul_pan_dir)
-        out_label_dir = os.path.join(root_dir, "CleanData/Labels")
+        out_label_dir = os.path.join(root_dir, "CleanData/{}/Labels".format(city))
         if not os.path.isdir(out_label_dir):
             os.makedirs(out_label_dir)
 
         split_dataset(mul_pan_dir, out_mul_pan_dir, tile_shape, strides)
-        split_dataset(rgb_pan_dir, out_rgb_pan_dir, tile_shape, strides)
         split_dataset(label_dir, out_label_dir, tile_shape, strides)

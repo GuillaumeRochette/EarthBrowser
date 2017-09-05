@@ -34,14 +34,20 @@ def rename_files(file_dir, old_prefix, old_suffix, new_pattern, file_extension, 
 
 if __name__ == '__main__':
     root_dir = "/home/grochette/Documents/SegNet/data/RawData"
-    # cities = ["Rio", "Vegas", "Paris", "Shanghai", "Khartoum"]
-    city = "Vegas"
-    city_dir = os.path.join(root_dir, city)
-    # file_dir = os.path.join(city_dir, "MUL_PAN")
-    # file_dir = os.path.join(city_dir, "RGB_PAN")
-    file_dir = os.path.join(city_dir, "Labels")
-    old_prefix = "CLASS_SEG_Vegas_"
-    old_suffix = ""
-    new_pattern = city
-    file_extension = "tif"
-    rename_files(file_dir, old_prefix, old_suffix, new_pattern, file_extension, rename=False)
+    cities = ["Vegas", "Paris", "Shanghai", "Khartoum"]
+    aois = [2, 3, 4, 5]
+    for aoi, city in zip(aois, cities):
+        city_dir = os.path.join(root_dir, city)
+        data_dir = os.path.join(city_dir, "MUL_PAN")
+        label_dir = os.path.join(city_dir, "Labels")
+        file_extension = "tif"
+        rename_files(file_dir=data_dir,
+                     old_prefix="MUL-PanSharpen_AOI_{}_{}_img".format(aoi, city),
+                     old_suffix="",
+                     new_pattern="{}".format(city),
+                     file_extension=file_extension, rename=True)
+        rename_files(file_dir=label_dir,
+                     old_prefix="MUL-PanSharpen_AOI_{}_{}_img".format(aoi, city),
+                     old_suffix="segcls",
+                     new_pattern="{}".format(city),
+                     file_extension=file_extension, rename=True)
