@@ -1,22 +1,12 @@
 import os
+import glob
 import random
 import h5py
 import numpy as np
 from osgeo import gdal
 
 
-def list_filepaths(src_dir):
-    """
-    Lists all files inside a directory, returns an array containing their full paths.
-    :param src_dir: Source directory.
-    :return: Array containing the full path of every files contained in the directory.
-    """
-    filenames = sorted(os.listdir(src_dir))
-    filepaths = [os.path.join(src_dir, filename) for filename in filenames]
-    return filepaths
-
-
-def split_train_val_sets(data_paths, labels_paths, split_ratio=0.9):
+def split_train_val_sets(data_paths, labels_paths, split_ratio=0.9, seed=None):
     """
     Randomly splits a dataset into a training set and a validation set according to the split ratio.
     :param data_paths: Paths to the data to be splitted.
@@ -25,6 +15,8 @@ def split_train_val_sets(data_paths, labels_paths, split_ratio=0.9):
     :return: Two arrays containing pairs of data/labels.
     """
     zipped_list = list(zip(data_paths, labels_paths))
+    if seed:
+        random.seed(seed)
     random.shuffle(zipped_list)
     train_val_index = int(len(zipped_list) * split_ratio)
     train_set = zipped_list[:train_val_index]
@@ -58,8 +50,9 @@ def create_hdf5(set_paths, hdf5_dir, max_data_per_file=2500, symmetry=False, cha
             datum = datum[channels, ...]
         # Convert label dtype into uint8 if you have less than 255 labels ;)
         label = np.array(gdal.Open(label_path).ReadAsArray(), dtype=np.uint8)
-        # In the SpaceNet Dataset, the absence of building is denoted by a 0, the presence by a 1
+        # In the SpaceNet Dataset, the absence of building is denoted by a 0, the presence by a 1 or a 100.
         # and the boundary by a 255. But Caffe accepts only consecutive labels starting with 0.
+        # label[label == 100] = 1
         label[label == 255] = 2
         # SpaceNet labels are 2-D tensors/blobs, but Caffe accepts only 3-D tensors/blobs. So we expand it to 3.
         if label.ndim < 4:
@@ -90,7 +83,7 @@ def create_hdf5(set_paths, hdf5_dir, max_data_per_file=2500, symmetry=False, cha
             print "Writing in {}.".format(hdf5_name)
             with h5py.File(hdf5_path, "w") as hdf5_file:
                 hdf5_file.create_dataset("data", data=data)
-                hdf5_file.create_dataset("labels", data=labels)
+                hdf5_file.create_dataset("label", data=labels)
             print "Done."
             data = []
             labels = []
@@ -104,11 +97,18 @@ def create_hdf5(set_paths, hdf5_dir, max_data_per_file=2500, symmetry=False, cha
 
 
 if __name__ == '__main__':
-    root_dir = "/home/grochette/Documents/SegNet/data"
-    data_dir = os.path.join(root_dir, "CleanData/MUL_PAN")
-    labels_dir = os.path.join(root_dir, "CleanData/Labels")
+    root_dir = "/home/grochette/Documents/SegNet"
+    clean_data_dir = os.path.join(root_dir, "data/CleanData")
+    cities = ["Vegas", "Paris", "Shanghai", "Khartoum"]
+    label_paths = []
+    data_paths = []
+    for city in cities:
+        data_dir = os.path.join(clean_data_dir, "{}/MUL_PAN".format(city))
+        label_dir = os.path.join(clean_data_dir, "{}/Labels".format(city))
+        data_paths += sorted(glob.glob(os.path.join(data_dir, "*")))
+        label_paths += sorted(glob.glob(os.path.join(label_dir, "*")))
 
-    h5_dir = os.path.join(root_dir, "HDF5")
+    h5_dir = os.path.join(root_dir, "data/HDF5")
     train_dir = os.path.join(h5_dir, "Train")
     val_dir = os.path.join(h5_dir, "Validation")
     if not os.path.isdir(train_dir):
@@ -116,10 +116,7 @@ if __name__ == '__main__':
     if not os.path.isdir(val_dir):
         os.makedirs(val_dir)
 
-    data_paths = list_filepaths(data_dir)
-    labels_paths = list_filepaths(labels_dir)
-
-    train_set, val_set = split_train_val_sets(data_paths, labels_paths, 0.90)
+    train_set, val_set = split_train_val_sets(data_paths, label_paths, split_ratio=0.90, seed=1337)
     print "Whole set contains {} files".format(len(data_paths))
     print "Train set contains {} files.".format(len(train_set))
     print "Validation set contains {} files.".format(len(val_set))
