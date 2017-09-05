@@ -36,9 +36,7 @@ if __name__ == '__main__':
     dist = compute_distribution(label_paths)
     occurences = np.array(dist.values(), dtype=np.float32)
     occurences = occurences[:-1]
-    frequencies = occurences / occurences.sum()
-    print frequencies
-    weights = 1 / frequencies
+    weights = occurences.sum() / occurences
     L = len(weights)
     H = np.diag(weights)
     print H
