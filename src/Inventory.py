@@ -36,8 +36,8 @@ if __name__ == '__main__':
     dist = compute_distribution(label_paths)
     occurences = np.array(dist.values(), dtype=np.float32)
     occurences = occurences[:-1]
-    weights = occurences.sum() / occurences
-    L = len(weights)
+    L = len(occurences)
+    weights = occurences.sum() / (occurences * L)
     H = np.diag(weights)
     print H
     blob = caffe.io.array_to_blobproto(H.reshape((1, 1, L, L)))
