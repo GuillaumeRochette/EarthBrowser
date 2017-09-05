@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 root_dir = "/home/grochette/Documents/SegNet"
 model_def = "/home/grochette/Documents/SegNet/resources/SegNet7/deploy.prototxt"
-model_weights = "/home/grochette/Documents/SegNet/resources/SegNet7/snapshots/segnet_infogain_iter_3142.caffemodel"
+model_weights = "/home/grochette/Documents/SegNet/resources/SegNet7/snapshots/segnet_infogain_iter_12500.caffemodel"
 
 net = caffe.Net(model_def, caffe.TEST, weights=model_weights)
 
@@ -33,8 +33,9 @@ while True:
     seg_result = out["prob"]
     probabilty_map = seg_result[0, 1]
     classification = np.array(probabilty_map)
-    epsilon = 1e-2
+    epsilon = 5e-2
     mean = np.mean(classification)
+    median = np.median(classification)
     classification[classification - epsilon > 0.5] = 1
     classification[classification + epsilon < 0.5] = 0
     print probabilty_map.shape, probabilty_map.dtype
