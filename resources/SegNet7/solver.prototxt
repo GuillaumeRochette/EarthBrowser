@@ -10,12 +10,12 @@ weight_decay: 0.0005
 lr_policy: "fixed"
 
 iter_size: 32
-max_iter: 25000
+max_iter: 50000
 
 test_iter: 4767
 test_interval: 500
 
-display: 250
+display: 500
 
 snapshot: 500
 snapshot_prefix: "snapshots/segnet_infogain"

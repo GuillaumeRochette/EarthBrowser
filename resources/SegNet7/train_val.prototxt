@@ -793,28 +793,29 @@ layer {
 #  }
 #}
 layer {
-    name: "infogainLoss"
-    type: "InfogainLoss"
-    bottom: "segmentation"
-    bottom: "labels"
-    top: "loss"
-    loss_param {
-        ignore_label: 2
-    }
-    infogain_loss_param {
-        source: "/home/grochette/Documents/SegNet/data/CleanData/infogainH.binaryproto"
-    }
+	name: "infogainLoss"
+	type: "InfogainLoss"
+	bottom: "segmentation"
+	bottom: "labels"
+	top: "loss"
+	loss_param {
+		ignore_label: 2
+	}
+	infogain_loss_param {
+		source: "/home/grochette/Documents/SegNet/data/CleanData/infogainH.binaryproto"
+	}
 }
 layer {
-  name: "accuracy"
-  type: "Accuracy"
-  bottom: "segmentation"
-  bottom: "labels"
-  top: "accuracy"
-  include {
-    phase: TEST
-  }
-  accuracy_param {
-    ignore_label: 2
-  }
+	name: "accuracy"
+	type: "Accuracy"
+	bottom: "segmentation"
+	bottom: "labels"
+	top: "accuracy"
+	top: "per_class_accuracy"
+	include {
+		phase: TEST
+	}
+	accuracy_param {
+		ignore_label: 2
+	}
 }
