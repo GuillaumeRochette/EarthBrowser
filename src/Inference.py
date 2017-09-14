@@ -5,11 +5,12 @@ import caffe
 import matplotlib.pyplot as plt
 
 root_dir = "/home/grochette/Documents/SegNet"
-model_def = "/home/grochette/Documents/SegNet/resources/SegNet7/deploy.prototxt"
-model_weights = "/home/grochette/Documents/SegNet/resources/SegNet7/snapshots/segnet_infogain_iter_12500.caffemodel"
+model_def = "/home/grochette/Documents/SegNet/resources/SegNet5/deploy.prototxt"
+model_weights = "/home/grochette/Documents/SegNet/resources/SegNet5/snapshots/segnet_infogain_iter_47500.caffemodel"
 # Load the model, a .prototxt containing the model definition, and a .caffemodel (proto binary)
 # containing the weight values are needed.
 net = caffe.Net(model_def, caffe.TEST, weights=model_weights)
+
 mul_pan_dir = os.path.join(root_dir, "data/CleanData/MUL_PAN")
 mul_pan_names = sorted(os.listdir(mul_pan_dir))
 label_dir = os.path.join(root_dir, "data/CleanData/Labels")
