@@ -33,21 +33,21 @@ def rename_files(file_dir, old_prefix, old_suffix, new_pattern, file_extension, 
 
 
 if __name__ == '__main__':
-    root_dir = "/home/grochette/Documents/SegNet/data/RawData"
+    root_dir = "/home/guillaume/Documents/SegNet/data/RawData"
     cities = ["Vegas", "Paris", "Shanghai", "Khartoum"]
     aois = [2, 3, 4, 5]
     for aoi, city in zip(aois, cities):
         city_dir = os.path.join(root_dir, city)
-        data_dir = os.path.join(city_dir, "MUL_PAN")
-        label_dir = os.path.join(city_dir, "Labels")
         file_extension = "tif"
+        data_dir = os.path.join(city_dir, "MUL_PAN")
         rename_files(file_dir=data_dir,
                      old_prefix="MUL-PanSharpen_AOI_{}_{}_img".format(aoi, city),
                      old_suffix="",
                      new_pattern="{}".format(city),
                      file_extension=file_extension, rename=True)
-        rename_files(file_dir=label_dir,
-                     old_prefix="MUL-PanSharpen_AOI_{}_{}_img".format(aoi, city),
-                     old_suffix="segcls",
-                     new_pattern="{}".format(city),
-                     file_extension=file_extension, rename=True)
+        # label_dir = os.path.join(city_dir, "Labels")
+        # rename_files(file_dir=label_dir,
+        #              old_prefix="MUL-PanSharpen_AOI_{}_{}_img".format(aoi, city),
+        #              old_suffix="segcls",
+        #              new_pattern="{}".format(city),
+        #              file_extension=file_extension, rename=False)

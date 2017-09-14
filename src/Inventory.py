@@ -1,7 +1,8 @@
-import os
 import glob
-from osgeo import gdal
 import numpy as np
+import os
+from osgeo import gdal
+
 import caffe
 
 gdal.UseExceptions()

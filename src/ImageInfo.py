@@ -1,6 +1,7 @@
+import numpy as np
 import os
 from osgeo import gdal
-import numpy as np
+
 import matplotlib.pyplot as plt
 
 data_dir = "/home/guillaume/Documents/SegNet/data/CleanData"

@@ -1,6 +1,7 @@
-import os
 import numpy as np
+import os
 from osgeo import gdal
+
 import caffe
 import matplotlib.pyplot as plt
 
