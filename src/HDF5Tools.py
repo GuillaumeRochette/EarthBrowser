@@ -1,8 +1,8 @@
-import os
 import glob
-import random
 import h5py
 import numpy as np
+import os
+import random
 from osgeo import gdal
 
 
