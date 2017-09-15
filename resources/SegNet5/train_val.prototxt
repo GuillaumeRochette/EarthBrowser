@@ -537,7 +537,7 @@ layer {
 		ignore_label: 2
 	}
 	infogain_loss_param {
-		source: "/home/grochette/Documents/SegNet/data/infogainH.binaryproto"
+		source: "/home/grochette/Documents/SegNet/data/CleanData/infogainH.binaryproto"
 	}
 }
 layer {
