@@ -3,7 +3,7 @@ layer {
 	name: "data"
 	type: "HDF5Data"
 	top: "data"
-	top: "labels"
+	top: "label"
 	include {
 		phase: TRAIN
 	}
@@ -17,7 +17,7 @@ layer {
 	name: "data"
 	type: "HDF5Data"
 	top: "data"
-	top: "labels"
+	top: "label"
 	include {
 		phase: TEST
 	}
@@ -781,22 +781,11 @@ layer {
 		decay_mult: 0
 	}
 }
-#layer {
-#  name: "loss"
-#  type: "SoftmaxWithLoss"
-#  bottom: "segmentation"
-#  bottom: "labels"
-#  top: "loss"
-#  loss_param {
-#    ignore_label: 2
-#    normalize: false
-#  }
-#}
 layer {
 	name: "infogainLoss"
 	type: "InfogainLoss"
 	bottom: "segmentation"
-	bottom: "labels"
+	bottom: "label"
 	top: "loss"
 	loss_param {
 		ignore_label: 2
@@ -809,7 +798,7 @@ layer {
 	name: "accuracy"
 	type: "Accuracy"
 	bottom: "segmentation"
-	bottom: "labels"
+	bottom: "label"
 	top: "accuracy"
 	top: "per_class_accuracy"
 	include {

@@ -4,9 +4,13 @@ import os
 import numpy as np
 
 log_dir = "/home/grochette/Documents/SegNet/resources/SegNet5"
-file_path = os.path.join(log_dir, "caffe.athena-0094.grochette.log.INFO.20170905-172820.11265")
-with open(file_path, "r") as file:
-    lines = [line for line in file]
+log_names = ["caffe.athena-0094.grochette.log.INFO.20170905-172820.11265", "caffe.athena-0094.grochette.log.INFO.20170915-164316.6593"]
+lines = []
+for log_name in log_names:
+    log_path = os.path.join(log_dir, log_name)
+    with open(log_path, "r") as log_file:
+        for line in log_file:
+            lines.append(line)
 
 regex_iteration = re.compile('Iteration (\d+), Testing net')
 regex_train_loss = re.compile('Train net output #0: loss = ([\.\deE+-]+)')
@@ -47,6 +51,7 @@ print test_accuracies
 print test_losses
 print test_accuracies_0
 print test_accuracies_1
+
 
 csv_path = os.path.join(log_dir, "results.csv")
 with open(csv_path, "w") as csv_file:
