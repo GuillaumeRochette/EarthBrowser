@@ -2,7 +2,7 @@ import json
 import os
 import time
 from osgeo import gdal
-
+import argparse
 import overpass
 
 
@@ -51,12 +51,13 @@ def request_data(data_dir, geojson_dir, file_extension="tif"):
 
 
 if __name__ == '__main__':
-    root_dir = "/home/guillaume/Documents/SegNet/"
-    raw_data_dir = os.path.join(root_dir, "data/RawData")
-    cities = ["Vegas", "Paris", "Shanghai", "Khartoum"]
-
+    parser = argparse.ArgumentParser(description="Requests the Extended OpenStreetMap API to retrieve vector data related to our raster data.")
+    parser.add_argument("-i", "--input_dir", required=True, help="Directory containing the city directories, themselves containing the raster data.")
+    args = parser.parse_args()
+    input_dir = args.input_dir
+    cities = os.listdir(input_dir)
     for city in cities:
-        city_dir = os.path.join(raw_data_dir, "{}".format(city))
+        city_dir = os.path.join(input_dir, city)
         data_dir = os.path.join(city_dir, "MUL_PAN")
         geojson_dir = os.path.join(city_dir, "OpenStreetMap_Labels")
         if not os.path.isdir(geojson_dir):

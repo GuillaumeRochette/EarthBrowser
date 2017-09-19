@@ -1,7 +1,6 @@
-import os
 import glob
-import rasterio
 import json
+import os
 import shapely.geometry as sg
 
 root_dir = "/home/guillaume/Documents/SegNet/data/RawData"

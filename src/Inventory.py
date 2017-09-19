@@ -1,3 +1,4 @@
+import argparse
 import glob
 import numpy as np
 import os
@@ -26,12 +27,18 @@ def compute_distribution(label_paths):
 
 
 if __name__ == '__main__':
-    root_dir = "/home/grochette/Documents/SegNet"
-    clean_data_dir = os.path.join(root_dir, "data/CleanData")
-    cities = ["Vegas", "Paris", "Shanghai", "Khartoum"]
+    parser = argparse.ArgumentParser(
+        description="Compute the occurences of the various classes in the dataset, then generate the infogain matrix H, which should be used (in Caffe) when class are very imbalanced.")
+    parser.add_argument("-i", "--input_dir", required=True,
+                        help="Directory containing the city directories, themselves containing the labels.")
+    args = parser.parse_args()
+
+    input_dir = args.input_dir
+    cities = os.listdir(input_dir)
     label_paths = []
     for city in cities:
-        label_dir = os.path.join(clean_data_dir, "{}/Labels".format(city))
+        city_dir = os.path.join(input_dir, city)
+        label_dir = os.path.join(city_dir, "Labels")
         label_paths += sorted(glob.glob(os.path.join(label_dir, "*")))
 
     dist = compute_distribution(label_paths)
@@ -42,5 +49,5 @@ if __name__ == '__main__':
     H = np.diag(weights)
     print H
     blob = caffe.io.array_to_blobproto(H.reshape((1, 1, L, L)))
-    with open(os.path.join(clean_data_dir, "infogainH.binaryproto"), 'wb') as f:
+    with open(os.path.join(input_dir, "infogainH.binaryproto"), 'wb') as f:
         f.write(blob.SerializeToString())

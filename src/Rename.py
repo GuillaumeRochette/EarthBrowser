@@ -44,10 +44,10 @@ if __name__ == '__main__':
                      old_prefix="MUL-PanSharpen_AOI_{}_{}_img".format(aoi, city),
                      old_suffix="",
                      new_pattern="{}".format(city),
-                     file_extension=file_extension, rename=True)
-        # label_dir = os.path.join(city_dir, "Labels")
-        # rename_files(file_dir=label_dir,
-        #              old_prefix="MUL-PanSharpen_AOI_{}_{}_img".format(aoi, city),
-        #              old_suffix="segcls",
-        #              new_pattern="{}".format(city),
-        #              file_extension=file_extension, rename=False)
+                     file_extension=file_extension, rename=False)
+        label_dir = os.path.join(city_dir, "Labels")
+        rename_files(file_dir=label_dir,
+                     old_prefix="MUL-PanSharpen_AOI_{}_{}_img".format(aoi, city),
+                     old_suffix="segcls",
+                     new_pattern="{}".format(city),
+                     file_extension=file_extension, rename=False)

@@ -1,3 +1,4 @@
+import argparse
 import os
 from osgeo import gdal
 
@@ -56,23 +57,35 @@ def split_dataset(src_dir, dst_dir, patch_shape, strides=None):
 
 
 if __name__ == '__main__':
-    root_dir = "/home/grochette/Documents/SegNet/data"
-    # cities = ["Rio", "Vegas", "Paris", "Shanghai", "Khartoum"]
-    cities = ["Vegas", "Paris", "Shanghai", "Khartoum"]  # Rio doesn't have MUL_PAN (50cm), only MUL (2m).
+    parser = argparse.ArgumentParser(
+        "Split data and labels into tiles of desired height and width, with a specified stride.")
+    parser.add_argument("--input_dir", required=True,
+                        help="Directory containing the city directories, themselves containing data and labels.")
+    parser.add_argument("--output_dir", required=True, help="Directory where the tiles will be created.")
+    parser.add_argument("--shape", type=int, default=224, help="Shape of the tile.")
+    parser.add_argument("--stride", type=int, default=224, help="Length of the stride between tiles.")
+    args = parser.parse_args()
+
+    input_dir = args.input_dir
+    output_dir = args.output_dir
+
+    tile_shape = (args.shape, args.shape)
+    strides = (args.stride, args.stride)
+
+    cities = os.listdir(input_dir)
     for city in cities:
-        mul_pan_dir = os.path.join(root_dir, "RawData/{}/MUL_PAN".format(city))
-        label_dir = os.path.join(root_dir, "RawData/{}/Labels".format(city))
+        in_city_dir = os.path.join(input_dir, city)
+        mul_pan_dir = os.path.join(in_city_dir, "MUL_PAN")
+        label_dir = os.path.join(in_city_dir, "Labels")
         print mul_pan_dir
         print label_dir
 
-        tile_shape = (224, 224)
-        strides = (224, 224)
-
         # Creates output directories if they don't already exists.
-        out_mul_pan_dir = os.path.join(root_dir, "CleanData/{}/MUL_PAN".format(city))
+        out_city_dir = os.path.join(output_dir, city)
+        out_mul_pan_dir = os.path.join(out_city_dir, "MUL_PAN")
         if not os.path.isdir(out_mul_pan_dir):
             os.makedirs(out_mul_pan_dir)
-        out_label_dir = os.path.join(root_dir, "CleanData/{}/Labels".format(city))
+        out_label_dir = os.path.join(out_city_dir, "Labels")
         if not os.path.isdir(out_label_dir):
             os.makedirs(out_label_dir)
 

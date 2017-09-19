@@ -1,6 +1,6 @@
+import glob
 import numpy as np
 import os
-import glob
 from osgeo import gdal
 
 import caffe
