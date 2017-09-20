@@ -1,0 +1,2813 @@
+Log file created at: 2017/09/05 17:28:20
+Running on machine: athena-0094
+Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+I0905 17:28:20.758186 11265 caffe.cpp:218] Using GPUs 0
+I0905 17:28:20.790010 11265 caffe.cpp:223] GPU 0: Quadro M1000M
+I0905 17:28:21.055408 11265 solver.cpp:44] Initializing solver from parameters: 
+test_iter: 4767
+test_interval: 500
+base_lr: 0.001
+display: 500
+max_iter: 50000
+lr_policy: "fixed"
+momentum: 0.9
+weight_decay: 0.0005
+snapshot: 500
+snapshot_prefix: "snapshots/segnet_infogain"
+solver_mode: GPU
+device_id: 0
+net: "train_val.prototxt"
+train_state {
+  level: 0
+  stage: ""
+}
+iter_size: 16
+momentum2: 0.999
+type: "Adam"
+I0905 17:28:21.055565 11265 solver.cpp:87] Creating training net from net file: train_val.prototxt
+I0905 17:28:21.055908 11265 net.cpp:294] The NetState phase (0) differed from the phase (1) specified by a rule in layer data
+I0905 17:28:21.055933 11265 net.cpp:294] The NetState phase (0) differed from the phase (1) specified by a rule in layer accuracy
+I0905 17:28:21.056139 11265 net.cpp:51] Initializing net from parameters: 
+name: "SegNet5"
+state {
+  phase: TRAIN
+  level: 0
+  stage: ""
+}
+layer {
+  name: "data"
+  type: "HDF5Data"
+  top: "data"
+  top: "label"
+  include {
+    phase: TRAIN
+  }
+  hdf5_data_param {
+    source: "/home/grochette/Documents/SegNet/data/HDF5/Train/hdf5_list.txt"
+    batch_size: 4
+    shuffle: true
+  }
+}
+layer {
+  name: "batchnorm0"
+  type: "BatchNorm"
+  bottom: "data"
+  top: "data"
+}
+layer {
+  name: "conv1_1"
+  type: "Convolution"
+  bottom: "data"
+  top: "conv1_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm1_1"
+  type: "BatchNorm"
+  bottom: "conv1_1"
+  top: "conv1_1"
+}
+layer {
+  name: "elu1_1"
+  type: "ELU"
+  bottom: "conv1_1"
+  top: "conv1_1"
+}
+layer {
+  name: "conv1_2"
+  type: "Convolution"
+  bottom: "conv1_1"
+  top: "conv1_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm1_2"
+  type: "BatchNorm"
+  bottom: "conv1_2"
+  top: "conv1_2"
+}
+layer {
+  name: "elu1_2"
+  type: "ELU"
+  bottom: "conv1_2"
+  top: "conv1_2"
+}
+layer {
+  name: "pool1"
+  type: "Pooling"
+  bottom: "conv1_2"
+  top: "pool1"
+  top: "pool1_mask"
+  top: "pool1_argmax_count"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "conv2_1"
+  type: "Convolution"
+  bottom: "pool1"
+  top: "conv2_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm2_1"
+  type: "BatchNorm"
+  bottom: "conv2_1"
+  top: "conv2_1"
+}
+layer {
+  name: "elu2_1"
+  type: "ELU"
+  bottom: "conv2_1"
+  top: "conv2_1"
+}
+layer {
+  name: "conv2_2"
+  type: "Convolution"
+  bottom: "conv2_1"
+  top: "conv2_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm2_2"
+  type: "BatchNorm"
+  bottom: "conv2_2"
+  top: "conv2_2"
+}
+layer {
+  name: "elu2_2"
+  type: "ELU"
+  bottom: "conv2_2"
+  top: "conv2_2"
+}
+layer {
+  name: "pool2"
+  type: "Pooling"
+  bottom: "conv2_2"
+  top: "pool2"
+  top: "pool2_mask"
+  top: "pool2_argmax_count"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "conv3_1"
+  type: "Convolution"
+  bottom: "pool2"
+  top: "conv3_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm3_1"
+  type: "BatchNorm"
+  bottom: "conv3_1"
+  top: "conv3_1"
+}
+layer {
+  name: "elu3_1"
+  type: "ELU"
+  bottom: "conv3_1"
+  top: "conv3_1"
+}
+layer {
+  name: "conv3_2"
+  type: "Convolution"
+  bottom: "conv3_1"
+  top: "conv3_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm3_2"
+  type: "BatchNorm"
+  bottom: "conv3_2"
+  top: "conv3_2"
+}
+layer {
+  name: "elu3_2"
+  type: "ELU"
+  bottom: "conv3_2"
+  top: "conv3_2"
+}
+layer {
+  name: "deconv3_3"
+  type: "Deconvolution"
+  bottom: "conv3_2"
+  top: "deconv3_3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "debatchnorm3_3"
+  type: "BatchNorm"
+  bottom: "deconv3_3"
+  top: "deconv3_3"
+}
+layer {
+  name: "deelu3_3"
+  type: "ELU"
+  bottom: "deconv3_3"
+  top: "deconv3_3"
+}
+layer {
+  name: "unpool2"
+  type: "Unpooling"
+  bottom: "deconv3_3"
+  bottom: "pool2_mask"
+  bottom: "pool2_argmax_count"
+  top: "unpool2"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "deconv2_1"
+  type: "Deconvolution"
+  bottom: "unpool2"
+  top: "deconv2_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "debatchnorm2_1"
+  type: "BatchNorm"
+  bottom: "deconv2_1"
+  top: "deconv2_1"
+}
+layer {
+  name: "deelu2_1"
+  type: "ELU"
+  bottom: "deconv2_1"
+  top: "deconv2_1"
+}
+layer {
+  name: "deconv2_2"
+  type: "Deconvolution"
+  bottom: "deconv2_1"
+  top: "deconv2_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "debatchnorm2_2"
+  type: "BatchNorm"
+  bottom: "deconv2_2"
+  top: "deconv2_2"
+}
+layer {
+  name: "deelu2_2"
+  type: "ELU"
+  bottom: "deconv2_2"
+  top: "deconv2_2"
+}
+layer {
+  name: "unpool1"
+  type: "Unpooling"
+  bottom: "deconv2_2"
+  bottom: "pool1_mask"
+  bottom: "pool1_argmax_count"
+  top: "unpool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "deconv1_1"
+  type: "Deconvolution"
+  bottom: "unpool1"
+  top: "deconv1_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "debatchnorm1_1"
+  type: "BatchNorm"
+  bottom: "deconv1_1"
+  top: "deconv1_1"
+}
+layer {
+  name: "deelu1_1"
+  type: "ELU"
+  bottom: "deconv1_1"
+  top: "deconv1_1"
+}
+layer {
+  name: "deconv1_2"
+  type: "Deconvolution"
+  bottom: "deconv1_1"
+  top: "deconv1_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "debatchnorm1_2"
+  type: "BatchNorm"
+  bottom: "deconv1_2"
+  top: "deconv1_2"
+}
+layer {
+  name: "deelu1_2"
+  type: "ELU"
+  bottom: "deconv1_2"
+  top: "deconv1_2"
+}
+layer {
+  name: "segmentation"
+  type: "Convolution"
+  bottom: "deconv1_2"
+  top: "segmentation"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 2
+    pad: 0
+    kernel_size: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "infogainLoss"
+  type: "InfogainLoss"
+  bottom: "segmentation"
+  bottom: "label"
+  top: "loss"
+  loss_param {
+    ignore_label: 2
+  }
+  infogain_loss_param {
+    source: "/home/grochette/Documents/SegNet/data/infogainH.binaryproto"
+  }
+}
+I0905 17:28:21.056438 11265 layer_factory.hpp:77] Creating layer data
+I0905 17:28:21.056452 11265 net.cpp:84] Creating Layer data
+I0905 17:28:21.056457 11265 net.cpp:380] data -> data
+I0905 17:28:21.056473 11265 net.cpp:380] data -> label
+I0905 17:28:21.056483 11265 hdf5_data_layer.cpp:80] Loading list of HDF5 filenames from: /home/grochette/Documents/SegNet/data/HDF5/Train/hdf5_list.txt
+I0905 17:28:21.056540 11265 hdf5_data_layer.cpp:94] Number of HDF5 files: 86
+I0905 17:28:21.057487 11265 hdf5.cpp:32] Datatype class: H5T_FLOAT
+I0905 17:28:21.404831 11265 hdf5.cpp:35] Datatype class: H5T_INTEGER
+I0905 17:28:21.525257 11265 net.cpp:122] Setting up data
+I0905 17:28:21.525290 11265 net.cpp:129] Top shape: 4 4 224 224 (802816)
+I0905 17:28:21.525295 11265 net.cpp:129] Top shape: 4 1 224 224 (200704)
+I0905 17:28:21.525298 11265 net.cpp:137] Memory required for data: 4014080
+I0905 17:28:21.525305 11265 layer_factory.hpp:77] Creating layer batchnorm0
+I0905 17:28:21.525316 11265 net.cpp:84] Creating Layer batchnorm0
+I0905 17:28:21.525323 11265 net.cpp:406] batchnorm0 <- data
+I0905 17:28:21.525334 11265 net.cpp:367] batchnorm0 -> data (in-place)
+I0905 17:28:21.526063 11265 net.cpp:122] Setting up batchnorm0
+I0905 17:28:21.526074 11265 net.cpp:129] Top shape: 4 4 224 224 (802816)
+I0905 17:28:21.526077 11265 net.cpp:137] Memory required for data: 7225344
+I0905 17:28:21.526096 11265 layer_factory.hpp:77] Creating layer conv1_1
+I0905 17:28:21.526110 11265 net.cpp:84] Creating Layer conv1_1
+I0905 17:28:21.526130 11265 net.cpp:406] conv1_1 <- data
+I0905 17:28:21.526137 11265 net.cpp:380] conv1_1 -> conv1_1
+I0905 17:28:22.004642 11265 net.cpp:122] Setting up conv1_1
+I0905 17:28:22.004684 11265 net.cpp:129] Top shape: 4 64 224 224 (12845056)
+I0905 17:28:22.004689 11265 net.cpp:137] Memory required for data: 58605568
+I0905 17:28:22.004703 11265 layer_factory.hpp:77] Creating layer batchnorm1_1
+I0905 17:28:22.004712 11265 net.cpp:84] Creating Layer batchnorm1_1
+I0905 17:28:22.004716 11265 net.cpp:406] batchnorm1_1 <- conv1_1
+I0905 17:28:22.004724 11265 net.cpp:367] batchnorm1_1 -> conv1_1 (in-place)
+I0905 17:28:22.004921 11265 net.cpp:122] Setting up batchnorm1_1
+I0905 17:28:22.004928 11265 net.cpp:129] Top shape: 4 64 224 224 (12845056)
+I0905 17:28:22.004932 11265 net.cpp:137] Memory required for data: 109985792
+I0905 17:28:22.004940 11265 layer_factory.hpp:77] Creating layer elu1_1
+I0905 17:28:22.004946 11265 net.cpp:84] Creating Layer elu1_1
+I0905 17:28:22.004951 11265 net.cpp:406] elu1_1 <- conv1_1
+I0905 17:28:22.004956 11265 net.cpp:367] elu1_1 -> conv1_1 (in-place)
+I0905 17:28:22.004961 11265 net.cpp:122] Setting up elu1_1
+I0905 17:28:22.004966 11265 net.cpp:129] Top shape: 4 64 224 224 (12845056)
+I0905 17:28:22.004969 11265 net.cpp:137] Memory required for data: 161366016
+I0905 17:28:22.004972 11265 layer_factory.hpp:77] Creating layer conv1_2
+I0905 17:28:22.004982 11265 net.cpp:84] Creating Layer conv1_2
+I0905 17:28:22.004987 11265 net.cpp:406] conv1_2 <- conv1_1
+I0905 17:28:22.004993 11265 net.cpp:380] conv1_2 -> conv1_2
+I0905 17:28:22.006958 11265 net.cpp:122] Setting up conv1_2
+I0905 17:28:22.006968 11265 net.cpp:129] Top shape: 4 64 224 224 (12845056)
+I0905 17:28:22.006978 11265 net.cpp:137] Memory required for data: 212746240
+I0905 17:28:22.006989 11265 layer_factory.hpp:77] Creating layer batchnorm1_2
+I0905 17:28:22.006995 11265 net.cpp:84] Creating Layer batchnorm1_2
+I0905 17:28:22.006999 11265 net.cpp:406] batchnorm1_2 <- conv1_2
+I0905 17:28:22.007004 11265 net.cpp:367] batchnorm1_2 -> conv1_2 (in-place)
+I0905 17:28:22.007630 11265 net.cpp:122] Setting up batchnorm1_2
+I0905 17:28:22.007657 11265 net.cpp:129] Top shape: 4 64 224 224 (12845056)
+I0905 17:28:22.007660 11265 net.cpp:137] Memory required for data: 264126464
+I0905 17:28:22.007668 11265 layer_factory.hpp:77] Creating layer elu1_2
+I0905 17:28:22.007675 11265 net.cpp:84] Creating Layer elu1_2
+I0905 17:28:22.007679 11265 net.cpp:406] elu1_2 <- conv1_2
+I0905 17:28:22.007683 11265 net.cpp:367] elu1_2 -> conv1_2 (in-place)
+I0905 17:28:22.007689 11265 net.cpp:122] Setting up elu1_2
+I0905 17:28:22.007695 11265 net.cpp:129] Top shape: 4 64 224 224 (12845056)
+I0905 17:28:22.007699 11265 net.cpp:137] Memory required for data: 315506688
+I0905 17:28:22.007704 11265 layer_factory.hpp:77] Creating layer pool1
+I0905 17:28:22.007709 11265 layer_factory.cpp:91] cuDNN does not support multiple tops. Using Caffe's own pooling layer.
+I0905 17:28:22.007719 11265 net.cpp:84] Creating Layer pool1
+I0905 17:28:22.007725 11265 net.cpp:406] pool1 <- conv1_2
+I0905 17:28:22.007732 11265 net.cpp:380] pool1 -> pool1
+I0905 17:28:22.007743 11265 net.cpp:380] pool1 -> pool1_mask
+I0905 17:28:22.007752 11265 net.cpp:380] pool1 -> pool1_argmax_count
+I0905 17:28:22.007814 11265 net.cpp:122] Setting up pool1
+I0905 17:28:22.007822 11265 net.cpp:129] Top shape: 4 64 112 112 (3211264)
+I0905 17:28:22.007828 11265 net.cpp:129] Top shape: 4 64 112 112 (3211264)
+I0905 17:28:22.007835 11265 net.cpp:129] Top shape: 4 64 224 224 (12845056)
+I0905 17:28:22.007839 11265 net.cpp:137] Memory required for data: 392577024
+I0905 17:28:22.007843 11265 layer_factory.hpp:77] Creating layer conv2_1
+I0905 17:28:22.007853 11265 net.cpp:84] Creating Layer conv2_1
+I0905 17:28:22.007858 11265 net.cpp:406] conv2_1 <- pool1
+I0905 17:28:22.007866 11265 net.cpp:380] conv2_1 -> conv2_1
+I0905 17:28:22.010825 11265 net.cpp:122] Setting up conv2_1
+I0905 17:28:22.010838 11265 net.cpp:129] Top shape: 4 128 112 112 (6422528)
+I0905 17:28:22.010845 11265 net.cpp:137] Memory required for data: 418267136
+I0905 17:28:22.010854 11265 layer_factory.hpp:77] Creating layer batchnorm2_1
+I0905 17:28:22.010861 11265 net.cpp:84] Creating Layer batchnorm2_1
+I0905 17:28:22.010866 11265 net.cpp:406] batchnorm2_1 <- conv2_1
+I0905 17:28:22.010875 11265 net.cpp:367] batchnorm2_1 -> conv2_1 (in-place)
+I0905 17:28:22.011068 11265 net.cpp:122] Setting up batchnorm2_1
+I0905 17:28:22.011076 11265 net.cpp:129] Top shape: 4 128 112 112 (6422528)
+I0905 17:28:22.011081 11265 net.cpp:137] Memory required for data: 443957248
+I0905 17:28:22.011095 11265 layer_factory.hpp:77] Creating layer elu2_1
+I0905 17:28:22.011101 11265 net.cpp:84] Creating Layer elu2_1
+I0905 17:28:22.011106 11265 net.cpp:406] elu2_1 <- conv2_1
+I0905 17:28:22.011112 11265 net.cpp:367] elu2_1 -> conv2_1 (in-place)
+I0905 17:28:22.011119 11265 net.cpp:122] Setting up elu2_1
+I0905 17:28:22.011126 11265 net.cpp:129] Top shape: 4 128 112 112 (6422528)
+I0905 17:28:22.011129 11265 net.cpp:137] Memory required for data: 469647360
+I0905 17:28:22.011134 11265 layer_factory.hpp:77] Creating layer conv2_2
+I0905 17:28:22.011144 11265 net.cpp:84] Creating Layer conv2_2
+I0905 17:28:22.011148 11265 net.cpp:406] conv2_2 <- conv2_1
+I0905 17:28:22.011153 11265 net.cpp:380] conv2_2 -> conv2_2
+I0905 17:28:22.013665 11265 net.cpp:122] Setting up conv2_2
+I0905 17:28:22.013677 11265 net.cpp:129] Top shape: 4 128 112 112 (6422528)
+I0905 17:28:22.013682 11265 net.cpp:137] Memory required for data: 495337472
+I0905 17:28:22.013689 11265 layer_factory.hpp:77] Creating layer batchnorm2_2
+I0905 17:28:22.013695 11265 net.cpp:84] Creating Layer batchnorm2_2
+I0905 17:28:22.013700 11265 net.cpp:406] batchnorm2_2 <- conv2_2
+I0905 17:28:22.013705 11265 net.cpp:367] batchnorm2_2 -> conv2_2 (in-place)
+I0905 17:28:22.013885 11265 net.cpp:122] Setting up batchnorm2_2
+I0905 17:28:22.013891 11265 net.cpp:129] Top shape: 4 128 112 112 (6422528)
+I0905 17:28:22.013895 11265 net.cpp:137] Memory required for data: 521027584
+I0905 17:28:22.013902 11265 layer_factory.hpp:77] Creating layer elu2_2
+I0905 17:28:22.013907 11265 net.cpp:84] Creating Layer elu2_2
+I0905 17:28:22.013911 11265 net.cpp:406] elu2_2 <- conv2_2
+I0905 17:28:22.013928 11265 net.cpp:367] elu2_2 -> conv2_2 (in-place)
+I0905 17:28:22.013934 11265 net.cpp:122] Setting up elu2_2
+I0905 17:28:22.013941 11265 net.cpp:129] Top shape: 4 128 112 112 (6422528)
+I0905 17:28:22.013943 11265 net.cpp:137] Memory required for data: 546717696
+I0905 17:28:22.013947 11265 layer_factory.hpp:77] Creating layer pool2
+I0905 17:28:22.013952 11265 layer_factory.cpp:91] cuDNN does not support multiple tops. Using Caffe's own pooling layer.
+I0905 17:28:22.013957 11265 net.cpp:84] Creating Layer pool2
+I0905 17:28:22.013960 11265 net.cpp:406] pool2 <- conv2_2
+I0905 17:28:22.013965 11265 net.cpp:380] pool2 -> pool2
+I0905 17:28:22.013972 11265 net.cpp:380] pool2 -> pool2_mask
+I0905 17:28:22.013981 11265 net.cpp:380] pool2 -> pool2_argmax_count
+I0905 17:28:22.014031 11265 net.cpp:122] Setting up pool2
+I0905 17:28:22.014039 11265 net.cpp:129] Top shape: 4 128 56 56 (1605632)
+I0905 17:28:22.014046 11265 net.cpp:129] Top shape: 4 128 56 56 (1605632)
+I0905 17:28:22.014052 11265 net.cpp:129] Top shape: 4 128 112 112 (6422528)
+I0905 17:28:22.014057 11265 net.cpp:137] Memory required for data: 585252864
+I0905 17:28:22.014062 11265 layer_factory.hpp:77] Creating layer conv3_1
+I0905 17:28:22.014075 11265 net.cpp:84] Creating Layer conv3_1
+I0905 17:28:22.014080 11265 net.cpp:406] conv3_1 <- pool2
+I0905 17:28:22.014088 11265 net.cpp:380] conv3_1 -> conv3_1
+I0905 17:28:22.017937 11265 net.cpp:122] Setting up conv3_1
+I0905 17:28:22.017954 11265 net.cpp:129] Top shape: 4 256 56 56 (3211264)
+I0905 17:28:22.017961 11265 net.cpp:137] Memory required for data: 598097920
+I0905 17:28:22.017971 11265 layer_factory.hpp:77] Creating layer batchnorm3_1
+I0905 17:28:22.017979 11265 net.cpp:84] Creating Layer batchnorm3_1
+I0905 17:28:22.017984 11265 net.cpp:406] batchnorm3_1 <- conv3_1
+I0905 17:28:22.017992 11265 net.cpp:367] batchnorm3_1 -> conv3_1 (in-place)
+I0905 17:28:22.018182 11265 net.cpp:122] Setting up batchnorm3_1
+I0905 17:28:22.018189 11265 net.cpp:129] Top shape: 4 256 56 56 (3211264)
+I0905 17:28:22.018194 11265 net.cpp:137] Memory required for data: 610942976
+I0905 17:28:22.018201 11265 layer_factory.hpp:77] Creating layer elu3_1
+I0905 17:28:22.018208 11265 net.cpp:84] Creating Layer elu3_1
+I0905 17:28:22.018210 11265 net.cpp:406] elu3_1 <- conv3_1
+I0905 17:28:22.018216 11265 net.cpp:367] elu3_1 -> conv3_1 (in-place)
+I0905 17:28:22.018223 11265 net.cpp:122] Setting up elu3_1
+I0905 17:28:22.018229 11265 net.cpp:129] Top shape: 4 256 56 56 (3211264)
+I0905 17:28:22.018234 11265 net.cpp:137] Memory required for data: 623788032
+I0905 17:28:22.018240 11265 layer_factory.hpp:77] Creating layer conv3_2
+I0905 17:28:22.018251 11265 net.cpp:84] Creating Layer conv3_2
+I0905 17:28:22.018255 11265 net.cpp:406] conv3_2 <- conv3_1
+I0905 17:28:22.018262 11265 net.cpp:380] conv3_2 -> conv3_2
+I0905 17:28:22.024564 11265 net.cpp:122] Setting up conv3_2
+I0905 17:28:22.024581 11265 net.cpp:129] Top shape: 4 256 56 56 (3211264)
+I0905 17:28:22.024587 11265 net.cpp:137] Memory required for data: 636633088
+I0905 17:28:22.024597 11265 layer_factory.hpp:77] Creating layer batchnorm3_2
+I0905 17:28:22.024606 11265 net.cpp:84] Creating Layer batchnorm3_2
+I0905 17:28:22.024611 11265 net.cpp:406] batchnorm3_2 <- conv3_2
+I0905 17:28:22.024618 11265 net.cpp:367] batchnorm3_2 -> conv3_2 (in-place)
+I0905 17:28:22.024804 11265 net.cpp:122] Setting up batchnorm3_2
+I0905 17:28:22.024813 11265 net.cpp:129] Top shape: 4 256 56 56 (3211264)
+I0905 17:28:22.024817 11265 net.cpp:137] Memory required for data: 649478144
+I0905 17:28:22.024832 11265 layer_factory.hpp:77] Creating layer elu3_2
+I0905 17:28:22.024837 11265 net.cpp:84] Creating Layer elu3_2
+I0905 17:28:22.024842 11265 net.cpp:406] elu3_2 <- conv3_2
+I0905 17:28:22.024849 11265 net.cpp:367] elu3_2 -> conv3_2 (in-place)
+I0905 17:28:22.024855 11265 net.cpp:122] Setting up elu3_2
+I0905 17:28:22.024862 11265 net.cpp:129] Top shape: 4 256 56 56 (3211264)
+I0905 17:28:22.024868 11265 net.cpp:137] Memory required for data: 662323200
+I0905 17:28:22.024873 11265 layer_factory.hpp:77] Creating layer deconv3_3
+I0905 17:28:22.024897 11265 net.cpp:84] Creating Layer deconv3_3
+I0905 17:28:22.024901 11265 net.cpp:406] deconv3_3 <- conv3_2
+I0905 17:28:22.024910 11265 net.cpp:380] deconv3_3 -> deconv3_3
+I0905 17:28:22.027151 11265 net.cpp:122] Setting up deconv3_3
+I0905 17:28:22.027163 11265 net.cpp:129] Top shape: 4 128 56 56 (1605632)
+I0905 17:28:22.027169 11265 net.cpp:137] Memory required for data: 668745728
+I0905 17:28:22.027179 11265 layer_factory.hpp:77] Creating layer debatchnorm3_3
+I0905 17:28:22.027185 11265 net.cpp:84] Creating Layer debatchnorm3_3
+I0905 17:28:22.027190 11265 net.cpp:406] debatchnorm3_3 <- deconv3_3
+I0905 17:28:22.027196 11265 net.cpp:367] debatchnorm3_3 -> deconv3_3 (in-place)
+I0905 17:28:22.027379 11265 net.cpp:122] Setting up debatchnorm3_3
+I0905 17:28:22.027387 11265 net.cpp:129] Top shape: 4 128 56 56 (1605632)
+I0905 17:28:22.027392 11265 net.cpp:137] Memory required for data: 675168256
+I0905 17:28:22.027401 11265 layer_factory.hpp:77] Creating layer deelu3_3
+I0905 17:28:22.027407 11265 net.cpp:84] Creating Layer deelu3_3
+I0905 17:28:22.027412 11265 net.cpp:406] deelu3_3 <- deconv3_3
+I0905 17:28:22.027418 11265 net.cpp:367] deelu3_3 -> deconv3_3 (in-place)
+I0905 17:28:22.027426 11265 net.cpp:122] Setting up deelu3_3
+I0905 17:28:22.027431 11265 net.cpp:129] Top shape: 4 128 56 56 (1605632)
+I0905 17:28:22.027436 11265 net.cpp:137] Memory required for data: 681590784
+I0905 17:28:22.027441 11265 layer_factory.hpp:77] Creating layer unpool2
+I0905 17:28:22.027449 11265 net.cpp:84] Creating Layer unpool2
+I0905 17:28:22.027454 11265 net.cpp:406] unpool2 <- deconv3_3
+I0905 17:28:22.027459 11265 net.cpp:406] unpool2 <- pool2_mask
+I0905 17:28:22.027464 11265 net.cpp:406] unpool2 <- pool2_argmax_count
+I0905 17:28:22.027469 11265 net.cpp:380] unpool2 -> unpool2
+I0905 17:28:22.027494 11265 net.cpp:122] Setting up unpool2
+I0905 17:28:22.027500 11265 net.cpp:129] Top shape: 4 128 112 112 (6422528)
+I0905 17:28:22.027503 11265 net.cpp:137] Memory required for data: 707280896
+I0905 17:28:22.027508 11265 layer_factory.hpp:77] Creating layer deconv2_1
+I0905 17:28:22.027514 11265 net.cpp:84] Creating Layer deconv2_1
+I0905 17:28:22.027518 11265 net.cpp:406] deconv2_1 <- unpool2
+I0905 17:28:22.027524 11265 net.cpp:380] deconv2_1 -> deconv2_1
+I0905 17:28:22.028921 11265 net.cpp:122] Setting up deconv2_1
+I0905 17:28:22.028933 11265 net.cpp:129] Top shape: 4 128 112 112 (6422528)
+I0905 17:28:22.028936 11265 net.cpp:137] Memory required for data: 732971008
+I0905 17:28:22.028942 11265 layer_factory.hpp:77] Creating layer debatchnorm2_1
+I0905 17:28:22.028949 11265 net.cpp:84] Creating Layer debatchnorm2_1
+I0905 17:28:22.028954 11265 net.cpp:406] debatchnorm2_1 <- deconv2_1
+I0905 17:28:22.028959 11265 net.cpp:367] debatchnorm2_1 -> deconv2_1 (in-place)
+I0905 17:28:22.029141 11265 net.cpp:122] Setting up debatchnorm2_1
+I0905 17:28:22.029150 11265 net.cpp:129] Top shape: 4 128 112 112 (6422528)
+I0905 17:28:22.029155 11265 net.cpp:137] Memory required for data: 758661120
+I0905 17:28:22.029163 11265 layer_factory.hpp:77] Creating layer deelu2_1
+I0905 17:28:22.029170 11265 net.cpp:84] Creating Layer deelu2_1
+I0905 17:28:22.029175 11265 net.cpp:406] deelu2_1 <- deconv2_1
+I0905 17:28:22.029182 11265 net.cpp:367] deelu2_1 -> deconv2_1 (in-place)
+I0905 17:28:22.029188 11265 net.cpp:122] Setting up deelu2_1
+I0905 17:28:22.029196 11265 net.cpp:129] Top shape: 4 128 112 112 (6422528)
+I0905 17:28:22.029201 11265 net.cpp:137] Memory required for data: 784351232
+I0905 17:28:22.029206 11265 layer_factory.hpp:77] Creating layer deconv2_2
+I0905 17:28:22.029213 11265 net.cpp:84] Creating Layer deconv2_2
+I0905 17:28:22.029217 11265 net.cpp:406] deconv2_2 <- deconv2_1
+I0905 17:28:22.029225 11265 net.cpp:380] deconv2_2 -> deconv2_2
+I0905 17:28:22.029840 11265 net.cpp:122] Setting up deconv2_2
+I0905 17:28:22.029850 11265 net.cpp:129] Top shape: 4 64 112 112 (3211264)
+I0905 17:28:22.029853 11265 net.cpp:137] Memory required for data: 797196288
+I0905 17:28:22.029861 11265 layer_factory.hpp:77] Creating layer debatchnorm2_2
+I0905 17:28:22.029868 11265 net.cpp:84] Creating Layer debatchnorm2_2
+I0905 17:28:22.029883 11265 net.cpp:406] debatchnorm2_2 <- deconv2_2
+I0905 17:28:22.029891 11265 net.cpp:367] debatchnorm2_2 -> deconv2_2 (in-place)
+I0905 17:28:22.030077 11265 net.cpp:122] Setting up debatchnorm2_2
+I0905 17:28:22.030086 11265 net.cpp:129] Top shape: 4 64 112 112 (3211264)
+I0905 17:28:22.030091 11265 net.cpp:137] Memory required for data: 810041344
+I0905 17:28:22.030100 11265 layer_factory.hpp:77] Creating layer deelu2_2
+I0905 17:28:22.030107 11265 net.cpp:84] Creating Layer deelu2_2
+I0905 17:28:22.030112 11265 net.cpp:406] deelu2_2 <- deconv2_2
+I0905 17:28:22.030118 11265 net.cpp:367] deelu2_2 -> deconv2_2 (in-place)
+I0905 17:28:22.030125 11265 net.cpp:122] Setting up deelu2_2
+I0905 17:28:22.030133 11265 net.cpp:129] Top shape: 4 64 112 112 (3211264)
+I0905 17:28:22.030136 11265 net.cpp:137] Memory required for data: 822886400
+I0905 17:28:22.030143 11265 layer_factory.hpp:77] Creating layer unpool1
+I0905 17:28:22.030153 11265 net.cpp:84] Creating Layer unpool1
+I0905 17:28:22.030156 11265 net.cpp:406] unpool1 <- deconv2_2
+I0905 17:28:22.030163 11265 net.cpp:406] unpool1 <- pool1_mask
+I0905 17:28:22.030169 11265 net.cpp:406] unpool1 <- pool1_argmax_count
+I0905 17:28:22.030176 11265 net.cpp:380] unpool1 -> unpool1
+I0905 17:28:22.030201 11265 net.cpp:122] Setting up unpool1
+I0905 17:28:22.030208 11265 net.cpp:129] Top shape: 4 64 224 224 (12845056)
+I0905 17:28:22.030215 11265 net.cpp:137] Memory required for data: 874266624
+I0905 17:28:22.030220 11265 layer_factory.hpp:77] Creating layer deconv1_1
+I0905 17:28:22.030227 11265 net.cpp:84] Creating Layer deconv1_1
+I0905 17:28:22.030232 11265 net.cpp:406] deconv1_1 <- unpool1
+I0905 17:28:22.030241 11265 net.cpp:380] deconv1_1 -> deconv1_1
+I0905 17:28:22.030679 11265 net.cpp:122] Setting up deconv1_1
+I0905 17:28:22.030689 11265 net.cpp:129] Top shape: 4 64 224 224 (12845056)
+I0905 17:28:22.030694 11265 net.cpp:137] Memory required for data: 925646848
+I0905 17:28:22.030701 11265 layer_factory.hpp:77] Creating layer debatchnorm1_1
+I0905 17:28:22.030707 11265 net.cpp:84] Creating Layer debatchnorm1_1
+I0905 17:28:22.030711 11265 net.cpp:406] debatchnorm1_1 <- deconv1_1
+I0905 17:28:22.030719 11265 net.cpp:367] debatchnorm1_1 -> deconv1_1 (in-place)
+I0905 17:28:22.030930 11265 net.cpp:122] Setting up debatchnorm1_1
+I0905 17:28:22.030937 11265 net.cpp:129] Top shape: 4 64 224 224 (12845056)
+I0905 17:28:22.030941 11265 net.cpp:137] Memory required for data: 977027072
+I0905 17:28:22.030951 11265 layer_factory.hpp:77] Creating layer deelu1_1
+I0905 17:28:22.030956 11265 net.cpp:84] Creating Layer deelu1_1
+I0905 17:28:22.030961 11265 net.cpp:406] deelu1_1 <- deconv1_1
+I0905 17:28:22.030969 11265 net.cpp:367] deelu1_1 -> deconv1_1 (in-place)
+I0905 17:28:22.031002 11265 net.cpp:122] Setting up deelu1_1
+I0905 17:28:22.031008 11265 net.cpp:129] Top shape: 4 64 224 224 (12845056)
+I0905 17:28:22.031013 11265 net.cpp:137] Memory required for data: 1028407296
+I0905 17:28:22.031018 11265 layer_factory.hpp:77] Creating layer deconv1_2
+I0905 17:28:22.031025 11265 net.cpp:84] Creating Layer deconv1_2
+I0905 17:28:22.031030 11265 net.cpp:406] deconv1_2 <- deconv1_1
+I0905 17:28:22.031040 11265 net.cpp:380] deconv1_2 -> deconv1_2
+I0905 17:28:22.031919 11265 net.cpp:122] Setting up deconv1_2
+I0905 17:28:22.031932 11265 net.cpp:129] Top shape: 4 64 224 224 (12845056)
+I0905 17:28:22.031939 11265 net.cpp:137] Memory required for data: 1079787520
+I0905 17:28:22.031946 11265 layer_factory.hpp:77] Creating layer debatchnorm1_2
+I0905 17:28:22.031954 11265 net.cpp:84] Creating Layer debatchnorm1_2
+I0905 17:28:22.031958 11265 net.cpp:406] debatchnorm1_2 <- deconv1_2
+I0905 17:28:22.031967 11265 net.cpp:367] debatchnorm1_2 -> deconv1_2 (in-place)
+I0905 17:28:22.032179 11265 net.cpp:122] Setting up debatchnorm1_2
+I0905 17:28:22.032187 11265 net.cpp:129] Top shape: 4 64 224 224 (12845056)
+I0905 17:28:22.032191 11265 net.cpp:137] Memory required for data: 1131167744
+I0905 17:28:22.032202 11265 layer_factory.hpp:77] Creating layer deelu1_2
+I0905 17:28:22.032208 11265 net.cpp:84] Creating Layer deelu1_2
+I0905 17:28:22.032224 11265 net.cpp:406] deelu1_2 <- deconv1_2
+I0905 17:28:22.032232 11265 net.cpp:367] deelu1_2 -> deconv1_2 (in-place)
+I0905 17:28:22.032238 11265 net.cpp:122] Setting up deelu1_2
+I0905 17:28:22.032244 11265 net.cpp:129] Top shape: 4 64 224 224 (12845056)
+I0905 17:28:22.032248 11265 net.cpp:137] Memory required for data: 1182547968
+I0905 17:28:22.032253 11265 layer_factory.hpp:77] Creating layer segmentation
+I0905 17:28:22.032263 11265 net.cpp:84] Creating Layer segmentation
+I0905 17:28:22.032268 11265 net.cpp:406] segmentation <- deconv1_2
+I0905 17:28:22.032276 11265 net.cpp:380] segmentation -> segmentation
+I0905 17:28:22.034447 11265 net.cpp:122] Setting up segmentation
+I0905 17:28:22.034538 11265 net.cpp:129] Top shape: 4 2 224 224 (401408)
+I0905 17:28:22.034544 11265 net.cpp:137] Memory required for data: 1184153600
+I0905 17:28:22.034554 11265 layer_factory.hpp:77] Creating layer infogainLoss
+I0905 17:28:22.034564 11265 net.cpp:84] Creating Layer infogainLoss
+I0905 17:28:22.034569 11265 net.cpp:406] infogainLoss <- segmentation
+I0905 17:28:22.034575 11265 net.cpp:406] infogainLoss <- label
+I0905 17:28:22.034586 11265 net.cpp:380] infogainLoss -> loss
+I0905 17:28:22.034603 11265 layer_factory.hpp:77] Creating layer infogainLoss
+I0905 17:28:22.036052 11265 net.cpp:122] Setting up infogainLoss
+I0905 17:28:22.036064 11265 net.cpp:129] Top shape: (1)
+I0905 17:28:22.036069 11265 net.cpp:132]     with loss weight 1
+I0905 17:28:22.036089 11265 net.cpp:137] Memory required for data: 1184153604
+I0905 17:28:22.036095 11265 net.cpp:198] infogainLoss needs backward computation.
+I0905 17:28:22.036105 11265 net.cpp:198] segmentation needs backward computation.
+I0905 17:28:22.036110 11265 net.cpp:198] deelu1_2 needs backward computation.
+I0905 17:28:22.036115 11265 net.cpp:198] debatchnorm1_2 needs backward computation.
+I0905 17:28:22.036121 11265 net.cpp:198] deconv1_2 needs backward computation.
+I0905 17:28:22.036125 11265 net.cpp:198] deelu1_1 needs backward computation.
+I0905 17:28:22.036129 11265 net.cpp:198] debatchnorm1_1 needs backward computation.
+I0905 17:28:22.036133 11265 net.cpp:198] deconv1_1 needs backward computation.
+I0905 17:28:22.036136 11265 net.cpp:198] unpool1 needs backward computation.
+I0905 17:28:22.036141 11265 net.cpp:198] deelu2_2 needs backward computation.
+I0905 17:28:22.036146 11265 net.cpp:198] debatchnorm2_2 needs backward computation.
+I0905 17:28:22.036151 11265 net.cpp:198] deconv2_2 needs backward computation.
+I0905 17:28:22.036157 11265 net.cpp:198] deelu2_1 needs backward computation.
+I0905 17:28:22.036162 11265 net.cpp:198] debatchnorm2_1 needs backward computation.
+I0905 17:28:22.036167 11265 net.cpp:198] deconv2_1 needs backward computation.
+I0905 17:28:22.036172 11265 net.cpp:198] unpool2 needs backward computation.
+I0905 17:28:22.036178 11265 net.cpp:198] deelu3_3 needs backward computation.
+I0905 17:28:22.036183 11265 net.cpp:198] debatchnorm3_3 needs backward computation.
+I0905 17:28:22.036188 11265 net.cpp:198] deconv3_3 needs backward computation.
+I0905 17:28:22.036195 11265 net.cpp:198] elu3_2 needs backward computation.
+I0905 17:28:22.036200 11265 net.cpp:198] batchnorm3_2 needs backward computation.
+I0905 17:28:22.036204 11265 net.cpp:198] conv3_2 needs backward computation.
+I0905 17:28:22.036211 11265 net.cpp:198] elu3_1 needs backward computation.
+I0905 17:28:22.036216 11265 net.cpp:198] batchnorm3_1 needs backward computation.
+I0905 17:28:22.036221 11265 net.cpp:198] conv3_1 needs backward computation.
+I0905 17:28:22.036226 11265 net.cpp:198] pool2 needs backward computation.
+I0905 17:28:22.036232 11265 net.cpp:198] elu2_2 needs backward computation.
+I0905 17:28:22.036237 11265 net.cpp:198] batchnorm2_2 needs backward computation.
+I0905 17:28:22.036242 11265 net.cpp:198] conv2_2 needs backward computation.
+I0905 17:28:22.036247 11265 net.cpp:198] elu2_1 needs backward computation.
+I0905 17:28:22.036254 11265 net.cpp:198] batchnorm2_1 needs backward computation.
+I0905 17:28:22.036263 11265 net.cpp:198] conv2_1 needs backward computation.
+I0905 17:28:22.036284 11265 net.cpp:198] pool1 needs backward computation.
+I0905 17:28:22.036290 11265 net.cpp:198] elu1_2 needs backward computation.
+I0905 17:28:22.036296 11265 net.cpp:198] batchnorm1_2 needs backward computation.
+I0905 17:28:22.036301 11265 net.cpp:198] conv1_2 needs backward computation.
+I0905 17:28:22.036308 11265 net.cpp:198] elu1_1 needs backward computation.
+I0905 17:28:22.036312 11265 net.cpp:198] batchnorm1_1 needs backward computation.
+I0905 17:28:22.036319 11265 net.cpp:198] conv1_1 needs backward computation.
+I0905 17:28:22.036324 11265 net.cpp:198] batchnorm0 needs backward computation.
+I0905 17:28:22.036329 11265 net.cpp:200] data does not need backward computation.
+I0905 17:28:22.036334 11265 net.cpp:242] This network produces output loss
+I0905 17:28:22.036362 11265 net.cpp:255] Network initialization done.
+I0905 17:28:22.036682 11265 solver.cpp:172] Creating test net (#0) specified by net file: train_val.prototxt
+I0905 17:28:22.036722 11265 net.cpp:294] The NetState phase (1) differed from the phase (0) specified by a rule in layer data
+I0905 17:28:22.036926 11265 net.cpp:51] Initializing net from parameters: 
+name: "SegNet5"
+state {
+  phase: TEST
+}
+layer {
+  name: "data"
+  type: "HDF5Data"
+  top: "data"
+  top: "label"
+  include {
+    phase: TEST
+  }
+  hdf5_data_param {
+    source: "/home/grochette/Documents/SegNet/data/HDF5/Validation/hdf5_list.txt"
+    batch_size: 2
+  }
+}
+layer {
+  name: "batchnorm0"
+  type: "BatchNorm"
+  bottom: "data"
+  top: "data"
+}
+layer {
+  name: "conv1_1"
+  type: "Convolution"
+  bottom: "data"
+  top: "conv1_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm1_1"
+  type: "BatchNorm"
+  bottom: "conv1_1"
+  top: "conv1_1"
+}
+layer {
+  name: "elu1_1"
+  type: "ELU"
+  bottom: "conv1_1"
+  top: "conv1_1"
+}
+layer {
+  name: "conv1_2"
+  type: "Convolution"
+  bottom: "conv1_1"
+  top: "conv1_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm1_2"
+  type: "BatchNorm"
+  bottom: "conv1_2"
+  top: "conv1_2"
+}
+layer {
+  name: "elu1_2"
+  type: "ELU"
+  bottom: "conv1_2"
+  top: "conv1_2"
+}
+layer {
+  name: "pool1"
+  type: "Pooling"
+  bottom: "conv1_2"
+  top: "pool1"
+  top: "pool1_mask"
+  top: "pool1_argmax_count"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "conv2_1"
+  type: "Convolution"
+  bottom: "pool1"
+  top: "conv2_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm2_1"
+  type: "BatchNorm"
+  bottom: "conv2_1"
+  top: "conv2_1"
+}
+layer {
+  name: "elu2_1"
+  type: "ELU"
+  bottom: "conv2_1"
+  top: "conv2_1"
+}
+layer {
+  name: "conv2_2"
+  type: "Convolution"
+  bottom: "conv2_1"
+  top: "conv2_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm2_2"
+  type: "BatchNorm"
+  bottom: "conv2_2"
+  top: "conv2_2"
+}
+layer {
+  name: "elu2_2"
+  type: "ELU"
+  bottom: "conv2_2"
+  top: "conv2_2"
+}
+layer {
+  name: "pool2"
+  type: "Pooling"
+  bottom: "conv2_2"
+  top: "pool2"
+  top: "pool2_mask"
+  top: "pool2_argmax_count"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "conv3_1"
+  type: "Convolution"
+  bottom: "pool2"
+  top: "conv3_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm3_1"
+  type: "BatchNorm"
+  bottom: "conv3_1"
+  top: "conv3_1"
+}
+layer {
+  name: "elu3_1"
+  type: "ELU"
+  bottom: "conv3_1"
+  top: "conv3_1"
+}
+layer {
+  name: "conv3_2"
+  type: "Convolution"
+  bottom: "conv3_1"
+  top: "conv3_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "batchnorm3_2"
+  type: "BatchNorm"
+  bottom: "conv3_2"
+  top: "conv3_2"
+}
+layer {
+  name: "elu3_2"
+  type: "ELU"
+  bottom: "conv3_2"
+  top: "conv3_2"
+}
+layer {
+  name: "deconv3_3"
+  type: "Deconvolution"
+  bottom: "conv3_2"
+  top: "deconv3_3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "debatchnorm3_3"
+  type: "BatchNorm"
+  bottom: "deconv3_3"
+  top: "deconv3_3"
+}
+layer {
+  name: "deelu3_3"
+  type: "ELU"
+  bottom: "deconv3_3"
+  top: "deconv3_3"
+}
+layer {
+  name: "unpool2"
+  type: "Unpooling"
+  bottom: "deconv3_3"
+  bottom: "pool2_mask"
+  bottom: "pool2_argmax_count"
+  top: "unpool2"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "deconv2_1"
+  type: "Deconvolution"
+  bottom: "unpool2"
+  top: "deconv2_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "debatchnorm2_1"
+  type: "BatchNorm"
+  bottom: "deconv2_1"
+  top: "deconv2_1"
+}
+layer {
+  name: "deelu2_1"
+  type: "ELU"
+  bottom: "deconv2_1"
+  top: "deconv2_1"
+}
+layer {
+  name: "deconv2_2"
+  type: "Deconvolution"
+  bottom: "deconv2_1"
+  top: "deconv2_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "debatchnorm2_2"
+  type: "BatchNorm"
+  bottom: "deconv2_2"
+  top: "deconv2_2"
+}
+layer {
+  name: "deelu2_2"
+  type: "ELU"
+  bottom: "deconv2_2"
+  top: "deconv2_2"
+}
+layer {
+  name: "unpool1"
+  type: "Unpooling"
+  bottom: "deconv2_2"
+  bottom: "pool1_mask"
+  bottom: "pool1_argmax_count"
+  top: "unpool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "deconv1_1"
+  type: "Deconvolution"
+  bottom: "unpool1"
+  top: "deconv1_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "debatchnorm1_1"
+  type: "BatchNorm"
+  bottom: "deconv1_1"
+  top: "deconv1_1"
+}
+layer {
+  name: "deelu1_1"
+  type: "ELU"
+  bottom: "deconv1_1"
+  top: "deconv1_1"
+}
+layer {
+  name: "deconv1_2"
+  type: "Deconvolution"
+  bottom: "deconv1_1"
+  top: "deconv1_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "debatchnorm1_2"
+  type: "BatchNorm"
+  bottom: "deconv1_2"
+  top: "deconv1_2"
+}
+layer {
+  name: "deelu1_2"
+  type: "ELU"
+  bottom: "deconv1_2"
+  top: "deconv1_2"
+}
+layer {
+  name: "segmentation"
+  type: "Convolution"
+  bottom: "deconv1_2"
+  top: "segmentation"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 2
+    pad: 0
+    kernel_size: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "infogainLoss"
+  type: "InfogainLoss"
+  bottom: "segmentation"
+  bottom: "label"
+  top: "loss"
+  loss_param {
+    ignore_label: 2
+  }
+  infogain_loss_param {
+    source: "/home/grochette/Documents/SegNet/data/infogainH.binaryproto"
+  }
+}
+layer {
+  name: "accuracy"
+  type: "Accuracy"
+  bottom: "segmentation"
+  bottom: "label"
+  top: "accuracy"
+  top: "per_class_accuracy"
+  include {
+    phase: TEST
+  }
+  accuracy_param {
+    ignore_label: 2
+  }
+}
+I0905 17:28:22.037267 11265 layer_factory.hpp:77] Creating layer data
+I0905 17:28:22.037279 11265 net.cpp:84] Creating Layer data
+I0905 17:28:22.037286 11265 net.cpp:380] data -> data
+I0905 17:28:22.037297 11265 net.cpp:380] data -> label
+I0905 17:28:22.037305 11265 hdf5_data_layer.cpp:80] Loading list of HDF5 filenames from: /home/grochette/Documents/SegNet/data/HDF5/Validation/hdf5_list.txt
+I0905 17:28:22.037333 11265 hdf5_data_layer.cpp:94] Number of HDF5 files: 10
+I0905 17:28:22.503010 11265 net.cpp:122] Setting up data
+I0905 17:28:22.503037 11265 net.cpp:129] Top shape: 2 4 224 224 (401408)
+I0905 17:28:22.503072 11265 net.cpp:129] Top shape: 2 1 224 224 (100352)
+I0905 17:28:22.503077 11265 net.cpp:137] Memory required for data: 2007040
+I0905 17:28:22.503087 11265 layer_factory.hpp:77] Creating layer label_data_1_split
+I0905 17:28:22.503101 11265 net.cpp:84] Creating Layer label_data_1_split
+I0905 17:28:22.503105 11265 net.cpp:406] label_data_1_split <- label
+I0905 17:28:22.503114 11265 net.cpp:380] label_data_1_split -> label_data_1_split_0
+I0905 17:28:22.503125 11265 net.cpp:380] label_data_1_split -> label_data_1_split_1
+I0905 17:28:22.503170 11265 net.cpp:122] Setting up label_data_1_split
+I0905 17:28:22.503177 11265 net.cpp:129] Top shape: 2 1 224 224 (100352)
+I0905 17:28:22.503185 11265 net.cpp:129] Top shape: 2 1 224 224 (100352)
+I0905 17:28:22.503188 11265 net.cpp:137] Memory required for data: 2809856
+I0905 17:28:22.503193 11265 layer_factory.hpp:77] Creating layer batchnorm0
+I0905 17:28:22.503202 11265 net.cpp:84] Creating Layer batchnorm0
+I0905 17:28:22.503206 11265 net.cpp:406] batchnorm0 <- data
+I0905 17:28:22.503213 11265 net.cpp:367] batchnorm0 -> data (in-place)
+I0905 17:28:22.503422 11265 net.cpp:122] Setting up batchnorm0
+I0905 17:28:22.503429 11265 net.cpp:129] Top shape: 2 4 224 224 (401408)
+I0905 17:28:22.503434 11265 net.cpp:137] Memory required for data: 4415488
+I0905 17:28:22.503448 11265 layer_factory.hpp:77] Creating layer conv1_1
+I0905 17:28:22.503459 11265 net.cpp:84] Creating Layer conv1_1
+I0905 17:28:22.503464 11265 net.cpp:406] conv1_1 <- data
+I0905 17:28:22.503473 11265 net.cpp:380] conv1_1 -> conv1_1
+I0905 17:28:22.505470 11265 net.cpp:122] Setting up conv1_1
+I0905 17:28:22.505483 11265 net.cpp:129] Top shape: 2 64 224 224 (6422528)
+I0905 17:28:22.505488 11265 net.cpp:137] Memory required for data: 30105600
+I0905 17:28:22.505499 11265 layer_factory.hpp:77] Creating layer batchnorm1_1
+I0905 17:28:22.505509 11265 net.cpp:84] Creating Layer batchnorm1_1
+I0905 17:28:22.505513 11265 net.cpp:406] batchnorm1_1 <- conv1_1
+I0905 17:28:22.505522 11265 net.cpp:367] batchnorm1_1 -> conv1_1 (in-place)
+I0905 17:28:22.506180 11265 net.cpp:122] Setting up batchnorm1_1
+I0905 17:28:22.506191 11265 net.cpp:129] Top shape: 2 64 224 224 (6422528)
+I0905 17:28:22.506197 11265 net.cpp:137] Memory required for data: 55795712
+I0905 17:28:22.506207 11265 layer_factory.hpp:77] Creating layer elu1_1
+I0905 17:28:22.506213 11265 net.cpp:84] Creating Layer elu1_1
+I0905 17:28:22.506218 11265 net.cpp:406] elu1_1 <- conv1_1
+I0905 17:28:22.506225 11265 net.cpp:367] elu1_1 -> conv1_1 (in-place)
+I0905 17:28:22.506232 11265 net.cpp:122] Setting up elu1_1
+I0905 17:28:22.506255 11265 net.cpp:129] Top shape: 2 64 224 224 (6422528)
+I0905 17:28:22.506260 11265 net.cpp:137] Memory required for data: 81485824
+I0905 17:28:22.506265 11265 layer_factory.hpp:77] Creating layer conv1_2
+I0905 17:28:22.506275 11265 net.cpp:84] Creating Layer conv1_2
+I0905 17:28:22.506279 11265 net.cpp:406] conv1_2 <- conv1_1
+I0905 17:28:22.506287 11265 net.cpp:380] conv1_2 -> conv1_2
+I0905 17:28:22.508685 11265 net.cpp:122] Setting up conv1_2
+I0905 17:28:22.508698 11265 net.cpp:129] Top shape: 2 64 224 224 (6422528)
+I0905 17:28:22.508704 11265 net.cpp:137] Memory required for data: 107175936
+I0905 17:28:22.508718 11265 layer_factory.hpp:77] Creating layer batchnorm1_2
+I0905 17:28:22.508724 11265 net.cpp:84] Creating Layer batchnorm1_2
+I0905 17:28:22.508728 11265 net.cpp:406] batchnorm1_2 <- conv1_2
+I0905 17:28:22.508738 11265 net.cpp:367] batchnorm1_2 -> conv1_2 (in-place)
+I0905 17:28:22.508955 11265 net.cpp:122] Setting up batchnorm1_2
+I0905 17:28:22.508962 11265 net.cpp:129] Top shape: 2 64 224 224 (6422528)
+I0905 17:28:22.508967 11265 net.cpp:137] Memory required for data: 132866048
+I0905 17:28:22.508976 11265 layer_factory.hpp:77] Creating layer elu1_2
+I0905 17:28:22.508985 11265 net.cpp:84] Creating Layer elu1_2
+I0905 17:28:22.508988 11265 net.cpp:406] elu1_2 <- conv1_2
+I0905 17:28:22.508994 11265 net.cpp:367] elu1_2 -> conv1_2 (in-place)
+I0905 17:28:22.509001 11265 net.cpp:122] Setting up elu1_2
+I0905 17:28:22.509007 11265 net.cpp:129] Top shape: 2 64 224 224 (6422528)
+I0905 17:28:22.509012 11265 net.cpp:137] Memory required for data: 158556160
+I0905 17:28:22.509016 11265 layer_factory.hpp:77] Creating layer pool1
+I0905 17:28:22.509022 11265 layer_factory.cpp:91] cuDNN does not support multiple tops. Using Caffe's own pooling layer.
+I0905 17:28:22.509029 11265 net.cpp:84] Creating Layer pool1
+I0905 17:28:22.509034 11265 net.cpp:406] pool1 <- conv1_2
+I0905 17:28:22.509042 11265 net.cpp:380] pool1 -> pool1
+I0905 17:28:22.509047 11265 net.cpp:380] pool1 -> pool1_mask
+I0905 17:28:22.509053 11265 net.cpp:380] pool1 -> pool1_argmax_count
+I0905 17:28:22.509105 11265 net.cpp:122] Setting up pool1
+I0905 17:28:22.509111 11265 net.cpp:129] Top shape: 2 64 112 112 (1605632)
+I0905 17:28:22.509115 11265 net.cpp:129] Top shape: 2 64 112 112 (1605632)
+I0905 17:28:22.509120 11265 net.cpp:129] Top shape: 2 64 224 224 (6422528)
+I0905 17:28:22.509122 11265 net.cpp:137] Memory required for data: 197091328
+I0905 17:28:22.509125 11265 layer_factory.hpp:77] Creating layer conv2_1
+I0905 17:28:22.509132 11265 net.cpp:84] Creating Layer conv2_1
+I0905 17:28:22.509136 11265 net.cpp:406] conv2_1 <- pool1
+I0905 17:28:22.509140 11265 net.cpp:380] conv2_1 -> conv2_1
+I0905 17:28:22.511824 11265 net.cpp:122] Setting up conv2_1
+I0905 17:28:22.511837 11265 net.cpp:129] Top shape: 2 128 112 112 (3211264)
+I0905 17:28:22.511840 11265 net.cpp:137] Memory required for data: 209936384
+I0905 17:28:22.511847 11265 layer_factory.hpp:77] Creating layer batchnorm2_1
+I0905 17:28:22.511852 11265 net.cpp:84] Creating Layer batchnorm2_1
+I0905 17:28:22.511855 11265 net.cpp:406] batchnorm2_1 <- conv2_1
+I0905 17:28:22.511860 11265 net.cpp:367] batchnorm2_1 -> conv2_1 (in-place)
+I0905 17:28:22.512066 11265 net.cpp:122] Setting up batchnorm2_1
+I0905 17:28:22.512073 11265 net.cpp:129] Top shape: 2 128 112 112 (3211264)
+I0905 17:28:22.512075 11265 net.cpp:137] Memory required for data: 222781440
+I0905 17:28:22.512085 11265 layer_factory.hpp:77] Creating layer elu2_1
+I0905 17:28:22.512089 11265 net.cpp:84] Creating Layer elu2_1
+I0905 17:28:22.512092 11265 net.cpp:406] elu2_1 <- conv2_1
+I0905 17:28:22.512097 11265 net.cpp:367] elu2_1 -> conv2_1 (in-place)
+I0905 17:28:22.512102 11265 net.cpp:122] Setting up elu2_1
+I0905 17:28:22.512109 11265 net.cpp:129] Top shape: 2 128 112 112 (3211264)
+I0905 17:28:22.512114 11265 net.cpp:137] Memory required for data: 235626496
+I0905 17:28:22.512118 11265 layer_factory.hpp:77] Creating layer conv2_2
+I0905 17:28:22.512128 11265 net.cpp:84] Creating Layer conv2_2
+I0905 17:28:22.512132 11265 net.cpp:406] conv2_2 <- conv2_1
+I0905 17:28:22.512152 11265 net.cpp:380] conv2_2 -> conv2_2
+I0905 17:28:22.515102 11265 net.cpp:122] Setting up conv2_2
+I0905 17:28:22.515115 11265 net.cpp:129] Top shape: 2 128 112 112 (3211264)
+I0905 17:28:22.515118 11265 net.cpp:137] Memory required for data: 248471552
+I0905 17:28:22.515125 11265 layer_factory.hpp:77] Creating layer batchnorm2_2
+I0905 17:28:22.515130 11265 net.cpp:84] Creating Layer batchnorm2_2
+I0905 17:28:22.515133 11265 net.cpp:406] batchnorm2_2 <- conv2_2
+I0905 17:28:22.515139 11265 net.cpp:367] batchnorm2_2 -> conv2_2 (in-place)
+I0905 17:28:22.515348 11265 net.cpp:122] Setting up batchnorm2_2
+I0905 17:28:22.515354 11265 net.cpp:129] Top shape: 2 128 112 112 (3211264)
+I0905 17:28:22.515358 11265 net.cpp:137] Memory required for data: 261316608
+I0905 17:28:22.515363 11265 layer_factory.hpp:77] Creating layer elu2_2
+I0905 17:28:22.515367 11265 net.cpp:84] Creating Layer elu2_2
+I0905 17:28:22.515370 11265 net.cpp:406] elu2_2 <- conv2_2
+I0905 17:28:22.515377 11265 net.cpp:367] elu2_2 -> conv2_2 (in-place)
+I0905 17:28:22.515380 11265 net.cpp:122] Setting up elu2_2
+I0905 17:28:22.515384 11265 net.cpp:129] Top shape: 2 128 112 112 (3211264)
+I0905 17:28:22.515388 11265 net.cpp:137] Memory required for data: 274161664
+I0905 17:28:22.515394 11265 layer_factory.hpp:77] Creating layer pool2
+I0905 17:28:22.515399 11265 layer_factory.cpp:91] cuDNN does not support multiple tops. Using Caffe's own pooling layer.
+I0905 17:28:22.515408 11265 net.cpp:84] Creating Layer pool2
+I0905 17:28:22.515413 11265 net.cpp:406] pool2 <- conv2_2
+I0905 17:28:22.515420 11265 net.cpp:380] pool2 -> pool2
+I0905 17:28:22.515429 11265 net.cpp:380] pool2 -> pool2_mask
+I0905 17:28:22.515436 11265 net.cpp:380] pool2 -> pool2_argmax_count
+I0905 17:28:22.515496 11265 net.cpp:122] Setting up pool2
+I0905 17:28:22.515503 11265 net.cpp:129] Top shape: 2 128 56 56 (802816)
+I0905 17:28:22.515509 11265 net.cpp:129] Top shape: 2 128 56 56 (802816)
+I0905 17:28:22.515516 11265 net.cpp:129] Top shape: 2 128 112 112 (3211264)
+I0905 17:28:22.515519 11265 net.cpp:137] Memory required for data: 293429248
+I0905 17:28:22.515524 11265 layer_factory.hpp:77] Creating layer conv3_1
+I0905 17:28:22.515535 11265 net.cpp:84] Creating Layer conv3_1
+I0905 17:28:22.515539 11265 net.cpp:406] conv3_1 <- pool2
+I0905 17:28:22.515548 11265 net.cpp:380] conv3_1 -> conv3_1
+I0905 17:28:22.519587 11265 net.cpp:122] Setting up conv3_1
+I0905 17:28:22.519605 11265 net.cpp:129] Top shape: 2 256 56 56 (1605632)
+I0905 17:28:22.519611 11265 net.cpp:137] Memory required for data: 299851776
+I0905 17:28:22.519630 11265 layer_factory.hpp:77] Creating layer batchnorm3_1
+I0905 17:28:22.519639 11265 net.cpp:84] Creating Layer batchnorm3_1
+I0905 17:28:22.519644 11265 net.cpp:406] batchnorm3_1 <- conv3_1
+I0905 17:28:22.519651 11265 net.cpp:367] batchnorm3_1 -> conv3_1 (in-place)
+I0905 17:28:22.519875 11265 net.cpp:122] Setting up batchnorm3_1
+I0905 17:28:22.519883 11265 net.cpp:129] Top shape: 2 256 56 56 (1605632)
+I0905 17:28:22.519887 11265 net.cpp:137] Memory required for data: 306274304
+I0905 17:28:22.519896 11265 layer_factory.hpp:77] Creating layer elu3_1
+I0905 17:28:22.519902 11265 net.cpp:84] Creating Layer elu3_1
+I0905 17:28:22.519907 11265 net.cpp:406] elu3_1 <- conv3_1
+I0905 17:28:22.519914 11265 net.cpp:367] elu3_1 -> conv3_1 (in-place)
+I0905 17:28:22.519920 11265 net.cpp:122] Setting up elu3_1
+I0905 17:28:22.519925 11265 net.cpp:129] Top shape: 2 256 56 56 (1605632)
+I0905 17:28:22.519932 11265 net.cpp:137] Memory required for data: 312696832
+I0905 17:28:22.519937 11265 layer_factory.hpp:77] Creating layer conv3_2
+I0905 17:28:22.519948 11265 net.cpp:84] Creating Layer conv3_2
+I0905 17:28:22.519953 11265 net.cpp:406] conv3_2 <- conv3_1
+I0905 17:28:22.519961 11265 net.cpp:380] conv3_2 -> conv3_2
+I0905 17:28:22.526159 11265 net.cpp:122] Setting up conv3_2
+I0905 17:28:22.526171 11265 net.cpp:129] Top shape: 2 256 56 56 (1605632)
+I0905 17:28:22.526196 11265 net.cpp:137] Memory required for data: 319119360
+I0905 17:28:22.526206 11265 layer_factory.hpp:77] Creating layer batchnorm3_2
+I0905 17:28:22.526229 11265 net.cpp:84] Creating Layer batchnorm3_2
+I0905 17:28:22.526234 11265 net.cpp:406] batchnorm3_2 <- conv3_2
+I0905 17:28:22.526245 11265 net.cpp:367] batchnorm3_2 -> conv3_2 (in-place)
+I0905 17:28:22.526470 11265 net.cpp:122] Setting up batchnorm3_2
+I0905 17:28:22.526477 11265 net.cpp:129] Top shape: 2 256 56 56 (1605632)
+I0905 17:28:22.526480 11265 net.cpp:137] Memory required for data: 325541888
+I0905 17:28:22.526490 11265 layer_factory.hpp:77] Creating layer elu3_2
+I0905 17:28:22.526496 11265 net.cpp:84] Creating Layer elu3_2
+I0905 17:28:22.526499 11265 net.cpp:406] elu3_2 <- conv3_2
+I0905 17:28:22.526504 11265 net.cpp:367] elu3_2 -> conv3_2 (in-place)
+I0905 17:28:22.526509 11265 net.cpp:122] Setting up elu3_2
+I0905 17:28:22.526515 11265 net.cpp:129] Top shape: 2 256 56 56 (1605632)
+I0905 17:28:22.526517 11265 net.cpp:137] Memory required for data: 331964416
+I0905 17:28:22.526520 11265 layer_factory.hpp:77] Creating layer deconv3_3
+I0905 17:28:22.526526 11265 net.cpp:84] Creating Layer deconv3_3
+I0905 17:28:22.526530 11265 net.cpp:406] deconv3_3 <- conv3_2
+I0905 17:28:22.526535 11265 net.cpp:380] deconv3_3 -> deconv3_3
+I0905 17:28:22.528789 11265 net.cpp:122] Setting up deconv3_3
+I0905 17:28:22.528800 11265 net.cpp:129] Top shape: 2 128 56 56 (802816)
+I0905 17:28:22.528805 11265 net.cpp:137] Memory required for data: 335175680
+I0905 17:28:22.528810 11265 layer_factory.hpp:77] Creating layer debatchnorm3_3
+I0905 17:28:22.528815 11265 net.cpp:84] Creating Layer debatchnorm3_3
+I0905 17:28:22.528820 11265 net.cpp:406] debatchnorm3_3 <- deconv3_3
+I0905 17:28:22.528825 11265 net.cpp:367] debatchnorm3_3 -> deconv3_3 (in-place)
+I0905 17:28:22.529040 11265 net.cpp:122] Setting up debatchnorm3_3
+I0905 17:28:22.529048 11265 net.cpp:129] Top shape: 2 128 56 56 (802816)
+I0905 17:28:22.529052 11265 net.cpp:137] Memory required for data: 338386944
+I0905 17:28:22.529062 11265 layer_factory.hpp:77] Creating layer deelu3_3
+I0905 17:28:22.529068 11265 net.cpp:84] Creating Layer deelu3_3
+I0905 17:28:22.529073 11265 net.cpp:406] deelu3_3 <- deconv3_3
+I0905 17:28:22.529079 11265 net.cpp:367] deelu3_3 -> deconv3_3 (in-place)
+I0905 17:28:22.529088 11265 net.cpp:122] Setting up deelu3_3
+I0905 17:28:22.529093 11265 net.cpp:129] Top shape: 2 128 56 56 (802816)
+I0905 17:28:22.529096 11265 net.cpp:137] Memory required for data: 341598208
+I0905 17:28:22.529101 11265 layer_factory.hpp:77] Creating layer unpool2
+I0905 17:28:22.529111 11265 net.cpp:84] Creating Layer unpool2
+I0905 17:28:22.529114 11265 net.cpp:406] unpool2 <- deconv3_3
+I0905 17:28:22.529121 11265 net.cpp:406] unpool2 <- pool2_mask
+I0905 17:28:22.529126 11265 net.cpp:406] unpool2 <- pool2_argmax_count
+I0905 17:28:22.529134 11265 net.cpp:380] unpool2 -> unpool2
+I0905 17:28:22.529161 11265 net.cpp:122] Setting up unpool2
+I0905 17:28:22.529168 11265 net.cpp:129] Top shape: 2 128 112 112 (3211264)
+I0905 17:28:22.529172 11265 net.cpp:137] Memory required for data: 354443264
+I0905 17:28:22.529177 11265 layer_factory.hpp:77] Creating layer deconv2_1
+I0905 17:28:22.529187 11265 net.cpp:84] Creating Layer deconv2_1
+I0905 17:28:22.529191 11265 net.cpp:406] deconv2_1 <- unpool2
+I0905 17:28:22.529199 11265 net.cpp:380] deconv2_1 -> deconv2_1
+I0905 17:28:22.530676 11265 net.cpp:122] Setting up deconv2_1
+I0905 17:28:22.530689 11265 net.cpp:129] Top shape: 2 128 112 112 (3211264)
+I0905 17:28:22.530694 11265 net.cpp:137] Memory required for data: 367288320
+I0905 17:28:22.530702 11265 layer_factory.hpp:77] Creating layer debatchnorm2_1
+I0905 17:28:22.530710 11265 net.cpp:84] Creating Layer debatchnorm2_1
+I0905 17:28:22.530714 11265 net.cpp:406] debatchnorm2_1 <- deconv2_1
+I0905 17:28:22.530722 11265 net.cpp:367] debatchnorm2_1 -> deconv2_1 (in-place)
+I0905 17:28:22.530935 11265 net.cpp:122] Setting up debatchnorm2_1
+I0905 17:28:22.530943 11265 net.cpp:129] Top shape: 2 128 112 112 (3211264)
+I0905 17:28:22.530947 11265 net.cpp:137] Memory required for data: 380133376
+I0905 17:28:22.530956 11265 layer_factory.hpp:77] Creating layer deelu2_1
+I0905 17:28:22.530984 11265 net.cpp:84] Creating Layer deelu2_1
+I0905 17:28:22.530990 11265 net.cpp:406] deelu2_1 <- deconv2_1
+I0905 17:28:22.530998 11265 net.cpp:367] deelu2_1 -> deconv2_1 (in-place)
+I0905 17:28:22.531004 11265 net.cpp:122] Setting up deelu2_1
+I0905 17:28:22.531011 11265 net.cpp:129] Top shape: 2 128 112 112 (3211264)
+I0905 17:28:22.531015 11265 net.cpp:137] Memory required for data: 392978432
+I0905 17:28:22.531020 11265 layer_factory.hpp:77] Creating layer deconv2_2
+I0905 17:28:22.531028 11265 net.cpp:84] Creating Layer deconv2_2
+I0905 17:28:22.531033 11265 net.cpp:406] deconv2_2 <- deconv2_1
+I0905 17:28:22.531040 11265 net.cpp:380] deconv2_2 -> deconv2_2
+I0905 17:28:22.531718 11265 net.cpp:122] Setting up deconv2_2
+I0905 17:28:22.531810 11265 net.cpp:129] Top shape: 2 64 112 112 (1605632)
+I0905 17:28:22.531813 11265 net.cpp:137] Memory required for data: 399400960
+I0905 17:28:22.531822 11265 layer_factory.hpp:77] Creating layer debatchnorm2_2
+I0905 17:28:22.531831 11265 net.cpp:84] Creating Layer debatchnorm2_2
+I0905 17:28:22.531836 11265 net.cpp:406] debatchnorm2_2 <- deconv2_2
+I0905 17:28:22.531843 11265 net.cpp:367] debatchnorm2_2 -> deconv2_2 (in-place)
+I0905 17:28:22.532073 11265 net.cpp:122] Setting up debatchnorm2_2
+I0905 17:28:22.532079 11265 net.cpp:129] Top shape: 2 64 112 112 (1605632)
+I0905 17:28:22.532081 11265 net.cpp:137] Memory required for data: 405823488
+I0905 17:28:22.532088 11265 layer_factory.hpp:77] Creating layer deelu2_2
+I0905 17:28:22.532096 11265 net.cpp:84] Creating Layer deelu2_2
+I0905 17:28:22.532099 11265 net.cpp:406] deelu2_2 <- deconv2_2
+I0905 17:28:22.532104 11265 net.cpp:367] deelu2_2 -> deconv2_2 (in-place)
+I0905 17:28:22.532107 11265 net.cpp:122] Setting up deelu2_2
+I0905 17:28:22.532114 11265 net.cpp:129] Top shape: 2 64 112 112 (1605632)
+I0905 17:28:22.532119 11265 net.cpp:137] Memory required for data: 412246016
+I0905 17:28:22.532122 11265 layer_factory.hpp:77] Creating layer unpool1
+I0905 17:28:22.532130 11265 net.cpp:84] Creating Layer unpool1
+I0905 17:28:22.532135 11265 net.cpp:406] unpool1 <- deconv2_2
+I0905 17:28:22.532142 11265 net.cpp:406] unpool1 <- pool1_mask
+I0905 17:28:22.532148 11265 net.cpp:406] unpool1 <- pool1_argmax_count
+I0905 17:28:22.532157 11265 net.cpp:380] unpool1 -> unpool1
+I0905 17:28:22.532186 11265 net.cpp:122] Setting up unpool1
+I0905 17:28:22.532194 11265 net.cpp:129] Top shape: 2 64 224 224 (6422528)
+I0905 17:28:22.532196 11265 net.cpp:137] Memory required for data: 437936128
+I0905 17:28:22.532199 11265 layer_factory.hpp:77] Creating layer deconv1_1
+I0905 17:28:22.532205 11265 net.cpp:84] Creating Layer deconv1_1
+I0905 17:28:22.532208 11265 net.cpp:406] deconv1_1 <- unpool1
+I0905 17:28:22.532214 11265 net.cpp:380] deconv1_1 -> deconv1_1
+I0905 17:28:22.533222 11265 net.cpp:122] Setting up deconv1_1
+I0905 17:28:22.533236 11265 net.cpp:129] Top shape: 2 64 224 224 (6422528)
+I0905 17:28:22.533241 11265 net.cpp:137] Memory required for data: 463626240
+I0905 17:28:22.533249 11265 layer_factory.hpp:77] Creating layer debatchnorm1_1
+I0905 17:28:22.533267 11265 net.cpp:84] Creating Layer debatchnorm1_1
+I0905 17:28:22.533272 11265 net.cpp:406] debatchnorm1_1 <- deconv1_1
+I0905 17:28:22.533279 11265 net.cpp:367] debatchnorm1_1 -> deconv1_1 (in-place)
+I0905 17:28:22.533526 11265 net.cpp:122] Setting up debatchnorm1_1
+I0905 17:28:22.533535 11265 net.cpp:129] Top shape: 2 64 224 224 (6422528)
+I0905 17:28:22.533540 11265 net.cpp:137] Memory required for data: 489316352
+I0905 17:28:22.533550 11265 layer_factory.hpp:77] Creating layer deelu1_1
+I0905 17:28:22.533555 11265 net.cpp:84] Creating Layer deelu1_1
+I0905 17:28:22.533558 11265 net.cpp:406] deelu1_1 <- deconv1_1
+I0905 17:28:22.533566 11265 net.cpp:367] deelu1_1 -> deconv1_1 (in-place)
+I0905 17:28:22.533571 11265 net.cpp:122] Setting up deelu1_1
+I0905 17:28:22.533576 11265 net.cpp:129] Top shape: 2 64 224 224 (6422528)
+I0905 17:28:22.533581 11265 net.cpp:137] Memory required for data: 515006464
+I0905 17:28:22.533584 11265 layer_factory.hpp:77] Creating layer deconv1_2
+I0905 17:28:22.533592 11265 net.cpp:84] Creating Layer deconv1_2
+I0905 17:28:22.533609 11265 net.cpp:406] deconv1_2 <- deconv1_1
+I0905 17:28:22.533619 11265 net.cpp:380] deconv1_2 -> deconv1_2
+I0905 17:28:22.534096 11265 net.cpp:122] Setting up deconv1_2
+I0905 17:28:22.534103 11265 net.cpp:129] Top shape: 2 64 224 224 (6422528)
+I0905 17:28:22.534108 11265 net.cpp:137] Memory required for data: 540696576
+I0905 17:28:22.534117 11265 layer_factory.hpp:77] Creating layer debatchnorm1_2
+I0905 17:28:22.534124 11265 net.cpp:84] Creating Layer debatchnorm1_2
+I0905 17:28:22.534129 11265 net.cpp:406] debatchnorm1_2 <- deconv1_2
+I0905 17:28:22.534135 11265 net.cpp:367] debatchnorm1_2 -> deconv1_2 (in-place)
+I0905 17:28:22.534451 11265 net.cpp:122] Setting up debatchnorm1_2
+I0905 17:28:22.534466 11265 net.cpp:129] Top shape: 2 64 224 224 (6422528)
+I0905 17:28:22.534471 11265 net.cpp:137] Memory required for data: 566386688
+I0905 17:28:22.534479 11265 layer_factory.hpp:77] Creating layer deelu1_2
+I0905 17:28:22.534485 11265 net.cpp:84] Creating Layer deelu1_2
+I0905 17:28:22.534490 11265 net.cpp:406] deelu1_2 <- deconv1_2
+I0905 17:28:22.534497 11265 net.cpp:367] deelu1_2 -> deconv1_2 (in-place)
+I0905 17:28:22.534503 11265 net.cpp:122] Setting up deelu1_2
+I0905 17:28:22.534510 11265 net.cpp:129] Top shape: 2 64 224 224 (6422528)
+I0905 17:28:22.534515 11265 net.cpp:137] Memory required for data: 592076800
+I0905 17:28:22.534519 11265 layer_factory.hpp:77] Creating layer segmentation
+I0905 17:28:22.534533 11265 net.cpp:84] Creating Layer segmentation
+I0905 17:28:22.534538 11265 net.cpp:406] segmentation <- deconv1_2
+I0905 17:28:22.534548 11265 net.cpp:380] segmentation -> segmentation
+I0905 17:28:22.537032 11265 net.cpp:122] Setting up segmentation
+I0905 17:28:22.537046 11265 net.cpp:129] Top shape: 2 2 224 224 (200704)
+I0905 17:28:22.537052 11265 net.cpp:137] Memory required for data: 592879616
+I0905 17:28:22.537062 11265 layer_factory.hpp:77] Creating layer segmentation_segmentation_0_split
+I0905 17:28:22.537070 11265 net.cpp:84] Creating Layer segmentation_segmentation_0_split
+I0905 17:28:22.537075 11265 net.cpp:406] segmentation_segmentation_0_split <- segmentation
+I0905 17:28:22.537084 11265 net.cpp:380] segmentation_segmentation_0_split -> segmentation_segmentation_0_split_0
+I0905 17:28:22.537094 11265 net.cpp:380] segmentation_segmentation_0_split -> segmentation_segmentation_0_split_1
+I0905 17:28:22.537147 11265 net.cpp:122] Setting up segmentation_segmentation_0_split
+I0905 17:28:22.537155 11265 net.cpp:129] Top shape: 2 2 224 224 (200704)
+I0905 17:28:22.537161 11265 net.cpp:129] Top shape: 2 2 224 224 (200704)
+I0905 17:28:22.537168 11265 net.cpp:137] Memory required for data: 594485248
+I0905 17:28:22.537171 11265 layer_factory.hpp:77] Creating layer infogainLoss
+I0905 17:28:22.537180 11265 net.cpp:84] Creating Layer infogainLoss
+I0905 17:28:22.537184 11265 net.cpp:406] infogainLoss <- segmentation_segmentation_0_split_0
+I0905 17:28:22.537192 11265 net.cpp:406] infogainLoss <- label_data_1_split_0
+I0905 17:28:22.537199 11265 net.cpp:380] infogainLoss -> loss
+I0905 17:28:22.537209 11265 layer_factory.hpp:77] Creating layer infogainLoss
+I0905 17:28:22.538120 11265 net.cpp:122] Setting up infogainLoss
+I0905 17:28:22.538131 11265 net.cpp:129] Top shape: (1)
+I0905 17:28:22.538136 11265 net.cpp:132]     with loss weight 1
+I0905 17:28:22.538143 11265 net.cpp:137] Memory required for data: 594485252
+I0905 17:28:22.538147 11265 layer_factory.hpp:77] Creating layer accuracy
+I0905 17:28:22.538156 11265 net.cpp:84] Creating Layer accuracy
+I0905 17:28:22.538161 11265 net.cpp:406] accuracy <- segmentation_segmentation_0_split_1
+I0905 17:28:22.538166 11265 net.cpp:406] accuracy <- label_data_1_split_1
+I0905 17:28:22.538172 11265 net.cpp:380] accuracy -> accuracy
+I0905 17:28:22.538182 11265 net.cpp:380] accuracy -> per_class_accuracy
+I0905 17:28:22.538228 11265 net.cpp:122] Setting up accuracy
+I0905 17:28:22.538234 11265 net.cpp:129] Top shape: (1)
+I0905 17:28:22.538240 11265 net.cpp:129] Top shape: 2 (2)
+I0905 17:28:22.538245 11265 net.cpp:137] Memory required for data: 594485264
+I0905 17:28:22.538262 11265 net.cpp:200] accuracy does not need backward computation.
+I0905 17:28:22.538269 11265 net.cpp:198] infogainLoss needs backward computation.
+I0905 17:28:22.538275 11265 net.cpp:198] segmentation_segmentation_0_split needs backward computation.
+I0905 17:28:22.538281 11265 net.cpp:198] segmentation needs backward computation.
+I0905 17:28:22.538286 11265 net.cpp:198] deelu1_2 needs backward computation.
+I0905 17:28:22.538290 11265 net.cpp:198] debatchnorm1_2 needs backward computation.
+I0905 17:28:22.538295 11265 net.cpp:198] deconv1_2 needs backward computation.
+I0905 17:28:22.538301 11265 net.cpp:198] deelu1_1 needs backward computation.
+I0905 17:28:22.538306 11265 net.cpp:198] debatchnorm1_1 needs backward computation.
+I0905 17:28:22.538311 11265 net.cpp:198] deconv1_1 needs backward computation.
+I0905 17:28:22.538316 11265 net.cpp:198] unpool1 needs backward computation.
+I0905 17:28:22.538326 11265 net.cpp:198] deelu2_2 needs backward computation.
+I0905 17:28:22.538331 11265 net.cpp:198] debatchnorm2_2 needs backward computation.
+I0905 17:28:22.538336 11265 net.cpp:198] deconv2_2 needs backward computation.
+I0905 17:28:22.538341 11265 net.cpp:198] deelu2_1 needs backward computation.
+I0905 17:28:22.538345 11265 net.cpp:198] debatchnorm2_1 needs backward computation.
+I0905 17:28:22.538350 11265 net.cpp:198] deconv2_1 needs backward computation.
+I0905 17:28:22.538355 11265 net.cpp:198] unpool2 needs backward computation.
+I0905 17:28:22.538362 11265 net.cpp:198] deelu3_3 needs backward computation.
+I0905 17:28:22.538367 11265 net.cpp:198] debatchnorm3_3 needs backward computation.
+I0905 17:28:22.538372 11265 net.cpp:198] deconv3_3 needs backward computation.
+I0905 17:28:22.538377 11265 net.cpp:198] elu3_2 needs backward computation.
+I0905 17:28:22.538381 11265 net.cpp:198] batchnorm3_2 needs backward computation.
+I0905 17:28:22.538386 11265 net.cpp:198] conv3_2 needs backward computation.
+I0905 17:28:22.538391 11265 net.cpp:198] elu3_1 needs backward computation.
+I0905 17:28:22.538395 11265 net.cpp:198] batchnorm3_1 needs backward computation.
+I0905 17:28:22.538400 11265 net.cpp:198] conv3_1 needs backward computation.
+I0905 17:28:22.538406 11265 net.cpp:198] pool2 needs backward computation.
+I0905 17:28:22.538411 11265 net.cpp:198] elu2_2 needs backward computation.
+I0905 17:28:22.538416 11265 net.cpp:198] batchnorm2_2 needs backward computation.
+I0905 17:28:22.538421 11265 net.cpp:198] conv2_2 needs backward computation.
+I0905 17:28:22.538427 11265 net.cpp:198] elu2_1 needs backward computation.
+I0905 17:28:22.538432 11265 net.cpp:198] batchnorm2_1 needs backward computation.
+I0905 17:28:22.538437 11265 net.cpp:198] conv2_1 needs backward computation.
+I0905 17:28:22.538442 11265 net.cpp:198] pool1 needs backward computation.
+I0905 17:28:22.538449 11265 net.cpp:198] elu1_2 needs backward computation.
+I0905 17:28:22.538453 11265 net.cpp:198] batchnorm1_2 needs backward computation.
+I0905 17:28:22.538458 11265 net.cpp:198] conv1_2 needs backward computation.
+I0905 17:28:22.538463 11265 net.cpp:198] elu1_1 needs backward computation.
+I0905 17:28:22.538470 11265 net.cpp:198] batchnorm1_1 needs backward computation.
+I0905 17:28:22.538473 11265 net.cpp:198] conv1_1 needs backward computation.
+I0905 17:28:22.538480 11265 net.cpp:198] batchnorm0 needs backward computation.
+I0905 17:28:22.538486 11265 net.cpp:200] label_data_1_split does not need backward computation.
+I0905 17:28:22.538492 11265 net.cpp:200] data does not need backward computation.
+I0905 17:28:22.538496 11265 net.cpp:242] This network produces output accuracy
+I0905 17:28:22.538502 11265 net.cpp:242] This network produces output loss
+I0905 17:28:22.538507 11265 net.cpp:242] This network produces output per_class_accuracy
+I0905 17:28:22.538538 11265 net.cpp:255] Network initialization done.
+I0905 17:28:22.538635 11265 solver.cpp:56] Solver scaffolding done.
+I0905 17:28:22.542037 11265 caffe.cpp:248] Starting Optimization
+I0905 17:28:22.542044 11265 solver.cpp:272] Solving SegNet5
+I0905 17:28:22.542048 11265 solver.cpp:273] Learning Rate Policy: fixed
+I0905 17:28:22.545135 11265 solver.cpp:330] Iteration 0, Testing net (#0)
+I0905 17:42:09.201946 11265 solver.cpp:397]     Test net output #0: accuracy = 0.631578
+I0905 17:42:09.202505 11265 solver.cpp:397]     Test net output #1: loss = 22.8999 (* 1 = 22.8999 loss)
+I0905 17:42:09.202513 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.689051
+I0905 17:42:09.202518 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.223763
+I0905 17:42:23.280988 11265 solver.cpp:218] Iteration 0 (-8.23533e+12 iter/s, 840.746s/500 iters), loss = 0.849436
+I0905 17:42:23.281033 11265 solver.cpp:237]     Train net output #0: loss = 1.01506 (* 1 = 1.01506 loss)
+I0905 17:42:23.281041 11265 sgd_solver.cpp:105] Iteration 0, lr = 0.001
+I0905 19:39:39.567287 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_500.caffemodel
+I0905 19:39:39.601742 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_500.solverstate
+I0905 19:39:39.622625 11265 solver.cpp:330] Iteration 500, Testing net (#0)
+I0905 19:53:28.633677 11265 solver.cpp:397]     Test net output #0: accuracy = 0.801056
+I0905 19:53:28.633846 11265 solver.cpp:397]     Test net output #1: loss = 0.419497 (* 1 = 0.419497 loss)
+I0905 19:53:28.633852 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.799351
+I0905 19:53:28.633854 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.639369
+I0905 19:53:42.619542 11265 solver.cpp:218] Iteration 500 (0.0634564 iter/s, 7879.43s/500 iters), loss = 0.436178
+I0905 19:53:42.619576 11265 solver.cpp:237]     Train net output #0: loss = 0.251011 (* 1 = 0.251011 loss)
+I0905 19:53:42.619585 11265 sgd_solver.cpp:105] Iteration 500, lr = 0.001
+I0905 21:50:54.700877 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_1000.caffemodel
+I0905 21:50:54.727798 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_1000.solverstate
+I0905 21:50:54.748739 11265 solver.cpp:330] Iteration 1000, Testing net (#0)
+I0905 22:04:43.377492 11265 solver.cpp:397]     Test net output #0: accuracy = 0.800004
+I0905 22:04:43.377663 11265 solver.cpp:397]     Test net output #1: loss = 0.380167 (* 1 = 0.380167 loss)
+I0905 22:04:43.377671 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.787162
+I0905 22:04:43.377674 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.713207
+I0905 22:04:57.359155 11265 solver.cpp:218] Iteration 1000 (0.063494 iter/s, 7874.76s/500 iters), loss = 0.379541
+I0905 22:04:57.359189 11265 solver.cpp:237]     Train net output #0: loss = 0.306373 (* 1 = 0.306373 loss)
+I0905 22:04:57.359196 11265 sgd_solver.cpp:105] Iteration 1000, lr = 0.001
+I0906 00:02:09.059557 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_1500.caffemodel
+I0906 00:02:09.086091 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_1500.solverstate
+I0906 00:02:09.106981 11265 solver.cpp:330] Iteration 1500, Testing net (#0)
+I0906 00:15:58.411404 11265 solver.cpp:397]     Test net output #0: accuracy = 0.862622
+I0906 00:15:58.411577 11265 solver.cpp:397]     Test net output #1: loss = 0.367242 (* 1 = 0.367242 loss)
+I0906 00:15:58.411584 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.864962
+I0906 00:15:58.411588 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.680349
+I0906 00:16:12.392472 11265 solver.cpp:218] Iteration 1500 (0.0634915 iter/s, 7875.07s/500 iters), loss = 0.351558
+I0906 00:16:12.392505 11265 solver.cpp:237]     Train net output #0: loss = 0.339986 (* 1 = 0.339986 loss)
+I0906 00:16:12.392513 11265 sgd_solver.cpp:105] Iteration 1500, lr = 0.001
+I0906 02:13:27.152786 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_2000.caffemodel
+I0906 02:13:27.179502 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_2000.solverstate
+I0906 02:13:27.200438 11265 solver.cpp:330] Iteration 2000, Testing net (#0)
+I0906 02:27:16.406895 11265 solver.cpp:397]     Test net output #0: accuracy = 0.807163
+I0906 02:27:16.406965 11265 solver.cpp:397]     Test net output #1: loss = 0.365202 (* 1 = 0.365202 loss)
+I0906 02:27:16.406983 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.793302
+I0906 02:27:16.406991 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.71133
+I0906 02:27:30.407564 11265 solver.cpp:218] Iteration 2000 (0.0634671 iter/s, 7878.1s/500 iters), loss = 0.372835
+I0906 02:27:30.407598 11265 solver.cpp:237]     Train net output #0: loss = 0.321405 (* 1 = 0.321405 loss)
+I0906 02:27:30.407604 11265 sgd_solver.cpp:105] Iteration 2000, lr = 0.001
+I0906 04:24:50.058107 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_2500.caffemodel
+I0906 04:24:50.085079 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_2500.solverstate
+I0906 04:24:50.105952 11265 solver.cpp:330] Iteration 2500, Testing net (#0)
+I0906 04:38:38.929996 11265 solver.cpp:397]     Test net output #0: accuracy = 0.912974
+I0906 04:38:38.930131 11265 solver.cpp:397]     Test net output #1: loss = 0.568716 (* 1 = 0.568716 loss)
+I0906 04:38:38.930137 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.995192
+I0906 04:38:38.930141 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.274159
+I0906 04:38:52.923513 11265 solver.cpp:218] Iteration 2500 (0.063431 iter/s, 7882.58s/500 iters), loss = 0.327437
+I0906 04:38:52.923547 11265 solver.cpp:237]     Train net output #0: loss = 0.231291 (* 1 = 0.231291 loss)
+I0906 04:38:52.923552 11265 sgd_solver.cpp:105] Iteration 2500, lr = 0.001
+I0906 06:36:06.683256 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_3000.caffemodel
+I0906 06:36:06.710528 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_3000.solverstate
+I0906 06:36:06.731485 11265 solver.cpp:330] Iteration 3000, Testing net (#0)
+I0906 06:49:55.054139 11265 solver.cpp:397]     Test net output #0: accuracy = 0.781765
+I0906 06:49:55.054731 11265 solver.cpp:397]     Test net output #1: loss = 0.409903 (* 1 = 0.409903 loss)
+I0906 06:49:55.054738 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.761822
+I0906 06:49:55.054744 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.730176
+I0906 06:50:09.045078 11265 solver.cpp:218] Iteration 3000 (0.0634827 iter/s, 7876.17s/500 iters), loss = 0.393346
+I0906 06:50:09.045109 11265 solver.cpp:237]     Train net output #0: loss = 0.253459 (* 1 = 0.253459 loss)
+I0906 06:50:09.045116 11265 sgd_solver.cpp:105] Iteration 3000, lr = 0.001
+I0906 08:47:20.624295 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_3500.caffemodel
+I0906 08:47:20.651377 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_3500.solverstate
+I0906 08:47:20.672437 11265 solver.cpp:330] Iteration 3500, Testing net (#0)
+I0906 09:01:11.008586 11265 solver.cpp:397]     Test net output #0: accuracy = 0.880864
+I0906 09:01:11.008780 11265 solver.cpp:397]     Test net output #1: loss = 0.409522 (* 1 = 0.409522 loss)
+I0906 09:01:11.008785 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.902979
+I0906 09:01:11.008790 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.598039
+I0906 09:01:24.998780 11265 solver.cpp:218] Iteration 3500 (0.0634839 iter/s, 7876.01s/500 iters), loss = 0.373987
+I0906 09:01:24.998816 11265 solver.cpp:237]     Train net output #0: loss = 0.819722 (* 1 = 0.819722 loss)
+I0906 09:01:24.998821 11265 sgd_solver.cpp:105] Iteration 3500, lr = 0.001
+I0906 10:58:39.179493 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_4000.caffemodel
+I0906 10:58:39.206454 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_4000.solverstate
+I0906 10:58:39.227602 11265 solver.cpp:330] Iteration 4000, Testing net (#0)
+I0906 11:12:29.378558 11265 solver.cpp:397]     Test net output #0: accuracy = 0.849654
+I0906 11:12:29.378777 11265 solver.cpp:397]     Test net output #1: loss = 0.384049 (* 1 = 0.384049 loss)
+I0906 11:12:29.378783 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.847492
+I0906 11:12:29.378788 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.691282
+I0906 11:12:43.360714 11265 solver.cpp:218] Iteration 4000 (0.0634645 iter/s, 7878.42s/500 iters), loss = 0.452924
+I0906 11:12:43.360749 11265 solver.cpp:237]     Train net output #0: loss = 0.623012 (* 1 = 0.623012 loss)
+I0906 11:12:43.360754 11265 sgd_solver.cpp:105] Iteration 4000, lr = 0.001
+I0906 13:09:59.217105 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_4500.caffemodel
+I0906 13:09:59.244385 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_4500.solverstate
+I0906 13:09:59.265358 11265 solver.cpp:330] Iteration 4500, Testing net (#0)
+I0906 13:23:49.457752 11265 solver.cpp:397]     Test net output #0: accuracy = 0.916303
+I0906 13:23:49.457909 11265 solver.cpp:397]     Test net output #1: loss = 0.430926 (* 1 = 0.430926 loss)
+I0906 13:23:49.457917 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.955017
+I0906 13:23:49.457921 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.515971
+I0906 13:24:03.448663 11265 solver.cpp:218] Iteration 4500 (0.0634506 iter/s, 7880.14s/500 iters), loss = 0.390162
+I0906 13:24:03.448698 11265 solver.cpp:237]     Train net output #0: loss = 0.363273 (* 1 = 0.363273 loss)
+I0906 13:24:03.448704 11265 sgd_solver.cpp:105] Iteration 4500, lr = 0.001
+I0906 15:21:15.998953 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_5000.caffemodel
+I0906 15:21:16.025992 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_5000.solverstate
+I0906 15:21:16.047004 11265 solver.cpp:330] Iteration 5000, Testing net (#0)
+I0906 15:35:06.294886 11265 solver.cpp:397]     Test net output #0: accuracy = 0.922329
+I0906 15:35:06.294951 11265 solver.cpp:397]     Test net output #1: loss = 0.524107 (* 1 = 0.524107 loss)
+I0906 15:35:06.294957 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.992688
+I0906 15:35:06.294960 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.347073
+I0906 15:35:20.274323 11265 solver.cpp:218] Iteration 5000 (0.0634768 iter/s, 7876.89s/500 iters), loss = 0.397204
+I0906 15:35:20.274358 11265 solver.cpp:237]     Train net output #0: loss = 0.233256 (* 1 = 0.233256 loss)
+I0906 15:35:20.274363 11265 sgd_solver.cpp:105] Iteration 5000, lr = 0.001
+I0906 17:32:33.791749 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_5500.caffemodel
+I0906 17:32:33.819558 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_5500.solverstate
+I0906 17:32:33.840574 11265 solver.cpp:330] Iteration 5500, Testing net (#0)
+I0906 17:46:24.507177 11265 solver.cpp:397]     Test net output #0: accuracy = 0.924589
+I0906 17:46:24.507376 11265 solver.cpp:397]     Test net output #1: loss = 0.425243 (* 1 = 0.425243 loss)
+I0906 17:46:24.507385 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.966873
+I0906 17:46:24.507388 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.50742
+I0906 17:46:39.865483 11265 solver.cpp:218] Iteration 5500 (0.0634546 iter/s, 7879.65s/500 iters), loss = 0.321469
+I0906 17:46:39.865520 11265 solver.cpp:237]     Train net output #0: loss = 0.286519 (* 1 = 0.286519 loss)
+I0906 17:46:39.865527 11265 sgd_solver.cpp:105] Iteration 5500, lr = 0.001
+I0906 19:43:50.435070 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_6000.caffemodel
+I0906 19:43:50.462772 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_6000.solverstate
+I0906 19:43:50.483988 11265 solver.cpp:330] Iteration 6000, Testing net (#0)
+I0906 19:57:40.820852 11265 solver.cpp:397]     Test net output #0: accuracy = 0.91313
+I0906 19:57:40.821045 11265 solver.cpp:397]     Test net output #1: loss = 0.410722 (* 1 = 0.410722 loss)
+I0906 19:57:40.821053 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.945838
+I0906 19:57:40.821058 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.550949
+I0906 19:57:56.280818 11265 solver.cpp:218] Iteration 6000 (0.0634801 iter/s, 7876.49s/500 iters), loss = 0.31621
+I0906 19:57:56.280853 11265 solver.cpp:237]     Train net output #0: loss = 0.43451 (* 1 = 0.43451 loss)
+I0906 19:57:56.280859 11265 sgd_solver.cpp:105] Iteration 6000, lr = 0.001
+I0906 21:55:19.254437 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_6500.caffemodel
+I0906 21:55:19.289351 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_6500.solverstate
+I0906 21:55:19.310312 11265 solver.cpp:330] Iteration 6500, Testing net (#0)
+I0906 22:09:08.747711 11265 solver.cpp:397]     Test net output #0: accuracy = 0.924517
+I0906 22:09:08.747778 11265 solver.cpp:397]     Test net output #1: loss = 0.478748 (* 1 = 0.478748 loss)
+I0906 22:09:08.747784 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.985849
+I0906 22:09:08.747787 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.406439
+I0906 22:09:24.441293 11265 solver.cpp:218] Iteration 6500 (0.0633857 iter/s, 7888.22s/500 iters), loss = 0.341844
+I0906 22:09:24.441328 11265 solver.cpp:237]     Train net output #0: loss = 0.22672 (* 1 = 0.22672 loss)
+I0906 22:09:24.441334 11265 sgd_solver.cpp:105] Iteration 6500, lr = 0.001
+I0907 00:06:47.645043 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_7000.caffemodel
+I0907 00:06:47.672847 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_7000.solverstate
+I0907 00:06:47.693998 11265 solver.cpp:330] Iteration 7000, Testing net (#0)
+I0907 00:20:37.772581 11265 solver.cpp:397]     Test net output #0: accuracy = 0.782748
+I0907 00:20:37.772771 11265 solver.cpp:397]     Test net output #1: loss = 0.371431 (* 1 = 0.371431 loss)
+I0907 00:20:37.772778 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.758947
+I0907 00:20:37.772783 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.751337
+I0907 00:20:53.072067 11265 solver.cpp:218] Iteration 7000 (0.063382 iter/s, 7888.67s/500 iters), loss = 0.331621
+I0907 00:20:53.072099 11265 solver.cpp:237]     Train net output #0: loss = 0.307821 (* 1 = 0.307821 loss)
+I0907 00:20:53.072106 11265 sgd_solver.cpp:105] Iteration 7000, lr = 0.001
+I0907 02:18:18.359220 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_7500.caffemodel
+I0907 02:18:18.386924 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_7500.solverstate
+I0907 02:18:18.407814 11265 solver.cpp:330] Iteration 7500, Testing net (#0)
+I0907 02:32:08.465144 11265 solver.cpp:397]     Test net output #0: accuracy = 0.90513
+I0907 02:32:08.465324 11265 solver.cpp:397]     Test net output #1: loss = 0.419341 (* 1 = 0.419341 loss)
+I0907 02:32:08.465332 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.937084
+I0907 02:32:08.465337 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.543134
+I0907 02:32:23.993891 11265 solver.cpp:218] Iteration 7500 (0.0633636 iter/s, 7890.97s/500 iters), loss = 0.358305
+I0907 02:32:23.993926 11265 solver.cpp:237]     Train net output #0: loss = 0.322055 (* 1 = 0.322055 loss)
+I0907 02:32:23.993932 11265 sgd_solver.cpp:105] Iteration 7500, lr = 0.001
+I0907 04:29:48.572254 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_8000.caffemodel
+I0907 04:29:48.599222 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_8000.solverstate
+I0907 04:29:48.620167 11265 solver.cpp:330] Iteration 8000, Testing net (#0)
+I0907 04:43:39.428349 11265 solver.cpp:397]     Test net output #0: accuracy = 0.9179
+I0907 04:43:39.428519 11265 solver.cpp:397]     Test net output #1: loss = 0.57982 (* 1 = 0.57982 loss)
+I0907 04:43:39.428526 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.996047
+I0907 04:43:39.428529 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.301958
+I0907 04:43:53.430006 11265 solver.cpp:218] Iteration 8000 (0.0633754 iter/s, 7889.5s/500 iters), loss = 0.331173
+I0907 04:43:53.430039 11265 solver.cpp:237]     Train net output #0: loss = 0.259354 (* 1 = 0.259354 loss)
+I0907 04:43:53.430047 11265 sgd_solver.cpp:105] Iteration 8000, lr = 0.001
+I0907 06:41:17.385171 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_8500.caffemodel
+I0907 06:41:17.412767 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_8500.solverstate
+I0907 06:41:17.433955 11265 solver.cpp:330] Iteration 8500, Testing net (#0)
+I0907 06:55:07.871731 11265 solver.cpp:397]     Test net output #0: accuracy = 0.866262
+I0907 06:55:07.871795 11265 solver.cpp:397]     Test net output #1: loss = 0.309768 (* 1 = 0.309768 loss)
+I0907 06:55:07.871801 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.853722
+I0907 06:55:07.871805 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.751535
+I0907 06:55:21.862118 11265 solver.cpp:218] Iteration 8500 (0.0633835 iter/s, 7888.49s/500 iters), loss = 0.411045
+I0907 06:55:21.862149 11265 solver.cpp:237]     Train net output #0: loss = 0.281839 (* 1 = 0.281839 loss)
+I0907 06:55:21.862155 11265 sgd_solver.cpp:105] Iteration 8500, lr = 0.001
+I0907 08:52:45.821238 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_9000.caffemodel
+I0907 08:52:45.848510 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_9000.solverstate
+I0907 08:52:45.869370 11265 solver.cpp:330] Iteration 9000, Testing net (#0)
+I0907 09:06:35.982923 11265 solver.cpp:397]     Test net output #0: accuracy = 0.92434
+I0907 09:06:35.983114 11265 solver.cpp:397]     Test net output #1: loss = 0.35129 (* 1 = 0.35129 loss)
+I0907 09:06:35.983120 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.948595
+I0907 09:06:35.983124 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.616768
+I0907 09:06:49.983431 11265 solver.cpp:218] Iteration 9000 (0.0633861 iter/s, 7888.17s/500 iters), loss = 0.34685
+I0907 09:06:49.983466 11265 solver.cpp:237]     Train net output #0: loss = 0.282482 (* 1 = 0.282482 loss)
+I0907 09:06:49.983474 11265 sgd_solver.cpp:105] Iteration 9000, lr = 0.001
+I0907 11:04:17.856214 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_9500.caffemodel
+I0907 11:04:17.884977 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_9500.solverstate
+I0907 11:04:17.905894 11265 solver.cpp:330] Iteration 9500, Testing net (#0)
+I0907 11:18:08.824084 11265 solver.cpp:397]     Test net output #0: accuracy = 0.860827
+I0907 11:18:08.824273 11265 solver.cpp:397]     Test net output #1: loss = 0.316715 (* 1 = 0.316715 loss)
+I0907 11:18:08.824278 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.853913
+I0907 11:18:08.824282 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.719551
+I0907 11:18:22.817586 11265 solver.cpp:218] Iteration 9500 (0.0633481 iter/s, 7892.89s/500 iters), loss = 0.349607
+I0907 11:18:22.817621 11265 solver.cpp:237]     Train net output #0: loss = 0.202289 (* 1 = 0.202289 loss)
+I0907 11:18:22.817627 11265 sgd_solver.cpp:105] Iteration 9500, lr = 0.001
+I0907 13:15:41.660056 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_10000.caffemodel
+I0907 13:15:41.688108 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_10000.solverstate
+I0907 13:15:41.709051 11265 solver.cpp:330] Iteration 10000, Testing net (#0)
+I0907 13:29:34.557865 11265 solver.cpp:397]     Test net output #0: accuracy = 0.926258
+I0907 13:29:34.558017 11265 solver.cpp:397]     Test net output #1: loss = 0.378269 (* 1 = 0.378269 loss)
+I0907 13:29:34.558025 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.954716
+I0907 13:29:34.558029 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.591784
+I0907 13:29:48.593533 11265 solver.cpp:218] Iteration 10000 (0.0634048 iter/s, 7885.84s/500 iters), loss = 0.262956
+I0907 13:29:48.593565 11265 solver.cpp:237]     Train net output #0: loss = 0.245452 (* 1 = 0.245452 loss)
+I0907 13:29:48.593572 11265 sgd_solver.cpp:105] Iteration 10000, lr = 0.001
+I0907 15:27:21.054329 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_10500.caffemodel
+I0907 15:27:21.082466 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_10500.solverstate
+I0907 15:27:21.103543 11265 solver.cpp:330] Iteration 10500, Testing net (#0)
+I0907 15:41:11.089628 11265 solver.cpp:397]     Test net output #0: accuracy = 0.900149
+I0907 15:41:11.089694 11265 solver.cpp:397]     Test net output #1: loss = 0.33277 (* 1 = 0.33277 loss)
+I0907 15:41:11.089699 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.906137
+I0907 15:41:11.089704 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.695013
+I0907 15:41:25.081677 11265 solver.cpp:218] Iteration 10500 (0.0633189 iter/s, 7896.54s/500 iters), loss = 0.275292
+I0907 15:41:25.081712 11265 solver.cpp:237]     Train net output #0: loss = 0.258829 (* 1 = 0.258829 loss)
+I0907 15:41:25.081718 11265 sgd_solver.cpp:105] Iteration 10500, lr = 0.001
+I0907 17:38:52.036005 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_11000.caffemodel
+I0907 17:38:52.062484 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_11000.solverstate
+I0907 17:38:52.083544 11265 solver.cpp:330] Iteration 11000, Testing net (#0)
+I0907 17:52:42.569721 11265 solver.cpp:397]     Test net output #0: accuracy = 0.857379
+I0907 17:52:42.569913 11265 solver.cpp:397]     Test net output #1: loss = 0.32292 (* 1 = 0.32292 loss)
+I0907 17:52:42.569921 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.845516
+I0907 17:52:42.569924 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.737799
+I0907 17:52:56.589983 11265 solver.cpp:218] Iteration 11000 (0.0633589 iter/s, 7891.55s/500 iters), loss = 0.326592
+I0907 17:52:56.590018 11265 solver.cpp:237]     Train net output #0: loss = 0.249029 (* 1 = 0.249029 loss)
+I0907 17:52:56.590025 11265 sgd_solver.cpp:105] Iteration 11000, lr = 0.001
+I0907 19:50:22.040446 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_11500.caffemodel
+I0907 19:50:22.068523 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_11500.solverstate
+I0907 19:50:22.089514 11265 solver.cpp:330] Iteration 11500, Testing net (#0)
+I0907 20:04:12.449422 11265 solver.cpp:397]     Test net output #0: accuracy = 0.88374
+I0907 20:04:12.449475 11265 solver.cpp:397]     Test net output #1: loss = 0.354487 (* 1 = 0.354487 loss)
+I0907 20:04:12.449479 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.889779
+I0907 20:04:12.449483 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.669159
+I0907 20:04:26.456694 11265 solver.cpp:218] Iteration 11500 (0.0633719 iter/s, 7889.93s/500 iters), loss = 0.565091
+I0907 20:04:26.456730 11265 solver.cpp:237]     Train net output #0: loss = 0.723284 (* 1 = 0.723284 loss)
+I0907 20:04:26.456738 11265 sgd_solver.cpp:105] Iteration 11500, lr = 0.001
+I0907 22:01:50.014096 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_12000.caffemodel
+I0907 22:01:50.042320 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_12000.solverstate
+I0907 22:01:50.063302 11265 solver.cpp:330] Iteration 12000, Testing net (#0)
+I0907 22:15:40.792798 11265 solver.cpp:397]     Test net output #0: accuracy = 0.899681
+I0907 22:15:40.792863 11265 solver.cpp:397]     Test net output #1: loss = 0.334513 (* 1 = 0.334513 loss)
+I0907 22:15:40.792870 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.908265
+I0907 22:15:40.792874 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.671341
+I0907 22:15:54.799846 11265 solver.cpp:218] Iteration 12000 (0.0633841 iter/s, 7888.41s/500 iters), loss = 0.361319
+I0907 22:15:54.799880 11265 solver.cpp:237]     Train net output #0: loss = 0.472719 (* 1 = 0.472719 loss)
+I0907 22:15:54.799888 11265 sgd_solver.cpp:105] Iteration 12000, lr = 0.001
+I0908 00:13:21.990568 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_12500.caffemodel
+I0908 00:13:22.018365 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_12500.solverstate
+I0908 00:13:22.039242 11265 solver.cpp:330] Iteration 12500, Testing net (#0)
+I0908 00:27:12.576223 11265 solver.cpp:397]     Test net output #0: accuracy = 0.907537
+I0908 00:27:12.576289 11265 solver.cpp:397]     Test net output #1: loss = 0.36806 (* 1 = 0.36806 loss)
+I0908 00:27:12.576294 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.917368
+I0908 00:27:12.576298 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.668875
+I0908 00:27:26.581403 11265 solver.cpp:218] Iteration 12500 (0.0633567 iter/s, 7891.83s/500 iters), loss = 0.267952
+I0908 00:27:26.581437 11265 solver.cpp:237]     Train net output #0: loss = 0.218232 (* 1 = 0.218232 loss)
+I0908 00:27:26.581444 11265 sgd_solver.cpp:105] Iteration 12500, lr = 0.001
+I0908 02:24:49.572899 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_13000.caffemodel
+I0908 02:24:49.600512 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_13000.solverstate
+I0908 02:24:49.621484 11265 solver.cpp:330] Iteration 13000, Testing net (#0)
+I0908 02:38:40.990000 11265 solver.cpp:397]     Test net output #0: accuracy = 0.924196
+I0908 02:38:40.990207 11265 solver.cpp:397]     Test net output #1: loss = 0.475414 (* 1 = 0.475414 loss)
+I0908 02:38:40.990214 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.976038
+I0908 02:38:40.990219 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.454051
+I0908 02:38:56.343122 11265 solver.cpp:218] Iteration 13000 (0.0633731 iter/s, 7889.79s/500 iters), loss = 0.304332
+I0908 02:38:56.343155 11265 solver.cpp:237]     Train net output #0: loss = 0.236579 (* 1 = 0.236579 loss)
+I0908 02:38:56.343163 11265 sgd_solver.cpp:105] Iteration 13000, lr = 0.001
+I0908 04:36:23.115516 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_13500.caffemodel
+I0908 04:36:23.143268 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_13500.solverstate
+I0908 04:36:23.164156 11265 solver.cpp:330] Iteration 13500, Testing net (#0)
+I0908 04:50:13.762851 11265 solver.cpp:397]     Test net output #0: accuracy = 0.701236
+I0908 04:50:13.763082 11265 solver.cpp:397]     Test net output #1: loss = 0.386405 (* 1 = 0.386405 loss)
+I0908 04:50:13.763090 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.66127
+I0908 04:50:13.763094 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.778459
+I0908 04:50:29.384346 11265 solver.cpp:218] Iteration 13500 (0.0633463 iter/s, 7893.12s/500 iters), loss = 0.434895
+I0908 04:50:29.384380 11265 solver.cpp:237]     Train net output #0: loss = 0.23823 (* 1 = 0.23823 loss)
+I0908 04:50:29.384387 11265 sgd_solver.cpp:105] Iteration 13500, lr = 0.001
+I0908 06:47:52.596372 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_14000.caffemodel
+I0908 06:47:52.624181 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_14000.solverstate
+I0908 06:47:52.645208 11265 solver.cpp:330] Iteration 14000, Testing net (#0)
+I0908 07:01:42.890542 11265 solver.cpp:397]     Test net output #0: accuracy = 0.869869
+I0908 07:01:42.890738 11265 solver.cpp:397]     Test net output #1: loss = 0.575987 (* 1 = 0.575987 loss)
+I0908 07:01:42.890746 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.931099
+I0908 07:01:42.890749 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.370351
+I0908 07:01:56.893709 11265 solver.cpp:218] Iteration 14000 (0.0633909 iter/s, 7887.57s/500 iters), loss = 0.364659
+I0908 07:01:56.893744 11265 solver.cpp:237]     Train net output #0: loss = 0.272395 (* 1 = 0.272395 loss)
+I0908 07:01:56.893750 11265 sgd_solver.cpp:105] Iteration 14000, lr = 0.001
+I0908 08:59:24.180413 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_14500.caffemodel
+I0908 08:59:24.207514 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_14500.solverstate
+I0908 08:59:24.228328 11265 solver.cpp:330] Iteration 14500, Testing net (#0)
+I0908 09:13:14.057817 11265 solver.cpp:397]     Test net output #0: accuracy = 0.920175
+I0908 09:13:14.057870 11265 solver.cpp:397]     Test net output #1: loss = 0.328797 (* 1 = 0.328797 loss)
+I0908 09:13:14.057878 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.932791
+I0908 09:13:14.057881 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.669685
+I0908 09:13:28.057812 11265 solver.cpp:218] Iteration 14500 (0.0633616 iter/s, 7891.21s/500 iters), loss = 0.276103
+I0908 09:13:28.057845 11265 solver.cpp:237]     Train net output #0: loss = 0.20718 (* 1 = 0.20718 loss)
+I0908 09:13:28.057852 11265 sgd_solver.cpp:105] Iteration 14500, lr = 0.001
+I0908 11:11:06.842087 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_15000.caffemodel
+I0908 11:11:06.869745 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_15000.solverstate
+I0908 11:11:06.890844 11265 solver.cpp:330] Iteration 15000, Testing net (#0)
+I0908 11:24:57.784709 11265 solver.cpp:397]     Test net output #0: accuracy = 0.903104
+I0908 11:24:57.784909 11265 solver.cpp:397]     Test net output #1: loss = 0.340954 (* 1 = 0.340954 loss)
+I0908 11:24:57.784917 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.909456
+I0908 11:24:57.784921 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.680767
+I0908 11:25:11.798789 11265 solver.cpp:218] Iteration 15000 (0.0632608 iter/s, 7903.79s/500 iters), loss = 0.337561
+I0908 11:25:11.798823 11265 solver.cpp:237]     Train net output #0: loss = 1.24788 (* 1 = 1.24788 loss)
+I0908 11:25:11.798830 11265 sgd_solver.cpp:105] Iteration 15000, lr = 0.001
+I0908 13:22:48.260515 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_15500.caffemodel
+I0908 13:22:48.303422 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_15500.solverstate
+I0908 13:22:48.324553 11265 solver.cpp:330] Iteration 15500, Testing net (#0)
+I0908 13:36:39.890410 11265 solver.cpp:397]     Test net output #0: accuracy = 0.886187
+I0908 13:36:39.890609 11265 solver.cpp:397]     Test net output #1: loss = 0.37078 (* 1 = 0.37078 loss)
+I0908 13:36:39.890616 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.894693
+I0908 13:36:39.890620 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.678063
+I0908 13:36:53.908030 11265 solver.cpp:218] Iteration 15500 (0.0632738 iter/s, 7902.17s/500 iters), loss = 0.35645
+I0908 13:36:53.908063 11265 solver.cpp:237]     Train net output #0: loss = 0.207201 (* 1 = 0.207201 loss)
+I0908 13:36:53.908072 11265 sgd_solver.cpp:105] Iteration 15500, lr = 0.001
+I0908 15:34:31.868110 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_16000.caffemodel
+I0908 15:34:31.895618 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_16000.solverstate
+I0908 15:34:31.916870 11265 solver.cpp:330] Iteration 16000, Testing net (#0)
+I0908 15:48:23.351866 11265 solver.cpp:397]     Test net output #0: accuracy = 0.876882
+I0908 15:48:23.351917 11265 solver.cpp:397]     Test net output #1: loss = 0.450703 (* 1 = 0.450703 loss)
+I0908 15:48:23.351922 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.909712
+I0908 15:48:23.351927 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.545905
+I0908 15:48:37.371453 11265 solver.cpp:218] Iteration 16000 (0.0632628 iter/s, 7903.54s/500 iters), loss = 0.315481
+I0908 15:48:37.371485 11265 solver.cpp:237]     Train net output #0: loss = 0.299017 (* 1 = 0.299017 loss)
+I0908 15:48:37.371492 11265 sgd_solver.cpp:105] Iteration 16000, lr = 0.001
+I0908 17:46:04.775512 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_16500.caffemodel
+I0908 17:46:04.802831 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_16500.solverstate
+I0908 17:46:04.823791 11265 solver.cpp:330] Iteration 16500, Testing net (#0)
+I0908 17:59:55.414108 11265 solver.cpp:397]     Test net output #0: accuracy = 0.559536
+I0908 17:59:55.414759 11265 solver.cpp:397]     Test net output #1: loss = 0.884051 (* 1 = 0.884051 loss)
+I0908 17:59:55.414767 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.508402
+I0908 17:59:55.414772 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.74324
+I0908 18:00:09.409536 11265 solver.cpp:218] Iteration 16500 (0.0633546 iter/s, 7892.09s/500 iters), loss = 0.342991
+I0908 18:00:09.409569 11265 solver.cpp:237]     Train net output #0: loss = 0.284463 (* 1 = 0.284463 loss)
+I0908 18:00:09.409575 11265 sgd_solver.cpp:105] Iteration 16500, lr = 0.001
+I0908 19:57:29.918918 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_17000.caffemodel
+I0908 19:57:29.945993 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_17000.solverstate
+I0908 19:57:29.967751 11265 solver.cpp:330] Iteration 17000, Testing net (#0)
+I0908 20:11:20.446410 11265 solver.cpp:397]     Test net output #0: accuracy = 0.682274
+I0908 20:11:20.446601 11265 solver.cpp:397]     Test net output #1: loss = 0.391885 (* 1 = 0.391885 loss)
+I0908 20:11:20.446609 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.630687
+I0908 20:11:20.446612 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.828261
+I0908 20:11:34.438679 11265 solver.cpp:218] Iteration 17000 (0.0634109 iter/s, 7885.08s/500 iters), loss = 0.293291
+I0908 20:11:34.438711 11265 solver.cpp:237]     Train net output #0: loss = 0.341585 (* 1 = 0.341585 loss)
+I0908 20:11:34.438719 11265 sgd_solver.cpp:105] Iteration 17000, lr = 0.001
+I0908 22:08:44.926151 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_17500.caffemodel
+I0908 22:08:44.953301 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_17500.solverstate
+I0908 22:08:44.974308 11265 solver.cpp:330] Iteration 17500, Testing net (#0)
+I0908 22:22:35.365710 11265 solver.cpp:397]     Test net output #0: accuracy = 0.930993
+I0908 22:22:35.365897 11265 solver.cpp:397]     Test net output #1: loss = 0.370927 (* 1 = 0.370927 loss)
+I0908 22:22:35.365906 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.959986
+I0908 22:22:35.365911 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.578597
+I0908 22:22:49.365202 11265 solver.cpp:218] Iteration 17500 (0.0634921 iter/s, 7874.99s/500 iters), loss = 0.274096
+I0908 22:22:49.365234 11265 solver.cpp:237]     Train net output #0: loss = 0.211233 (* 1 = 0.211233 loss)
+I0908 22:22:49.365242 11265 sgd_solver.cpp:105] Iteration 17500, lr = 0.001
+I0909 00:20:15.003666 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_18000.caffemodel
+I0909 00:20:15.031415 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_18000.solverstate
+I0909 00:20:15.052453 11265 solver.cpp:330] Iteration 18000, Testing net (#0)
+I0909 00:34:05.579367 11265 solver.cpp:397]     Test net output #0: accuracy = 0.826004
+I0909 00:34:05.580092 11265 solver.cpp:397]     Test net output #1: loss = 0.649938 (* 1 = 0.649938 loss)
+I0909 00:34:05.580112 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.885503
+I0909 00:34:05.580124 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.359375
+I0909 00:34:19.581295 11265 solver.cpp:218] Iteration 18000 (0.0633691 iter/s, 7890.28s/500 iters), loss = 0.42905
+I0909 00:34:19.581329 11265 solver.cpp:237]     Train net output #0: loss = 1.76898 (* 1 = 1.76898 loss)
+I0909 00:34:19.581339 11265 sgd_solver.cpp:105] Iteration 18000, lr = 0.001
+I0909 02:31:32.791335 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_18500.caffemodel
+I0909 02:31:32.818403 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_18500.solverstate
+I0909 02:31:32.839480 11265 solver.cpp:330] Iteration 18500, Testing net (#0)
+I0909 02:45:24.047695 11265 solver.cpp:397]     Test net output #0: accuracy = 0.908518
+I0909 02:45:24.047876 11265 solver.cpp:397]     Test net output #1: loss = 0.371759 (* 1 = 0.371759 loss)
+I0909 02:45:24.047883 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.929094
+I0909 02:45:24.047891 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.627687
+I0909 02:45:38.057735 11265 solver.cpp:218] Iteration 18500 (0.0634636 iter/s, 7878.53s/500 iters), loss = 0.337018
+I0909 02:45:38.057773 11265 solver.cpp:237]     Train net output #0: loss = 0.395269 (* 1 = 0.395269 loss)
+I0909 02:45:38.057782 11265 sgd_solver.cpp:105] Iteration 18500, lr = 0.001
+I0909 04:43:00.902339 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_19000.caffemodel
+I0909 04:43:00.929155 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_19000.solverstate
+I0909 04:43:00.950124 11265 solver.cpp:330] Iteration 19000, Testing net (#0)
+I0909 04:56:51.431409 11265 solver.cpp:397]     Test net output #0: accuracy = 0.930899
+I0909 04:56:51.431475 11265 solver.cpp:397]     Test net output #1: loss = 0.34586 (* 1 = 0.34586 loss)
+I0909 04:56:51.431481 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.956039
+I0909 04:56:51.431485 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.60535
+I0909 04:57:05.433684 11265 solver.cpp:218] Iteration 19000 (0.063392 iter/s, 7887.44s/500 iters), loss = 0.422304
+I0909 04:57:05.433719 11265 solver.cpp:237]     Train net output #0: loss = 0.265126 (* 1 = 0.265126 loss)
+I0909 04:57:05.433727 11265 sgd_solver.cpp:105] Iteration 19000, lr = 0.001
+I0909 06:54:28.678668 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_19500.caffemodel
+I0909 06:54:28.705796 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_19500.solverstate
+I0909 06:54:28.726853 11265 solver.cpp:330] Iteration 19500, Testing net (#0)
+I0909 07:08:19.236306 11265 solver.cpp:397]     Test net output #0: accuracy = 0.914898
+I0909 07:08:19.236485 11265 solver.cpp:397]     Test net output #1: loss = 0.355017 (* 1 = 0.355017 loss)
+I0909 07:08:19.236491 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.930208
+I0909 07:08:19.236495 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.667657
+I0909 07:08:34.660863 11265 solver.cpp:218] Iteration 19500 (0.0633771 iter/s, 7889.28s/500 iters), loss = 0.378807
+I0909 07:08:34.660897 11265 solver.cpp:237]     Train net output #0: loss = 0.335288 (* 1 = 0.335288 loss)
+I0909 07:08:34.660903 11265 sgd_solver.cpp:105] Iteration 19500, lr = 0.001
+I0909 09:05:58.720329 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_20000.caffemodel
+I0909 09:05:58.748957 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_20000.solverstate
+I0909 09:05:58.771322 11265 solver.cpp:330] Iteration 20000, Testing net (#0)
+I0909 09:19:49.446555 11265 solver.cpp:397]     Test net output #0: accuracy = 0.89727
+I0909 09:19:49.446705 11265 solver.cpp:397]     Test net output #1: loss = 0.352869 (* 1 = 0.352869 loss)
+I0909 09:19:49.446712 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.912985
+I0909 09:19:49.446715 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.642004
+I0909 09:20:05.302065 11265 solver.cpp:218] Iteration 20000 (0.0633658 iter/s, 7890.7s/500 iters), loss = 0.355196
+I0909 09:20:05.302099 11265 solver.cpp:237]     Train net output #0: loss = 0.141797 (* 1 = 0.141797 loss)
+I0909 09:20:05.302108 11265 sgd_solver.cpp:105] Iteration 20000, lr = 0.001
+I0909 11:17:21.083134 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_20500.caffemodel
+I0909 11:17:21.110735 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_20500.solverstate
+I0909 11:17:21.131965 11265 solver.cpp:330] Iteration 20500, Testing net (#0)
+I0909 11:31:12.000007 11265 solver.cpp:397]     Test net output #0: accuracy = 0.861346
+I0909 11:31:12.000062 11265 solver.cpp:397]     Test net output #1: loss = 0.525365 (* 1 = 0.525365 loss)
+I0909 11:31:12.000071 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.906515
+I0909 11:31:12.000077 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.475448
+I0909 11:31:27.589668 11265 solver.cpp:218] Iteration 20500 (0.063433 iter/s, 7882.34s/500 iters), loss = 0.447787
+I0909 11:31:27.589702 11265 solver.cpp:237]     Train net output #0: loss = 0.392661 (* 1 = 0.392661 loss)
+I0909 11:31:27.589709 11265 sgd_solver.cpp:105] Iteration 20500, lr = 0.001
+I0909 13:28:50.684200 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_21000.caffemodel
+I0909 13:28:50.711988 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_21000.solverstate
+I0909 13:28:50.733225 11265 solver.cpp:330] Iteration 21000, Testing net (#0)
+I0909 13:42:40.360404 11265 solver.cpp:397]     Test net output #0: accuracy = 0.931927
+I0909 13:42:40.360586 11265 solver.cpp:397]     Test net output #1: loss = 0.32975 (* 1 = 0.32975 loss)
+I0909 13:42:40.360594 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.953915
+I0909 13:42:40.360599 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.628725
+I0909 13:42:54.380384 11265 solver.cpp:218] Iteration 21000 (0.0633966 iter/s, 7886.86s/500 iters), loss = 0.375082
+I0909 13:42:54.380417 11265 solver.cpp:237]     Train net output #0: loss = 0.248994 (* 1 = 0.248994 loss)
+I0909 13:42:54.380424 11265 sgd_solver.cpp:105] Iteration 21000, lr = 0.001
+I0909 15:40:27.711576 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_21500.caffemodel
+I0909 15:40:27.739084 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_21500.solverstate
+I0909 15:40:27.760030 11265 solver.cpp:330] Iteration 21500, Testing net (#0)
+I0909 15:54:17.969950 11265 solver.cpp:397]     Test net output #0: accuracy = 0.844828
+I0909 15:54:17.970017 11265 solver.cpp:397]     Test net output #1: loss = 0.725637 (* 1 = 0.725637 loss)
+I0909 15:54:17.970022 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.928212
+I0909 15:54:17.970026 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.229108
+I0909 15:54:31.960211 11265 solver.cpp:218] Iteration 21500 (0.0633101 iter/s, 7897.63s/500 iters), loss = 0.297167
+I0909 15:54:31.960247 11265 solver.cpp:237]     Train net output #0: loss = 0.190501 (* 1 = 0.190501 loss)
+I0909 15:54:31.960253 11265 sgd_solver.cpp:105] Iteration 21500, lr = 0.001
+I0909 17:51:52.519186 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_22000.caffemodel
+I0909 17:51:52.546443 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_22000.solverstate
+I0909 17:51:52.567495 11265 solver.cpp:330] Iteration 22000, Testing net (#0)
+I0909 18:05:42.686262 11265 solver.cpp:397]     Test net output #0: accuracy = 0.863137
+I0909 18:05:42.686316 11265 solver.cpp:397]     Test net output #1: loss = 0.306699 (* 1 = 0.306699 loss)
+I0909 18:05:42.686321 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.851017
+I0909 18:05:42.686326 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.755789
+I0909 18:05:56.670835 11265 solver.cpp:218] Iteration 22000 (0.0634135 iter/s, 7884.76s/500 iters), loss = 0.356362
+I0909 18:05:56.670868 11265 solver.cpp:237]     Train net output #0: loss = 0.306623 (* 1 = 0.306623 loss)
+I0909 18:05:56.670874 11265 sgd_solver.cpp:105] Iteration 22000, lr = 0.001
+I0909 20:03:15.035770 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_22500.caffemodel
+I0909 20:03:15.063179 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_22500.solverstate
+I0909 20:03:15.085557 11265 solver.cpp:330] Iteration 22500, Testing net (#0)
+I0909 20:17:05.349303 11265 solver.cpp:397]     Test net output #0: accuracy = 0.927566
+I0909 20:17:05.349501 11265 solver.cpp:397]     Test net output #1: loss = 0.521405 (* 1 = 0.521405 loss)
+I0909 20:17:05.349509 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.990591
+I0909 20:17:05.349512 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.391239
+I0909 20:17:19.361677 11265 solver.cpp:218] Iteration 22500 (0.0634296 iter/s, 7882.76s/500 iters), loss = 0.334246
+I0909 20:17:19.361712 11265 solver.cpp:237]     Train net output #0: loss = 0.372397 (* 1 = 0.372397 loss)
+I0909 20:17:19.361718 11265 sgd_solver.cpp:105] Iteration 22500, lr = 0.001
+I0909 22:14:46.246693 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_23000.caffemodel
+I0909 22:14:46.291607 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_23000.solverstate
+I0909 22:14:46.312472 11265 solver.cpp:330] Iteration 23000, Testing net (#0)
+I0909 22:28:36.173857 11265 solver.cpp:397]     Test net output #0: accuracy = 0.93119
+I0909 22:28:36.174036 11265 solver.cpp:397]     Test net output #1: loss = 0.452102 (* 1 = 0.452102 loss)
+I0909 22:28:36.174042 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.98332
+I0909 22:28:36.174046 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.464963
+I0909 22:28:50.178709 11265 solver.cpp:218] Iteration 23000 (0.0633644 iter/s, 7890.87s/500 iters), loss = 0.42382
+I0909 22:28:50.178741 11265 solver.cpp:237]     Train net output #0: loss = 0.21052 (* 1 = 0.21052 loss)
+I0909 22:28:50.178747 11265 sgd_solver.cpp:105] Iteration 23000, lr = 0.001
+I0910 00:26:10.435149 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_23500.caffemodel
+I0910 00:26:10.462244 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_23500.solverstate
+I0910 00:26:10.483155 11265 solver.cpp:330] Iteration 23500, Testing net (#0)
+I0910 00:40:00.648600 11265 solver.cpp:397]     Test net output #0: accuracy = 0.910384
+I0910 00:40:00.648789 11265 solver.cpp:397]     Test net output #1: loss = 0.323916 (* 1 = 0.323916 loss)
+I0910 00:40:00.648797 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.91818
+I0910 00:40:00.648802 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.685992
+I0910 00:40:14.646065 11265 solver.cpp:218] Iteration 23500 (0.0634153 iter/s, 7884.53s/500 iters), loss = 0.299507
+I0910 00:40:14.646100 11265 solver.cpp:237]     Train net output #0: loss = 0.353225 (* 1 = 0.353225 loss)
+I0910 00:40:14.646107 11265 sgd_solver.cpp:105] Iteration 23500, lr = 0.001
+I0910 02:37:38.280001 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_24000.caffemodel
+I0910 02:37:38.307637 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_24000.solverstate
+I0910 02:37:38.328775 11265 solver.cpp:330] Iteration 24000, Testing net (#0)
+I0910 02:51:28.334089 11265 solver.cpp:397]     Test net output #0: accuracy = 0.905573
+I0910 02:51:28.334273 11265 solver.cpp:397]     Test net output #1: loss = 0.39386 (* 1 = 0.39386 loss)
+I0910 02:51:28.334280 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.906254
+I0910 02:51:28.334283 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.711584
+I0910 02:51:42.325518 11265 solver.cpp:218] Iteration 24000 (0.0633896 iter/s, 7887.73s/500 iters), loss = 0.279556
+I0910 02:51:42.325554 11265 solver.cpp:237]     Train net output #0: loss = 0.308535 (* 1 = 0.308535 loss)
+I0910 02:51:42.325562 11265 sgd_solver.cpp:105] Iteration 24000, lr = 0.001
+I0910 04:49:05.347607 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_24500.caffemodel
+I0910 04:49:05.375174 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_24500.solverstate
+I0910 04:49:05.396456 11265 solver.cpp:330] Iteration 24500, Testing net (#0)
+I0910 05:02:55.251456 11265 solver.cpp:397]     Test net output #0: accuracy = 0.865876
+I0910 05:02:55.251626 11265 solver.cpp:397]     Test net output #1: loss = 0.297852 (* 1 = 0.297852 loss)
+I0910 05:02:55.251631 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.852108
+I0910 05:02:55.251636 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.757517
+I0910 05:03:09.253618 11265 solver.cpp:218] Iteration 24500 (0.0633956 iter/s, 7886.98s/500 iters), loss = 0.312568
+I0910 05:03:09.253650 11265 solver.cpp:237]     Train net output #0: loss = 0.211379 (* 1 = 0.211379 loss)
+I0910 05:03:09.253657 11265 sgd_solver.cpp:105] Iteration 24500, lr = 0.001
+I0910 07:00:33.450057 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_25000.caffemodel
+I0910 07:00:33.478042 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_25000.solverstate
+I0910 07:00:33.499110 11265 solver.cpp:330] Iteration 25000, Testing net (#0)
+I0910 07:14:23.786648 11265 solver.cpp:397]     Test net output #0: accuracy = 0.920144
+I0910 07:14:23.786713 11265 solver.cpp:397]     Test net output #1: loss = 0.312447 (* 1 = 0.312447 loss)
+I0910 07:14:23.786720 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.930719
+I0910 07:14:23.786723 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.678114
+I0910 07:14:37.773213 11265 solver.cpp:218] Iteration 25000 (0.0633828 iter/s, 7888.58s/500 iters), loss = 0.387237
+I0910 07:14:37.773247 11265 solver.cpp:237]     Train net output #0: loss = 0.168734 (* 1 = 0.168734 loss)
+I0910 07:14:37.773253 11265 sgd_solver.cpp:105] Iteration 25000, lr = 0.001
+I0910 09:12:03.464202 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_25500.caffemodel
+I0910 09:12:03.491684 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_25500.solverstate
+I0910 09:12:03.513505 11265 solver.cpp:330] Iteration 25500, Testing net (#0)
+I0910 09:25:54.027325 11265 solver.cpp:397]     Test net output #0: accuracy = 0.929174
+I0910 09:25:54.027518 11265 solver.cpp:397]     Test net output #1: loss = 0.313673 (* 1 = 0.313673 loss)
+I0910 09:25:54.027526 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.943534
+I0910 09:25:54.027530 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.673781
+I0910 09:26:08.033366 11265 solver.cpp:218] Iteration 25500 (0.0633688 iter/s, 7890.32s/500 iters), loss = 0.287863
+I0910 09:26:08.033399 11265 solver.cpp:237]     Train net output #0: loss = 0.178414 (* 1 = 0.178414 loss)
+I0910 09:26:08.033406 11265 sgd_solver.cpp:105] Iteration 25500, lr = 0.001
+I0910 11:23:29.750802 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_26000.caffemodel
+I0910 11:23:29.778539 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_26000.solverstate
+I0910 11:23:29.799547 11265 solver.cpp:330] Iteration 26000, Testing net (#0)
+I0910 11:37:20.047267 11265 solver.cpp:397]     Test net output #0: accuracy = 0.875937
+I0910 11:37:20.047333 11265 solver.cpp:397]     Test net output #1: loss = 0.287779 (* 1 = 0.287779 loss)
+I0910 11:37:20.047338 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.863592
+I0910 11:37:20.047341 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.763241
+I0910 11:37:34.049842 11265 solver.cpp:218] Iteration 26000 (0.0634029 iter/s, 7886.08s/500 iters), loss = 0.356051
+I0910 11:37:34.049876 11265 solver.cpp:237]     Train net output #0: loss = 0.232134 (* 1 = 0.232134 loss)
+I0910 11:37:34.049882 11265 sgd_solver.cpp:105] Iteration 26000, lr = 0.001
+I0910 13:34:56.157359 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_26500.caffemodel
+I0910 13:34:56.184710 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_26500.solverstate
+I0910 13:34:56.205734 11265 solver.cpp:330] Iteration 26500, Testing net (#0)
+I0910 13:48:46.316704 11265 solver.cpp:397]     Test net output #0: accuracy = 0.916626
+I0910 13:48:46.316907 11265 solver.cpp:397]     Test net output #1: loss = 0.380706 (* 1 = 0.380706 loss)
+I0910 13:48:46.316915 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.942675
+I0910 13:48:46.316920 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.594455
+I0910 13:49:00.322691 11265 solver.cpp:218] Iteration 26500 (0.0634009 iter/s, 7886.33s/500 iters), loss = 0.417283
+I0910 13:49:00.322732 11265 solver.cpp:237]     Train net output #0: loss = 0.192255 (* 1 = 0.192255 loss)
+I0910 13:49:00.322739 11265 sgd_solver.cpp:105] Iteration 26500, lr = 0.001
+I0910 15:46:30.733464 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_27000.caffemodel
+I0910 15:46:30.760675 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_27000.solverstate
+I0910 15:46:30.781803 11265 solver.cpp:330] Iteration 27000, Testing net (#0)
+I0910 16:00:21.056849 11265 solver.cpp:397]     Test net output #0: accuracy = 0.89425
+I0910 16:00:21.057004 11265 solver.cpp:397]     Test net output #1: loss = 0.358448 (* 1 = 0.358448 loss)
+I0910 16:00:21.057013 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.901862
+I0910 16:00:21.057016 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.67972
+I0910 16:00:36.401372 11265 solver.cpp:218] Iteration 27000 (0.0633221 iter/s, 7896.14s/500 iters), loss = 0.304559
+I0910 16:00:36.401407 11265 solver.cpp:237]     Train net output #0: loss = 0.502953 (* 1 = 0.502953 loss)
+I0910 16:00:36.401414 11265 sgd_solver.cpp:105] Iteration 27000, lr = 0.001
+I0910 17:57:53.896006 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_27500.caffemodel
+I0910 17:57:53.923265 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_27500.solverstate
+I0910 17:57:53.944190 11265 solver.cpp:330] Iteration 27500, Testing net (#0)
+I0910 18:11:43.616677 11265 solver.cpp:397]     Test net output #0: accuracy = 0.897826
+I0910 18:11:43.616875 11265 solver.cpp:397]     Test net output #1: loss = 0.333756 (* 1 = 0.333756 loss)
+I0910 18:11:43.616883 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.90134
+I0910 18:11:43.616886 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.697798
+I0910 18:11:57.618949 11265 solver.cpp:218] Iteration 27500 (0.0634415 iter/s, 7881.28s/500 iters), loss = 0.401669
+I0910 18:11:57.618986 11265 solver.cpp:237]     Train net output #0: loss = 0.350592 (* 1 = 0.350592 loss)
+I0910 18:11:57.618993 11265 sgd_solver.cpp:105] Iteration 27500, lr = 0.001
+I0910 20:09:13.372870 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_28000.caffemodel
+I0910 20:09:13.400149 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_28000.solverstate
+I0910 20:09:13.421217 11265 solver.cpp:330] Iteration 28000, Testing net (#0)
+I0910 20:23:03.769199 11265 solver.cpp:397]     Test net output #0: accuracy = 0.898935
+I0910 20:23:03.769356 11265 solver.cpp:397]     Test net output #1: loss = 0.414553 (* 1 = 0.414553 loss)
+I0910 20:23:03.769363 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.925785
+I0910 20:23:03.769367 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.601889
+I0910 20:23:17.788882 11265 solver.cpp:218] Iteration 28000 (0.0634499 iter/s, 7880.23s/500 iters), loss = 0.309931
+I0910 20:23:17.788914 11265 solver.cpp:237]     Train net output #0: loss = 0.523604 (* 1 = 0.523604 loss)
+I0910 20:23:17.788920 11265 sgd_solver.cpp:105] Iteration 28000, lr = 0.001
+I0910 22:20:41.763564 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_28500.caffemodel
+I0910 22:20:41.790766 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_28500.solverstate
+I0910 22:20:41.811851 11265 solver.cpp:330] Iteration 28500, Testing net (#0)
+I0910 22:34:31.048951 11265 solver.cpp:397]     Test net output #0: accuracy = 0.894893
+I0910 22:34:31.049134 11265 solver.cpp:397]     Test net output #1: loss = 0.275404 (* 1 = 0.275404 loss)
+I0910 22:34:31.049140 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.890902
+I0910 22:34:31.049144 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.730568
+I0910 22:34:45.046649 11265 solver.cpp:218] Iteration 28500 (0.063393 iter/s, 7887.3s/500 iters), loss = 0.247666
+I0910 22:34:45.046684 11265 solver.cpp:237]     Train net output #0: loss = 0.15295 (* 1 = 0.15295 loss)
+I0910 22:34:45.046690 11265 sgd_solver.cpp:105] Iteration 28500, lr = 0.001
+I0911 00:32:08.786394 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_29000.caffemodel
+I0911 00:32:08.818378 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_29000.solverstate
+I0911 00:32:08.841790 11265 solver.cpp:330] Iteration 29000, Testing net (#0)
+I0911 00:45:59.346760 11265 solver.cpp:397]     Test net output #0: accuracy = 0.924165
+I0911 00:45:59.346957 11265 solver.cpp:397]     Test net output #1: loss = 0.49621 (* 1 = 0.49621 loss)
+I0911 00:45:59.346966 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.981886
+I0911 00:45:59.346969 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.428744
+I0911 00:46:13.347162 11265 solver.cpp:218] Iteration 29000 (0.0633845 iter/s, 7888.37s/500 iters), loss = 0.295109
+I0911 00:46:13.347198 11265 solver.cpp:237]     Train net output #0: loss = 0.185918 (* 1 = 0.185918 loss)
+I0911 00:46:13.347204 11265 sgd_solver.cpp:105] Iteration 29000, lr = 0.001
+I0911 02:43:33.157606 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_29500.caffemodel
+I0911 02:43:33.184798 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_29500.solverstate
+I0911 02:43:33.205662 11265 solver.cpp:330] Iteration 29500, Testing net (#0)
+I0911 02:57:22.564350 11265 solver.cpp:397]     Test net output #0: accuracy = 0.91315
+I0911 02:57:22.564402 11265 solver.cpp:397]     Test net output #1: loss = 0.616796 (* 1 = 0.616796 loss)
+I0911 02:57:22.564409 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.991706
+I0911 02:57:22.564412 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.313418
+I0911 02:57:36.564318 11265 solver.cpp:218] Iteration 29500 (0.0634254 iter/s, 7883.27s/500 iters), loss = 0.338105
+I0911 02:57:36.564352 11265 solver.cpp:237]     Train net output #0: loss = 0.383481 (* 1 = 0.383481 loss)
+I0911 02:57:36.564358 11265 sgd_solver.cpp:105] Iteration 29500, lr = 0.001
+I0911 04:54:58.918735 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_30000.caffemodel
+I0911 04:54:58.946074 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_30000.solverstate
+I0911 04:54:58.967118 11265 solver.cpp:330] Iteration 30000, Testing net (#0)
+I0911 05:08:49.242554 11265 solver.cpp:397]     Test net output #0: accuracy = 0.910331
+I0911 05:08:49.242751 11265 solver.cpp:397]     Test net output #1: loss = 0.36368 (* 1 = 0.36368 loss)
+I0911 05:08:49.242758 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.931939
+I0911 05:08:49.242763 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.609151
+I0911 05:09:03.237825 11265 solver.cpp:218] Iteration 30000 (0.0633978 iter/s, 7886.71s/500 iters), loss = 0.346494
+I0911 05:09:03.237859 11265 solver.cpp:237]     Train net output #0: loss = 0.274526 (* 1 = 0.274526 loss)
+I0911 05:09:03.237865 11265 sgd_solver.cpp:105] Iteration 30000, lr = 0.001
+I0911 07:06:26.179538 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_30500.caffemodel
+I0911 07:06:26.206864 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_30500.solverstate
+I0911 07:06:26.229084 11265 solver.cpp:330] Iteration 30500, Testing net (#0)
+I0911 07:20:16.532109 11265 solver.cpp:397]     Test net output #0: accuracy = 0.935219
+I0911 07:20:16.532311 11265 solver.cpp:397]     Test net output #1: loss = 0.366709 (* 1 = 0.366709 loss)
+I0911 07:20:16.532317 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.96247
+I0911 07:20:16.532321 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.605315
+I0911 07:20:30.529558 11265 solver.cpp:218] Iteration 30500 (0.0633927 iter/s, 7887.35s/500 iters), loss = 0.427405
+I0911 07:20:30.529593 11265 solver.cpp:237]     Train net output #0: loss = 0.298672 (* 1 = 0.298672 loss)
+I0911 07:20:30.529599 11265 sgd_solver.cpp:105] Iteration 30500, lr = 0.001
+I0911 09:17:55.143085 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_31000.caffemodel
+I0911 09:17:55.171042 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_31000.solverstate
+I0911 09:17:55.192095 11265 solver.cpp:330] Iteration 31000, Testing net (#0)
+I0911 09:31:44.771105 11265 solver.cpp:397]     Test net output #0: accuracy = 0.912829
+I0911 09:31:44.771157 11265 solver.cpp:397]     Test net output #1: loss = 0.553252 (* 1 = 0.553252 loss)
+I0911 09:31:44.771163 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.977263
+I0911 09:31:44.771167 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.406779
+I0911 09:31:58.771610 11265 solver.cpp:218] Iteration 31000 (0.0633849 iter/s, 7888.31s/500 iters), loss = 0.313656
+I0911 09:31:58.771644 11265 solver.cpp:237]     Train net output #0: loss = 0.614066 (* 1 = 0.614066 loss)
+I0911 09:31:58.771651 11265 sgd_solver.cpp:105] Iteration 31000, lr = 0.001
+I0911 11:29:31.038831 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_31500.caffemodel
+I0911 11:29:31.066547 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_31500.solverstate
+I0911 11:29:31.087704 11265 solver.cpp:330] Iteration 31500, Testing net (#0)
+I0911 11:43:23.639950 11265 solver.cpp:397]     Test net output #0: accuracy = 0.931991
+I0911 11:43:23.640000 11265 solver.cpp:397]     Test net output #1: loss = 0.495005 (* 1 = 0.495005 loss)
+I0911 11:43:23.640007 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.985024
+I0911 11:43:23.640009 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.458373
+I0911 11:43:37.632573 11265 solver.cpp:218] Iteration 31500 (0.0632995 iter/s, 7898.95s/500 iters), loss = 0.247822
+I0911 11:43:37.632606 11265 solver.cpp:237]     Train net output #0: loss = 0.242324 (* 1 = 0.242324 loss)
+I0911 11:43:37.632613 11265 sgd_solver.cpp:105] Iteration 31500, lr = 0.001
+I0911 13:41:05.781638 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_32000.caffemodel
+I0911 13:41:05.809718 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_32000.solverstate
+I0911 13:41:05.830584 11265 solver.cpp:330] Iteration 32000, Testing net (#0)
+I0911 13:54:56.267488 11265 solver.cpp:397]     Test net output #0: accuracy = 0.936835
+I0911 13:54:56.267689 11265 solver.cpp:397]     Test net output #1: loss = 0.410344 (* 1 = 0.410344 loss)
+I0911 13:54:56.267698 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.980303
+I0911 13:54:56.267701 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.510621
+I0911 13:55:10.271819 11265 solver.cpp:218] Iteration 32000 (0.0633503 iter/s, 7892.63s/500 iters), loss = 0.428161
+I0911 13:55:10.271854 11265 solver.cpp:237]     Train net output #0: loss = 0.257714 (* 1 = 0.257714 loss)
+I0911 13:55:10.271862 11265 sgd_solver.cpp:105] Iteration 32000, lr = 0.001
+I0911 15:52:39.612372 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_32500.caffemodel
+I0911 15:52:39.640435 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_32500.solverstate
+I0911 15:52:39.661392 11265 solver.cpp:330] Iteration 32500, Testing net (#0)
+I0911 16:06:31.062640 11265 solver.cpp:397]     Test net output #0: accuracy = 0.933649
+I0911 16:06:31.062820 11265 solver.cpp:397]     Test net output #1: loss = 0.331145 (* 1 = 0.331145 loss)
+I0911 16:06:31.062827 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.955251
+I0911 16:06:31.062831 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.625911
+I0911 16:06:45.069519 11265 solver.cpp:218] Iteration 32500 (0.0633322 iter/s, 7894.88s/500 iters), loss = 0.264577
+I0911 16:06:45.069553 11265 solver.cpp:237]     Train net output #0: loss = 0.3579 (* 1 = 0.3579 loss)
+I0911 16:06:45.069560 11265 sgd_solver.cpp:105] Iteration 32500, lr = 0.001
+I0911 18:04:17.095919 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_33000.caffemodel
+I0911 18:04:17.123162 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_33000.solverstate
+I0911 18:04:17.144119 11265 solver.cpp:330] Iteration 33000, Testing net (#0)
+I0911 18:18:07.773296 11265 solver.cpp:397]     Test net output #0: accuracy = 0.930813
+I0911 18:18:07.773474 11265 solver.cpp:397]     Test net output #1: loss = 0.30927 (* 1 = 0.30927 loss)
+I0911 18:18:07.773480 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.945074
+I0911 18:18:07.773484 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.664699
+I0911 18:18:21.787341 11265 solver.cpp:218] Iteration 33000 (0.0633167 iter/s, 7896.81s/500 iters), loss = 0.378291
+I0911 18:18:21.787372 11265 solver.cpp:237]     Train net output #0: loss = 0.205635 (* 1 = 0.205635 loss)
+I0911 18:18:21.787379 11265 sgd_solver.cpp:105] Iteration 33000, lr = 0.001
+I0911 20:15:46.022603 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_33500.caffemodel
+I0911 20:15:46.050251 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_33500.solverstate
+I0911 20:15:46.071408 11265 solver.cpp:330] Iteration 33500, Testing net (#0)
+I0911 20:29:35.935897 11265 solver.cpp:397]     Test net output #0: accuracy = 0.891338
+I0911 20:29:35.935976 11265 solver.cpp:397]     Test net output #1: loss = 0.372884 (* 1 = 0.372884 loss)
+I0911 20:29:35.935981 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.902594
+I0911 20:29:35.935986 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.655203
+I0911 20:29:49.919603 11265 solver.cpp:218] Iteration 33500 (0.063386 iter/s, 7888.18s/500 iters), loss = 0.282034
+I0911 20:29:49.919637 11265 solver.cpp:237]     Train net output #0: loss = 0.220985 (* 1 = 0.220985 loss)
+I0911 20:29:49.919643 11265 sgd_solver.cpp:105] Iteration 33500, lr = 0.001
+I0911 22:27:04.659478 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_34000.caffemodel
+I0911 22:27:04.686734 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_34000.solverstate
+I0911 22:27:04.708364 11265 solver.cpp:330] Iteration 34000, Testing net (#0)
+I0911 22:40:55.712502 11265 solver.cpp:397]     Test net output #0: accuracy = 0.90961
+I0911 22:40:55.712692 11265 solver.cpp:397]     Test net output #1: loss = 0.536873 (* 1 = 0.536873 loss)
+I0911 22:40:55.712700 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.975836
+I0911 22:40:55.712704 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.375594
+I0911 22:41:09.709069 11265 solver.cpp:218] Iteration 34000 (0.0634531 iter/s, 7879.84s/500 iters), loss = 0.323442
+I0911 22:41:09.709103 11265 solver.cpp:237]     Train net output #0: loss = 0.244875 (* 1 = 0.244875 loss)
+I0911 22:41:09.709110 11265 sgd_solver.cpp:105] Iteration 34000, lr = 0.001
+I0912 00:38:33.615133 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_34500.caffemodel
+I0912 00:38:33.642807 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_34500.solverstate
+I0912 00:38:33.663858 11265 solver.cpp:330] Iteration 34500, Testing net (#0)
+I0912 00:52:24.613790 11265 solver.cpp:397]     Test net output #0: accuracy = 0.851044
+I0912 00:52:24.613992 11265 solver.cpp:397]     Test net output #1: loss = 0.314256 (* 1 = 0.314256 loss)
+I0912 00:52:24.614001 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.843084
+I0912 00:52:24.614003 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.73891
+I0912 00:52:38.605619 11265 solver.cpp:218] Iteration 34500 (0.0633799 iter/s, 7888.94s/500 iters), loss = 0.286328
+I0912 00:52:38.605654 11265 solver.cpp:237]     Train net output #0: loss = 0.244718 (* 1 = 0.244718 loss)
+I0912 00:52:38.605662 11265 sgd_solver.cpp:105] Iteration 34500, lr = 0.001
+I0912 02:49:57.900291 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_35000.caffemodel
+I0912 02:49:57.928359 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_35000.solverstate
+I0912 02:49:57.949558 11265 solver.cpp:330] Iteration 35000, Testing net (#0)
+I0912 03:03:48.637545 11265 solver.cpp:397]     Test net output #0: accuracy = 0.940939
+I0912 03:03:48.637748 11265 solver.cpp:397]     Test net output #1: loss = 0.358153 (* 1 = 0.358153 loss)
+I0912 03:03:48.637756 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.971666
+I0912 03:03:48.637759 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.579579
+I0912 03:04:02.642258 11265 solver.cpp:218] Iteration 35000 (0.0634187 iter/s, 7884.11s/500 iters), loss = 0.383892
+I0912 03:04:02.642297 11265 solver.cpp:237]     Train net output #0: loss = 0.718406 (* 1 = 0.718406 loss)
+I0912 03:04:02.642304 11265 sgd_solver.cpp:105] Iteration 35000, lr = 0.001
+I0912 05:01:28.882748 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_35500.caffemodel
+I0912 05:01:28.910055 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_35500.solverstate
+I0912 05:01:28.931120 11265 solver.cpp:330] Iteration 35500, Testing net (#0)
+I0912 05:15:18.395892 11265 solver.cpp:397]     Test net output #0: accuracy = 0.866691
+I0912 05:15:18.396095 11265 solver.cpp:397]     Test net output #1: loss = 0.29496 (* 1 = 0.29496 loss)
+I0912 05:15:18.396101 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.856148
+I0912 05:15:18.396106 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.74532
+I0912 05:15:32.392753 11265 solver.cpp:218] Iteration 35500 (0.063373 iter/s, 7889.79s/500 iters), loss = 0.334851
+I0912 05:15:32.392791 11265 solver.cpp:237]     Train net output #0: loss = 0.278957 (* 1 = 0.278957 loss)
+I0912 05:15:32.392798 11265 sgd_solver.cpp:105] Iteration 35500, lr = 0.001
+I0912 07:12:56.478044 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_36000.caffemodel
+I0912 07:12:56.506076 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_36000.solverstate
+I0912 07:12:56.527145 11265 solver.cpp:330] Iteration 36000, Testing net (#0)
+I0912 07:26:46.319818 11265 solver.cpp:397]     Test net output #0: accuracy = 0.649951
+I0912 07:26:46.319990 11265 solver.cpp:397]     Test net output #1: loss = 0.402645 (* 1 = 0.402645 loss)
+I0912 07:26:46.319998 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.598085
+I0912 07:26:46.320003 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.808997
+I0912 07:27:00.327834 11265 solver.cpp:218] Iteration 36000 (0.0633873 iter/s, 7888.02s/500 iters), loss = 0.292321
+I0912 07:27:00.327872 11265 solver.cpp:237]     Train net output #0: loss = 0.330995 (* 1 = 0.330995 loss)
+I0912 07:27:00.327879 11265 sgd_solver.cpp:105] Iteration 36000, lr = 0.001
+I0912 09:24:21.999038 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_36500.caffemodel
+I0912 09:24:22.027756 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_36500.solverstate
+I0912 09:24:22.050158 11265 solver.cpp:330] Iteration 36500, Testing net (#0)
+I0912 09:38:13.922199 11265 solver.cpp:397]     Test net output #0: accuracy = 0.842745
+I0912 09:38:13.922399 11265 solver.cpp:397]     Test net output #1: loss = 0.344003 (* 1 = 0.344003 loss)
+I0912 09:38:13.922405 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.823732
+I0912 09:38:13.922408 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.772828
+I0912 09:38:27.930034 11265 solver.cpp:218] Iteration 36500 (0.0633902 iter/s, 7887.65s/500 iters), loss = 0.415155
+I0912 09:38:27.930066 11265 solver.cpp:237]     Train net output #0: loss = 0.314316 (* 1 = 0.314316 loss)
+I0912 09:38:27.930073 11265 sgd_solver.cpp:105] Iteration 36500, lr = 0.001
+I0912 11:35:55.507318 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_37000.caffemodel
+I0912 11:35:55.534698 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_37000.solverstate
+I0912 11:35:55.555634 11265 solver.cpp:330] Iteration 37000, Testing net (#0)
+I0912 11:49:46.716796 11265 solver.cpp:397]     Test net output #0: accuracy = 0.93372
+I0912 11:49:46.717000 11265 solver.cpp:397]     Test net output #1: loss = 0.389759 (* 1 = 0.389759 loss)
+I0912 11:49:46.717007 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.962429
+I0912 11:49:46.717012 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.597888
+I0912 11:50:00.722085 11265 solver.cpp:218] Iteration 37000 (0.0633484 iter/s, 7892.86s/500 iters), loss = 0.281651
+I0912 11:50:00.722117 11265 solver.cpp:237]     Train net output #0: loss = 0.24629 (* 1 = 0.24629 loss)
+I0912 11:50:00.722124 11265 sgd_solver.cpp:105] Iteration 37000, lr = 0.001
+I0912 13:47:23.565927 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_37500.caffemodel
+I0912 13:47:23.593760 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_37500.solverstate
+I0912 13:47:23.614629 11265 solver.cpp:330] Iteration 37500, Testing net (#0)
+I0912 14:01:13.813053 11265 solver.cpp:397]     Test net output #0: accuracy = 0.89344
+I0912 14:01:13.813278 11265 solver.cpp:397]     Test net output #1: loss = 0.331179 (* 1 = 0.331179 loss)
+I0912 14:01:13.813287 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.901355
+I0912 14:01:13.813293 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.680722
+I0912 14:01:27.802505 11265 solver.cpp:218] Iteration 37500 (0.0633942 iter/s, 7887.15s/500 iters), loss = 0.438006
+I0912 14:01:27.802539 11265 solver.cpp:237]     Train net output #0: loss = 0.208548 (* 1 = 0.208548 loss)
+I0912 14:01:27.802547 11265 sgd_solver.cpp:105] Iteration 37500, lr = 0.001
+I0912 15:58:49.417094 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_38000.caffemodel
+I0912 15:58:49.444437 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_38000.solverstate
+I0912 15:58:49.465314 11265 solver.cpp:330] Iteration 38000, Testing net (#0)
+I0912 16:12:39.196995 11265 solver.cpp:397]     Test net output #0: accuracy = 0.928153
+I0912 16:12:39.197180 11265 solver.cpp:397]     Test net output #1: loss = 0.488105 (* 1 = 0.488105 loss)
+I0912 16:12:39.197186 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.984141
+I0912 16:12:39.197190 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.449897
+I0912 16:12:53.203505 11265 solver.cpp:218] Iteration 38000 (0.0634079 iter/s, 7885.45s/500 iters), loss = 0.329546
+I0912 16:12:53.203536 11265 solver.cpp:237]     Train net output #0: loss = 0.287222 (* 1 = 0.287222 loss)
+I0912 16:12:53.203543 11265 sgd_solver.cpp:105] Iteration 38000, lr = 0.001
+I0912 18:10:22.611843 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_38500.caffemodel
+I0912 18:10:22.639906 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_38500.solverstate
+I0912 18:10:22.660964 11265 solver.cpp:330] Iteration 38500, Testing net (#0)
+I0912 18:24:13.116210 11265 solver.cpp:397]     Test net output #0: accuracy = 0.83678
+I0912 18:24:13.116345 11265 solver.cpp:397]     Test net output #1: loss = 0.31029 (* 1 = 0.31029 loss)
+I0912 18:24:13.116350 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.81481
+I0912 18:24:13.116354 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.780334
+I0912 18:24:27.136466 11265 solver.cpp:218] Iteration 38500 (0.0633396 iter/s, 7893.95s/500 iters), loss = 0.331962
+I0912 18:24:27.136498 11265 solver.cpp:237]     Train net output #0: loss = 0.470989 (* 1 = 0.470989 loss)
+I0912 18:24:27.136504 11265 sgd_solver.cpp:105] Iteration 38500, lr = 0.001
+I0912 20:21:58.420347 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_39000.caffemodel
+I0912 20:21:58.448803 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_39000.solverstate
+I0912 20:21:58.470201 11265 solver.cpp:330] Iteration 39000, Testing net (#0)
+I0912 20:35:49.062887 11265 solver.cpp:397]     Test net output #0: accuracy = 0.934389
+I0912 20:35:49.062952 11265 solver.cpp:397]     Test net output #1: loss = 0.324096 (* 1 = 0.324096 loss)
+I0912 20:35:49.062958 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.959055
+I0912 20:35:49.062961 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.613805
+I0912 20:36:03.054698 11265 solver.cpp:218] Iteration 39000 (0.0633234 iter/s, 7895.98s/500 iters), loss = 0.277917
+I0912 20:36:03.054731 11265 solver.cpp:237]     Train net output #0: loss = 0.632672 (* 1 = 0.632672 loss)
+I0912 20:36:03.054738 11265 sgd_solver.cpp:105] Iteration 39000, lr = 0.001
+I0912 22:33:14.630170 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_39500.caffemodel
+I0912 22:33:14.657385 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_39500.solverstate
+I0912 22:33:14.678334 11265 solver.cpp:330] Iteration 39500, Testing net (#0)
+I0912 22:47:06.674783 11265 solver.cpp:397]     Test net output #0: accuracy = 0.92925
+I0912 22:47:06.674890 11265 solver.cpp:397]     Test net output #1: loss = 0.472998 (* 1 = 0.472998 loss)
+I0912 22:47:06.674898 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.988675
+I0912 22:47:06.674906 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.431531
+I0912 22:47:20.673625 11265 solver.cpp:218] Iteration 39500 (0.0634705 iter/s, 7877.68s/500 iters), loss = 0.251077
+I0912 22:47:20.673658 11265 solver.cpp:237]     Train net output #0: loss = 0.349207 (* 1 = 0.349207 loss)
+I0912 22:47:20.673665 11265 sgd_solver.cpp:105] Iteration 39500, lr = 0.001
+I0913 00:44:41.583879 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_40000.caffemodel
+I0913 00:44:41.611949 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_40000.solverstate
+I0913 00:44:41.632851 11265 solver.cpp:330] Iteration 40000, Testing net (#0)
+I0913 00:58:32.448381 11265 solver.cpp:397]     Test net output #0: accuracy = 0.888154
+I0913 00:58:32.448587 11265 solver.cpp:397]     Test net output #1: loss = 0.310758 (* 1 = 0.310758 loss)
+I0913 00:58:32.448596 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.878608
+I0913 00:58:32.448599 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.756679
+I0913 00:58:46.437652 11265 solver.cpp:218] Iteration 40000 (0.063405 iter/s, 7885.82s/500 iters), loss = 0.256655
+I0913 00:58:46.437685 11265 solver.cpp:237]     Train net output #0: loss = 0.24192 (* 1 = 0.24192 loss)
+I0913 00:58:46.437691 11265 sgd_solver.cpp:105] Iteration 40000, lr = 0.001
+I0913 02:56:07.053833 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_40500.caffemodel
+I0913 02:56:07.081581 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_40500.solverstate
+I0913 02:56:07.102473 11265 solver.cpp:330] Iteration 40500, Testing net (#0)
+I0913 03:09:56.857476 11265 solver.cpp:397]     Test net output #0: accuracy = 0.890688
+I0913 03:09:56.858139 11265 solver.cpp:397]     Test net output #1: loss = 0.375274 (* 1 = 0.375274 loss)
+I0913 03:09:56.858146 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.90014
+I0913 03:09:56.858150 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.660564
+I0913 03:10:10.858649 11265 solver.cpp:218] Iteration 40500 (0.0634157 iter/s, 7884.49s/500 iters), loss = 0.270331
+I0913 03:10:10.858682 11265 solver.cpp:237]     Train net output #0: loss = 0.233153 (* 1 = 0.233153 loss)
+I0913 03:10:10.858690 11265 sgd_solver.cpp:105] Iteration 40500, lr = 0.001
+I0913 05:07:31.491013 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_41000.caffemodel
+I0913 05:07:31.518441 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_41000.solverstate
+I0913 05:07:31.541554 11265 solver.cpp:330] Iteration 41000, Testing net (#0)
+I0913 05:21:22.567031 11265 solver.cpp:397]     Test net output #0: accuracy = 0.91623
+I0913 05:21:22.567214 11265 solver.cpp:397]     Test net output #1: loss = 0.300523 (* 1 = 0.300523 loss)
+I0913 05:21:22.567221 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.92141
+I0913 05:21:22.567225 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.700928
+I0913 05:21:36.558080 11265 solver.cpp:218] Iteration 41000 (0.0634055 iter/s, 7885.76s/500 iters), loss = 0.27986
+I0913 05:21:36.558115 11265 solver.cpp:237]     Train net output #0: loss = 0.27038 (* 1 = 0.27038 loss)
+I0913 05:21:36.558121 11265 sgd_solver.cpp:105] Iteration 41000, lr = 0.001
+I0913 07:18:57.624552 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_41500.caffemodel
+I0913 07:18:57.651762 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_41500.solverstate
+I0913 07:18:57.672714 11265 solver.cpp:330] Iteration 41500, Testing net (#0)
+I0913 07:32:46.724308 11265 solver.cpp:397]     Test net output #0: accuracy = 0.932264
+I0913 07:32:46.724514 11265 solver.cpp:397]     Test net output #1: loss = 0.492479 (* 1 = 0.492479 loss)
+I0913 07:32:46.724519 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.98923
+I0913 07:32:46.724524 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.43342
+I0913 07:33:00.720338 11265 solver.cpp:218] Iteration 41500 (0.0634179 iter/s, 7884.21s/500 iters), loss = 0.251408
+I0913 07:33:00.720372 11265 solver.cpp:237]     Train net output #0: loss = 0.160766 (* 1 = 0.160766 loss)
+I0913 07:33:00.720378 11265 sgd_solver.cpp:105] Iteration 41500, lr = 0.001
+I0913 09:30:25.228565 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_42000.caffemodel
+I0913 09:30:25.256635 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_42000.solverstate
+I0913 09:30:25.277614 11265 solver.cpp:330] Iteration 42000, Testing net (#0)
+I0913 09:44:16.125362 11265 solver.cpp:397]     Test net output #0: accuracy = 0.912029
+I0913 09:44:16.125530 11265 solver.cpp:397]     Test net output #1: loss = 0.29853 (* 1 = 0.29853 loss)
+I0913 09:44:16.125536 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.913675
+I0913 09:44:16.125540 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.724427
+I0913 09:44:30.137732 11265 solver.cpp:218] Iteration 42000 (0.0633756 iter/s, 7889.48s/500 iters), loss = 0.349324
+I0913 09:44:30.137763 11265 solver.cpp:237]     Train net output #0: loss = 0.194406 (* 1 = 0.194406 loss)
+I0913 09:44:30.137770 11265 sgd_solver.cpp:105] Iteration 42000, lr = 0.001
+I0913 11:41:53.295194 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_42500.caffemodel
+I0913 11:41:53.323271 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_42500.solverstate
+I0913 11:41:53.344388 11265 solver.cpp:330] Iteration 42500, Testing net (#0)
+I0913 11:55:43.908895 11265 solver.cpp:397]     Test net output #0: accuracy = 0.897475
+I0913 11:55:43.909098 11265 solver.cpp:397]     Test net output #1: loss = 0.598464 (* 1 = 0.598464 loss)
+I0913 11:55:43.909106 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.966992
+I0913 11:55:43.909109 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.337291
+I0913 11:55:57.909102 11265 solver.cpp:218] Iteration 42500 (0.0633889 iter/s, 7887.81s/500 iters), loss = 0.281554
+I0913 11:55:57.909137 11265 solver.cpp:237]     Train net output #0: loss = 0.26194 (* 1 = 0.26194 loss)
+I0913 11:55:57.909142 11265 sgd_solver.cpp:105] Iteration 42500, lr = 0.001
+I0913 13:53:26.080575 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_43000.caffemodel
+I0913 13:53:26.108453 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_43000.solverstate
+I0913 13:53:26.129297 11265 solver.cpp:330] Iteration 43000, Testing net (#0)
+I0913 14:07:16.259022 11265 solver.cpp:397]     Test net output #0: accuracy = 0.824622
+I0913 14:07:16.259207 11265 solver.cpp:397]     Test net output #1: loss = 0.5273 (* 1 = 0.5273 loss)
+I0913 14:07:16.259214 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.858009
+I0913 14:07:16.259218 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.491598
+I0913 14:07:30.270449 11265 solver.cpp:218] Iteration 43000 (0.0633519 iter/s, 7892.42s/500 iters), loss = 0.329004
+I0913 14:07:30.270483 11265 solver.cpp:237]     Train net output #0: loss = 0.360533 (* 1 = 0.360533 loss)
+I0913 14:07:30.270489 11265 sgd_solver.cpp:105] Iteration 43000, lr = 0.001
+I0913 16:05:00.888521 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_43500.caffemodel
+I0913 16:05:00.915693 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_43500.solverstate
+I0913 16:05:00.936650 11265 solver.cpp:330] Iteration 43500, Testing net (#0)
+I0913 16:18:52.927225 11265 solver.cpp:397]     Test net output #0: accuracy = 0.934057
+I0913 16:18:52.927449 11265 solver.cpp:397]     Test net output #1: loss = 0.333328 (* 1 = 0.333328 loss)
+I0913 16:18:52.927458 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.950784
+I0913 16:18:52.927461 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.653399
+I0913 16:19:07.018153 11265 solver.cpp:218] Iteration 43500 (0.0633165 iter/s, 7896.83s/500 iters), loss = 0.421367
+I0913 16:19:07.018185 11265 solver.cpp:237]     Train net output #0: loss = 0.453818 (* 1 = 0.453818 loss)
+I0913 16:19:07.018191 11265 sgd_solver.cpp:105] Iteration 43500, lr = 0.001
+I0913 18:16:56.234884 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_44000.caffemodel
+I0913 18:16:56.263031 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_44000.solverstate
+I0913 18:16:56.284107 11265 solver.cpp:330] Iteration 44000, Testing net (#0)
+I0913 18:30:47.548481 11265 solver.cpp:397]     Test net output #0: accuracy = 0.921298
+I0913 18:30:47.548651 11265 solver.cpp:397]     Test net output #1: loss = 0.326366 (* 1 = 0.326366 loss)
+I0913 18:30:47.548660 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.92883
+I0913 18:30:47.548663 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.697307
+I0913 18:31:01.607219 11265 solver.cpp:218] Iteration 44000 (0.063174 iter/s, 7914.65s/500 iters), loss = 0.262772
+I0913 18:31:01.607252 11265 solver.cpp:237]     Train net output #0: loss = 0.359413 (* 1 = 0.359413 loss)
+I0913 18:31:01.607259 11265 sgd_solver.cpp:105] Iteration 44000, lr = 0.001
+I0913 20:29:00.636669 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_44500.caffemodel
+I0913 20:29:00.665065 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_44500.solverstate
+I0913 20:29:00.686084 11265 solver.cpp:330] Iteration 44500, Testing net (#0)
+I0913 20:42:52.961604 11265 solver.cpp:397]     Test net output #0: accuracy = 0.899273
+I0913 20:42:52.961655 11265 solver.cpp:397]     Test net output #1: loss = 0.316193 (* 1 = 0.316193 loss)
+I0913 20:42:52.961660 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.899799
+I0913 20:42:52.961665 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.725948
+I0913 20:43:07.013200 11265 solver.cpp:218] Iteration 44500 (0.0630879 iter/s, 7925.45s/500 iters), loss = 0.28245
+I0913 20:43:07.013233 11265 solver.cpp:237]     Train net output #0: loss = 0.29705 (* 1 = 0.29705 loss)
+I0913 20:43:07.013239 11265 sgd_solver.cpp:105] Iteration 44500, lr = 0.001
+I0913 22:40:40.973485 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_45000.caffemodel
+I0913 22:40:41.000759 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_45000.solverstate
+I0913 22:40:41.021697 11265 solver.cpp:330] Iteration 45000, Testing net (#0)
+I0913 22:54:31.088204 11265 solver.cpp:397]     Test net output #0: accuracy = 0.809609
+I0913 22:54:31.088402 11265 solver.cpp:397]     Test net output #1: loss = 0.318724 (* 1 = 0.318724 loss)
+I0913 22:54:31.088410 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.779133
+I0913 22:54:31.088414 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.804357
+I0913 22:54:45.115763 11265 solver.cpp:218] Iteration 45000 (0.0633059 iter/s, 7898.16s/500 iters), loss = 0.273175
+I0913 22:54:45.115797 11265 solver.cpp:237]     Train net output #0: loss = 0.223953 (* 1 = 0.223953 loss)
+I0913 22:54:45.115803 11265 sgd_solver.cpp:105] Iteration 45000, lr = 0.001
+I0914 00:52:27.437167 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_45500.caffemodel
+I0914 00:52:27.465551 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_45500.solverstate
+I0914 00:52:27.486796 11265 solver.cpp:330] Iteration 45500, Testing net (#0)
+I0914 01:06:19.808257 11265 solver.cpp:397]     Test net output #0: accuracy = 0.809007
+I0914 01:06:19.808465 11265 solver.cpp:397]     Test net output #1: loss = 0.316393 (* 1 = 0.316393 loss)
+I0914 01:06:19.808471 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.7812
+I0914 01:06:19.808475 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.795233
+I0914 01:06:33.831776 11265 solver.cpp:218] Iteration 45500 (0.0632208 iter/s, 7908.78s/500 iters), loss = 0.305432
+I0914 01:06:33.831810 11265 solver.cpp:237]     Train net output #0: loss = 0.199745 (* 1 = 0.199745 loss)
+I0914 01:06:33.831816 11265 sgd_solver.cpp:105] Iteration 45500, lr = 0.001
+I0914 03:04:09.285820 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_46000.caffemodel
+I0914 03:04:09.314039 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_46000.solverstate
+I0914 03:04:09.335095 11265 solver.cpp:330] Iteration 46000, Testing net (#0)
+I0914 03:18:00.401880 11265 solver.cpp:397]     Test net output #0: accuracy = 0.872972
+I0914 03:18:00.402076 11265 solver.cpp:397]     Test net output #1: loss = 0.290294 (* 1 = 0.290294 loss)
+I0914 03:18:00.402083 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.859658
+I0914 03:18:00.402087 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.768261
+I0914 03:18:14.423482 11265 solver.cpp:218] Iteration 46000 (0.0632859 iter/s, 7900.66s/500 iters), loss = 0.312361
+I0914 03:18:14.423516 11265 solver.cpp:237]     Train net output #0: loss = 0.33532 (* 1 = 0.33532 loss)
+I0914 03:18:14.423522 11265 sgd_solver.cpp:105] Iteration 46000, lr = 0.001
+I0914 05:15:51.406713 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_46500.caffemodel
+I0914 05:15:51.434909 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_46500.solverstate
+I0914 05:15:51.455935 11265 solver.cpp:330] Iteration 46500, Testing net (#0)
+I0914 05:29:42.187356 11265 solver.cpp:397]     Test net output #0: accuracy = 0.892154
+I0914 05:29:42.187500 11265 solver.cpp:397]     Test net output #1: loss = 0.272002 (* 1 = 0.272002 loss)
+I0914 05:29:42.187506 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.886296
+I0914 05:29:42.187510 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.747227
+I0914 05:29:56.207933 11265 solver.cpp:218] Iteration 46500 (0.0632763 iter/s, 7901.85s/500 iters), loss = 0.265018
+I0914 05:29:56.207965 11265 solver.cpp:237]     Train net output #0: loss = 0.166268 (* 1 = 0.166268 loss)
+I0914 05:29:56.207972 11265 sgd_solver.cpp:105] Iteration 46500, lr = 0.001
+I0914 07:27:30.293018 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_47000.caffemodel
+I0914 07:27:30.321220 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_47000.solverstate
+I0914 07:27:30.342170 11265 solver.cpp:330] Iteration 47000, Testing net (#0)
+I0914 07:41:20.353437 11265 solver.cpp:397]     Test net output #0: accuracy = 0.902466
+I0914 07:41:20.353641 11265 solver.cpp:397]     Test net output #1: loss = 0.315614 (* 1 = 0.315614 loss)
+I0914 07:41:20.353649 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.901873
+I0914 07:41:20.353653 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.714463
+I0914 07:41:34.378738 11265 solver.cpp:218] Iteration 47000 (0.0633053 iter/s, 7898.23s/500 iters), loss = 0.288483
+I0914 07:41:34.378770 11265 solver.cpp:237]     Train net output #0: loss = 0.152311 (* 1 = 0.152311 loss)
+I0914 07:41:34.378777 11265 sgd_solver.cpp:105] Iteration 47000, lr = 0.001
+I0914 09:39:14.686681 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_47500.caffemodel
+I0914 09:39:14.714010 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_47500.solverstate
+I0914 09:39:14.735052 11265 solver.cpp:330] Iteration 47500, Testing net (#0)
+I0914 09:53:06.375771 11265 solver.cpp:397]     Test net output #0: accuracy = 0.769807
+I0914 09:53:06.375954 11265 solver.cpp:397]     Test net output #1: loss = 0.34411 (* 1 = 0.34411 loss)
+I0914 09:53:06.375962 11265 solver.cpp:397]     Test net output #2: per_class_accuracy = 0.735745
+I0914 09:53:06.375965 11265 solver.cpp:397]     Test net output #3: per_class_accuracy = 0.786885
+I0914 09:53:20.393759 11265 solver.cpp:218] Iteration 47500 (0.0632425 iter/s, 7906.07s/500 iters), loss = 0.335958
+I0914 09:53:20.393791 11265 solver.cpp:237]     Train net output #0: loss = 0.431361 (* 1 = 0.431361 loss)
+I0914 09:53:20.393797 11265 sgd_solver.cpp:105] Iteration 47500, lr = 0.001
+I0914 11:12:53.052569 11265 solver.cpp:447] Snapshotting to binary proto file snapshots/segnet_infogain_iter_47838.caffemodel
+I0914 11:12:53.081553 11265 sgd_solver.cpp:273] Snapshotting solver state to binary proto file snapshots/segnet_infogain_iter_47838.solverstate
+I0914 11:12:53.102844 11265 solver.cpp:294] Optimization stopped early.
+I0914 11:12:53.102862 11265 caffe.cpp:259] Optimization Done.
