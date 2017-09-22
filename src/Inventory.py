@@ -29,11 +29,13 @@ def compute_distribution(label_paths):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description="Compute the occurences of the various classes in the dataset, then generate the infogain matrix H, which should be used (in Caffe) when class are very imbalanced.")
-    parser.add_argument("-i", "--input_dir", required=True,
+    parser.add_argument("--input_dir", required=True,
                         help="Directory containing the city directories, themselves containing the labels.")
+    parser.add_argument("--output_dir", required=True, help="Output directory for the infogain matrix file.")
     args = parser.parse_args()
 
     input_dir = args.input_dir
+    output_dir = args.output_dir
     cities = os.listdir(input_dir)
     label_paths = []
     for city in cities:
@@ -42,6 +44,7 @@ if __name__ == '__main__':
         label_paths += sorted(glob.glob(os.path.join(label_dir, "*")))
 
     dist = compute_distribution(label_paths)
+    print dist
     occurences = np.array(dist.values(), dtype=np.float32)
     occurences = occurences[:-1]
     L = len(occurences)
@@ -49,5 +52,5 @@ if __name__ == '__main__':
     H = np.diag(weights)
     print H
     blob = caffe.io.array_to_blobproto(H.reshape((1, 1, L, L)))
-    with open(os.path.join(input_dir, "infogainH.binaryproto"), 'wb') as f:
+    with open(os.path.join(output_dir, "infogainH.binaryproto"), 'wb') as f:
         f.write(blob.SerializeToString())
