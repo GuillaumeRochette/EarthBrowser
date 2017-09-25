@@ -54,7 +54,7 @@ def create_hdf5(couple_paths, h5_dir, max_data_per_file=2500, symmetry=False, ch
         # In the SpaceNet Dataset, the absence of building is denoted by a 0, the presence by a 1 or a 100.
         # and the boundary by a 255. But Caffe accepts only consecutive labels starting with 0.
         # label[label == 100] = 1
-        label[label == 255] = 2
+        # label[label == 255] = 2
         # SpaceNet labels are 2-D tensors/blobs, but Caffe accepts only 3-D tensors/blobs. So we expand it to 3.
         label = np.expand_dims(label, 0)
 
@@ -94,15 +94,15 @@ def create_hdf5(couple_paths, h5_dir, max_data_per_file=2500, symmetry=False, ch
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Set up the HDF5 Database with ready-for-use data.")
-    parser.add_argument("-i", "--input_dir", required=True,
+    parser.add_argument("--input_dir", required=True,
                         help="Directory containing the city directories, themselves containing data and labels.")
-    parser.add_argument("-o", "--output_dir", required=True, help="Directory where the HDF5 files will be written.")
-    parser.add_argument("-c", "--channels", help="Channels to keep for multispectral images.")
-    parser.add_argument("-r", "--ratio", default=0.9, type=float,
+    parser.add_argument("--output_dir", required=True, help="Directory where the HDF5 files will be written.")
+    parser.add_argument("--channels", help="Channels to keep for multispectral images.")
+    parser.add_argument("--ratio", default=0.9, type=float,
                         help="Ratio for train/val to be split, e.g if ratio=0.9 then 90% of the data will be for training.")
-    parser.add_argument("-m", "--max_data_per_file", type=int, default=1000,
+    parser.add_argument("--max_data_per_file", type=int, default=1000,
                         help="Maximum data to be written in each HDF5 file.")
-    parser.add_argument("-s", "--seed", help="Seed to reproduce the same dataset.")
+    parser.add_argument("--seed", help="Seed to reproduce the same dataset.")
 
     args = parser.parse_args()
 
@@ -114,13 +114,16 @@ if __name__ == '__main__':
     split_ratio = args.ratio
     seed = args.seed
     max_data_per_file = args.max_data_per_file
-    channels = args.channels
+    channels = [1, 2, 4, 6]
+    # channels = args.channels
 
     cities = os.listdir(input_dir)
 
     train_dir = os.path.join(h5_dir, "Train")
 
     val_dir = os.path.join(h5_dir, "Validation")
+    train_set_len = 0
+    val_set_len = 0
     for city in cities:
         city_dir = os.path.join(input_dir, city)
         data_dir = os.path.join(city_dir, "MUL_PAN")
@@ -137,7 +140,9 @@ if __name__ == '__main__':
             os.makedirs(city_val_dir)
 
         train_set, val_set = split_train_val_sets(data_paths, label_paths, split_ratio=split_ratio, seed=seed)
-        print "Whole set contains {} files".format(len(data_paths))
+        train_set_len += len(train_set)
+        val_set_len += len(val_set)
+        print "Whole set contains {} files".format(len(train_set) + len(val_set))
         print "Train set contains {} files.".format(len(train_set))
         print "Validation set contains {} files.".format(len(val_set))
         h5_train_list += create_hdf5(train_set, city_train_dir, max_data_per_file=max_data_per_file, symmetry=False,
@@ -145,6 +150,9 @@ if __name__ == '__main__':
         h5_val_list += create_hdf5(val_set, city_val_dir, max_data_per_file=max_data_per_file, symmetry=False,
                                    channels=channels)
 
+    print "Whole set contains {} files".format(train_set_len + val_set_len)
+    print "Train set contains {} files.".format(train_set_len)
+    print "Validation set contains {} files.".format(val_set_len)
     for a_dir, a_list in zip([train_dir, val_dir], [h5_train_list, h5_val_list]):
         h5_list_path = os.path.join(a_dir, "hdf5_list.txt")
         print "HDF5 Files indexed in {}.".format(h5_list_path)
