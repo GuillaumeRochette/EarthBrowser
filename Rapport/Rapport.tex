@@ -5,13 +5,21 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
-\usepackage{graphicx}
+\usepackage{graphicx, float}
+\usepackage{algorithm, algorithmic}
+\usepackage{csquotes}
+\usepackage{wasysym}
+\usepackage{dsfont}
 \usepackage{hyperref}
 \usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
 
 \author{Guillaume Rochette}
 \title{Stage de Fin d'Études\\
 Création d'un Moteur de Recherche dans les Images Satellite}
+
+\newcommand{\lexp}[1]{\phantom{}^{#1}}
+\newcommand{\elem}[4]{\lexp{#2}#1^{#3}_{#4}}
+
 \begin{document}
 	\maketitle
 	\tableofcontents
@@ -35,8 +43,863 @@ Création d'un Moteur de Recherche dans les Images Satellite}
 			\subsection{Échantillonnage}
 			\subsection{Interpolation d'images}
 			\subsection{Amélioration de la résolution}
+	\chapter{L'Apprentissage Machine}
+	L'apprentissage machine permet d'accomplir des tâches traditionnellement compliquées pour les ordinateurs, mais vues comme simple pour l'humain.\\
+	En effet, l'humain apprend par exemple dès le plus jeune âge à discerner les contours sur une image, d'en décrire le contenu et même de visualiser un objet sous différents angles. Des algorithmes classiques ont du mal à produire des bons résultats sur ce genre de problèmes.\\
+	À l'inverse, les ordinateurs possèdent une capacité très supérieure à l'humain pour résoudre des calculs complexes, ou des problèmes d'ordre combinatoire.\\
+	D'un point de vue scientifique et philosophique, l'apprentissage machine est très intéressant et soulève beaucoup de questions, car l'étude de l'apprentissage appliqué aux machines nous permettrait peut-être d'entrevoir certains principes définissant l'intelligence.
+	\section{Définition d'un Algorithme Apprenant}
+	Un algorithme apprenant est un algorithme capable d'utiliser des données pour accomplir des tâches. La définition la plus célèbre, proposée par T.M Mitchell, est la suivante : \\
+	\begin{displayquote}
+	On dit qu'un algorithme apprend grâce à une expérience \emph{E}, par rapport à une classe de tâches à accomplir \emph{T}, dont on peut calculer la mesure de performance (ou d'accomplissement) \emph{P}, si sa capacité d'accomplir la tâche \emph{T}, mesurée par la performance \emph{P}, s'améliore avec l'expérience \emph{E}.
+	\end{displayquote}
+	Un tel algorithme basera son apprentissage sur un jeu de données.\\
+	Un jeu de données est un ensemble d'exemples.\\
+	\begin{center}
+	Chaque exemple, noté $e$, est composé d'une entrée, notée $x$, à laquelle on peut associer, dans le cas d'un apprentissage supervisé, une sortie attendue, notée $\hat{y}$.
+	\end{center}
+		\subsection{La Tâche}
+		Le processus d'apprentissage ne représente pas la tâche. L'apprentissage symbolise les moyens d'acquérir la possibilité, qui peut-être aussi vue comme la capacité, d'accomplir une tâche en particulier.\\
+		Par exemple, si l'on veut apprendre à un robot à lire, la tâche en question sera la capacité à lire.\\
+		En apprentissage machine, une tâche, notée \emph{T}, consiste à faire, pour chaque exemple $e$, correspondre une entrée $x$ à un résultat de sortie $y$.\\
+		Une entrée $x$ est au sens statistique un individu décrit par un ensemble de variables.
+		\begin{center}
+		Un individu est représenté par un vecteur $x \in \mathbb{R}^n$, avec $n$ étant le nombre de variables décrivant l'individu et $x_i$ la $i$-ème variable.
+		\end{center}
+		Par exemple, une image est vue comme une matrice $I \in \mathbb{R}^{m \times n}$ de pixels, que nous pouvons projeter sur un vecteur $x \in \mathbb{R}^k$, avec $k = m \times n$.\\
+		Voici à présent un aperçu non exhaustif des tâches.
+			\subsubsection{Classification}
+			La classification consiste à déterminer, pour une entrée $x \in \mathbb{R}^n$, en sortie, une ou plusieurs parmi $k$ catégories, ou classes, associées à l'entrée.\\
+			Pour résoudre ce type de problème, l'algorithme apprenant doit produire une fonction $f : \mathbb{R}^n \in E$, avec $E$ étant un ensemble de dimension $k$.\\
+			On notera que la structure de $E$ n'est pas fixée.\\
+			On peut par exemple avoir :
+			\begin{itemize}
+				\item $E = \{1,..,k\}$, dans ce cas, la classification est dite simple, car pour tout individu $x$ donné, il ne peut correspondre qu'une seule classe.
+				\item $E = \{0,1\}^k$, dans ce cas la classification est multiple, car il peut correspondre $0$, $1$ ou plusieurs classes.
+				\item $E = \{y \in [0,1]^k/ \sum_{i=1}^{k}{y_i}=1  \}$, dans ce cas, la sortie $y$ représente une distribution de probabilité.
+			\end{itemize}
+			La classification est par exemple utilisée pour la reconnaissance d'objets, l'entrée $x$ étant l'image, et la sortie $y$, la classe de l'objet dans l'image.
+			\subsubsection{Régression}
+			La régression consiste à prédire une valeur réelle en fonction d'un individu en entrée.\\
+			L'algorithme doit par conséquent se comporter comme une fonction $f : \mathbb{R}^n \rightarrow \mathbb{R}$, en faisant correspond à un individu donné $x \in \mathbb{R}^n$, une prédiction $y \in \mathbb{R}$.\\
+			On l'utilise par exemple pour l'approximation de fonctions modélisant un phénomène ou encore la prédiction des cours des actions.
+			\subsubsection{Autres applications}
+			Les deux applications citées ci-dessus sont les plus connues et les plus largement utilisées, toutefois il en existe un grand nombre telles que :
+			\begin{itemize}
+				\item La transcription, consistant à traduire des données sans structure particulière en données ayant une structure discrète. Par exemple, extraire le texte d'une image, ou la reconnaissance vocale.
+				\item La traduction, consistant à traduire une suite de caractères d'une langue à une autre.
+				\item Le débruitage, ou \emph{denoising} : Il s'agit de reconstituer à partir d'un exemple bruité $\tilde{x} \in \mathbb{R}^n$, l'original $x \in \mathbb{R}^n$, en prédisant la probabilité $p(x|\tilde{x})$, c'est à dire que $x$ soit l'original de $\tilde{x}$.
+			\end{itemize}
+		
+		\subsection{La Mesure de la Performance}
+		Afin de quantifier les performances d'un algorithme d'apprentissage machine, il nous faut définir une mesure. Cette mesure, notée \emph{P}, est généralement spécifique à la tâche \emph{T} donnée à l'algorithme.\\
+		Pour des tâches, telles que la classification, la transcription ou la traduction, on mesure généralement la précision, c'est à dire la proportion d'exemples ou la sortie proposée par le modèle est similaire à la sortie attendue.\\
+		Néanmoins, cette mesure n'est pas générale, en effet, par exemple pour une tâche de régression, si l'écart entre la sortie produite et la sortie attendue est faible mais non nul, alors faut-il considérer le modèle comme valide ?\\
+		Pour cela, nous définissons une mesure plus générale, une \emph{fonction de perte }associée.
+		Cette fonction de perte n'a pas de forme particulière car elle dépend de la tâche \emph{T} à réaliser, mais elle décroît à mesure que la sortie $y$ produite par l'algorithme est "bonne".\\
+		Afin de réaliser un bon apprentissage, il nous donc minimiser cette \emph{fonction de perte}.\\
+		L'apprentissage machine se résume donc à optimiser notre algorithme pour modéliser au mieux une situation.
+		
+		\subsection{L'Expérience}
+		On peut distinguer deux grandes classes d'algorithmes d'apprentissage machines, les algorithmes d'apprentissage \emph{non-supervisés} et \emph{supervisés}.\\
+		Une expérience \emph{E} peut être comprise comme le fait d'apprendre sur un \emph{jeu de données}.\\
+			\subsubsection{Apprentissage non supervisé}
+			Les algorithmes d'apprentissage machine non-supervisés ont pour but d'apprendre sur des jeux de données ne contenant que des entrées $x$, et par exemple apprendre la distribution de probabilité $p(x)$ du jeu de données, ou bien de répartir les données dans des clusters, par le biais d'une distance donnée.\\
+			\subsubsection{Apprentissage supervisé}
+			Les algorithmes d'apprentissage machine supervisés ont pour but d'apprendre sur un jeu de données, à associer une entrée $x$ à une sortie $y$, que l'on veut proche de la sortie attendue $\hat{y}$. Ce qui peut être vu comme l'apprentissage de la probabilité de $p(y|x)$.
+	
+	\section{Contraintes d'apprentissage et régularisation}
+		\subsection{Sous-apprentissage, Sur-apprentissage et Capacité d'un algorithme apprenant}
+		L'un des défi, et intérêt, majeur en apprentissage machine est la possibilité de bien raisonner sur de nouveaux exemples encore inconnus de l'algorithme. Cette capacité de raisonnement s'appelle la généralisation.
+		En effet, un algorithme apprenant s'appuie pour l'entraînement sur un ensemble d'apprentissage, ce qui nous permet de mesurer l'\emph{erreur d'apprentissage}, terme équivalent à la \emph{fonction de perte} sur les données d'apprentissage, et ainsi de la minimiser.\\
+		Ce qui différencie un simple problème d'optimisation de l'apprentissage machine, est que nous souhaitons non seulement que notre algorithme ait une \emph{erreur d’apprentissage} faible, mais que sa capacité à généraliser, traduite par l'\emph{erreur de généralisation} ou \emph{erreur de test}, soit aussi petite que possible.\\
+	Ainsi, pour juger de l'efficacité d'un algorithme apprenant, nous devons prendre en compte l'\emph{erreur d'apprentissage}, mais aussi que la différence entre l'\emph{erreur d'apprentissage} et l'\emph{erreur de test}.
+			\subsubsection{Sous-apprentissage}
+			Le phénomène de sous-apprentissage survient lorsque pour un problème donné et un modèle choisi, l'\emph{erreur d'apprentissage} n'est pas suffisamment faible pour obtenir de bons résultats.\\
+		On peut donc interpréter le sous-apprentissage comme étant l'incapacité d'un modèle à ajuster un phénomène.\\
+			\subsubsection{Sur-apprentissage}
+			Le phénomène de sur-apprentissage survient lorsque l'écart entre l'\emph{erreur d'apprentissage} et l'\emph{erreur de test} est trop grand. Cela signifie que notre modèle, proposé par l'algorithme d'apprentissage, a été capable d'apprendre suffisamment sur les exemples d'entraînement, mais n'est pas capable de généraliser sur des exemples de test, sur lesquels il n'a pas appris.
+			\subsubsection{Capacité}
+			On peut alors définir la \emph{capacité} d'un modèle comme étant la mesure théorique de ses performances d'apprentissage mais aussi de ses performances en terme de généralisation.\\
+		Ainsi le modèle le plus adapté à notre problème aura une capacité suffisante pour apprendre correctement la fonction à produire par rapport aux données, mais ne sera pas trop grande, afin de garder un pouvoir suffisant de généralisation.
+			
+			\subsubsection{Exemple}
+			Nous allons maintenant introduire un exemple nous permettant d'illustrer ces concepts.\\
+			La tâche \emph{T} est une régression polynomiale, c'est-à-dire que nous devons trouver un polynôme $P \in \mathbb{R}^{q}$ ajustant au mieux nos données.\\
+			$P$ est donc de la forme :
+			$$P(z) = b + \sum_{j=1}^{q}{w_j z^j}$$
+			L'expérience \emph{E} est un ensemble de $n$ points $(x_i,y_i)$, que l'on peut résumer en deux vecteurs :
+			$$x, y \in \mathbb{R}^n$$
+			Et la mesure de performance \emph{P}, le critère des moindres carrés, c'est-à-dire :
+			$$J_0(x,y) =\frac{1}{2} \sum_{i=1}^{n}{(P(x_i)-y_i)^2}$$
+			Si l'on considère que $P(x) = (P(x_i))_{i=1..q}$, alors on peut réécrire $J_0(x,y)$ tel que :
+			$$J_0(x,y) = \frac{1}{2} (P(x)-y)^T(P(x)-y)$$
+			Voici le nuage de $10$ points à ajuster :
+			\begin{figure}[H]
+				\begin{center}
+					\includegraphics[scale=0.5]{Images/fittingproblem.png}
+					\caption{Nuage de $10$ points à ajuster}		
+				\end{center}
+			\end{figure}
+			
+			
+			Si nous choisissons un polynôme $P \in \mathbb{R}^1$, c'est à dire de la forme $P(z) = b + wz$, en minimisant le \emph{problème des moindres carrés}, nous obtenons la courbe suivante.
+			\begin{figure}[H]
+				\begin{center}
+					\includegraphics[scale=0.5]{Images/underfitting.png}
+					\caption{Cas de sous-apprentissage}			
+				\end{center}
+			\end{figure}
+			Sans même faire d'études statistiques, on peut voir que le modèle ajuste mal les données.\\
+			Si nous choisissons par contre un polynôme $P \in \mathbb{R}^9$, en minimisant le \emph{problème des moindres carrés}, nous obtenons la courbe suivante.
+			\begin{figure}[H]
+				\begin{center}
+					\includegraphics[scale=0.5]{Images/overfitting.png}
+					\caption{Cas de sur-apprentissage}
+				\end{center}
+			\end{figure}
+			On peut s'apercevoir que même si la droite passe exactement par nos $10$ points, le modèle ne semblera pas ajuster d'éventuelles nouvelles données.
+			
+			
+			Enfin, si l'on choisit un polynôme $P \in \mathbb{R}^2$, nous ajustons tous les points du jeu de données et le modèle semble suffisamment simple pour généraliser de nouvelles données.
+			\begin{figure}[H]
+				\begin{center}
+					\includegraphics[scale=0.5]{Images/goodfitting.png}
+					\caption{Capacité du modèle adaptée}
+				\end{center}
+			\end{figure}
+		
+		\subsection{Régularisation}
+			Dans l'exemple précédent, nous avons vu que le choix du modèle influait sur sa capacité, c'est à dire de tenter de produire une fonction suffisamment générale par rapport au phénomène représenté par les données.\\
+	Afin d'améliorer les capacités de généralisation des algorithmes d'apprentissage machine, un principe, dont les premières formulations sont attribuées à Ptolémée, $II^e$ siècle, connu dans la littérature, sous le nom du Rasoir d'Occam (ou Ockham) est le suivant : 
+	\begin{displayquote}
+		Les hypothèses suffisantes les plus simples sont les plus vraisemblables.
+	\end{displayquote}
+	Ce principe de parcimonie, ou de simplicité, consiste à ne pas utiliser d'hypothèses spécifiques à un problème, si il existe des hypothèses générales plus simples répondant à ce même problème.\\
+	Ainsi pour résoudre notre problème, notre modèle doit être suffisamment performant sur un problème spécifique, mais doit être assez général pour produire des résultats corrects si l'on change quelques hypothèses.\\
+	\begin{figure}[H]
+		\begin{center}
+			\includegraphics[scale=0.5]{Images/regularization.png}
+			\caption{Dilemme du choix entre deux modèles}
+		\end{center}
+	\end{figure}
+	Dans cet exemple, nous choisirons bien entendu la courbe verte, car le modèle vert est beaucoup plus simple et nous semble plus cohérent par rapport à nos données.\\
+	Cette recherche d'un modèle optimal mais suffisamment simple peut se faire en ajoutant une composante à la mesure de performance.\\
+	En reprenant l'exemple précédent, nous pouvons ajouter à $J_0(x,y)$ une fonction $f$ arbitraire, qui aurait tendance à pénaliser l'effet de sur-apprentissage.\\
+	Cette fonction $f$ peut dépendre par exemple des coefficients $w_i$ du polynôme.\\
+	Ce qui nous donne une fonction :
+	$$J(x,y,w) = J_0(x,y) + \lambda f(w)$$
+	On peut choisir par exemple $f(w) = \sum_{i=1}^{q}{w_i^i}$ et ainsi pénaliser les coefficients d'ordre élevé, ainsi notre algorithme aura tendance à proposer des polynômes ayant des coefficients d'ordre élevé de petite taille, et ainsi réduire artificiellement l'ordre du polynôme choisi.\\
+	Le terme de \emph{régularisation} est employé pour tout modification apportée à l'algorithme apprenant visant à réduire l'\emph{erreur de généralisation}, mais pas l'\emph{erreur d'apprentissage}.
+	
+	\section{Paramétrisation et Validation d'un Algorithme}
+	La plupart des algorithmes d'apprentissage machine sont paramétrés afin de contrôler plus précisément leur apprentissage.\\
+	Ces paramètres s'appellent des \emph{hyper-paramètres}.\\
+	Par exemple dans l'exemple de la régression polynomiale, nous avons utilisé deux \emph{hyper-paramètres} :
+	\begin{itemize}
+		\item $q$ : le degré du polynôme $P$ utilisé.
+		\item $\lambda$ : le coefficient de décroissance appliquée à la fonction $f(w)$.
+	\end{itemize}
+	En effet, ces deux paramètres doivent être manuellement choisis par rapport à notre problème, en fonction de notre besoin de généralisation ($\lambda$) ou de performance sur l'apprentissage ($q$).\\
+	Afin de vérifier que notre algorithme soit correctement paramétré, il nous faut construire un troisième jeu de données, appelé ensemble de validation.\\
+	Voici les propriétés de ces jeux de données.
+	\begin{itemize}
+		\item Le premier jeu de données est l'ensemble d'apprentissage, notre algorithme apprendra donc uniquement sur cet ensemble.
+		\item Le second jeu de données est l'ensemble de test, il est indépendant du premier. Nous pourrons vérifier grâce à ce jeu de données si l'algorithme est apte à généraliser.
+		\item Le troisième jeu de données est l'ensemble de validation. En règle générale, on soustrait au jeu d'apprentissage une petite fraction de ses données. Grâce à lui, nous pouvons vérifier l'hyper-paramétrisation de notre algorithme.
+	\end{itemize}
+	Ainsi la procédure d'expérimentation est la suivante :
+	\begin{enumerate}
+		\item Choix d'un modèle.
+		\item Choix des hyper-paramètres.
+		\item Apprentissage sur l'ensemble d'apprentissage.
+		\item Estimation de la capacité de généralisation du modèle sur l'ensemble de validation.
+		\item Si la capacité à généraliser est trop faible, c'est à dire que l'\emph{erreur de validation} est trop élevée, on modifie les hyper-paramètres, puis retour à l'étape d'apprentissage, sinon on passe à l'étape suivante.
+		\item Évaluation finale des performances du modèle sur l'ensemble de test.
+		\item Si l'\emph{erreur de test} est trop élevée, alors il retourner à la première étape et choisir un nouveau modèle, sinon on valide le modèle.
+	\end{enumerate}
+	
+	\section{Optimisation}
+	Dans cette section, nous aborderons les grands principes utilisés pour réaliser l'apprentissage à proprement parler.\\
+	Nous rappelons qu'en effet le but d'un algorithme d'apprentissage machine est s'améliorer à réaliser une tâche \emph{T} grâce à une expérience \emph{E}, cette amélioration étant mesurée par \emph{P}.\\
+	Nous voulons donc ici, minimiser l'\emph{erreur d'apprentissage} afin d'améliorer nos performances sur la tâche à réaliser.\\
+		\subsection{Méthodes exactes}
+		Les méthodes exactes sont très pratiques, car elles permettent de trouver la solution de façon immédiate.\\
+		Pour résoudre le problème $min_{w}J(x,y)$, il nous faut donc annuler le gradient de la fonction de perte, soit
+		\begin{center}
+			$\nabla_{w} J(x,y) = 0$
+		\end{center}
+		Cela nécessite un certain travail en amont, dépendant entièrement du type d'algorithme utilisé.
+		De plus il n'existe \textbf{pas toujours de solution exacte unique}.
+			\subsubsection{Exemple}
+			Prenons le cas de la régression polynomiale, le problème est le suivant :
+			\begin{center}
+				$min_{w,b} J(x,y) = \frac{1}{2} (P(x)-y)^T(P(x)-y)$\\
+				$\leftrightarrow$ Trouver $w \in \mathbb{R}^q$ et $b \in \mathbb{R}$, tels que la fonction de perte $J(x,y)$ soit minimale.
+			\end{center}
+			Pour rappel, 
+				\begin{center}
+					$P(z) = b + \sum_{j=1}^{q}{w_j z^j}$,\\
+					un polynôme de degré $q$,\\
+					et $P(x) = (P(x_i))_{i=1..n}$,\\
+					le polynôme d'un vecteur $P(x)$ est le vecteur de polynômes $P(x_i)$.\\
+					Donc $P(x) = 
+					\begin{pmatrix}
+						1 & x_1 & \cdots & x_1^q \\ 
+						\vdots & \cdots  & \cdots & \vdots \\ 
+						\vdots & \cdots & \cdots & \vdots \\ 
+						1 & x_n & \cdots & x_n^q
+					\end{pmatrix} 
+					\begin{pmatrix}
+					b \\
+					w_1 \\
+					\vdots \\
+					w_n
+					\end{pmatrix}
+					= X \theta
+					$
+				\end{center}
+			On peut alors réécrire $J(x,y)$ de la façon suivante :
+			\begin{center}
+				$J(x,y) = \frac{1}{2} (P(x)-y)^T(P(x)-y) = \frac{1}{2} (X\theta-y)^T(X\theta-y)$\\
+				$\rightarrow J(x,y) =\frac{1}{2} (\theta^TX^TX\theta - 2\theta^TX^Ty + y^Ty)$
+			\end{center}
+			Il nous faut maintenant trouver le minimum de $J(x,y)$, ce qui revient à résoudre $\nabla_\theta J(x,y) = 0$\\
+			Or, grâce aux dérivées vectorielles ($\frac{\partial x^Ta}{\partial x} = a$, et $\frac{\partial x^TAx}{\partial x} = 2Ax$ )
+			\begin{center}
+				$\nabla_\theta J(x,y) = \frac{1}{2} (2X^TX\theta-2X^Ty) = X^TX\theta-X^Ty$
+			\end{center}
+			Donc,
+			\begin{center}
+				$X^TX\theta-X^Ty = 0$\\
+				$\rightarrow X^TX\theta = X^Ty$\\
+				$\rightarrow \theta = (X^TX)^{-1} X^Ty$
+			\end{center}
+			Néanmoins une méthode exacte présente des inconvénients.
+			Par exemple, pour calculer $\theta$, la complexité algorithmique est de l'ordre de $O(n^3)$, avec $n$ le nombre de données, à cause de l'inversion de matrice.\\
+			Cette complexité cubique pose donc des problèmes quand $n$ est très grand.\\
+			De plus cette méthode présente des problèmes de stabilité numérique, si le conditionnement de $X^TX$ est grand.
+		
+		\subsection{Méthodes itératives}
+		Nous avons vu dans un premier temps, que les méthodes exactes permettaient parfois avec, un peu de calcul formel, d'avoir une solution optimale à notre problème, et ce immédiatement.\\
+		Une méthode itérative, comme son nom l'indique, converge vers le résultat après plusieurs itérations.\\
+		Elles peuvent remplacer les méthodes exactes, quand celles-ci sont soit inapplicables, coûteuses ou inconnues. De plus lorsqu'un problème est mal conditionné, elles limitent la propagation des erreurs.\\
+		Il existe un grand nombre de méthodes itératives, mais nous n'en aborderons qu'une seule catégorie, car utile pour la suite, les méthodes de descente du gradient.
+		Les méthodes de descente de gradient, sont très utilisées en apprentissage machine, de par leur facilité d'implémentation, ainsi que de leur convergence plutôt rapide.\\
+			\subsubsection{Algorithme général de Descente de Gradient}
+			Voici à présent l'algorithme général du gradient, appliqué à une fonction $J(x,y,\theta)$.
+			\begin{algorithm}[H]
+				\caption{Algorithme général de Descente de Gradient}
+				\begin{algorithmic}
+				    \REQUIRE {
+				    L'ensemble des entrées $x=(x_i)_{i=1}^n$ et l'ensemble des sorties $y=(y_i)_{i=1}^n$\\
+				    $x_i$ et $y_i$ sont des vecteurs réels de dimensions quelconques,\\
+				    $\theta_0$, les paramètres initiaux du modèle,\\
+				    et $\epsilon > 0$, seuil de tolérance.
+				     }
+				    \REPEAT
+				    	\STATE Calcul de $\nabla_\theta J(x,y,\theta_k)$.
+				    	\STATE Calcul de $\alpha_k$.
+				    	\COMMENT{$\alpha_k$ peut être soit une constante, soit calculé en fonction de gradients $\nabla_\theta J(x,y,\theta)$}
+				    	\STATE $\theta_{k+1} = \theta_k - \alpha_k \nabla_\theta J(x,y,\theta_k)$.
+				    \UNTIL{$\nabla_\theta J(x,y,\theta_k) \leq \epsilon$}
+				    \RETURN $\theta_{k+1}$
+				\end{algorithmic}
+			\end{algorithm}
+			Dans notre cas, nous souhaitons minimiser la fonction de perte de associée à notre modèle par rapport aux données d'apprentissage.\\
+			Soit $x$ et $y \in \mathbb{R}^n$, les entrées et les sorties.\\
+			On pose ici $J(x,y,\theta)$ l'erreur moyenne du modèle par rapport aux données d'apprentissage.
+			$$J(x,y,\theta) = \frac{1}{n} \sum_{i=1}^{n}{J(x_i,y_i,\theta)}$$
+			Donc,
+				$$\nabla_\theta J(x,y,\theta) = \frac{1}{n} \sum_{i=1}^{n}{\nabla_\theta J(x_i,y_i,\theta)}$$
+			\			
+			\subsubsection{Méthode de Descente de Gradient Stochastique}
+			La réflexion derrière la descente de gradient stochastique est que le gradient de l'ensemble est la moyenne des gradients des couples $(x,y)$ .\\
+			D'après la Loi des Grands Nombres, $$\mathbb{E}(X) \approx \frac{1}{n} \sum_{i=1}^{n}{x_i}$$
+			Avec $X$ une distribution, dont les données $x_i$ sont issues.\\
+			Par ailleurs, si l'on échantillonne de façon uniforme $m$ individus parmi les $n$ données d'apprentissage, on aura :
+			$$\mathbb{E}(X) \approx \frac{1}{m} \sum_{i=1}^{m}{x_i}$$
+			Ainsi,
+			$$\frac{1}{n} \sum_{i=1}^{n}{x_i} \approx \frac{1}{m} \sum_{i=1}^{m}{x_i}$$
+			L'ensemble des $m$ variables extraites de $x$ s'appelle \emph{mini-lot} ou \emph{mini-batch}\\
+			\begin{algorithm}[H]
+				\caption{Algorithme de Descente de Gradient Stochastique}
+				\begin{algorithmic}
+				    \REQUIRE {
+				    L'ensemble des entrées $x=(x_i)_{i=1}^n$ et l'ensemble des sorties $y=(y_i)_{i=1}^n$\\
+				    $x_i$ et $y_i$ sont des vecteurs réels de dimensions quelconques,\\
+				    $m < n$,\\
+				    $\theta_0$, les paramètres initiaux du modèle, initialisés aléatoirement,\\
+				     $\alpha > 0$, le pas de descente\\
+				     et $\epsilon > 0$, seuil de tolérance.
+				     }
+				    \REPEAT
+				    	\STATE $\hat{x},\hat{y} = sample(x,y,m)$
+				    	\STATE Calcul de $\nabla_\theta J(\hat{x},\hat{y},\theta_k)$.
+				    	\STATE Calcul de $\alpha_k$.
+				    	\COMMENT{$\alpha_k$ peut être soit une constante, soit calculé en fonction de gradients $\nabla_\theta J(x,y,\theta)$}
+				    	\STATE $\theta_{k+1} = \theta_k - \alpha_k \nabla_\theta J(\hat{x},\hat{y},\theta_k)$.
+				    \UNTIL{$\nabla_\theta J(\hat{x},\hat{y},\theta_k) \leq \epsilon$}
+				    \RETURN $\theta_{k+1}$
+				\end{algorithmic}
+			\end{algorithm}
+			L'intérêt de cette méthode repose principalement sur le fait que le gradient moyen du \emph{mini-batch} est une très bonne approximation du gradient moyen calculé sur l'ensemble des données, et nous permet ainsi d'ajuster les paramètres du modèle plus souvent, permettant généralement une convergence plus rapide.
 	\chapter{L'Apprentissage Profond}
-		\section{Généralités}
+		L'apprentissage profond se différencie de l'apprentissage machine classique particulièrement sur deux points :\\
+\begin{itemize}
+	\item Il existe des dizaines, voire des centaines de classes d'algorithmes d'apprentissage pour résoudre des tâches variées, et par extension des problèmes très variés, cependant dans le cas de l'apprentissage profond, même si il existe des différences, le principe utilisé reste globalement le même.\\
+	De ce fait leur capacité de généralisation est beaucoup plus forte, permettant ainsi de résoudre plus efficacement certains problèmes jugés difficiles à résoudre par des algorithmes d'apprentissage classiques.\\
+	\item Si le principe de l'algorithme reste globalement le même, la structure du modèle est quant à elle très variable, et il est même très important de la faire varier d'un problème à un autre, car elle est intrinsèquement dépendante du problème et de ses données.\\
+\end{itemize}
+Nous présenterons dans un premier temps le fonctionnement des réseaux totalement connectés, car les plus simples. Ainsi que différentes méthodes employées pour améliorer les performances des modèles.\\
+Puis nous verrons ensuite une variante, les réseaux convolutifs.\\
+Enfin nous aborderons succinctement différentes applications existantes appliquées à la vision.
+	\section{Réseaux Totalement Connectés}
+	Les réseaux totalement connectés, aussi appelés \emph{Fully Connected Networks} et plus anciennement \emph{Multi-Layer Perceptron}, définissent un \emph{mapping} entre un vecteur d'entrée $x$ et sa sortie associée $y$ de sorte que $y = f(x,\theta)$ et apprennent $\theta$ de sorte à produire la meilleure estimation.\\
+	Ils sont dits "\emph{feedforward}", ou en français à "propagation unique", car l'information se déplace à travers la fonction, depuis l'entrée $x$, puis par des étapes intermédiaires, pour arriver à la sortie $y$, sans aucun retour en arrière.\\
+	Les réseaux de neurones permettant un \emph{feedback} ou \emph{retour d'expérience} sont appelés font partie de la classe des réseaux récurrents.\\
+	Les réseaux de types "\emph{feedforward}" sont de loin les réseaux de neurones les plus utilisés.\\
+	On utilise le mot \emph{réseau} dans l’appellation réseaux de neurones, car ils sont composés d'une multitude de fonctions \emph{simples}, organisées en réseau.\\
+	On pourrait par exemple imaginer notre fonction $f(x,\theta)$ comme étant la composée de plusieurs fonctions, telle que $f(x,\theta) = u_{\theta_1} \circ v_{\theta_2} \circ w_{\theta_3}(x)$ avec $\theta = (\theta_1,\theta_2, \theta_3))$, un ensemble de paramètres.\\
+	C'est par ailleurs cette architecture distribuée, qui grâce à une puissance de calcul grandissante, par le biais du calcul GPU, permet de résoudre des problèmes de plus en plus complexes.
+		\subsection{Définition d'un Neurone Totalement Connecté}
+		Ce que l'on appelle \emph{neurone} est effectivement inspiré du fonctionnement d'un neurone biologique, bien que différent à bien des égards.\\
+			Un neurone artificiel est une application $f : \mathbb{R}^p \rightarrow \mathbb{R}$, paramétrée par $\theta = (b,w) = (b, w_1, ..., w_p)$.\\
+			Le réel $b$ s'appelle le biais, et le vecteur $w = (w_1, ..., w_p)$ s'appelle vecteur de poids.
+			\begin{figure}[H]
+				\begin{center}
+					\includegraphics[scale=0.5]{Images/neuron.png}
+					\caption{Schéma de représentation d'un Neurone}
+				\end{center}
+			\end{figure}
+			Cette application est la composée de deux fonctions distinctes :
+			\begin{itemize}
+				\item Une fonction d’\emph{agrégation} $h : \mathbb{R}^p \rightarrow \mathbb{R}$, combinant l'entrée $x$ avec les poids $w$ et le biais $b$.\\
+				Dans la quasi-totalité des cas, elle à l'allure suivante :
+				$$h_\theta(x) = h_{b,w}(x) = w^Tx + b = \sum_{i=1}^{p}{w_i x_i} + b$$
+				\item Une fonction d'\emph{activation} $g : \mathbb{R} \rightarrow \mathbb{R}$, \emph{non-linéaire}.\\
+				Des exemples :
+				\begin{itemize}
+					\item \emph{ReLU}, pour \emph{Rectified Linear Unit} : $g(z) = max(0,z)$
+					\item \emph{Sigmoïde} : $g(z) = \frac{1}{1+e^{-z}}$
+					\item \emph{Tangente hyperbolique} : $g(z) = \tanh(z)$
+				\end{itemize}
+			\end{itemize}
+		Ainsi notre neurone peut être résumé par une fonction $f$ telle que :
+		$$f_\theta(x) = g \circ h_\theta(x) = g(w^Tx + b)$$
+		La sortie de notre neurone, par la suite notée $a$, est l'\emph{image} de la fonction $f$ par l'entrée $x$:
+		$$a = f_\theta(x) = g \circ h_\theta(x) = g(w^Tx + b)$$
+		\subsection{Définition d'un Réseau de Neurones}
+		Avec la définition précédente d'un neurone, nous pouvons alors schématiser un réseau de neurones de la façon suivante :
+		\begin{figure}[H]
+			\begin{center}
+				\includegraphics[scale=0.5]{Images/neuralnetwork.png}
+				\caption{Schéma de représentation d'un Réseau de Neurones}
+			\end{center}
+		\end{figure}
+		Ici, chaque cercle représente un neurone, équivalent à ceux définis précédemment.\\
+		Toutefois, sur la première couche, appelée \emph{couche d'entrée}, les neurones produisent en sortie, le \emph{vecteur d'entrée} $x$.\\
+		On peut noter aussi que la dernière couche, appelée \emph{couche de sortie}, les neurones produisent le vecteur $y$, ici $y\in \mathbb{R}^1 = \mathbb{R}$.\\
+		Ainsi, pour décrire un réseau de neurones, nous mesurerons deux caractéristiques :
+		\subsubsection{Largeur}
+		\begin{center}
+			Le nombre de neurones composant une couche est appelé \emph{largeur}.\\
+		\end{center}
+		Nous pouvons par ailleurs noter que le nombre de paramètres $\theta = (b,w) = (b,w_1,..,w_p)$ d'un neurone n'est pas arbitraire.\\
+		En effet, la \emph{largeur} de chaque couche est égale au nombre de paramètres $\theta$ des neurones de la couche suivante.\\
+		Par ailleurs, la \emph{largeur} de la première couche est égale à la taille du vecteur d'entrée $x$.\\
+		
+		\subsubsection{Profondeur}
+		\begin{center}
+			Le nombre de couches d'un réseau de neurones est appelé \emph{profondeur}, plus ce nombre est élevé, plus la capacité théorique de généralisation est forte.
+		\end{center}
+		Même si il n'existe pas de seuil officiel différenciant les réseaux de neurones, \emph{peu profonds}, dits \emph{superficiels}, des réseaux de neurones \emph{profonds}, on parle d'\emph{apprentissage profond} lorsque le nombre de couches cachées est $\geq 2$.\\
+		On parlera d'apprentissage très profond, lorsque le nombre de couches cachées est $\geq 10$.\\
+		\subsubsection{Expression générale}
+		On explicitera généralement l'architecture d'un réseau de neurones par un vecteur $s \in \mathbb{N}^L$.\\
+		Ainsi $S = (S_1, S_2, ..., S_L)$ représente un réseau de neurones de \emph{profondeur} $L$ ($L$ couches), chacune possédant $s_i$ neurones ayant $s_{i-1}$ poids et un biais par neurone.
+		\subsection{Notations}
+		Afin de ne pas se perdre dans les calculs qui vont survenir, nous allons définir une notation nous permettant de repérer sans ambiguïté la position des différents éléments d'un réseau de neurones.
+		\begin{center}
+		\emph{\textbf{Important !}}
+		\end{center}
+		Chaque élément du réseau de neurones peut être défini par sa position dans le réseau.\\
+		Pour les \emph{poids} :
+		\begin{itemize}
+			\item Un poids \emph{réel} noté $\elem{w}{k}{j}{i}$ sera le $i$-ème poids du $j$-ème neurone, situé dans la $k$-ème couche.
+			\item Par conséquent $\elem{w}{k}{j}{}$ sera quant à lui le vecteur de poids du $j$-ème neurone, situé dans la $k$-ème couche.
+			\item Enfin $\elem{w}{k}{}{}$ sera la matrice des poids de la $k$-ème couche.\\
+		\end{itemize}
+		Pour les \emph{biais} :
+		\begin{itemize}
+			\item Un biais \emph{réel} noté $\elem{b}{k}{j}{}$ sera le biais du $j$-ème neurone, situé dans la $k$-ème couche.
+			\item Par conséquent $\elem{b}{k}{}{}$ sera quant à lui le vecteur de biais de la $k$-ème couche.\\
+		\end{itemize}
+		Nous noterons par ailleurs avec la lettre $a$, qui sera indicée par la suite, la sortie d'une couche du réseau.\\
+		Pour les \emph{sorties} :
+		\begin{itemize}
+			\item Une sortie d'un neurone noté $\elem{a}{k}{j}{}$ sera la sortie du $j$-ème neurone, situé dans la $k$-ème couche.
+			\item Par conséquent $\elem{a}{k}{}{}$ représente le vecteur de sortie de la $k$-ème couche, mais aussi le vecteur d'entrée de la $(k+1)$-ème couche.
+			\item Le vecteur d'entrée $x$, sera noté $\elem{a}{0}{}{}$.
+			\item Le vecteur de sortie $y$, sera noté $\elem{a}{L}{}{}$ dans réseau de $L$ couches.\\
+		\end{itemize}
+		Enfin, les résultats de la fonction de combinaison sont de même dimensions que les sorties de couche.\\
+		Pour les \emph{combinaisons} :
+		\begin{itemize}
+			\item Une combinaison noté $\elem{z}{k}{j}{}$ sera la combinaison du $j$-ème neurone, situé dans la $k$-ème couche.
+			\item Par conséquent $\elem{z}{k}{}{}$ représente le vecteur des combinaisons de la $k$-ème couche.\\
+		\end{itemize}
+			
+		\subsection{Propagation}
+			On parle de \emph{propagation à sens unique} dans un réseau de neurones, car l'entrée $x$, affectée à la première couche, est transmise à la suivante, qui produira alors un vecteur de sortie.\\
+			Ce vecteur de sortie sera alors considéré comme un vecteur d'entrée pour la couche suivante, qui produira à l'aide de cette entrée un autre vecteur de sortie.\\
+			Et ainsi de suite, jusqu'à la dernière couche, qui produira finalement la sortie du réseau : $y$.\\			
+			Nous voilà à présent correctement armés pour voir la propagation dans un réseau de neurones.\\
+			Voici l'algorithme de propagation au sein d'un réseau de neurones : 
+			\begin{algorithm}[H]
+				\caption{Algorithme de Propagation}
+				\begin{algorithmic}
+				    \REQUIRE {
+				    Un réseau de neurones de $L$ couches, défini par $S = (S_1, S_2, ..., S_L)$.\\
+				    Un vecteur d'entrée $x \in \mathbb{R}^n = \mathbb{R}^{S_1}$,\\
+				     }
+				    \STATE $\elem{a}{0}{}{} = x$
+				    \FOR{$k=1$ \TO $L$}
+				    	\FOR{$j=1$ \TO $S_k$}
+				    		\STATE $\elem{z}{k}{j}{} = (\elem{w}{k}{j}{})^T(\elem{a}{k-1}{}{}) + \elem{b}{k}{j}{} = \sum_{i=1}^{S_{k-1}}{\elem{w}{k}{j}{i} \times \elem{a}{k-1}{i}{}} + \elem{b}{k}{j}{}$
+				    		\STATE $\elem{a}{k}{j}{} = g(\elem{z}{k}{j}{})$\\
+				    		\COMMENT{$\elem{a}{k}{j}{}$ est, comme vu précédemment, la sortie du $j$-ème neurone de la $k$-ème couche,\\
+				    		$\elem{z}{k}{j}{}$ est le résultat de la fonction d'agrégation, résultat très utile par la suite.
+				    		$\elem{w}{k}{j}{}$ est le vecteur de poids du $j$-ème neurone de la $k$-ème couche,\\
+				    		et $\elem{b}{k}{j}{}$ est le biais du $j$-ème neurone de la $k$-ème couche.}
+				    	\ENDFOR
+				    \ENDFOR
+				    \RETURN $\elem{a}{L}{}{}$
+				    \COMMENT{$\elem{a}{L}{}{}$ est la sortie du réseau de neurones, que nous comparerons ensuite à $y$.}
+				\end{algorithmic}
+			\end{algorithm}
+			
+			Néanmoins, il existe aujourd'hui un grand nombre de bibliothèques permettant de faire du calcul matriciel de façon optimisée, appelées Basic Linear Algebra Subprograms (BLAS), telles que ATLAS, GotoBLAS, OpenBLAS.\\
+			Pour rappel, $\elem{w}{k}{}{}$ représente la matrice des poids de la $k$-ème couche, et $\elem{a}{k-1}{}{}$ le vecteur de sortie de la $(k-1)$-ème couche.\\
+			Par conséquent, on peut calculer le vecteur de sortie de la $k$-ème couche de la façon suivante :
+			$$\elem{z}{k}{}{} = (\elem{w}{k}{}{})^T(\elem{a}{k-1}{}{}) + \elem{b}{k}{}{}$$
+			$$\elem{a}{k}{}{} = g(\elem{z}{k}{}{})$$
+			Ce qui nous permet alors d'écrire l'algorithme de propagation de façon matricielle (et laisser aux bibliothèques de calcul matriciel le soin d'optimiser les calculs):
+			\begin{algorithm}[H]
+				\caption{Algorithme matriciel de Propagation}
+				\begin{algorithmic}
+				    \REQUIRE {
+				    Un réseau de neurones de $L$ couches, défini par $S = (S_1, S_2, ..., S_L)$.\\
+				    Un vecteur d'entrée $x \in \mathbb{R}^n = \mathbb{R}^{S_1}$,\\
+				     }
+				    \STATE $\elem{a}{0}{}{} = x$
+				    \FOR{$k=1$ \TO $L$}
+				    	\STATE $\elem{z}{k}{}{} = (\elem{w}{k}{}{})^T(\elem{a}{k-1}{}{}) + \elem{b}{k}{}{}$
+				    	\STATE $\elem{a}{k}{}{} = g(\elem{z}{k}{}{})$
+				    \ENDFOR
+				    \RETURN $\elem{a}{L}{}{}$
+				\end{algorithmic}
+			\end{algorithm}
+			
+		\subsection{Rétro-propagation du Gradient}
+		
+		L'algorithme de rétro-propagation est souvent à tort considéré comme étant la méthode d'optimisation utilisée pour minimiser la fonction de perte.\\
+		C'est en effet le rôle d'une méthode de descente de gradient.\\
+		Voici pour rappel une méthode générale de descente de gradient, vue dans la première partie :
+		\begin{algorithm}[H]
+			\caption{Algorithme général de Descente de Gradient}
+			\begin{algorithmic}
+			    \REQUIRE {
+			    $x$ et $y \in \mathbb{R}^n$,\\
+			    $\theta_0$, les paramètres initiaux du modèle,\\
+			     et $\epsilon > 0$, seuil de tolérance.
+			     }
+			    \REPEAT
+			    	\STATE Calcul de $\nabla_\theta J(x,y,\theta_k)$.
+			    	\STATE Calcul de $\alpha_k$.
+			    	\COMMENT{$\alpha_k$ peut être soit une constante, soit calculé en fonction de gradients $\nabla_\theta J(x,y,\theta)$}
+			    	\STATE $\theta_{k+1} = \theta_k - \alpha_k \nabla_\theta J(x,y,\theta_k)$.
+			    \UNTIL{$\nabla_\theta J(x,y,\theta_k) \leq \epsilon$}
+			    \RETURN $\theta_{k+1}$
+			\end{algorithmic}
+		\end{algorithm}
+		L'algorithme de rétro-propagation du gradient a pour simple but de calculer, de façon élégante, le gradient $\nabla_\theta J(x,y,\theta)$, avec $\theta$ représentant ici tous les paramètres du modèle, c'est à dire l'ensemble des poids $\elem{w}{k}{j}{i}$ et des biais $\elem{b}{k}{j}{}$.\\
+		
+			\subsubsection{Calcul formel du Gradient}
+			
+				Il nous faut donc calculer $\frac{\partial J(x,y,\theta)}{\partial \elem{w}{k}{j}{i}}$, traduisant l'influence du poids $\elem{w}{k}{j}{i}$ sur la fonction de perte $J(x,y,\theta)$.\\
+				Et $\frac{\partial J(x,y,\theta)}{\partial \elem{b}{k}{j}{}}$, qui traduit l'influence du biais $\elem{b}{k}{j}{}$ sur la fonction de perte $J(x,y,\theta)$.\\
+				\begin{center}
+				\textbf{Toute dérivée partielle $\frac{\partial u}{\partial v}$ représente l'influence qu'a l'élément $v$ sur l'élément $u$.}
+				\end{center}
+				Nous utiliserons le Théorème de dérivation des fonctions composées, aussi appelée \emph{chain rule}.\\
+				Nous rappelons que $J(x,y,\theta)$ est une fonction de perte de la forme :
+				$$J(x,y,\theta) = C(\elem{a}{L}{}{}(x),y)$$
+				
+				 \emph{\\Afin de mieux comprendre la preuve, on peut s'aider d'un dessin \smiley{}.}
+				
+				\paragraph{Calcul sur la Couche de Sortie}
+				
+				Commençons par calculer le gradient de l'erreur pour les poids de la couche de sortie, $\frac{\partial C}{\partial \elem{w}{L}{j}{i}}$.\\
+				Ainsi que le gradient pour les biais de la couche de sortie, $\frac{\partial C}{\partial \elem{b}{L}{j}{}}$.\\
+				Sur la dernière couche, nous avons
+				$$\elem{z}{L}{j}{} = (\elem{w}{L}{j}{})^T(\elem{a}{L-1}{}{}) + \elem{b}{L}{j}{}$$
+				Et
+				$$\elem{a}{L}{j}{} = g(\elem{z}{L}{j}{})$$\\
+				Utilisons à présent la règle de chaînage sur $\frac{\partial C}{\partial \elem{w}{L}{j}{i}}$, car $\elem{a}{L}{j}{}$ est une fonction composée.\\
+				Nous obtenons donc,
+				$$\left\{
+				\begin{array}{l}
+					\frac{\partial C}{\partial \elem{w}{L}{j}{i}} = \frac{\partial C}{\partial \elem{a}{L}{j}{}} \times \frac{\partial \elem{a}{L}{j}{}}{\partial \elem{z}{L}{j}{}} \times \frac{\partial \elem{z}{L}{j}{}}{\partial \elem{w}{L}{j}{i}}\\
+					
+					\frac{\partial C}{\partial \elem{b}{L}{j}{}} = \frac{\partial C}{\partial \elem{a}{L}{j}{}} \times \frac{\partial \elem{a}{L}{j}{}}{\partial \elem{z}{L}{j}{}} \times \frac{\partial \elem{z}{L}{j}{}}{\partial \elem{b}{L}{j}{}}\\
+				\end{array}
+				\right.$$\\
+				
+				On s'aperçoit ici que le terme $\frac{\partial C}{\partial \elem{a}{L}{j}{}}$, exprime la variation de $C(\elem{a}{L}{}{}(x),y)$ en fonction de la sortie du neurone $\elem{a}{L}{j}{}$.\\
+				
+				On voit aussi que le terme $\frac{\partial \elem{a}{L}{j}{}}{\partial \elem{z}{L}{j}{}}$, traduit la variation de la sortie du neurone $\elem{a}{L}{j}{}$ en fonction de l'agrégat $\elem{z}{L}{j}{}$, dépend de la \emph{fonction d'activation} choisie.\\
+				
+				Nous reviendrons sur les expressions de $\frac{\partial C}{\partial \elem{a}{L}{j}{}}$ et $\frac{\partial \elem{a}{L}{j}{}}{\partial \elem{z}{L}{j}{}}$, car elles nous permettront de choisir de façon éclairée la fonction d'activation et la fonction coût,car des simplifications peuvent s'opérer.\\
+				
+				Enfin $\frac{\partial \elem{z}{L}{j}{}}{\partial \elem{w}{L}{j}{i}}=\elem{a}{L-1}{i}{}$ et $\frac{\partial \elem{z}{L}{j}{}}{\partial \elem{b}{L}{j}{i}} = 1$, ce qui est évident à vérifier, car 
+				$$\elem{z}{L}{j}{} = \sum_{i=1}^{S_{L-1}}{\elem{w}{L}{j}{i} \times \elem{a}{L-1}{i}{}} + \elem{b}{L}{j}{}$$
+				
+				Ces deux expressions traduisent l'influence des poids $\elem{w}{L}{j}{i}$ et du biais $\elem{b}{L}{j}{}$ sur l'agrégat, ou résultat de la fonction d'agrégation, $\elem{z}{L}{j}{}$\\
+				
+				Pour la suite, nous allons poser $\elem{\delta}{L}{j}{} = \frac{\partial C}{\partial \elem{a}{L}{j}{}} \times \frac{\partial \elem{a}{L}{j}{}}{\partial \elem{z}{L}{j}{}}$, cela interviendra quand nous montrerons le caractère récursif de la rétropropagation.\\
+				
+				Finalement, nous obtenons,
+				$$\left\{
+				\begin{array}{l}
+					\frac{\partial C}{\partial \elem{w}{L}{j}{i}} = \elem{\delta}{L}{j}{} \times \frac{\partial \elem{z}{L}{j}{}}{\partial \elem{w}{L}{j}{i}} = \elem{\delta}{L}{j}{} \times \elem{a}{L-1}{i}{} \\
+					
+					\frac{\partial C}{\partial \elem{b}{L}{j}{}} = \elem{\delta}{L}{j}{} \times \frac{\partial \elem{z}{L}{j}{}}{\partial \elem{b}{L}{j}{}} = \elem{\delta}{L}{j}{}\\
+				\end{array}
+				\right.$$
+				Avec,
+				$$\elem{\delta}{L}{j}{} = \frac{\partial C}{\partial \elem{a}{L}{j}{}} \times \frac{\partial \elem{a}{L}{j}{}}{\partial \elem{z}{L}{j}{}}$$
+				
+				\paragraph{Calcul sur l'avant dernière couche}
+				
+				Après avoir explicité les calculs des $\frac{\partial C}{\partial \elem{w}{L}{j}{i}}$ et $\frac{\partial C}{\partial \elem{b}{L}{j}{}}$, passons à présent au calcul sur l'avant dernière couche, soit aux $\frac{\partial C}{\partial \elem{w}{L-1}{j}{i}}$ et $\frac{\partial C}{\partial \elem{b}{L-1}{j}{}}$.\\
+				Grâce à la \emph{chain rule}, nous obtenons de la même façon que précédemment,
+				
+				$$\left\{
+				\begin{array}{l}
+					\frac{\partial C}{\partial \elem{w}{L-1}{j}{i}} = \frac{\partial C}{\partial \elem{a}{L-1}{j}{}} \times \frac{\partial \elem{a}{L-1}{j}{}}{\partial \elem{z}{L-1}{j}{}} \times \frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{w}{L-1}{j}{i}}\\
+					\frac{\partial C}{\partial \elem{b}{L-1}{j}{}} = \frac{\partial C}{\partial \elem{a}{L-1}{j}{}} \times \frac{\partial \elem{a}{L-1}{j}{}}{\partial \elem{z}{L-1}{j}{}} \times \frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{b}{L-1}{j}{}}\\
+				\end{array}
+				\right.$$\\
+				
+				On peut remarquer que l'utilisation de la \emph{Chain rule} permet d'exprimer facilement $\frac{\partial \elem{a}{L-1}{j}{}}{\partial \elem{z}{L-1}{j}{}}$, $\frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{w}{L-1}{j}{i}}$ et $\frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{b}{L-1}{j}{}}$.\\
+				En effet si la fonction d'activation reste la même pour tout le réseau de neurones, alors le terme $\frac{\partial \elem{a}{L-1}{j}{}}{\partial \elem{z}{L-1}{j}{}}$ est la même que $\frac{\partial \elem{a}{L}{j}{}}{\partial \elem{z}{L}{j}{}}$ calculée plus haut.\\
+				De même que précédemment $\frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{w}{L-1}{j}{i}}=\elem{a}{L-2}{i}{}$ et $\frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{b}{L-1}{j}{i}} = 1$, car
+				$$\elem{z}{L-1}{j}{} = \sum_{i=1}^{S_{L-2}}{\elem{w}{L-1}{j}{i} \times \elem{a}{L-2}{i}{}} + \elem{b}{L-1}{j}{}$$
+				
+				La difficulté réside ici, dans le calcul de $\frac{\partial C}{\partial \elem{a}{L-1}{j}{}}$.\\
+				Si on trace un réseau de neurones quelconque.\\
+				Prenons le $j$-ème neurone de la couche $L-1$, on peut voir qu'il transmet le résultat de son activation $\elem{a}{L-1}{j}{}$ à tous les neurones de la couche $L$.\\
+				Cette diffusion d'informations a aussi un impact sur le coût, puisque si erreur il y a alors, les neurones de la couche $L$ en feront les "frais".\\
+				Un neurone $\elem{a}{L-1}{i}{}$ propage l'erreur à un neurone $\elem{a}{L}{j}{}$ proportionnellement au poids $\elem{w}{L}{j}{i}$.\\
+				
+				Nous devons donc décomposer $\frac{\partial C}{\partial \elem{a}{L-1}{j}{}}$, grâce à la \emph{chain rule}.\\
+				
+				Le résultat est le suivant :	
+				$$\frac{\partial C}{\partial \elem{a}{L-1}{j}{}} = \sum_{l=1}^{L-1}{\frac{\partial C}{\partial \elem{a}{L}{l}{}} \times \frac{\partial \elem{a}{L}{l}{}}{\partial \elem{z}{L}{l}{}} \times \frac{\partial \elem{z}{L}{l}{}}{\partial \elem{a}{L-1}{l}{}}}$$
+				En effet, le neurone $\elem{a}{L-1}{i}{}$ transfère son erreur à tous les neurones $\elem{a}{L}{j}{}$ de la couche suivante par le biais des poids, car $\frac{\partial \elem{z}{L}{l}{}}{\partial \elem{a}{L-1}{j}{}} = \elem{w}{L-1}{l}{j}$.\\
+				On remarque par ailleurs que 
+				$$\frac{\partial C}{\partial \elem{a}{L-1}{j}{}} = \sum_{l=1}^{L-1}{\elem{\delta}{L}{l}{} \times \frac{\partial \elem{z}{L}{l}{}}{\partial \elem{a}{L-1}{j}{}}}$$
+				Car $$\elem{\delta}{L}{j}{} = \frac{\partial C}{\partial \elem{a}{L}{j}{}} \times \frac{\partial \elem{a}{L}{j}{}}{\partial \elem{z}{L}{j}{}}$$
+				Donc,
+				$$\elem{\delta}{L-1}{j}{} = \frac{\partial C}{\partial \elem{a}{L-1}{j}{}}  \times \frac{\partial \elem{a}{L-1}{j}{}}{\partial \elem{z}{L-1}{j}{}} = \sum_{l=1}^{L-1}{\elem{\delta}{L}{l}{} \times \frac{\partial \elem{z}{L}{l}{}}{\partial \elem{a}{L-1}{j}{}}} \times \frac{\partial \elem{a}{L-1}{j}{}}{\partial \elem{z}{L-1}{j}{}}$$
+				
+				\paragraph{Récapitulatif}
+				Récapitulons, afin de voir se dessiner un schéma de récurrence.\\
+				Sur la couche $L$,
+				$$\left\{
+				\begin{array}{l}
+					\frac{\partial C}{\partial \elem{w}{L}{j}{i}} = \elem{\delta}{L}{j}{} \times \frac{\partial \elem{z}{L}{j}{}}{\partial \elem{w}{L}{j}{i}} = \elem{\delta}{L}{j}{} \times \elem{a}{L-1}{i}{} \\
+					
+					\frac{\partial C}{\partial \elem{b}{L}{j}{}} = \elem{\delta}{L}{j}{} \times \frac{\partial \elem{z}{L}{j}{}}{\partial \elem{b}{L}{j}{}} = \elem{\delta}{L}{j}{}\\
+				\end{array}
+				\right.$$
+				Avec,
+				$$\elem{\delta}{L}{j}{} = \frac{\partial C}{\partial \elem{a}{L}{j}{}} \times \frac{\partial \elem{a}{L}{j}{}}{\partial \elem{z}{L-1}{j}{}}$$
+				Sur la couche $L-1$,
+				$$\left\{
+				\begin{array}{l}
+					\frac{\partial C}{\partial \elem{w}{L-1}{j}{i}} = \elem{\delta}{L-1}{j}{} \times \frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{w}{L-1}{j}{i}} = \elem{\delta}{L-1}{j}{} \times \elem{a}{L-2}{i}{}\\
+					\frac{\partial C}{\partial \elem{b}{L-1}{j}{}} = \elem{\delta}{L-1}{j}{} \times \frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{b}{L-1}{j}{}} = \elem{\delta}{L-1}{j}{}\\
+				\end{array}
+				\right.$$
+				Avec,
+				$$\elem{\delta}{L-1}{j}{} = \sum_{l=1}^{L-1}{\elem{\delta}{L}{l}{} \times \frac{\partial \elem{z}{L}{l}{}}{\partial \elem{a}{L-1}{j}{}}} \times \frac{\partial \elem{a}{L-1}{j}{}}{\partial \elem{z}{L-1}{j}{}}$$
+				\paragraph{Calcul généralisé}
+				Essayons à présent d'exprimer une forme récurrente applicable à chaque couche.\\
+				On a $\forall k = 1..L$,
+				$$\left\{
+				\begin{array}{l}
+					\frac{\partial C}{\partial \elem{w}{k}{j}{i}} = \elem{\delta}{k}{j}{} \times \frac{\partial \elem{z}{k}{j}{}}{\partial \elem{w}{k}{j}{i}} = \elem{\delta}{k}{j}{} \times \elem{a}{k-1}{i}{}\\
+					\frac{\partial C}{\partial \elem{b}{k}{j}{}} = \elem{\delta}{k}{j}{} \times \frac{\partial \elem{z}{k}{j}{}}{\partial \elem{b}{k}{j}{}} = \elem{\delta}{k}{j}{}\\
+				\end{array}
+				\right.$$
+				Avec $$\elem{\delta}{k}{j}{} = \left\{
+				\begin{array}{l}
+					\frac{\partial C}{\partial \elem{a}{L-1}{j}{}}, \  si \ k=L\\
+					\sum_{l=1}^{k-1}{\elem{\delta}{k+1}{l}{} \times \frac{\partial \elem{z}{k+1}{l}{}}{\partial \elem{a}{k}{j}{}} \times \frac{\partial \elem{a}{k}{j}{}}{\partial \elem{z}{k}{j}{}}}, \ si \ k \in \{1 .. L-1\}
+				\end{array}
+				\right.$$
+				
+				Ce qui nous permet d'exprimer l'algorithme de rétro-propagation de la façon suivante :
+			\begin{algorithm}[H]
+				\caption{Algorithme de Rétro-propagation}
+				\begin{algorithmic}
+				    \REQUIRE {
+				    Un réseau de neurones de $L$ couches, défini par $S = (S_1, S_2, ..., S_L)$.\\
+				    Un vecteur d'entrée $x \in \mathbb{R}^n = \mathbb{R}^{S_1}$,\\
+				    Un vecteur de sortie $y \in \mathbb{R}^m = \mathbb{R}^{S_L}$,\\
+				     }
+				    \STATE
+				    \COMMENT{Calcul du gradient sur la couche de sortie.}
+				    \FOR{$j = 1$ \TO $L-1$}
+				    	\STATE $\elem{\delta}{L}{j}{} = \frac{\partial C}{\partial \elem{a}{L-1}{j}{}}$
+				    	\STATE $\frac{\partial C}{\partial \elem{b}{L}{j}{}} = \elem{\delta}{L}{j}{}$
+				    	\FOR{$i =1$ \TO $L$}
+					    	\STATE $\frac{\partial C}{\partial \elem{w}{L}{j}{i}} = \elem{\delta}{L}{j}{} \times \elem{a}{L-1}{i}{}$
+				    	\ENDFOR
+				    \ENDFOR
+				    
+				    \FOR{$k=L-1$ \TO $1$}
+				    	\STATE
+				    	\COMMENT{Calcul du gradient sur la $k$-ème couche.}
+				    	\FOR{$j = 1$ \TO $k-1$}
+				    		\STATE $\elem{\delta}{k}{j}{} = \sum_{l=1}^{k-1}{\elem{\delta}{k+1}{l}{} \times \frac{\partial \elem{z}{k+1}{l}{}}{\partial \elem{a}{k}{j}{}} \times \frac{\partial \elem{a}{k}{j}{}}{\partial \elem{z}{k}{j}{}}}$
+				    		\STATE $\frac{\partial C}{\partial \elem{b}{k}{j}{}} = \elem{\delta}{k}{j}{}$
+				    		\FOR{$i =1$ \TO $k$}
+					    		\STATE $\frac{\partial C}{\partial \elem{w}{k}{j}{i}} = \elem{\delta}{k}{j}{}  \times \elem{a}{k-1}{i}{}$
+					    	\ENDFOR
+				    	\ENDFOR
+				    \ENDFOR
+				    
+				\end{algorithmic}
+			\end{algorithm}
+		Cet algorithme nous permet donc de calculer de façon très efficace tous les $\frac{\partial C}{\partial \elem{w}{k}{j}{i}}$ et $\frac{\partial C}{\partial \elem{b}{k}{j}{}}$.\\
+		Il existe une version privilégiant le calcul matriciel, permettant un calcul plus rapide, grâce aux bibliothèques de calcul matriciel.\\
+		Nous ne redémontrerons pas l'algorithme, mais nous en donneront toutefois la formulation.
+		\begin{algorithm}[H]
+			\caption{Algorithme de Rétro-propagation Matriciel}
+			\begin{algorithmic}
+			    \REQUIRE {
+			    Un réseau de neurones de $L$ couches, défini par $S = (S_1, S_2, ..., S_L)$.\\
+			    Un vecteur d'entrée $x \in \mathbb{R}^n = \mathbb{R}^{S_1}$,\\
+			    Un vecteur de sortie $y \in \mathbb{R}^m = \mathbb{R}^{S_L}$,\\
+			     }
+			    \STATE
+			    \COMMENT{Calcul du gradient sur la couche de sortie.}
+			    \STATE $\elem{\delta}{L}{}{} = \nabla_{\elem{a}{L-1}{}{}} C$
+			    \STATE $\nabla_{\elem{b}{L}{}{}} C = \elem{\delta}{L}{}{}$
+			    \STATE $\nabla_{\elem{w}{L}{}{}} C = \elem{\delta}{L}{}{} \times{\elem{a}{L-1}{}{}}^T $
+			    
+			    \FOR{$k=L-1$ \TO $1$}
+			    	\STATE
+			    	\COMMENT{Calcul du gradient sur la $k$-ème couche.}
+			    	\STATE $\elem{\delta}{k}{}{} = ((\nabla_{\elem{a}{k}{}{}}\elem{z}{k+1}{}{})^T \times \elem{\delta}{k+1}{}{}) \odot \nabla_{\elem{z}{k}{}{}}{\elem{a}{k}{}{}}$
+			    	\STATE $\nabla_{\elem{b}{k}{}{}} C = \elem{\delta}{k}{}{}$
+			    	\STATE $\nabla_{\elem{w}{k}{}{}} C = \elem{\delta}{k}{}{} \times{\elem{a}{k-1}{}{}}^T $
+			    \ENDFOR
+			\end{algorithmic}
+		\end{algorithm}
+		Nous implémenterons alors cette méthode, car plus rapide en machine.\\
+		Nous disposons à présent des éléments suivants :
+		\begin{itemize}
+			\item Une méthode de descente de gradient.
+			\item L'algorithme de rétro-propagation, permettant le calcul du gradient de la fonction de perte de manière efficace.
+		\end{itemize}
+		Ainsi, nous disposons alors des éléments permettant de créer un réseau de neurones, ainsi que d'effectuer son apprentissage.\\
+		Nous allons maintenant quitter cette partie plutôt calculatoire, pour s'intéresser aux différents moyens existants pour améliorer les capacités de généralisation de nos futurs réseaux de neurones.
+		\subsection{Théorème d'Approximation Universelle}
+		Les réseaux de neurones permettent de représenter universellement n'importe quelle fonction, dans le sens où il existe un réseau de neurones, ayant une architecture donnée, des poids et biais donnés, pouvant approximer une fonction en particulier.\\
+		Le \emph{Théorème d'Approximation Universelle} nous dit qu'il existe un réseau suffisamment "grand" pour avoir la précision souhaitée sur les résultats.\\
+		Toutefois, ce théorème ne dit pas quelle sera la taille de ce réseau, mais en affirme seulement l'existence.
+		\subsection{Techniques de Régularisation}
+		Un défi majeur en apprentissage machine est de choisir un algorithme qui aura de bons résultats,non seulement à l'apprentissage, mais aussi sur de nouvelles entrées.\\
+		Les stratégies utilisées en apprentissage machine, permettant de réduire l'\emph{erreur de test}, parfois au dépend de l'\emph{erreur d'apprentissage}, sont appelées techniques de régularisation.\\
+		Nous avons, dans le premier chapitre, vu les concepts généraux de la \emph{généralisation}, du \emph{sous-apprentissage} et du \emph{sur-apprentissage}.\\
+		Nous verrons à présent des méthodes concrètes appliquées aux réseaux de neurones profonds.\\
+		Certaines méthodes ajouteront des contraintes d'optimisation sur la fonction de perte, d'autres des restrictions sur les paramètres.\\
+		Si les méthodes sont choisies avec soin, elles peuvent améliorer grandement la performance des réseaux de neurones profonds sur l'ensemble des données de test.
+			\subsubsection{Pénalisation des paramètres}
+			La pénalisation des paramètres est une des premières formes de régularisation, utilisée depuis les débuts de l'apprentissage machine.\\
+			Cette régularisation limite la capacité de modèles, tels que les réseaux de neurones, les régressions linéaires, polynomiales et logistiques, en ajoutant une composante de pénalisation des paramètres $\Omega(\theta)$ à la fonction de perte $J(x,y,\theta)$, tel que
+			$$J(x,y,\theta) = J_0(x,y,\theta) + \lambda \Omega(\theta)$$
+			Avec $\lambda \geq 0$, un hyper-paramètre pondérant la contribution de la composante de pénalisation.\\
+			Si $\lambda = 0$, il n'y a pas de régularisation.\\
+			Nous ajouterons par ailleurs que cette pénalisation n'affecte que les poids $\elem{w}{k}{j}{i}$ et non les biais $\elem{b}{k}{j}{}$, car les biais requièrent moins de données pour ajuster précisément les données.\\
+				\paragraph{Régularisation $L^2$}
+				On pose, $$\Omega(\theta) = \Omega(w) = \frac{1}{2} ||w||_2^2 = \frac{1}{2} w^T w$$
+				La fonction de perte s'écrit donc,
+				$$\tilde{J}(x,y,\theta) = J(x,y,\theta) + \frac{\lambda}{2} w^T w$$
+				Par conséquent le gradient s'écrit de la façon suivante,
+				$$\nabla_\theta \tilde{J}(x,y,\theta) = \nabla_\theta J(x,y,\theta) + \lambda w$$
+				Ainsi le poids $\elem{w}{k}{j}{i}$ aura tendance à diminuer par rapport à une fraction de lui même.
+			\subsubsection{Augmentation du jeu de données}
+			Une des meilleures façons d'améliorer la capacité de généralisation d'un modèle, est de l'entraîner sur plus de données.\\
+			Malheureusement, la taille des ensembles de données est généralement limitée.\\
+			Une façon de contourner le problème est de créer artificiellement des données et de les ajouter à l'ensemble d'apprentissage.\\
+			Cette méthode est principalement utilisée pour un domaine : la reconnaissance d'objets.
+			En effet, il est très facile de transformer les données existantes par des transformations, telles que des rotations, des translations ou des homothéties, paramétrées aléatoirement.
+			On peut aussi le faire sur d'autres types de données en ajoutant du \emph{bruit blanc} sur une partie des entrées.
+			\subsubsection{Arrêt prématuré}
+			Lors de qu'un modèle avec une capacité suffisante pour sur-apprendre, on observe généralement que tandis ce que l'\emph{erreur d'apprentissage} continue de diminuer, l'\emph{erreur d'entraînement} recommence à augmenter.\\
+			Cela signifie que nous avons atteint un \emph{minimum local} sur les données de test, il convient alors d'arrêter l'apprentissage avant que l'\emph{erreur de généralisation} empire.
+			\subsubsection{Dropout}
+			La méthode \emph{Dropout} est une méthode assez particulière de régularisation, qui consiste à entraîner tour à tour des sous-réseaux de notre réseaux de neurones.
+			\begin{figure}[H]
+				\begin{center}
+					\includegraphics[scale=0.25]{Images/dropout.png}
+					\caption{Exemple d'application de la méthode de \emph{Dropout}}
+				\end{center}
+			\end{figure}
+			Ainsi les différents sous-modèles se partagent les paramètres $\theta$ du modèle original.\\
+			Il en résulte un modèle beaucoup plus robuste, car les différents sous-modèles entraînent une recherche de paramètres pour atteindre des minima locaux différents.\\
+			Cela incite donc à une convergence vers un minimum local partagé par les différents sous-modèles.\\
+			Ce minimum local est de façon générale un bien meilleur minimum que ceux propres aux sous-modèles.\\
+			Cette méthode présente toutefois un inconvénient, elle est difficile à implémenter, mais est présente dans la plupart des librairies d'apprentissage profond.
+		\section{Réseaux Convolutifs}
+		Les réseaux de neurones convolutifs sont une famille particulièrement intéressante de réseaux de neurones, qui a donné naissance à de nombreux archétypes de modèles parmi les plus performants au monde en matière de traitement de l'image.\\
+	Ils sont en effet spécialisés dans le traitement de données ayant une structure en forme de grille, spatialement ou temporellement parlant.\\
+	Voici des exemples de données ayant ce genre de structure :
+	\begin{itemize}
+		\item Les séries temporelles pouvant être vue comme une grille de dimension $1$, car assimilables à des signaux, ayant pour unité un intervalle de temps fixe.
+		\item Les images, pouvant être considérées comme étant des grilles de dimensions $2$ de pixels.
+	\end{itemize}
+	Ces deux types de données sont en fait assez proches, ce sont tous deux des signaux, l'un est en temporel et de dimension $1$, l'autre est atemporel et de dimension $2$.
+		\subsection{L'Opérateur de Convolution}
+			\subsubsection{Pour des fonctions}
+			Le produit de convolution de deux fonctions réelles ou complexes $f$ et $g$, noté $f * g$ est défini tel que,
+			$$(f * g)(x) = \int_{-\infty}^{+\infty}{f(x-t)g(t)dt} = \int_{-\infty}^{+\infty}{f(t)g(x-t)dt}$$
+			La fonction $g$ est en règle générale un filtre.
+			\subsubsection{Pour des suites}
+			Le produit de convolution de deux suites $f$ et $g$, noté $f * g$ est défini tel que,
+			$$(f *g)(n) = \sum_{m = -\infty}^{+\infty}{f(n-m)g(m)} = \sum_{m = -\infty}^{+\infty}{f(m)g(n-m)}$$
+			La suite $g$ est en règle générale un filtre.
+			\subsection{Pour les images}
+			Le produit de convolution de deux images de dimension $2$, $I$ et $K$, noté $I * K$ est défini tel que,
+			$$(I*K)(i,j) = \sum_{m}\sum_{n}{I(m,n)K(i-m,j-n)} = \sum_{m}\sum_{n}{I(i-m,j-n)K(m,n)}$$
+			L'image $K$ est appelée \emph{noyau}, ou \emph{kernel}, c'est l'équivalent d'un filtre pour les images.
+			Voici un exemple d'application de la convolution sur une image :
+			\begin{figure}[H]
+				\begin{center}
+					\includegraphics[scale=0.25]{Images/convolution.png}
+					\caption{Exemple de convolution entre une image $I$, $(8,3)$ et un noyau $K$, $(2,2)$}
+				\end{center}
+			\end{figure}
+			Dans cet exemple de convolution entre une image $I$, $(8,3)$ et un noyau $K$, $(2,2)$, on peut remarquer tout d'abord, que la image issue de la convolution est de forme $(6,2)$.\\
+			En effet la convolution réduit la taille de la fenêtre.\\
+			Si l'image $I$ est de taille $(m,n)$ et le noyau de taille $(k,l)$ alors l'image convolutée sera de taille $(m-k,n-l)$.
+		\subsection{Convolution dans les Réseaux de Neurones}
+		L'idée d'utiliser la convolution en apprentissage machine s'appuie sur deux points essentiels, la \emph{connectivité partielle}, le \emph{partage des paramètres}.
+			\subsubsection{La connectivité partielle}
+			Dans les réseaux de neurones traditionnels, la sortie d'une couche $\elem{a}{k}{}{}$ est entièrement distribuée comme entrée à tous les neurones de la couche $k+1$. On parle alors de \emph{connectivité totale}\\
+			À l'inverse, les réseaux de neurones convolutifs n'ont qu'une \emph{connectivité partielle}, ce qui signifie que les composantes $\elem{a}{k}{j}{}$ de la sortie ne seront transmises que partiellement à différents neurones de la couche $k+1$, et ce par proximité dans la sortie.
+			Ainsi la transmission de l'information se fera de façon locale d'un point de vue distance et non plus de façon globale.
+			\subsubsection{Le partage des paramètres}
+			Une couche de convolution est unique pour tous les sous-vecteurs d'une sortie $\elem{a}{k}{}{}$.\\
+			Si nous construisons une couche de convolution composée des poids suivants :
+			$$
+			\begin{pmatrix}
+			1 & 0 & 1 \\ 
+			0 & 0 & 0 \\ 
+			0 & 1 & 0
+			\end{pmatrix}
+			$$
+			Nous ne transmettrons que les composantes $1$, $3$ et $8$ du sous-vecteur de sortie à la couche suivante, les autres composantes seront alors ignorées.\\
+			On voit alors tout de suite l'utilité pour la reconnaissance d'objet, en effet, il suffit de choisir la couche de convolution selon la motif que nous souhaitons identifier.
+			Comme par exemple :
+			$$
+			\begin{pmatrix}
+			0 & 0 & 1 & 1 & 1 & 1 & 1 & 0 & 0 \\ 
+			0 & 1 & 0 & 0 & 0 & 0 & 0 & 1 & 0 \\ 
+			1 & 0 & 1 & 1 & 0 & 1 & 1 & 0 & 1 \\ 
+			1 & 0 & 1 & 1 & 0 & 1 & 1 & 0 & 1 \\ 
+			1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\
+			1 & 0 & 1 & 0 & 0 & 0 & 1 & 0 & 1 \\
+			1 & 0 & 1 & 1 & 0 & 1 & 1 & 0 & 1 \\ 
+			1 & 0 & 0 & 1 & 1 & 1 & 0 & 0 & 1 \\ 
+			0 & 1 & 0 & 0 & 0 & 0 & 0 & 1 & 0 \\ 
+			0 & 0 & 1 & 1 & 1 & 1 & 1 & 0 & 0
+			\end{pmatrix} 
+			$$
+			C'est un filtre permettant de reconnaître le motif \smiley{} dans une image.\\
+			Voici à présent la représentation d'une couche de convolution en entrée d'un réseau de neurones :
+			\begin{figure}[H]
+				\begin{center}
+					\includegraphics[scale=0.60]{Images/convolutionlayer.png}
+					\caption{Représentation d'une couche de convolution}
+				\end{center}
+			\end{figure}
+			Nous retiendrons alors que les couches de convolution servent à trouver des motifs locaux sur des séries temporelles ou images.
+			\subsubsection{Neurone de Convolution}
+			Un neurone de convolution est une application $f : \mathbb{R}^{p \times q} \rightarrow \mathbb{R}$, paramétrée par $\theta = (b,w)$.\\
+			Le réel $b$ s'appelle le biais, et la matrice $w = \begin{pmatrix}
+			w_{1,1} & \cdots & \cdots & w_{1,q} \\ 
+			\vdots & \ddots &  & \vdots \\ 
+			\vdots &  & \ddots & \vdots \\ 
+			w_{p,1} & \cdots & \cdots & w_{p,q}\\
+			\end{pmatrix}  $ s'appelle \emph{noyau} ou \emph{filtre}.\\
+			Cette application est la composée de deux fonctions distinctes :
+			\begin{itemize}
+				\item Une fonction d’\emph{agrégation} $h : \mathbb{R}^p \rightarrow \mathbb{R}$, combinant l'entrée $x$ avec le \emph{noyau} $w$ et le biais $b$.\\
+				$$h_\theta(x) = h_{b,w}(x) = (w * x) + b$$
+				\item Une fonction d'\emph{activation} $g : \mathbb{R} \rightarrow \mathbb{R}$, \emph{non-linéaire}.\\
+				Des exemples, comme vus précédemment :
+				\begin{itemize}
+					\item \emph{ReLU}, pour \emph{Rectified Linear Unit} : $g(z) = max(0,z)$
+					\item \emph{Sigmoïde} : $g(z) = \frac{1}{1+e^{-z}}$
+					\item \emph{Tangente hyperbolique} : $g(z) = \tanh(z)$
+				\end{itemize}
+			\end{itemize}
+		Ainsi notre neurone de convolution peut être résumé par une fonction $f$ telle que :
+		$$f_\theta(x) = g \circ h_\theta(x) = g((w * x) + b)$$
+		La sortie de notre neurone de convolution $a$, est l'\emph{image} de la fonction $f$ par l'entrée $x$:
+		$$a = f_\theta(x) = g \circ h_\theta(x) = g((w * x) + b)$$
+		\subsection{Pooling}
+		Il est d'usage courant d'utiliser plusieurs filtres en parallèle sur une couche de convolution, et par conséquent réaliser plusieurs convolutions.\\
+		En voici un exemple :
+		\begin{figure}[H]
+			\begin{center}
+				\includegraphics[scale=0.6]{Images/convolutionlayers.png}
+				\caption{Parallélisation de couches de convolution}
+			\end{center}
+		\end{figure}
+		Ainsi, nous pouvons identifier trois \emph{features} différentes de taille $(4,4)$.\\
+		Cette pratique est très courante, car il peut être intéressant de distinguer plusieurs motifs en même temps pour classer une image dans une ou plusieurs catégories.\\
+		On peut toutefois se poser la question de comment traiter les différentes sorties.\\
+		Pour cela on utilise une couche de \emph{pooling}, cette couche à pour but résumer les sorties des différentes couches de convolutions\\
+		Ainsi grâce à la succession de ces deux couches, on transforme une image brute, à une matrice de \emph{caratéristiques}, aussi appelées \emph{features}, pour la suite de notre réseau de neurones.\\
+		La fonction de \emph{pooling} la plus populaire est le \emph{max-pooling}, consistant à propager le maximum parmi les différentes sorties.\\
+		Une couche de \emph{pooling} peut être représentée comme ceci :
+		\begin{figure}[H]
+			\begin{center}
+				\includegraphics[scale=0.6]{Images/poolinglayer.png}
+				\caption{\emph{Max-pooling} sur une fenêtre $(2,2)$}
+			\end{center}
+		\end{figure}
+		\subsection{Résumé des réseaux de neurones convolutifs}
+		Ainsi les réseaux de neurones utilisent des couches de convolution mises en parallèle, suivies de couches de \emph{pooling}.\\
+		On utilise ces réseaux de neurones pour traiter des données où la position spatiale des composantes et leurs relations importent, comme par exemple une image où chaque pixel possède des informations le liant à ses voisins.\\
+		Ces couches permettent de transformer l'information brute provenant de l'entrée, en une \emph{carte} de \emph{features}, afin de faciliter le traitement dans les couches suivantes.\\
+		On peut récapituler leur fonctionnement par le schéma suivant :
+		\begin{figure}[H]
+			\begin{center}
+				\includegraphics[scale=0.6]{Images/fullconvnetwork.png}
+				\caption{Schéma d'intégration du mécanisme de convolution dans un réseau de neurones}
+			\end{center}
+		\end{figure}
+		Comme vu précédemment, l'image transformée par en une carte de \emph{features}, puis transmise à une couche totalement connectée, représentée par un alignement vertical de cercles.\\
+		Par ailleurs, les réseaux de neurones convolutifs ont été les premiers réseaux profonds offrant de bons résultats.\\
+		L'intérêt de la société pour l'apprentissage profond est apparu après que des progrès spectaculaires furent réalisé en $2012$, lors du concours de reconnaissance d'objets ImageNet remporté par un réseau de neurones mêlant de multiples couches de convolutions connectées à des couches totalement connectées.
 		\section{Applications à la vision par ordinateur}
 			\subsection{Classification}
 			\subsection{Détection d'objets}
