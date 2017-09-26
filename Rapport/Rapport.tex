@@ -127,7 +127,7 @@ Création d'un Moteur de Recherche dans les Images Satellite}
 			Nous allons maintenant introduire un exemple nous permettant d'illustrer ces concepts.\\
 			La tâche \emph{T} est une régression polynomiale, c'est-à-dire que nous devons trouver un polynôme $P \in \mathbb{R}^{q}$ ajustant au mieux nos données.\\
 			$P$ est donc de la forme :
-			$$P(z) = b + \sum_{j=1}^{q}{w_j z^j}$$
+			$$P(z) = b + \sum_{j=1}^{q}{\theta_j z^j}$$
 			L'expérience \emph{E} est un ensemble de $n$ points $(x_i,y_i)$, que l'on peut résumer en deux vecteurs :
 			$$x, y \in \mathbb{R}^n$$
 			Et la mesure de performance \emph{P}, le critère des moindres carrés, c'est-à-dire :
@@ -143,7 +143,7 @@ Création d'un Moteur de Recherche dans les Images Satellite}
 			\end{figure}
 			
 			
-			Si nous choisissons un polynôme $P \in \mathbb{R}^1$, c'est à dire de la forme $P(z) = b + wz$, en minimisant le \emph{problème des moindres carrés}, nous obtenons la courbe suivante.
+			Si nous choisissons un polynôme $P \in \mathbb{R}^1$, c'est à dire de la forme $P(z) = b + \theta z$, en minimisant le \emph{problème des moindres carrés}, nous obtenons la courbe suivante.
 			\begin{figure}[H]
 				\begin{center}
 					\includegraphics[scale=0.5]{Images/underfitting.png}
@@ -186,10 +186,10 @@ Création d'un Moteur de Recherche dans les Images Satellite}
 	Dans cet exemple, nous choisirons bien entendu la courbe verte, car le modèle vert est beaucoup plus simple et nous semble plus cohérent par rapport à nos données.\\
 	Cette recherche d'un modèle optimal mais suffisamment simple peut se faire en ajoutant une composante à la mesure de performance.\\
 	En reprenant l'exemple précédent, nous pouvons ajouter à $J_0(x,y)$ une fonction $f$ arbitraire, qui aurait tendance à pénaliser l'effet de sur-apprentissage.\\
-	Cette fonction $f$ peut dépendre par exemple des coefficients $w_i$ du polynôme.\\
+	Cette fonction $f$ peut dépendre par exemple des coefficients $\theta_i$ du polynôme.\\
 	Ce qui nous donne une fonction :
-	$$J(x,y,w) = J_0(x,y) + \lambda f(w)$$
-	On peut choisir par exemple $f(w) = \sum_{i=1}^{q}{w_i^i}$ et ainsi pénaliser les coefficients d'ordre élevé, ainsi notre algorithme aura tendance à proposer des polynômes ayant des coefficients d'ordre élevé de petite taille, et ainsi réduire artificiellement l'ordre du polynôme choisi.\\
+	$$J(x,y,\theta) = J_0(x,y) + \lambda f(\theta)$$
+	On peut choisir par exemple $f(\theta) = \sum_{i=1}^{q}{\theta_i^i}$ et ainsi pénaliser les coefficients d'ordre élevé, ainsi notre algorithme aura tendance à proposer des polynômes ayant des coefficients d'ordre élevé de petite taille, et ainsi réduire artificiellement l'ordre du polynôme choisi.\\
 	Le terme de \emph{régularisation} est employé pour tout modification apportée à l'algorithme apprenant visant à réduire l'\emph{erreur de généralisation}, mais pas l'\emph{erreur d'apprentissage}.
 	
 	\section{Paramétrisation et Validation d'un Algorithme}
@@ -198,7 +198,7 @@ Création d'un Moteur de Recherche dans les Images Satellite}
 	Par exemple dans l'exemple de la régression polynomiale, nous avons utilisé deux \emph{hyper-paramètres} :
 	\begin{itemize}
 		\item $q$ : le degré du polynôme $P$ utilisé.
-		\item $\lambda$ : le coefficient de décroissance appliquée à la fonction $f(w)$.
+		\item $\lambda$ : le coefficient de décroissance appliquée à la fonction $f(\theta)$.
 	\end{itemize}
 	En effet, ces deux paramètres doivent être manuellement choisis par rapport à notre problème, en fonction de notre besoin de généralisation ($\lambda$) ou de performance sur l'apprentissage ($q$).\\
 	Afin de vérifier que notre algorithme soit correctement paramétré, il nous faut construire un troisième jeu de données, appelé ensemble de validation.\\
@@ -225,21 +225,21 @@ Création d'un Moteur de Recherche dans les Images Satellite}
 	Nous voulons donc ici, minimiser l'\emph{erreur d'apprentissage} afin d'améliorer nos performances sur la tâche à réaliser.\\
 		\subsection{Méthodes exactes}
 		Les méthodes exactes sont très pratiques, car elles permettent de trouver la solution de façon immédiate.\\
-		Pour résoudre le problème $min_{w}J(x,y)$, il nous faut donc annuler le gradient de la fonction de perte, soit
+		Pour résoudre le problème $min_{\theta}J(x,y)$, il nous faut donc annuler le gradient de la fonction de perte, soit
 		\begin{center}
-			$\nabla_{w} J(x,y) = 0$
+			$\nabla_{\theta} J(x,y) = 0$
 		\end{center}
 		Cela nécessite un certain travail en amont, dépendant entièrement du type d'algorithme utilisé.
 		De plus il n'existe \textbf{pas toujours de solution exacte unique}.
 			\subsubsection{Exemple}
 			Prenons le cas de la régression polynomiale, le problème est le suivant :
 			\begin{center}
-				$min_{w,b} J(x,y) = \frac{1}{2} (P(x)-y)^T(P(x)-y)$\\
-				$\leftrightarrow$ Trouver $w \in \mathbb{R}^q$ et $b \in \mathbb{R}$, tels que la fonction de perte $J(x,y)$ soit minimale.
+				$min_{\theta,b} J(x,y) = \frac{1}{2} (P(x)-y)^T(P(x)-y)$\\
+				$\leftrightarrow$ Trouver $\theta \in \mathbb{R}^q$ et $b \in \mathbb{R}$, tels que la fonction de perte $J(x,y)$ soit minimale.
 			\end{center}
 			Pour rappel, 
 				\begin{center}
-					$P(z) = b + \sum_{j=1}^{q}{w_j z^j}$,\\
+					$P(z) = b + \sum_{j=1}^{q}{\theta_j z^j}$,\\
 					un polynôme de degré $q$,\\
 					et $P(x) = (P(x_i))_{i=1..n}$,\\
 					le polynôme d'un vecteur $P(x)$ est le vecteur de polynômes $P(x_i)$.\\
@@ -252,9 +252,9 @@ Création d'un Moteur de Recherche dans les Images Satellite}
 					\end{pmatrix} 
 					\begin{pmatrix}
 					b \\
-					w_1 \\
+					\theta_1 \\
 					\vdots \\
-					w_n
+					\theta_n
 					\end{pmatrix}
 					= X \theta
 					$
@@ -354,15 +354,15 @@ Création d'un Moteur de Recherche dans les Images Satellite}
 Nous présenterons dans un premier temps le fonctionnement des réseaux totalement connectés, car les plus simples. Ainsi que différentes méthodes employées pour améliorer les performances des modèles.\\
 Puis nous verrons ensuite une variante, les réseaux convolutifs.\\
 Enfin nous aborderons succinctement différentes applications existantes appliquées à la vision.
-	\section{Réseaux Totalement Connectés}
-	Les réseaux totalement connectés, aussi appelés \emph{Fully Connected Networks} et plus anciennement \emph{Multi-Layer Perceptron}, définissent un \emph{mapping} entre un vecteur d'entrée $x$ et sa sortie associée $y$ de sorte que $y = f(x,\theta)$ et apprennent $\theta$ de sorte à produire la meilleure estimation.\\
+	\section{Réseaux de Neurones Profonds}
+	Les réseaux de neurones profonds, aussi appelés \emph{Deep Feedforward Networks} définissent un \emph{mapping} entre un vecteur d'entrée $x$ et sa sortie associée $y$ de sorte que $y = f(x,\theta)$ et apprennent les paramètres $\theta$ de sorte à produire la meilleure estimation.\\
 	Ils sont dits "\emph{feedforward}", ou en français à "propagation unique", car l'information se déplace à travers la fonction, depuis l'entrée $x$, puis par des étapes intermédiaires, pour arriver à la sortie $y$, sans aucun retour en arrière.\\
 	Les réseaux de neurones permettant un \emph{feedback} ou \emph{retour d'expérience} sont appelés font partie de la classe des réseaux récurrents.\\
 	Les réseaux de types "\emph{feedforward}" sont de loin les réseaux de neurones les plus utilisés.\\
 	On utilise le mot \emph{réseau} dans l’appellation réseaux de neurones, car ils sont composés d'une multitude de fonctions \emph{simples}, organisées en réseau.\\
 	On pourrait par exemple imaginer notre fonction $f(x,\theta)$ comme étant la composée de plusieurs fonctions, telle que $f(x,\theta) = u_{\theta_1} \circ v_{\theta_2} \circ w_{\theta_3}(x)$ avec $\theta = (\theta_1,\theta_2, \theta_3))$, un ensemble de paramètres.\\
 	C'est par ailleurs cette architecture distribuée, qui grâce à une puissance de calcul grandissante, par le biais du calcul GPU, permet de résoudre des problèmes de plus en plus complexes.
-		\subsection{Définition d'un Neurone Totalement Connecté}
+		\subsection{Définition d'un Neurone Artificiel}
 		Ce que l'on appelle \emph{neurone} est effectivement inspiré du fonctionnement d'un neurone biologique, bien que différent à bien des égards.\\
 			Un neurone artificiel est une application $f : \mathbb{R}^p \rightarrow \mathbb{R}$, paramétrée par $\theta = (b,w) = (b, w_1, ..., w_p)$.\\
 			Le réel $b$ s'appelle le biais, et le vecteur $w = (w_1, ..., w_p)$ s'appelle vecteur de poids.
@@ -375,7 +375,7 @@ Enfin nous aborderons succinctement différentes applications existantes appliqu
 			Cette application est la composée de deux fonctions distinctes :
 			\begin{itemize}
 				\item Une fonction d’\emph{agrégation} $h : \mathbb{R}^p \rightarrow \mathbb{R}$, combinant l'entrée $x$ avec les poids $w$ et le biais $b$.\\
-				Dans la quasi-totalité des cas, elle à l'allure suivante :
+				Dans le cas d'un neurone classique, ou dit \emph{totalement connecté}, elle à l'allure suivante :
 				$$h_\theta(x) = h_{b,w}(x) = w^Tx + b = \sum_{i=1}^{p}{w_i x_i} + b$$
 				\item Une fonction d'\emph{activation} $g : \mathbb{R} \rightarrow \mathbb{R}$, \emph{non-linéaire}.\\
 				Des exemples :
@@ -385,6 +385,7 @@ Enfin nous aborderons succinctement différentes applications existantes appliqu
 					\item \emph{Tangente hyperbolique} : $g(z) = \tanh(z)$
 				\end{itemize}
 			\end{itemize}
+		Il est important de garder à l'esprit que ces deux opérations successives sont distinctes, mais qu'elles sont regroupées ici pour montrer les similarités avec les neurones biologiques.\\
 		Ainsi notre neurone peut être résumé par une fonction $f$ telle que :
 		$$f_\theta(x) = g \circ h_\theta(x) = g(w^Tx + b)$$
 		La sortie de notre neurone, par la suite notée $a$, est l'\emph{image} de la fonction $f$ par l'entrée $x$:
@@ -398,9 +399,15 @@ Enfin nous aborderons succinctement différentes applications existantes appliqu
 			\end{center}
 		\end{figure}
 		Ici, chaque cercle représente un neurone, équivalent à ceux définis précédemment.\\
-		Toutefois, sur la première couche, appelée \emph{couche d'entrée}, les neurones produisent en sortie, le \emph{vecteur d'entrée} $x$.\\
+		Toutefois, sur la première couche, appelée \emph{couche d'entrée}, les neurones produisent en sortie, le \emph{vecteur d'entrée} $x$, ici $x \in \mathbb{R}^6$.\\
 		On peut noter aussi que la dernière couche, appelée \emph{couche de sortie}, les neurones produisent le vecteur $y$, ici $y\in \mathbb{R}^1 = \mathbb{R}$.\\
 		Ainsi, pour décrire un réseau de neurones, nous mesurerons deux caractéristiques :
+		\subsubsection{Profondeur}
+		\begin{center}
+			Le nombre de couches d'un réseau de neurones est appelé \emph{profondeur}, plus ce nombre est élevé, plus la capacité théorique de généralisation est forte.
+		\end{center}
+		Même si il n'existe pas de seuil officiel différenciant les réseaux de neurones, \emph{peu profonds}, dits \emph{superficiels}, des réseaux de neurones \emph{profonds}, on parle d'\emph{apprentissage profond} lorsque le nombre de couches cachées est $\geq 2$.\\
+		On parlera d'apprentissage très profond, lorsque le nombre de couches cachées est $\geq 10$.\\
 		\subsubsection{Largeur}
 		\begin{center}
 			Le nombre de neurones composant une couche est appelé \emph{largeur}.\\
@@ -408,13 +415,6 @@ Enfin nous aborderons succinctement différentes applications existantes appliqu
 		Nous pouvons par ailleurs noter que le nombre de paramètres $\theta = (b,w) = (b,w_1,..,w_p)$ d'un neurone n'est pas arbitraire.\\
 		En effet, la \emph{largeur} de chaque couche est égale au nombre de paramètres $\theta$ des neurones de la couche suivante.\\
 		Par ailleurs, la \emph{largeur} de la première couche est égale à la taille du vecteur d'entrée $x$.\\
-		
-		\subsubsection{Profondeur}
-		\begin{center}
-			Le nombre de couches d'un réseau de neurones est appelé \emph{profondeur}, plus ce nombre est élevé, plus la capacité théorique de généralisation est forte.
-		\end{center}
-		Même si il n'existe pas de seuil officiel différenciant les réseaux de neurones, \emph{peu profonds}, dits \emph{superficiels}, des réseaux de neurones \emph{profonds}, on parle d'\emph{apprentissage profond} lorsque le nombre de couches cachées est $\geq 2$.\\
-		On parlera d'apprentissage très profond, lorsque le nombre de couches cachées est $\geq 10$.\\
 		\subsubsection{Expression générale}
 		On explicitera généralement l'architecture d'un réseau de neurones par un vecteur $s \in \mathbb{N}^L$.\\
 		Ainsi $S = (S_1, S_2, ..., S_L)$ représente un réseau de neurones de \emph{profondeur} $L$ ($L$ couches), chacune possédant $s_i$ neurones ayant $s_{i-1}$ poids et un biais par neurone.
@@ -426,9 +426,9 @@ Enfin nous aborderons succinctement différentes applications existantes appliqu
 		Chaque élément du réseau de neurones peut être défini par sa position dans le réseau.\\
 		Pour les \emph{poids} :
 		\begin{itemize}
-			\item Un poids \emph{réel} noté $\elem{w}{k}{j}{i}$ sera le $i$-ème poids du $j$-ème neurone, situé dans la $k$-ème couche.
-			\item Par conséquent $\elem{w}{k}{j}{}$ sera quant à lui le vecteur de poids du $j$-ème neurone, situé dans la $k$-ème couche.
-			\item Enfin $\elem{w}{k}{}{}$ sera la matrice des poids de la $k$-ème couche.\\
+			\item Un poids \emph{réel} noté $\elem{W}{k}{j}{i}$ sera le $i$-ème poids du $j$-ème neurone, situé dans la $k$-ème couche.
+			\item Par conséquent $\elem{W}{k}{j}{}$ sera quant à lui le vecteur de poids du $j$-ème neurone, situé dans la $k$-ème couche.
+			\item Enfin $\elem{W}{k}{}{}$ sera la matrice des poids de la $k$-ème couche.\\
 		\end{itemize}
 		Pour les \emph{biais} :
 		\begin{itemize}
@@ -466,11 +466,11 @@ Enfin nous aborderons succinctement différentes applications existantes appliqu
 				    \STATE $\elem{a}{0}{}{} = x$
 				    \FOR{$k=1$ \TO $L$}
 				    	\FOR{$j=1$ \TO $S_k$}
-				    		\STATE $\elem{z}{k}{j}{} = (\elem{w}{k}{j}{})^T(\elem{a}{k-1}{}{}) + \elem{b}{k}{j}{} = \sum_{i=1}^{S_{k-1}}{\elem{w}{k}{j}{i} \times \elem{a}{k-1}{i}{}} + \elem{b}{k}{j}{}$
+				    		\STATE $\elem{z}{k}{j}{} = (\elem{W}{k}{j}{})^T(\elem{a}{k-1}{}{}) + \elem{b}{k}{j}{} = \sum_{i=1}^{S_{k-1}}{\elem{W}{k}{j}{i} \times \elem{a}{k-1}{i}{}} + \elem{b}{k}{j}{}$
 				    		\STATE $\elem{a}{k}{j}{} = g(\elem{z}{k}{j}{})$\\
 				    		\COMMENT{$\elem{a}{k}{j}{}$ est, comme vu précédemment, la sortie du $j$-ème neurone de la $k$-ème couche,\\
 				    		$\elem{z}{k}{j}{}$ est le résultat de la fonction d'agrégation, résultat très utile par la suite.
-				    		$\elem{w}{k}{j}{}$ est le vecteur de poids du $j$-ème neurone de la $k$-ème couche,\\
+				    		$\elem{W}{k}{j}{}$ est le vecteur de poids du $j$-ème neurone de la $k$-ème couche,\\
 				    		et $\elem{b}{k}{j}{}$ est le biais du $j$-ème neurone de la $k$-ème couche.}
 				    	\ENDFOR
 				    \ENDFOR
@@ -480,9 +480,9 @@ Enfin nous aborderons succinctement différentes applications existantes appliqu
 			\end{algorithm}
 			
 			Néanmoins, il existe aujourd'hui un grand nombre de bibliothèques permettant de faire du calcul matriciel de façon optimisée, appelées Basic Linear Algebra Subprograms (BLAS), telles que ATLAS, GotoBLAS, OpenBLAS.\\
-			Pour rappel, $\elem{w}{k}{}{}$ représente la matrice des poids de la $k$-ème couche, et $\elem{a}{k-1}{}{}$ le vecteur de sortie de la $(k-1)$-ème couche.\\
+			Pour rappel, $\elem{W}{k}{}{}$ représente la matrice des poids de la $k$-ème couche, et $\elem{a}{k-1}{}{}$ le vecteur de sortie de la $(k-1)$-ème couche.\\
 			Par conséquent, on peut calculer le vecteur de sortie de la $k$-ème couche de la façon suivante :
-			$$\elem{z}{k}{}{} = (\elem{w}{k}{}{})^T(\elem{a}{k-1}{}{}) + \elem{b}{k}{}{}$$
+			$$\elem{z}{k}{}{} = (\elem{W}{k}{}{})^T(\elem{a}{k-1}{}{}) + \elem{b}{k}{}{}$$
 			$$\elem{a}{k}{}{} = g(\elem{z}{k}{}{})$$
 			Ce qui nous permet alors d'écrire l'algorithme de propagation de façon matricielle (et laisser aux bibliothèques de calcul matriciel le soin d'optimiser les calculs):
 			\begin{algorithm}[H]
@@ -494,7 +494,7 @@ Enfin nous aborderons succinctement différentes applications existantes appliqu
 				     }
 				    \STATE $\elem{a}{0}{}{} = x$
 				    \FOR{$k=1$ \TO $L$}
-				    	\STATE $\elem{z}{k}{}{} = (\elem{w}{k}{}{})^T(\elem{a}{k-1}{}{}) + \elem{b}{k}{}{}$
+				    	\STATE $\elem{z}{k}{}{} = (\elem{W}{k}{}{})^T(\elem{a}{k-1}{}{}) + \elem{b}{k}{}{}$
 				    	\STATE $\elem{a}{k}{}{} = g(\elem{z}{k}{}{})$
 				    \ENDFOR
 				    \RETURN $\elem{a}{L}{}{}$
@@ -523,11 +523,11 @@ Enfin nous aborderons succinctement différentes applications existantes appliqu
 			    \RETURN $\theta_{k+1}$
 			\end{algorithmic}
 		\end{algorithm}
-		L'algorithme de rétro-propagation du gradient a pour simple but de calculer, de façon élégante, le gradient $\nabla_\theta J(x,y,\theta)$, avec $\theta$ représentant ici tous les paramètres du modèle, c'est à dire l'ensemble des poids $\elem{w}{k}{j}{i}$ et des biais $\elem{b}{k}{j}{}$.\\
+		L'algorithme de rétro-propagation du gradient a pour simple but de calculer, de façon élégante, le gradient $\nabla_\theta J(x,y,\theta)$, avec $\theta$ représentant ici tous les paramètres du modèle, c'est à dire l'ensemble des poids $\elem{W}{k}{j}{i}$ et des biais $\elem{b}{k}{j}{}$.\\
 		
 			\subsubsection{Calcul formel du Gradient}
 			
-				Il nous faut donc calculer $\frac{\partial J(x,y,\theta)}{\partial \elem{w}{k}{j}{i}}$, traduisant l'influence du poids $\elem{w}{k}{j}{i}$ sur la fonction de perte $J(x,y,\theta)$.\\
+				Il nous faut donc calculer $\frac{\partial J(x,y,\theta)}{\partial \elem{W}{k}{j}{i}}$, traduisant l'influence du poids $\elem{W}{k}{j}{i}$ sur la fonction de perte $J(x,y,\theta)$.\\
 				Et $\frac{\partial J(x,y,\theta)}{\partial \elem{b}{k}{j}{}}$, qui traduit l'influence du biais $\elem{b}{k}{j}{}$ sur la fonction de perte $J(x,y,\theta)$.\\
 				\begin{center}
 				\textbf{Toute dérivée partielle $\frac{\partial u}{\partial v}$ représente l'influence qu'a l'élément $v$ sur l'élément $u$.}
@@ -540,17 +540,17 @@ Enfin nous aborderons succinctement différentes applications existantes appliqu
 				
 				\paragraph{Calcul sur la Couche de Sortie}
 				
-				Commençons par calculer le gradient de l'erreur pour les poids de la couche de sortie, $\frac{\partial C}{\partial \elem{w}{L}{j}{i}}$.\\
+				Commençons par calculer le gradient de l'erreur pour les poids de la couche de sortie, $\frac{\partial C}{\partial \elem{W}{L}{j}{i}}$.\\
 				Ainsi que le gradient pour les biais de la couche de sortie, $\frac{\partial C}{\partial \elem{b}{L}{j}{}}$.\\
 				Sur la dernière couche, nous avons
-				$$\elem{z}{L}{j}{} = (\elem{w}{L}{j}{})^T(\elem{a}{L-1}{}{}) + \elem{b}{L}{j}{}$$
+				$$\elem{z}{L}{j}{} = (\elem{W}{L}{j}{})^T(\elem{a}{L-1}{}{}) + \elem{b}{L}{j}{}$$
 				Et
 				$$\elem{a}{L}{j}{} = g(\elem{z}{L}{j}{})$$\\
-				Utilisons à présent la règle de chaînage sur $\frac{\partial C}{\partial \elem{w}{L}{j}{i}}$, car $\elem{a}{L}{j}{}$ est une fonction composée.\\
+				Utilisons à présent la règle de chaînage sur $\frac{\partial C}{\partial \elem{W}{L}{j}{i}}$, car $\elem{a}{L}{j}{}$ est une fonction composée.\\
 				Nous obtenons donc,
 				$$\left\{
 				\begin{array}{l}
-					\frac{\partial C}{\partial \elem{w}{L}{j}{i}} = \frac{\partial C}{\partial \elem{a}{L}{j}{}} \times \frac{\partial \elem{a}{L}{j}{}}{\partial \elem{z}{L}{j}{}} \times \frac{\partial \elem{z}{L}{j}{}}{\partial \elem{w}{L}{j}{i}}\\
+					\frac{\partial C}{\partial \elem{W}{L}{j}{i}} = \frac{\partial C}{\partial \elem{a}{L}{j}{}} \times \frac{\partial \elem{a}{L}{j}{}}{\partial \elem{z}{L}{j}{}} \times \frac{\partial \elem{z}{L}{j}{}}{\partial \elem{W}{L}{j}{i}}\\
 					
 					\frac{\partial C}{\partial \elem{b}{L}{j}{}} = \frac{\partial C}{\partial \elem{a}{L}{j}{}} \times \frac{\partial \elem{a}{L}{j}{}}{\partial \elem{z}{L}{j}{}} \times \frac{\partial \elem{z}{L}{j}{}}{\partial \elem{b}{L}{j}{}}\\
 				\end{array}
@@ -562,17 +562,17 @@ Enfin nous aborderons succinctement différentes applications existantes appliqu
 				
 				Nous reviendrons sur les expressions de $\frac{\partial C}{\partial \elem{a}{L}{j}{}}$ et $\frac{\partial \elem{a}{L}{j}{}}{\partial \elem{z}{L}{j}{}}$, car elles nous permettront de choisir de façon éclairée la fonction d'activation et la fonction coût,car des simplifications peuvent s'opérer.\\
 				
-				Enfin $\frac{\partial \elem{z}{L}{j}{}}{\partial \elem{w}{L}{j}{i}}=\elem{a}{L-1}{i}{}$ et $\frac{\partial \elem{z}{L}{j}{}}{\partial \elem{b}{L}{j}{i}} = 1$, ce qui est évident à vérifier, car 
-				$$\elem{z}{L}{j}{} = \sum_{i=1}^{S_{L-1}}{\elem{w}{L}{j}{i} \times \elem{a}{L-1}{i}{}} + \elem{b}{L}{j}{}$$
+				Enfin $\frac{\partial \elem{z}{L}{j}{}}{\partial \elem{W}{L}{j}{i}}=\elem{a}{L-1}{i}{}$ et $\frac{\partial \elem{z}{L}{j}{}}{\partial \elem{b}{L}{j}{i}} = 1$, ce qui est évident à vérifier, car 
+				$$\elem{z}{L}{j}{} = \sum_{i=1}^{S_{L-1}}{\elem{W}{L}{j}{i} \times \elem{a}{L-1}{i}{}} + \elem{b}{L}{j}{}$$
 				
-				Ces deux expressions traduisent l'influence des poids $\elem{w}{L}{j}{i}$ et du biais $\elem{b}{L}{j}{}$ sur l'agrégat, ou résultat de la fonction d'agrégation, $\elem{z}{L}{j}{}$\\
+				Ces deux expressions traduisent l'influence des poids $\elem{W}{L}{j}{i}$ et du biais $\elem{b}{L}{j}{}$ sur l'agrégat, ou résultat de la fonction d'agrégation, $\elem{z}{L}{j}{}$\\
 				
 				Pour la suite, nous allons poser $\elem{\delta}{L}{j}{} = \frac{\partial C}{\partial \elem{a}{L}{j}{}} \times \frac{\partial \elem{a}{L}{j}{}}{\partial \elem{z}{L}{j}{}}$, cela interviendra quand nous montrerons le caractère récursif de la rétropropagation.\\
 				
 				Finalement, nous obtenons,
 				$$\left\{
 				\begin{array}{l}
-					\frac{\partial C}{\partial \elem{w}{L}{j}{i}} = \elem{\delta}{L}{j}{} \times \frac{\partial \elem{z}{L}{j}{}}{\partial \elem{w}{L}{j}{i}} = \elem{\delta}{L}{j}{} \times \elem{a}{L-1}{i}{} \\
+					\frac{\partial C}{\partial \elem{W}{L}{j}{i}} = \elem{\delta}{L}{j}{} \times \frac{\partial \elem{z}{L}{j}{}}{\partial \elem{W}{L}{j}{i}} = \elem{\delta}{L}{j}{} \times \elem{a}{L-1}{i}{} \\
 					
 					\frac{\partial C}{\partial \elem{b}{L}{j}{}} = \elem{\delta}{L}{j}{} \times \frac{\partial \elem{z}{L}{j}{}}{\partial \elem{b}{L}{j}{}} = \elem{\delta}{L}{j}{}\\
 				\end{array}
@@ -582,32 +582,32 @@ Enfin nous aborderons succinctement différentes applications existantes appliqu
 				
 				\paragraph{Calcul sur l'avant dernière couche}
 				
-				Après avoir explicité les calculs des $\frac{\partial C}{\partial \elem{w}{L}{j}{i}}$ et $\frac{\partial C}{\partial \elem{b}{L}{j}{}}$, passons à présent au calcul sur l'avant dernière couche, soit aux $\frac{\partial C}{\partial \elem{w}{L-1}{j}{i}}$ et $\frac{\partial C}{\partial \elem{b}{L-1}{j}{}}$.\\
+				Après avoir explicité les calculs des $\frac{\partial C}{\partial \elem{W}{L}{j}{i}}$ et $\frac{\partial C}{\partial \elem{b}{L}{j}{}}$, passons à présent au calcul sur l'avant dernière couche, soit aux $\frac{\partial C}{\partial \elem{W}{L-1}{j}{i}}$ et $\frac{\partial C}{\partial \elem{b}{L-1}{j}{}}$.\\
 				Grâce à la \emph{chain rule}, nous obtenons de la même façon que précédemment,
 				
 				$$\left\{
 				\begin{array}{l}
-					\frac{\partial C}{\partial \elem{w}{L-1}{j}{i}} = \frac{\partial C}{\partial \elem{a}{L-1}{j}{}} \times \frac{\partial \elem{a}{L-1}{j}{}}{\partial \elem{z}{L-1}{j}{}} \times \frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{w}{L-1}{j}{i}}\\
+					\frac{\partial C}{\partial \elem{W}{L-1}{j}{i}} = \frac{\partial C}{\partial \elem{a}{L-1}{j}{}} \times \frac{\partial \elem{a}{L-1}{j}{}}{\partial \elem{z}{L-1}{j}{}} \times \frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{W}{L-1}{j}{i}}\\
 					\frac{\partial C}{\partial \elem{b}{L-1}{j}{}} = \frac{\partial C}{\partial \elem{a}{L-1}{j}{}} \times \frac{\partial \elem{a}{L-1}{j}{}}{\partial \elem{z}{L-1}{j}{}} \times \frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{b}{L-1}{j}{}}\\
 				\end{array}
 				\right.$$\\
 				
-				On peut remarquer que l'utilisation de la \emph{Chain rule} permet d'exprimer facilement $\frac{\partial \elem{a}{L-1}{j}{}}{\partial \elem{z}{L-1}{j}{}}$, $\frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{w}{L-1}{j}{i}}$ et $\frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{b}{L-1}{j}{}}$.\\
+				On peut remarquer que l'utilisation de la \emph{Chain rule} permet d'exprimer facilement $\frac{\partial \elem{a}{L-1}{j}{}}{\partial \elem{z}{L-1}{j}{}}$, $\frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{W}{L-1}{j}{i}}$ et $\frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{b}{L-1}{j}{}}$.\\
 				En effet si la fonction d'activation reste la même pour tout le réseau de neurones, alors le terme $\frac{\partial \elem{a}{L-1}{j}{}}{\partial \elem{z}{L-1}{j}{}}$ est la même que $\frac{\partial \elem{a}{L}{j}{}}{\partial \elem{z}{L}{j}{}}$ calculée plus haut.\\
-				De même que précédemment $\frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{w}{L-1}{j}{i}}=\elem{a}{L-2}{i}{}$ et $\frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{b}{L-1}{j}{i}} = 1$, car
-				$$\elem{z}{L-1}{j}{} = \sum_{i=1}^{S_{L-2}}{\elem{w}{L-1}{j}{i} \times \elem{a}{L-2}{i}{}} + \elem{b}{L-1}{j}{}$$
+				De même que précédemment $\frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{W}{L-1}{j}{i}}=\elem{a}{L-2}{i}{}$ et $\frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{b}{L-1}{j}{i}} = 1$, car
+				$$\elem{z}{L-1}{j}{} = \sum_{i=1}^{S_{L-2}}{\elem{W}{L-1}{j}{i} \times \elem{a}{L-2}{i}{}} + \elem{b}{L-1}{j}{}$$
 				
 				La difficulté réside ici, dans le calcul de $\frac{\partial C}{\partial \elem{a}{L-1}{j}{}}$.\\
 				Si on trace un réseau de neurones quelconque.\\
 				Prenons le $j$-ème neurone de la couche $L-1$, on peut voir qu'il transmet le résultat de son activation $\elem{a}{L-1}{j}{}$ à tous les neurones de la couche $L$.\\
 				Cette diffusion d'informations a aussi un impact sur le coût, puisque si erreur il y a alors, les neurones de la couche $L$ en feront les "frais".\\
-				Un neurone $\elem{a}{L-1}{i}{}$ propage l'erreur à un neurone $\elem{a}{L}{j}{}$ proportionnellement au poids $\elem{w}{L}{j}{i}$.\\
+				Un neurone $\elem{a}{L-1}{i}{}$ propage l'erreur à un neurone $\elem{a}{L}{j}{}$ proportionnellement au poids $\elem{W}{L}{j}{i}$.\\
 				
 				Nous devons donc décomposer $\frac{\partial C}{\partial \elem{a}{L-1}{j}{}}$, grâce à la \emph{chain rule}.\\
 				
 				Le résultat est le suivant :	
 				$$\frac{\partial C}{\partial \elem{a}{L-1}{j}{}} = \sum_{l=1}^{L-1}{\frac{\partial C}{\partial \elem{a}{L}{l}{}} \times \frac{\partial \elem{a}{L}{l}{}}{\partial \elem{z}{L}{l}{}} \times \frac{\partial \elem{z}{L}{l}{}}{\partial \elem{a}{L-1}{l}{}}}$$
-				En effet, le neurone $\elem{a}{L-1}{i}{}$ transfère son erreur à tous les neurones $\elem{a}{L}{j}{}$ de la couche suivante par le biais des poids, car $\frac{\partial \elem{z}{L}{l}{}}{\partial \elem{a}{L-1}{j}{}} = \elem{w}{L-1}{l}{j}$.\\
+				En effet, le neurone $\elem{a}{L-1}{i}{}$ transfère son erreur à tous les neurones $\elem{a}{L}{j}{}$ de la couche suivante par le biais des poids, car $\frac{\partial \elem{z}{L}{l}{}}{\partial \elem{a}{L-1}{j}{}} = \elem{W}{L-1}{l}{j}$.\\
 				On remarque par ailleurs que 
 				$$\frac{\partial C}{\partial \elem{a}{L-1}{j}{}} = \sum_{l=1}^{L-1}{\elem{\delta}{L}{l}{} \times \frac{\partial \elem{z}{L}{l}{}}{\partial \elem{a}{L-1}{j}{}}}$$
 				Car $$\elem{\delta}{L}{j}{} = \frac{\partial C}{\partial \elem{a}{L}{j}{}} \times \frac{\partial \elem{a}{L}{j}{}}{\partial \elem{z}{L}{j}{}}$$
@@ -619,7 +619,7 @@ Enfin nous aborderons succinctement différentes applications existantes appliqu
 				Sur la couche $L$,
 				$$\left\{
 				\begin{array}{l}
-					\frac{\partial C}{\partial \elem{w}{L}{j}{i}} = \elem{\delta}{L}{j}{} \times \frac{\partial \elem{z}{L}{j}{}}{\partial \elem{w}{L}{j}{i}} = \elem{\delta}{L}{j}{} \times \elem{a}{L-1}{i}{} \\
+					\frac{\partial C}{\partial \elem{W}{L}{j}{i}} = \elem{\delta}{L}{j}{} \times \frac{\partial \elem{z}{L}{j}{}}{\partial \elem{W}{L}{j}{i}} = \elem{\delta}{L}{j}{} \times \elem{a}{L-1}{i}{} \\
 					
 					\frac{\partial C}{\partial \elem{b}{L}{j}{}} = \elem{\delta}{L}{j}{} \times \frac{\partial \elem{z}{L}{j}{}}{\partial \elem{b}{L}{j}{}} = \elem{\delta}{L}{j}{}\\
 				\end{array}
@@ -629,7 +629,7 @@ Enfin nous aborderons succinctement différentes applications existantes appliqu
 				Sur la couche $L-1$,
 				$$\left\{
 				\begin{array}{l}
-					\frac{\partial C}{\partial \elem{w}{L-1}{j}{i}} = \elem{\delta}{L-1}{j}{} \times \frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{w}{L-1}{j}{i}} = \elem{\delta}{L-1}{j}{} \times \elem{a}{L-2}{i}{}\\
+					\frac{\partial C}{\partial \elem{W}{L-1}{j}{i}} = \elem{\delta}{L-1}{j}{} \times \frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{W}{L-1}{j}{i}} = \elem{\delta}{L-1}{j}{} \times \elem{a}{L-2}{i}{}\\
 					\frac{\partial C}{\partial \elem{b}{L-1}{j}{}} = \elem{\delta}{L-1}{j}{} \times \frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{b}{L-1}{j}{}} = \elem{\delta}{L-1}{j}{}\\
 				\end{array}
 				\right.$$
@@ -640,7 +640,7 @@ Enfin nous aborderons succinctement différentes applications existantes appliqu
 				On a $\forall k = 1..L$,
 				$$\left\{
 				\begin{array}{l}
-					\frac{\partial C}{\partial \elem{w}{k}{j}{i}} = \elem{\delta}{k}{j}{} \times \frac{\partial \elem{z}{k}{j}{}}{\partial \elem{w}{k}{j}{i}} = \elem{\delta}{k}{j}{} \times \elem{a}{k-1}{i}{}\\
+					\frac{\partial C}{\partial \elem{W}{k}{j}{i}} = \elem{\delta}{k}{j}{} \times \frac{\partial \elem{z}{k}{j}{}}{\partial \elem{W}{k}{j}{i}} = \elem{\delta}{k}{j}{} \times \elem{a}{k-1}{i}{}\\
 					\frac{\partial C}{\partial \elem{b}{k}{j}{}} = \elem{\delta}{k}{j}{} \times \frac{\partial \elem{z}{k}{j}{}}{\partial \elem{b}{k}{j}{}} = \elem{\delta}{k}{j}{}\\
 				\end{array}
 				\right.$$
@@ -666,7 +666,7 @@ Enfin nous aborderons succinctement différentes applications existantes appliqu
 				    	\STATE $\elem{\delta}{L}{j}{} = \frac{\partial C}{\partial \elem{a}{L-1}{j}{}}$
 				    	\STATE $\frac{\partial C}{\partial \elem{b}{L}{j}{}} = \elem{\delta}{L}{j}{}$
 				    	\FOR{$i =1$ \TO $L$}
-					    	\STATE $\frac{\partial C}{\partial \elem{w}{L}{j}{i}} = \elem{\delta}{L}{j}{} \times \elem{a}{L-1}{i}{}$
+					    	\STATE $\frac{\partial C}{\partial \elem{W}{L}{j}{i}} = \elem{\delta}{L}{j}{} \times \elem{a}{L-1}{i}{}$
 				    	\ENDFOR
 				    \ENDFOR
 				    
@@ -677,14 +677,14 @@ Enfin nous aborderons succinctement différentes applications existantes appliqu
 				    		\STATE $\elem{\delta}{k}{j}{} = \sum_{l=1}^{k-1}{\elem{\delta}{k+1}{l}{} \times \frac{\partial \elem{z}{k+1}{l}{}}{\partial \elem{a}{k}{j}{}} \times \frac{\partial \elem{a}{k}{j}{}}{\partial \elem{z}{k}{j}{}}}$
 				    		\STATE $\frac{\partial C}{\partial \elem{b}{k}{j}{}} = \elem{\delta}{k}{j}{}$
 				    		\FOR{$i =1$ \TO $k$}
-					    		\STATE $\frac{\partial C}{\partial \elem{w}{k}{j}{i}} = \elem{\delta}{k}{j}{}  \times \elem{a}{k-1}{i}{}$
+					    		\STATE $\frac{\partial C}{\partial \elem{W}{k}{j}{i}} = \elem{\delta}{k}{j}{}  \times \elem{a}{k-1}{i}{}$
 					    	\ENDFOR
 				    	\ENDFOR
 				    \ENDFOR
 				    
 				\end{algorithmic}
 			\end{algorithm}
-		Cet algorithme nous permet donc de calculer de façon très efficace tous les $\frac{\partial C}{\partial \elem{w}{k}{j}{i}}$ et $\frac{\partial C}{\partial \elem{b}{k}{j}{}}$.\\
+		Cet algorithme nous permet donc de calculer de façon très efficace tous les $\frac{\partial C}{\partial \elem{W}{k}{j}{i}}$ et $\frac{\partial C}{\partial \elem{b}{k}{j}{}}$.\\
 		Il existe une version privilégiant le calcul matriciel, permettant un calcul plus rapide, grâce aux bibliothèques de calcul matriciel.\\
 		Nous ne redémontrerons pas l'algorithme, mais nous en donneront toutefois la formulation.
 		\begin{algorithm}[H]
@@ -699,14 +699,14 @@ Enfin nous aborderons succinctement différentes applications existantes appliqu
 			    \COMMENT{Calcul du gradient sur la couche de sortie.}
 			    \STATE $\elem{\delta}{L}{}{} = \nabla_{\elem{a}{L-1}{}{}} C$
 			    \STATE $\nabla_{\elem{b}{L}{}{}} C = \elem{\delta}{L}{}{}$
-			    \STATE $\nabla_{\elem{w}{L}{}{}} C = \elem{\delta}{L}{}{} \times{\elem{a}{L-1}{}{}}^T $
+			    \STATE $\nabla_{\elem{W}{L}{}{}} C = \elem{\delta}{L}{}{} \times{\elem{a}{L-1}{}{}}^T $
 			    
 			    \FOR{$k=L-1$ \TO $1$}
 			    	\STATE
 			    	\COMMENT{Calcul du gradient sur la $k$-ème couche.}
 			    	\STATE $\elem{\delta}{k}{}{} = ((\nabla_{\elem{a}{k}{}{}}\elem{z}{k+1}{}{})^T \times \elem{\delta}{k+1}{}{}) \odot \nabla_{\elem{z}{k}{}{}}{\elem{a}{k}{}{}}$
 			    	\STATE $\nabla_{\elem{b}{k}{}{}} C = \elem{\delta}{k}{}{}$
-			    	\STATE $\nabla_{\elem{w}{k}{}{}} C = \elem{\delta}{k}{}{} \times{\elem{a}{k-1}{}{}}^T $
+			    	\STATE $\nabla_{\elem{W}{k}{}{}} C = \elem{\delta}{k}{}{} \times{\elem{a}{k-1}{}{}}^T $
 			    \ENDFOR
 			\end{algorithmic}
 		\end{algorithm}
@@ -735,14 +735,15 @@ Enfin nous aborderons succinctement différentes applications existantes appliqu
 			$$J(x,y,\theta) = J_0(x,y,\theta) + \lambda \Omega(\theta)$$
 			Avec $\lambda \geq 0$, un hyper-paramètre pondérant la contribution de la composante de pénalisation.\\
 			Si $\lambda = 0$, il n'y a pas de régularisation.\\
-			Nous ajouterons par ailleurs que cette pénalisation n'affecte que les poids $\elem{w}{k}{j}{i}$ et non les biais $\elem{b}{k}{j}{}$, car les biais requièrent moins de données pour ajuster précisément les données.\\
+			Nous ajouterons par ailleurs que cette pénalisation n'affecte que les poids $\elem{W}{k}{j}{i}$ et non les biais $\elem{b}{k}{j}{}$, car les biais requièrent moins de données pour ajuster précisément les données.\\
 				\paragraph{Régularisation $L^2$}
+				Soit $w$, l'ensemble des poids du modèle,\\
 				On pose, $$\Omega(\theta) = \Omega(w) = \frac{1}{2} ||w||_2^2 = \frac{1}{2} w^T w$$
 				La fonction de perte s'écrit donc,
 				$$\tilde{J}(x,y,\theta) = J(x,y,\theta) + \frac{\lambda}{2} w^T w$$
 				Par conséquent le gradient s'écrit de la façon suivante,
 				$$\nabla_\theta \tilde{J}(x,y,\theta) = \nabla_\theta J(x,y,\theta) + \lambda w$$
-				Ainsi le poids $\elem{w}{k}{j}{i}$ aura tendance à diminuer par rapport à une fraction de lui même.
+				Ainsi le poids $\elem{W}{k}{j}{i}$ aura tendance à diminuer par rapport à une fraction de lui même.
 			\subsubsection{Augmentation du jeu de données}
 			Une des meilleures façons d'améliorer la capacité de généralisation d'un modèle, est de l'entraîner sur plus de données.\\
 			Malheureusement, la taille des ensembles de données est généralement limitée.\\
@@ -757,7 +758,7 @@ Enfin nous aborderons succinctement différentes applications existantes appliqu
 			La méthode \emph{Dropout} est une méthode assez particulière de régularisation, qui consiste à entraîner tour à tour des sous-réseaux de notre réseaux de neurones.
 			\begin{figure}[H]
 				\begin{center}
-					\includegraphics[scale=0.25]{Images/dropout.png}
+					\includegraphics[scale=0.20]{Images/dropout.png}
 					\caption{Exemple d'application de la méthode de \emph{Dropout}}
 				\end{center}
 			\end{figure}
@@ -767,25 +768,30 @@ Enfin nous aborderons succinctement différentes applications existantes appliqu
 			Ce minimum local est de façon générale un bien meilleur minimum que ceux propres aux sous-modèles.\\
 			Cette méthode présente toutefois un inconvénient, elle est difficile à implémenter, mais est présente dans la plupart des librairies d'apprentissage profond.
 		\section{Réseaux Convolutifs}
-		Les réseaux de neurones convolutifs sont une famille particulièrement intéressante de réseaux de neurones, qui a donné naissance à de nombreux archétypes de modèles parmi les plus performants au monde en matière de traitement de l'image.\\
-	Ils sont en effet spécialisés dans le traitement de données ayant une structure en forme de grille, spatialement ou temporellement parlant.\\
+		Les réseaux de neurones convolutifs sont une famille particulière de réseaux de neurones, qui excelle en terme de performance dans le domaine de la vision par ordinateur.\\
+	Ils sont en effet spécialisés dans le traitement de données ayant une structure en forme de grille, c'est à dire que les données sont liées spatialement ou temporellement.\\
 	Voici des exemples de données ayant ce genre de structure :
 	\begin{itemize}
 		\item Les séries temporelles pouvant être vue comme une grille de dimension $1$, car assimilables à des signaux, ayant pour unité un intervalle de temps fixe.
 		\item Les images, pouvant être considérées comme étant des grilles de dimensions $2$ de pixels.
 	\end{itemize}
-	Ces deux types de données sont en fait assez proches, ce sont tous deux des signaux, l'un est en temporel et de dimension $1$, l'autre est atemporel et de dimension $2$.
+	Dans un premier temps, nous définirons rapidement l'opérateur de convolution.\\
+	Dans un second temps, nous discuterons de l'intérêt des convolutions dans les réseaux de neurones, ainsi que des différences existantes entre la convolution au sens mathématique et celle employée pour l'apprentissage profond.\\
+	Enfin nous parlerons d'une opération très souvent complémentaire à celle de \emph{convolution}, appelée \emph{pooling}.
 		\subsection{L'Opérateur de Convolution}
-			\subsubsection{Pour des fonctions}
-			Le produit de convolution de deux fonctions réelles ou complexes $f$ et $g$, noté $f * g$ est défini tel que,
+		L'opérateur de convolution est un opérateur bilinéaire, c'est-à-dire linéaire par rapport à chacune des opérandes, et commutatif, généralement noté $*$.\\
+		En traitement du signal, cet opérateur représente l’interaction entre un filtre et un signal.\\
+		Elle peut être vue comme une moyenne mobile d'un signal pondérée par une fonction appelée \emph{noyau}.
+			\subsubsection{Cas continu}
+			Le produit de convolution de deux fonctions réelles ou complexes $f$ et $g$ est défini tel que,
 			$$(f * g)(x) = \int_{-\infty}^{+\infty}{f(x-t)g(t)dt} = \int_{-\infty}^{+\infty}{f(t)g(x-t)dt}$$
-			La fonction $g$ est en règle générale un filtre.
-			\subsubsection{Pour des suites}
-			Le produit de convolution de deux suites $f$ et $g$, noté $f * g$ est défini tel que,
+			\subsubsection{Cas discret}
+			Le produit de convolution de deux suites $f$ et $g$ est défini tel que,
 			$$(f *g)(n) = \sum_{m = -\infty}^{+\infty}{f(n-m)g(m)} = \sum_{m = -\infty}^{+\infty}{f(m)g(n-m)}$$
-			La suite $g$ est en règle générale un filtre.
-			\subsection{Pour les images}
-			Le produit de convolution de deux images de dimension $2$, $I$ et $K$, noté $I * K$ est défini tel que,
+			\subsubsection{Application aux images}
+			On rappelle qu'une image $I$ de $M$ lignes et $N$ colonnes est décrite par une fonction discrète $I(i,j)$ à support fini $S \subset \mathbb{Z}^2$ et à valeurs dans $\mathbb{R}$ ou $\mathbb{N}$.\\
+			Puisque l'image, décrite par la fonction $I$ est nulle en dehors du support, on peut réécrire le produit de convolution entre des bornes finies.\\
+			Le produit de convolution en un point $(i,j)$ de deux images $I$ et $K$, noté $I * K$ est défini tel que,
 			$$(I*K)(i,j) = \sum_{m}\sum_{n}{I(m,n)K(i-m,j-n)} = \sum_{m}\sum_{n}{I(i-m,j-n)K(m,n)}$$
 			L'image $K$ est appelée \emph{noyau}, ou \emph{kernel}, c'est l'équivalent d'un filtre pour les images.
 			Voici un exemple d'application de la convolution sur une image :
@@ -796,51 +802,62 @@ Enfin nous aborderons succinctement différentes applications existantes appliqu
 				\end{center}
 			\end{figure}
 			Dans cet exemple de convolution entre une image $I$, $(8,3)$ et un noyau $K$, $(2,2)$, on peut remarquer tout d'abord, que la image issue de la convolution est de forme $(6,2)$.\\
-			En effet la convolution réduit la taille de la fenêtre.\\
-			Si l'image $I$ est de taille $(m,n)$ et le noyau de taille $(k,l)$ alors l'image convolutée sera de taille $(m-k,n-l)$.
-		\subsection{Convolution dans les Réseaux de Neurones}
-		L'idée d'utiliser la convolution en apprentissage machine s'appuie sur deux points essentiels, la \emph{connectivité partielle}, le \emph{partage des paramètres}.
-			\subsubsection{La connectivité partielle}
-			Dans les réseaux de neurones traditionnels, la sortie d'une couche $\elem{a}{k}{}{}$ est entièrement distribuée comme entrée à tous les neurones de la couche $k+1$. On parle alors de \emph{connectivité totale}\\
-			À l'inverse, les réseaux de neurones convolutifs n'ont qu'une \emph{connectivité partielle}, ce qui signifie que les composantes $\elem{a}{k}{j}{}$ de la sortie ne seront transmises que partiellement à différents neurones de la couche $k+1$, et ce par proximité dans la sortie.
-			Ainsi la transmission de l'information se fera de façon locale d'un point de vue distance et non plus de façon globale.
-			\subsubsection{Le partage des paramètres}
-			Une couche de convolution est unique pour tous les sous-vecteurs d'une sortie $\elem{a}{k}{}{}$.\\
-			Si nous construisons une couche de convolution composée des poids suivants :
-			$$
-			\begin{pmatrix}
-			1 & 0 & 1 \\ 
-			0 & 0 & 0 \\ 
-			0 & 1 & 0
-			\end{pmatrix}
-			$$
-			Nous ne transmettrons que les composantes $1$, $3$ et $8$ du sous-vecteur de sortie à la couche suivante, les autres composantes seront alors ignorées.\\
-			On voit alors tout de suite l'utilité pour la reconnaissance d'objet, en effet, il suffit de choisir la couche de convolution selon la motif que nous souhaitons identifier.
-			Comme par exemple :
-			$$
-			\begin{pmatrix}
-			0 & 0 & 1 & 1 & 1 & 1 & 1 & 0 & 0 \\ 
-			0 & 1 & 0 & 0 & 0 & 0 & 0 & 1 & 0 \\ 
-			1 & 0 & 1 & 1 & 0 & 1 & 1 & 0 & 1 \\ 
-			1 & 0 & 1 & 1 & 0 & 1 & 1 & 0 & 1 \\ 
-			1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\
-			1 & 0 & 1 & 0 & 0 & 0 & 1 & 0 & 1 \\
-			1 & 0 & 1 & 1 & 0 & 1 & 1 & 0 & 1 \\ 
-			1 & 0 & 0 & 1 & 1 & 1 & 0 & 0 & 1 \\ 
-			0 & 1 & 0 & 0 & 0 & 0 & 0 & 1 & 0 \\ 
-			0 & 0 & 1 & 1 & 1 & 1 & 1 & 0 & 0
-			\end{pmatrix} 
-			$$
-			C'est un filtre permettant de reconnaître le motif \smiley{} dans une image.\\
-			Voici à présent la représentation d'une couche de convolution en entrée d'un réseau de neurones :
+			En effet la convolution sans \emph{padding} réduit la taille de la fenêtre.\\
+			Si l'image $I$ est de taille $(m,n)$ et le noyau de taille $(k,l)$ alors l'image convolutée sera de taille $(m-k+1,n-l+1)$.
+		\subsection{Intérêts de la Convolution dans les Réseaux de Neurones}
+		La convolution s'appuie sur trois idées importantes permettant l'amélioration des performances, l'\emph{interaction partielle}, le \emph{partage des paramètres} et l'\emph{invariance par translation}.
+			\subsubsection{L'interaction partielle}
+			Dans les réseaux de neurones traditionnels, le passage de l'information d'une couche à la suivante se fait en autre par la multiplication matricielle du vecteur d'entrée $\elem{a}{k-1}{}{}$ de dimension $m$, par la matrice $\elem{W}{k}{}{}$ de dimension $m \times n$, la sortie du neurone $\elem{a}{k-1}{}{}$ sera donc de dimension $n$.\\
+			Pour rappel :
+			$$\elem{z}{k}{}{} = (\elem{W}{k}{}{})^T(\elem{a}{k-1}{}{}) + \elem{b}{k}{}{}$$
+			$$\elem{a}{k}{}{} = g(\elem{z}{k}{}{})$$
+			On voit donc qu'ici l'interaction, ou connectivité, est totale puisque toutes les entrées $\elem{a}{k-1}{j}{}$ sont connectées par les poids $\elem{W}{k}{j}{i}$ aux sorties $\elem{a}{k-1}{i}{}$.\\
+			Dans le cas où l'on travaille avec des images, on peut se demander si pour un pixel donné l'information apportée par un pixel situé à l'extrême opposé de l'image est pertinente.\\
+			Ainsi, envisager une connectivité partielle entre le vecteur d'entrée $\elem{a}{k-1}{}{}$ et le vecteur de sortie $\elem{a}{k-1}{}{}$ peut sembler intéressante si l'information apportée s'apparente à du bruit.\\
+			La convolution nous permet en effet cette interaction partielle, en effet la dimension du noyau $\elem{W}{k}{}{}$, de la forme $k \times n$, et si $k < m$ alors l'interaction sera en effet partielle.\\
+			Voici à présent la représentation de l'interaction partielle dans un cas matriciel, plus illustratif qu'un simple cas vectoriel:
 			\begin{figure}[H]
 				\begin{center}
 					\includegraphics[scale=0.60]{Images/convolutionlayer.png}
-					\caption{Représentation d'une couche de convolution}
+					\caption{Représentation de l'interaction partielle}
 				\end{center}
 			\end{figure}
-			Nous retiendrons alors que les couches de convolution servent à trouver des motifs locaux sur des séries temporelles ou images.
-			\subsubsection{Neurone de Convolution}
+			
+			\subsubsection{Le partage des paramètres et invariance par translation}
+			Dans un réseau convolutif, chaque paramètre du noyau est utilisé à toutes les positions du vecteur d'entrée, sauf peut-être pour les premiers et derniers éléments du vecteur d'entrée.\\
+			Ainsi le partage de paramètres pour la convolution signifie plutôt que d'apprendre plusieurs ensembles de paramètres pour chaque sous-région du vecteur d'entrée, un seul ensemble sera appris.\\
+			Dans le cas de la figure précédente, où la fenêtre est de dimension $5 \times 5$, un seul noyau de dimension $5 \times 5$ sera appris pour cette couche de convolution.\\
+			Ce partage de paramètres permet alors à notre couche de convolution d'être invariante par translation.\\
+			En effet supposons que le noyau de notre couche soit entraîné à détecter un motif, ou \emph{feature} en particulier sur une image. Le noyau unique, et donc partagé à toutes les sous-régions de l'entrée, pourra détecter le motif peu importe sa position dans l'image.\\
+			
+			Cette propriété d'invariance par translation rend les couches de convolutions très intéressantes, car elles sont plus robustes au bruit que des couches entièrement connectées.
+				
+			\subsection{La Convolution appliquée aux Réseaux de Neurones}
+			Le terme \emph{convolution} employé dans le contexte de l'apprentissage profond, diffère quelque peu de la convolution mathématique définie comme ci-dessus.\\
+			Tout d'abord, quand on parle d'une convolution dans le contexte des réseaux de neurones, il s'agit en fait de plusieurs convolutions menées en parallèle.\\
+			En effet, une convolution avec un noyau "\emph{simple}", ne peut extraire qu'une seule \emph{feature} à différents endroits de l'image.\\
+			Il est toutefois possible d'en extraire plusieurs à la fois à différents endroits de l'image.\\
+			De plus, l'entrée n'est pas juste un vecteur ou une matrice de valeurs.\\
+			Nous parlerons ici de façon plus générale de tenseurs.
+				\paragraph{Définition d'un Tenseur}
+				Un vecteur de dimension $n$ est représenté par un tableau uni-dimensionnel de longueur $n$ dans une base donnée.\\
+				On peut aussi représenter ce même vecteur dans une autre base par un tableau bi-dimensionnel ayant pour dimensions $(l,m)$, si $l \times m = n$.\\
+				On peut encore représenter ce même vecteur dans une autre base par un tableau tri-dimensionnel ayant pour dimensions $(k,l,m)$, si $k \times l \times m = n$.\\
+				\begin{center}
+					Le terme tenseur désigne un tableau multi-dimensionnel représentant un vecteur.
+				\end{center}
+				Un élément d'un tenseur est appelée composante scalaire.\\
+				\begin{center}
+					L'ordre, ou degré, d'un tenseur est égal à la dimension du tableau.
+				\end{center}
+				Exemple : Une image en couleurs (RGB) de $650 \times 650$ pixels peut être décrite par un tenseur d'ordre $3$.\\
+				Nous écrirons alors que la dimension de l'image est $3 \times 650 \times 650$, ou bien encore $650 \times 650 \times 3$.\\
+				Toutefois, d'un point de vue machine, nous indexons celle variant le plus lentement en premier et celle variant le plus rapidement en dernier. Nous retiendrons ici l'écriture $3 \times 650 \times 650$.
+				
+				
+			
+			
+			
 			Un neurone de convolution est une application $f : \mathbb{R}^{p \times q} \rightarrow \mathbb{R}$, paramétrée par $\theta = (b,w)$.\\
 			Le réel $b$ s'appelle le biais, et la matrice $w = \begin{pmatrix}
 			w_{1,1} & \cdots & \cdots & w_{1,q} \\ 
