@@ -672,7 +672,7 @@ Nous utiliserons le Théorème de dérivation des fonctions composées, aussi ap
 Nous rappelons que $J(x,y,\theta)$ est une fonction de perte de la forme :
 $$J(x,y,\theta) = C(\elem{a}{L}{}{}(x),y)$$
 				
-\emph{Afin de mieux comprendre la preuve, on peut s'aider d'un dessin \smiley{}.}
+\emph{Afin de mieux comprendre la preuve, on peut s'aider d'un \textbf{dessin \smiley{}}.}
 				
 \paragraph{Calcul sur la Couche de Sortie}
 				
@@ -1113,70 +1113,134 @@ Tout d'abord, quand on parle d'une convolution dans le contexte des réseaux de 
 Cette dernière expression est l'expression générale de la convolution.
 On peut remarquer pour le premier cas, que $(H_I,W_I) = (1, H_I,W_I)$, $(H_S,W_S) = (1, H_S,W_S)$ et $(H_I,W_I) = (1, 1,  H_I,W_I)$
 
-\subsubsection{Expression générale}
+\subsubsection{Convolution tensorielle}
 Soient $I$ de dimensions $(C_I, H_I,W_I)$ et $S$ de dimensions $(C_S, H_S, W_S)$,\\
 Et si $H_I > H_S + 1$ et $W_I > W_S + 1$,\\
 Alors $K$ sera de dimensions :
 $$(C_K^{out}, C_K^{in}, H_K, W_K) = (C_S, C_I, H_I - H_S + 1, W_I - W_S + 1)$$
-Et,
-$$S(k,i,j) = \sum_{l}\sum_{m}\sum_{n}{K_{k,l,m,n} \times I_{l,i+m,j+n}}$$
+Donc $\forall k \in [0, C_S[, \ \forall i \in [0, H_S[, \ \forall j \in [0, W_S[$,
+$$S(k,i,j) = \sum_{l}\sum_{m}\sum_{n}{K_{k,l,m,n} \times I_{l,m + i, n + j}}$$
+Avec les indices de sommations suivants,
+\begin{itemize}
+	\item $l \in [0, C_K^{in}[$
+	\item $m \in [0, H_K[$ et $(m + i) \in [0, H_I[$
+	\item $n \in [0, W_K[$ et $(n + j) \in [0, W_I[$
+\end{itemize}
+\subsubsection{Padding et Strides}
+\paragraph{Padding}
+Nous avons pu observer précédemment que la convolution ne préservait pas les dimensions spatiales, la hauteur et la largeur, entre le tenseur d'entrée $I$ et le tenseur de sortie $S$.
+Soit $I$ un tenseur de dimensions $(H_I, W_I)$ et $K$ un noyau de dimensions $(H_K, W_K)$,\\
+Alors $S$ aura les dimensions suivantes :
+$$(H_S, W_S) = (H_I - H_K + 1, W_I - W_K + 1)$$
+Toutefois il peut être intéressant dans certains cas de préserver ces dimensions.
+Le \emph{padding}, signifiant \emph{rembourrage}, permet de remédier à ce problème. Cette méthode consiste à créer un tenseur $I'$, en ajoutant à $I$ des lignes et colonnes de zéros sur ses \emph{bords}.\\
+Ainsi, $$(H_{I'}, W_{I'}) = (H_I + p_H, W_I + p_W)$$
+Donc si on applique la convolution à $I'$,
+$$(H_S, W_S) = (H_I + p_H - H_K + 1, W_I + p_W - W_K + 1)$$
+Donc,
+$$(H_S, W_S) = (H_I, W_I) \leftrightarrow (p_H, p_W) = (H_K - 1, W_K - 1) $$
+
+Dans le cas où les dimensions du noyau sont impaires, le \emph{padding} se fera de façon symétrique autour de $I$.
+\par
+Dans le cas où les dimensions du noyau sont paires, le \emph{padding} est par convention pour les bords \emph{haut} et \emph{gauche} de $I$.
+
+\subparagraph{Exemple}
+Dans le cas d'une convolution de noyau $K$ de dimensions $(3, 3)$ appliquée à un tenseur $I$ de dimensions $(3,3)$, si on veut garder $S$ de même dimensions que $I$.\\
+Soit
+$$I =
+\begin{pmatrix}
+a & b & c \\ 
+d & e & f \\ 
+g & h & i
+\end{pmatrix}$$
+Alors $(p_H,p_W) = (2, 2)$\\
+Donc $$I'=
+\begin{pmatrix}
+0 & 0 & 0 & 0 & 0\\
+0 & a & b & c & 0\\ 
+0 & d & e & f & 0\\ 
+0 & g & h & i & 0\\
+0 & 0 & 0 & 0 & 0
+\end{pmatrix}
+$$
+\paragraph{Strides}
+Le terme anglais \emph{stride} peut être traduit en français par le \emph{pas de déplacement}.\\
+Augmenter le pas de déplacement dans une convolution à pour effet de diminuer la dimension du tenseur de sortie $S$.
+\par
+Nous n'allons pas ici expliciter l'impact de ce changement sur les effets de l'apprentissage, un lien sera fait dans la partie dédiée au \emph{Pooling}, mais simplement décrire les modifications sur la sortie.
+$$(H_S, W_S) = ((H_I - H_K) / s_H + 1, (W_I - W_K) / s_W + 1)$$
+Les divisions sont ici \emph{entières} car les dimensions de sorties sont forcément entières.
+\subsubsection{Convolution généralisée}
+Soient $I$ de dimensions $(C_I, H_I,W_I)$,\\
+$S$ de dimensions $(C_S, H_S, W_S)$,\\
+et $K$ de dimensions $(C_K^{out}, C_K^{in}, H_K, W_K)$, avec $C_K^{out} = C_S$ et $C_K^{in} = C_I$\\
+Il nous faut alors trouver $(p_H, p_W)$ et $(s_H, s_W)$, tels que :
+$$(C_S, H_S, W_S) = (C_S, (H_I + p_H - H_K) / s_H + 1, (W_I + p_W - W_K) / s_W + 1)$$
+On pose alors $I'$ le tenseur "\emph{rembourré}" de $I$, avec 
+$$(C_{I'}, H_{I'}, W_{I'}) = (C_I, H_I + p_H, W_I + p_W)$$
+Donc,
+$$(C_S, H_S, W_S) = ((H_{I'} - H_K) / s_H + 1, (W_{I'} - W_K) / s_W + 1)$$
+Donc $\forall k \in [0, C_S[, \ \forall i \in [0, H_S[, \ \forall j \in [0, W_S[$,
+$$S(k, i, j) = \sum_{l}\sum_{m}\sum_{n}{K_{k, l, m, n} \times {I'}_{l, m + i \times s_H, n + j \times s_W}}$$
 Avec,
 \begin{itemize}
-	\item $l \in [0, C_K^{in}[$.
-	\item $m \in [0, H_K[$ et $(i + m) \in [0, H_I[$
-	\item $n \in [0, W_K[$ et $(j + n) \in [0, W_I[$
+	\item $l \in [0, C_K^{in}[$
+	\item $m \in [0, H_K[$ et $(m + i \times s_H) \in [0, H_I[$
+	\item $n \in [0, W_K[$ et $(n + j \times s_W) \in [0, W_I[$
 \end{itemize}
-
-\subsubsection{Padding et Strides}
-		
-\subsection{Pooling}
-Il est d'usage courant d'utiliser plusieurs filtres en parallèle sur une couche de convolution, et par conséquent réaliser plusieurs convolutions.
+\subsection{La Réduction de la Dimensionnalité}
+La \emph{réduction de la dimensionnalité} est un défi majeur en Statistiques et en Apprentissage Machine.
+Prenons un exemple pour illustrer le problème.
+Imaginons que nous souhaitons classifier des images issues d'Internet de dimensions $(3,256,256)$, en $1000$ classes distinctes.
+Ce problème revient à devoir trouver un \emph{mapping} entre un tenseur d'entrée de dimensions $(3, 256, 256)$ et un tenseur de sortie de dimension $(1000)$.
+On remarque qu'on peut transformer le tenseur d'entrée en un tenseur de dimension $(3 \times 256 \times 256) = (196608)$.
+On peut alors se poser plusieurs questions,
+\begin{itemize}
+	\item Quelles sont les variables significatives parmi les $196608$ variables disponibles ?
+	\item Comment \emph{transformer}, ou \emph{modeler}, cette quantité d'information pour en extraire l'essentiel, c'est à dire sa classe ?
+\end{itemize}
+Tout d'abord la première question n'a pas vraiment de sens dans de nombreux domaines, et particulièrement en \emph{vision par ordinateur}, car les pixels d'une image sont liés spatialement. Ils sont donc dépendants de leurs voisins.
+La deuxième est plus beaucoup plus intéressante.
 \par
-En voici un exemple :
+Une approche plutôt naïve pourrait suggérer de transformer l'image de dimensions $(3, 256, 256)$ en niveaux de gris de dimensions $(1, 256, 256)$ puis de la \emph{redimensionner} en $(1, 32, 32)$, ce qui nous permet d'obtenir un tenseur d'entrée de dimension $(1024)$.
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.6]{Images/convolutionlayers.png}
-		\caption{Parallélisation de couches de convolution}
+		\includegraphics[scale=0.25]{Images/lena.jpg}
+		\caption{Pré-traitement d'une image}
 	\end{center}
 \end{figure}
-Ainsi, nous pouvons identifier trois \emph{features} différentes de taille $(4,4)$.
+Ici les dimensions d'entrées et de sorties sont comparables, nous pouvons donc "choisir" plus facilement les combinaisons de variables à effectuer pour classifier les images. Toutefois la perte d'information, due aux pré-traitements appliqués aux données, est grande, ce qui aura un impact potentiel sur la performance de notre algorithme apprenant.
 \par
-Cette pratique est très courante, car il peut être intéressant de distinguer plusieurs motifs en même temps pour classer une image dans une ou plusieurs catégories.
-\par
-On peut toutefois se poser la question de comment traiter les différentes sorties.
-\par
-Pour cela on utilise une couche de \emph{pooling}, cette couche à pour but résumer les sorties des différentes couches de convolutions
-\par
-Ainsi grâce à la succession de ces deux couches, on transforme une image brute, à une matrice de \emph{caratéristiques}, aussi appelées \emph{features}, pour la suite de notre réseau de neurones.
-\par
-La fonction de \emph{pooling} la plus populaire est le \emph{max-pooling}, consistant à propager le maximum parmi les différentes sorties.
-\par
-Une couche de \emph{pooling} peut être représentée comme ceci :
+Une approche un peu plus réfléchie pourrait suggérer d'une part de ne pas réduire la dimension des données non pas pendant le pré-traitement, mais surtout d'autre part, d'éviter de la réduire d'un seul coup, mais plutôt petit à petit.
+Nous allons lister deux transformations très efficaces appliquées aux réseaux de neurones, en particulier convolutifs.
+\subsubsection{Pooling d'informations}
+Le \emph{pooling}, signifiant \emph{mise en commun}, consiste à résumer l'information apportée par les valeurs de sorties proches en une seule valeur.
+Il existe deux déclinaisons du \emph{pooling},
+\begin{itemize}
+	\item Le \emph{max pooling}, qui calcule le maximum des valeurs données en entrée.
+	\item L'\emph{average pooling}, qui calcule la moyenne des valeurs données en entrée.
+	\item Les convolutions avec une ou plusieurs \emph{strides} $> 1$
+\end{itemize}
+Nous allons maintenant voir un exemple de calcul d'un \emph{pooling} appliqué sur les composantes spatiales.\\
+Soit $I$ un tenseur de dimensions $(C_I, H_I, W_I)$, et une fonction de \emph{pooling} définie par une fenêtre de dimension $(H_P, W_P)$, de \emph{padding} $(p_H, p_W)$ et de \emph{strides} $(s_H, s_W)$,\\
+Alors $S$ sera de dimensions :
+$$(C_S, H_S, W_S) = (C_I, (H_I + p_H - H_K) / s_H + 1, (W_I + p_W - W_K) / s_W + 1))$$
+
+Ces deux déclinaisons sont utilisées dans des contextes assez différents.
+\paragraph{Max-Pooling}
+Le \emph{max pooling} est principalement utilisé pour réduire la dimension des données de façon spatiale, c'est une méthode robuste aux bruits ambients, car elle ne transmet que l'information ayant le plus d'intensité.
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[scale=0.6]{Images/poolinglayer.png}
 		\caption{\emph{Max-pooling} sur une fenêtre $(2,2)$}
 	\end{center}
 \end{figure}
-\subsection{Résumé des réseaux de neurones convolutifs}
-Ainsi les réseaux de neurones utilisent des couches de convolution mises en parallèle, suivies de couches de \emph{pooling}.
-\par
-On utilise ces réseaux de neurones pour traiter des données où la position spatiale des composantes et leurs relations importent, comme par exemple une image où chaque pixel possède des informations le liant à ses voisins.
-\par
-Ces couches permettent de transformer l'information brute provenant de l'entrée, en une \emph{carte} de \emph{features}, afin de faciliter le traitement dans les couches suivantes.
-\par
-On peut récapituler leur fonctionnement par le schéma suivant :
-\begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.6]{Images/fullconvnetwork.png}
-		\caption{Schéma d'intégration du mécanisme de convolution dans un réseau de neurones}
-	\end{center}
-\end{figure}
-Comme vu précédemment, l'image transformée par en une carte de \emph{features}, puis transmise à une couche totalement connectée, représentée par un alignement vertical de cercles.
-\par
-Par ailleurs, les réseaux de neurones convolutifs ont été les premiers réseaux profonds offrant de bons résultats.
-\par
-L'intérêt de la société pour l'apprentissage profond est apparu après que des progrès spectaculaires furent réalisé en $2012$, lors du concours de reconnaissance d'objets ImageNet remporté par un réseau de neurones mêlant de multiples couches de convolutions connectées à des couches totalement connectées.
+\paragraph{Average Pooling}
+L'\emph{average pooling} est principalement utilisé pour réduire la dimension des données au niveau des canaux, car elle permet de prendre en compte les valeurs des différentes \emph{features} et de les agréger.
+\paragraph{Pooling par Convolution}
+Les convolutions à strides $>1$ sont à l'heure actuelle \emph{à la mode}. Elles font le travail à la fois de couches de convolution, mais aussi de couches de \emph{pooling}, permettant ainsi d'une part de simplifier le modèle, ce qui réduit le nombre de \emph{floating-point operations}, mais aussi d'avoir une opération de \emph{pooling} plus "maléable", car la fonction calculée n'est pas statique, mais sera amenée à évoluer lors de la rétro-propagation.
+De plus, elles sont souvent suivies de fonctions d'activation, rendant la sortie plus robuste aux bruits stochastiques.
+Elle est utilisée dans plusieurs modèles très performants, justifiant ainsi sa popularité montante.
 \section{Applications à la vision par ordinateur}
 \subsection{Classification}
 \subsection{Détection d'objets}
