@@ -5,8 +5,8 @@ import argparse
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Parse multiple log files into one csv file.")
-    parser.add_argument("-l", "--log_dir", required=True, help="Path to the directory containing the logs.")
-    parser.add_argument("-o", "--output", required=True, help="Path of the csv file to be created.")
+    parser.add_argument("--log_dir", required=True, help="Path to the directory containing the logs.")
+    parser.add_argument("--output", required=True, help="Path of the csv file to be created.")
 
     args = parser.parse_args()
     log_dir = args.log_dir
