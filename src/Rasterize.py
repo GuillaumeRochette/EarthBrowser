@@ -4,6 +4,7 @@ import numpy as np
 import os
 import shapely.geometry as sg
 import sys
+import argparse
 
 import rasterio
 import rasterio.features as rf
@@ -63,13 +64,14 @@ def rasterize(data, features):
                     geometries_and_values.append([inner_polygon, road_value])
                 if contour.area != 0:
                     geometries_and_values.append([contour, contour_value])
-                # else:
-                #     building = closed_linestring_to_polygon(geometry)
-                #     inner_polygon, contour = process_with_contour(building, mean_res)
-                #     if inner_polygon.area != 0:
-                #         geometries_and_values.append([inner_polygon, building_value])
-                #     if contour.area != 0:
-                #         geometries_and_values.append([contour, contour_value])
+            else:
+                pass
+                # building = closed_linestring_to_polygon(geometry)
+                # inner_polygon, contour = process_with_contour(building, mean_res)
+                # if inner_polygon.area != 0:
+                #     geometries_and_values.append([inner_polygon, building_value])
+                # if contour.area != 0:
+                #     geometries_and_values.append([contour, contour_value])
         elif geometry.type in ["Polygon", "MultiPolygon"]:
             inner_polygon, contour = process_with_contour(geometry, mean_res)
             if inner_polygon.area != 0:
@@ -103,10 +105,15 @@ def burn_raster(label_path, label, data):
 
 
 if __name__ == '__main__':
-    root_dir = "/home/guillaume/Documents/SegNet/data/RawData"
-    cities = ["Vegas", "Paris", "Shanghai", "Khartoum"]
+    parser = argparse.ArgumentParser(description="Rasterize GeoJSON Files in order to create labels for the images.")
+    parser.add_argument("--input_dir", required=True,
+                        help="Directory containing the city directories, themselves containing data and labels.")
+    args = parser.parse_args()
+
+    input_dir = args.input_dir
+    cities = os.listdir(input_dir)
     for city in cities:
-        city_dir = os.path.join(root_dir, city)
+        city_dir = os.path.join(input_dir, city)
 
         mul_pan_dir = os.path.join(city_dir, "MUL_PAN")
         osm_dir = os.path.join(city_dir, "OpenStreetMap_Labels")

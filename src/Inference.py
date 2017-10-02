@@ -6,8 +6,8 @@ from osgeo import gdal
 import caffe
 import matplotlib.pyplot as plt
 
-model_def = "/home/grochette/Documents/SegNet/resources/SegNet5/deploy.prototxt"
-model_weights = "/home/grochette/Documents/SegNet/resources/SegNet5/snapshots/segnet_infogain_iter_46500.caffemodel"
+model_def = "/home/grochette/Documents/SegNet/resources/SegNet7/deploy.prototxt"
+model_weights = "/home/grochette/Documents/SegNet/resources/SegNet7/snapshots/segnet_infogain_iter_10500.caffemodel"
 # Load the model, a .prototxt containing the model definition, and a .caffemodel (proto binary)
 # containing the weight values are needed.
 net = caffe.Net(model_def, caffe.TEST, weights=model_weights)
@@ -15,7 +15,6 @@ net = caffe.Net(model_def, caffe.TEST, weights=model_weights)
 root_dir = "/home/grochette/Documents/SegNet"
 clean_data_dir = os.path.join(root_dir, "data/CleanData")
 cities = ["Vegas", "Paris", "Shanghai", "Khartoum"]
-# cities = ["Vegas"]
 mul_pan_paths = []
 label_paths = []
 for city in cities:
@@ -56,11 +55,12 @@ while True:
 
     # Creates the classification map, which is a probability map with a threshold.
     epsilon = 5e-2
+    threshold = 0.75
     classification = np.array(probabilty_map)
     mean = np.mean(classification)
     median = np.median(classification)
-    classification[classification - epsilon > 0.75] = 1
-    classification[classification + epsilon < 0.75] = 0
+    classification[classification - epsilon > threshold] = 1
+    classification[classification + epsilon < threshold] = 0
 
     print probabilty_map.shape, probabilty_map.dtype
     print probabilty_map.min(), probabilty_map.max()

@@ -51,8 +51,10 @@ def request_data(data_dir, geojson_dir, file_extension="tif"):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Requests the Extended OpenStreetMap API to retrieve vector data related to our raster data.")
-    parser.add_argument("-i", "--input_dir", required=True, help="Directory containing the city directories, themselves containing the raster data.")
+    parser = argparse.ArgumentParser(
+        description="Requests the Extended OpenStreetMap API to retrieve vector data related to our raster data.")
+    parser.add_argument("-i", "--input_dir", required=True,
+                        help="Directory containing the city directories, themselves containing the raster data.")
     args = parser.parse_args()
     input_dir = args.input_dir
     cities = os.listdir(input_dir)

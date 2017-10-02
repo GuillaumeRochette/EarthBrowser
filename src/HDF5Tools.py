@@ -97,10 +97,11 @@ if __name__ == '__main__':
     parser.add_argument("--input_dir", required=True,
                         help="Directory containing the city directories, themselves containing data and labels.")
     parser.add_argument("--output_dir", required=True, help="Directory where the HDF5 files will be written.")
-    parser.add_argument("--channels", help="Channels to keep for multispectral images.")
+    parser.add_argument("--channels", nargs="+", type=int,
+                        help="Channels to keep for multispectral images, WV3 -> PHR = [1,2,4,6].")
     parser.add_argument("--ratio", default=0.9, type=float,
                         help="Ratio for train/val to be split, e.g if ratio=0.9 then 90% of the data will be for training.")
-    parser.add_argument("--max_data_per_file", type=int, default=1000,
+    parser.add_argument("--max_data_per_file", type=int, default=2000,
                         help="Maximum data to be written in each HDF5 file.")
     parser.add_argument("--seed", help="Seed to reproduce the same dataset.")
 
@@ -114,8 +115,7 @@ if __name__ == '__main__':
     split_ratio = args.ratio
     seed = args.seed
     max_data_per_file = args.max_data_per_file
-    channels = [1, 2, 4, 6]
-    # channels = args.channels
+    channels = args.channels
 
     cities = os.listdir(input_dir)
 
