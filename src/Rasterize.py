@@ -26,27 +26,56 @@ def count_geometries(geojson_paths):
     return types
 
 
+def open_linestring_to_polygon(open_linestring, mean_res):
+    polygon = open_linestring.buffer(10 * mean_res)
+    return polygon
+
+
+def closed_linestring_to_polygon(closed_linestring):
+    polygon = sg.Polygon(closed_linestring)
+    return polygon
+
+
+def process_with_contour(polygon, mean_res):
+    inner_polygon = polygon.buffer(-5 * mean_res)
+    contour = polygon.difference(inner_polygon)
+    return inner_polygon, contour
+
+
 def rasterize(data, features):
     x_res = data.affine.a
     y_res = data.affine.e
     mean_res = (np.abs(x_res) + np.abs(y_res)) / 2.0
+
+    road_value = 1
+    building_value = 2
+    contour_value = 3
 
     geometries_and_values = []
 
     for feature in features:
         geometry = sg.shape(feature["geometry"])
         if geometry.type == "LineString":
-            buffered_linestring = geometry.buffer(10 * mean_res)
-            if buffered_linestring.area != 0:
-                geometries_and_values.append((buffered_linestring, 1))
-        # elif geometry.type in ["Polygon", "MultiPolygon"]:
+            if not geometry.is_closed:
+                road = open_linestring_to_polygon(geometry, mean_res)
+                inner_polygon, contour = process_with_contour(road, mean_res)
+                if inner_polygon.area != 0:
+                    geometries_and_values.append([inner_polygon, road_value])
+                if contour.area != 0:
+                    geometries_and_values.append([contour, contour_value])
+                # else:
+                #     building = closed_linestring_to_polygon(geometry)
+                #     inner_polygon, contour = process_with_contour(building, mean_res)
+                #     if inner_polygon.area != 0:
+                #         geometries_and_values.append([inner_polygon, building_value])
+                #     if contour.area != 0:
+                #         geometries_and_values.append([contour, contour_value])
         elif geometry.type in ["Polygon", "MultiPolygon"]:
-            inner_polygon = geometry.buffer(-5 * mean_res, cap_style=2, join_style=2)
-            contour = geometry.difference(inner_polygon)
+            inner_polygon, contour = process_with_contour(geometry, mean_res)
             if inner_polygon.area != 0:
-                geometries_and_values.append((inner_polygon, 2))
+                geometries_and_values.append([inner_polygon, building_value])
             if contour.area != 0:
-                geometries_and_values.append((contour, 3))
+                geometries_and_values.append([contour, contour_value])
     if geometries_and_values:
         label = rf.rasterize(geometries_and_values, out_shape=data.shape, transform=data.affine, all_touched=True,
                              dtype=rasterio.uint8)
@@ -57,18 +86,19 @@ def rasterize(data, features):
 
 def aggregate_features(sp_path, osm_path):
     features = []
-    with open(sp_path, "r") as sp_file:
-        geojson = json.load(sp_file)
-    features += geojson["features"]
     with open(osm_path, "r") as osm_file:
         geojson = json.load(osm_file)
+    features += geojson["features"]
+    with open(sp_path, "r") as sp_file:
+        geojson = json.load(sp_file)
     features += geojson["features"]
     return features
 
 
 def burn_raster(label_path, label, data):
     with rasterio.open(label_path, mode="w", driver="GTiff", width=data.width, height=data.height, count=1,
-                       crs=data.crs, transform=data.affine, dtype=rasterio.uint8, nodata=0, compress="DEFLATE") as label_file:
+                       crs=data.crs, transform=data.affine, dtype=rasterio.uint8, nodata=0,
+                       compress="DEFLATE") as label_file:
         label_file.write(label, indexes=1)
 
 
