@@ -27,23 +27,112 @@ Création d'un Moteur de Recherche dans les Images Satellite}
 	
 \chapter{Introduction}
 \section{Présentation de l'entreprise}
+\subsection{Le Groupe Thales}
+Le groupe Thales, historiquement fabricant d'électronique, est un acteur français majeur dans les secteurs de l'aéronautique, le spatial, la défense, la sécurité et le transport terrestre.
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.3]{Images/Secteurs_Activites.png}
+		\caption{Secteurs d'activités de Thales}
+	\end{center}
+\end{figure}
+Le groupe Thales est implanté dans $56$ pays et emploie $64000$ salariés, dont $34000$ collaborateurs répartis dans $70$ sites en France.
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.4]{Images/Chiffres_Cles.png}
+		\caption{Chiffres Clés du Groupe Thales}
+	\end{center}
+\end{figure}
+\subsection{Thales Services}
+Thales Services est une entreprise spécialisée dans les activités de conception, développement et maintenance de systèmes informatiques sécurisés.
+Thales Services est implanté sur tout le territoire français, chaque site ayant des spécialisations différentes.
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.75]{Images/TS_France.png}
+		\caption{Implantation de Thales Services en France}
+	\end{center}
+\end{figure}
+Le groupe Thales, et par extension Thales Services, est organisé de façon \emph{matricielle}, c'est-à-dire par zones géographiques et par domaines d'activités.
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.4]{Images/Matrice_Thales_Services.png}
+		\caption{Organisation matricielle de Thales Services}
+	\end{center}
+\end{figure}
+Ce stage s'effectue dans le \emph{Centre de Compétences} \textbf{Logiciel Orienté Machine} de la \emph{Région Sud-Ouest}.
 \section{Problématique(s)}
 \section{Objectifs du stage}
 \chapter{L'Imagerie Satellite}
-\section{Introduction}
-\subsection{Histoire}
-\subsection{Applications}
-\section{Géométrie des images}
-\subsection{Référentiels}
-\subsection{Acquisition de l'image}
-\subsection{Corrections géométriques}
-\section{Radiométrie des images}
-\subsection{Principe d'acquisition de l'image}
-\subsection{Corrections radiométriques}
-\section{Résolution des images}
-\subsection{Échantillonnage}
-\subsection{Interpolation d'images}
-\subsection{Amélioration de la résolution}
+\section{Historique}
+De tout temps, l'humain a toujours souhaité pouvoir observer le monde, que ce soit à des fins militaires, scientifiques ou à simple but de contemplation.
+Les besoins en matière de télédétection sont plus anciens que les premiers satellites artificiels. Dès la fin du XIX ème siècle, lors du siège de Paris en $1870$, des ballons effectuaient des missions de reconnaissance en utilisant les progrès en matière de photographie.
+Jusqu'aux années $1970$, la télédétection optique servait majoritairement à l'espionnage et la cartographie, principalement réalisée par le biais d'appareils photographies emporté dans des avions.
+Les premières images de la Terre depuis l'Espace ont été réalisé de cette même manière, des appareils photographiques à microfilm étaient embarqués dans des satellites artificiels. Il est à noter qu'un défi de taille était la réception de ces microfilms alors largués vers la Terre depuis l'Espace.
+L'apparition de capteurs numériques a révolutionné le domaine de la télédétection, car permettant de s'abstraire du support physique, problématique de par sa quantité limité à bord, ainsi que sa réception.
+Nous aborderons d'abord le fonctionnement d'un Satellite d'Observation, puis nous survolerons les différentes particularités d'une image satellite.
+\section{Fonctionnement d'un Satellite d'Observation}
+Nous allons d'abord présenter brièvement le fonctionnement des différents types de capteurs numériques existants.
+Puis nous aborderons les différents mécanismes relatif au contrôle de l'orbite du satellite
+\subsection{Capteurs Optiques}
+Selon leur longueur d'onde, les ondes électromagnétique portent des noms différents
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.5]{Images/Domaines_du_spectre_electromagnetique.png}
+	\end{center}
+\end{figure}
+Le domaine \emph{optique} est la réunion du domaine du visible et de l'infrarouge (I.R.).
+Bien que les satellites puissent embarquer aussi d'autres types de capteurs, nous n'en parlerons pas, car cela n'a pas de rapport avec l'Imagerie Satellite.
+Par ailleurs, nous nous focaliserons uniquement sur les capteurs passifs, c'est à dire des capteurs qui ne font que mesurer le rayonnement d'un objet, contrairement aux capteurs actifs, qui émettent un rayonnement et en observent l'écho sur l'objet.
+\subsubsection{Capteurs de type Whisk Broom}
+Ce sont les premiers capteurs historiques utilisés pour l'imagerie satellite, utilisés par exemple dès $1970$ sur les satellites du programme LANDSAT de la NASA.
+Le fonctionnement de ce type de capteur s'apparente au mécanisme des premiers scanners, c'est à dire une unique cellule de détection, qui nécessitait un double balayage selon les axes des lignes et des colonnes pour décrire la scène.
+En anglais, le terme \emph{whisk broom} désigne des balais à \emph{fouetter}, comme par exemple des plumeaux.
+Voici un schéma décrivant le fonctionnement d'un capteur de type \emph{whisk broom} :
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.7]{Images/Whisk_Broom.jpg}
+		\caption{Capteur de type \emph{Whisk Broom}}
+	\end{center}
+\end{figure}
+Les avantages d'un capteur \emph{whisk broom} sont les suivants :
+\begin{itemize}
+	\item Étant donné qu'un seul capteur n'est utilisé, l'étalonnage de l'appareil est facile, permettant ainsi un rendu homogène de l'image.
+	\item La fauchée, c'est-à-dire la largeur au sol de l'image, peut-être très large.
+\end{itemize}
+Néanmoins un tel capteur présente aussi des inconvénients :
+\begin{itemize}
+	\item Le balayage mécanique est complexe à mettre en œuvre, au niveau des mécanismes à utiliser pour compenser les oscillations du satellite. De plus l'usure de tels mécanismes limitent la durée de vie utile du satellite.
+	\item Le temps d'intégration, c'est-à-dire le temps d'acquisition requis pour effectuer une mesure, est le fruit d'un compromis entre une bonne qualité radiométrique et la résolution au sol. En effet, pour obtenir une mesure de bonne qualité, on préfère faire une moyenne sur un grand nombre d'acquisitions, mais étant donné que le capteur se déplace, d'une part car le satellite est en mouvement, mais aussi suivant la taille de la fauchée.
+\end{itemize}
+\subsubsection{Capteurs de type Push Broom}
+Le fonctionnement de ces capteurs est inspiré des scanners et photocopieurs grand-publics apparus dans les années $1980$.
+Le premier satellite équipé d'un tel dispositif était SPOT $1$, un satellite conçu par le CNES en $1986$.
+Le principe de fonctionnement est assez simple, au lieu d'utiliser une unique cellule comme pour les capteurs \emph{whisk broom}, on utilise des lignes, aussi appelées barrettes, de cellules de détection.
+Ainsi l'acquisition est simultanée pour les détecteurs composants une seule et même ligne.
+Une image, composées de $m$ lignes et $n$ colonnes, est donc le résultat de $n$ acquisitions simultanées répétées à $m$ intervalles de temps suivant trajectoire du satellite.
+Voici un schéma décrivant le fonctionnement d'un capteur de type \emph{push broom} :
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.7]{Images/Push_Broom.jpg}
+		\caption{Capteur de type \emph{Push Broom}}
+	\end{center}
+\end{figure}
+Les avantages d'un capteur \emph{push broom} sont les suivants :
+\begin{itemize}
+	\item Simplicité du système.
+	\item Perturbations géométriques seulement le long des colonnes.
+	\item Larges fauchées grâce à la miniaturisation des cellules.
+\end{itemize}
+Un inconvénient majeur de ce système est à cause du nombre important de détecteurs, l'étalonnage radiométrique est assez complexe.
+
+\subsubsection{Capteurs Matriciels}
+
+
+\subsection{L'Orbite des Satellites}
+\subsection{Contrôle du Satellite}
+\section{Images Satellite}
+\subsection{Mosaïque}
+\subsection{Fusion d'Images}
+\subsection{Angles}
 \chapter{L'Apprentissage Machine}
 L'apprentissage machine permet d'accomplir des tâches traditionnellement compliquées pour les ordinateurs, mais vues comme simple pour l'humain.
 \par
@@ -531,8 +620,7 @@ Afin de ne pas se perdre dans les calculs qui vont survenir, nous allons défini
 \begin{center}
 	\emph{\textbf{Important !}}
 \end{center}
-Chaque élément du réseau de neurones peut être défini par sa position dans le réseau.
-\par
+Chaque élément du réseau de neurones peut être défini par sa position dans le réseau.\\
 Pour les \emph{poids} :
 \begin{itemize}
 	\item Un poids \emph{réel} noté $\elem{W}{k}{j}{i}$ sera le $i$-ème poids du $j$-ème neurone, situé dans la $k$-ème couche.
@@ -610,7 +698,7 @@ Pour rappel, $\elem{W}{k}{}{}$ représente la matrice des poids de la $k$-ème c
 Par conséquent, on peut calculer le vecteur de sortie de la $k$-ème couche de la façon suivante :
 $$\elem{z}{k}{}{} = (\elem{W}{k}{}{})^T(\elem{a}{k-1}{}{}) + \elem{b}{k}{}{}$$
 $$\elem{a}{k}{}{} = g(\elem{z}{k}{}{})$$
-Ce qui nous permet alors d'écrire l'algorithme de propagation de façon matricielle (et laisser aux bibliothèques de calcul matriciel le soin d'optimiser les calculs):
+Ainsi,
 \begin{algorithm}[H]
 	\caption{Algorithme matriciel de Propagation}
 	\begin{algorithmic}
@@ -962,7 +1050,7 @@ La méthode \emph{Dropout} est une méthode assez particulière de régularisati
 \end{figure}
 Ainsi les différents sous-modèles se partagent les paramètres $\theta$ du modèle original.
 \par
-Il en résulte un modèle beaucoup plus robuste, car les différents sous-modèles entraînent une recherche de paramètres pour atteindre des minima locaux différents.
+Il en résulte un modèle beaucoup plus robuste, car les différents sous-modèles entraînent une recherche de paramètres pour atteindre des minima différents.
 \par
 Cela incite donc à une convergence vers un minimum local partagé par les différents sous-modèles.
 \par
@@ -1075,7 +1163,7 @@ Voici à présent la représentation de l'interaction partielle dans un cas matr
 \subsubsection{Le partage des paramètres et invariance par translation}
 Dans un réseau convolutif, chaque paramètre du noyau est utilisé à toutes les positions du vecteur d'entrée, sauf peut-être pour les premiers et derniers éléments du vecteur d'entrée.
 \par
-Ainsi le partage de paramètres pour la convolution signifie plutôt que d'apprendre plusieurs ensembles de paramètres pour chaque sous-région du vecteur d'entrée, un seul ensemble sera appris.
+Ainsi le partage de paramètres pour la convolution signifie qu'au lieu d'apprendre pour chaque élément du vecteur d'entrée un paramètre associé, un filtre unique, \emph{composé d'un petit nombre de paramètre}, sera appris en rapport au vecteur d'entrée.
 \par
 Dans le cas de la figure précédente, où la fenêtre est de dimension $5 \times 5$, un seul noyau de dimension $5 \times 5$ sera appris pour cette couche de convolution.
 \par
