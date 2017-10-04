@@ -1,4 +1,4 @@
-\documentclass[10pt,a4paper]{report}
+\documentclass[a4paper, 10pt]{report}
 \usepackage[utf8]{inputenc}
 \usepackage[french]{babel}
 \usepackage[T1]{fontenc}
@@ -10,6 +10,7 @@
 \usepackage{csquotes}
 \usepackage{wasysym}
 \usepackage{dsfont}
+\usepackage{yhmath}
 \usepackage{hyperref}
 \usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
 
@@ -63,12 +64,11 @@ Ce stage s'effectue dans le \emph{Centre de Compétences} \textbf{Logiciel Orien
 \section{Problématique(s)}
 \section{Objectifs du stage}
 \chapter{L'Imagerie Satellite}
-\section{Historique}
 De tout temps, l'humain a toujours souhaité pouvoir observer le monde, que ce soit à des fins militaires, scientifiques ou à simple but de contemplation.
 
 Les besoins en matière de \emph{télédétection} sont plus anciens que les premiers satellites artificiels. Dès la fin du XIX ème siècle, lors du siège de Paris en $1870$, des ballons effectuaient des missions de reconnaissance en utilisant les progrès en matière de photographie.
 
-Jusqu'aux années $1970$, la \emph{télédétection} servait majoritairement à l'espionnage et la cartographie, principalement réalisée par le biais d'appareils photographies emporté dans des avions.
+Jusqu'aux années $1970$, la télédétection servait majoritairement à l'espionnage et la cartographie, principalement réalisée par le biais d'appareils photographies emporté dans des avions.
 Les premières images de la Terre depuis l'Espace ont été réalisé de cette même manière, des appareils photographiques à microfilm étaient embarqués dans des satellites artificiels. Il est à noter qu'un défi de taille était la réception de ces microfilms alors largués vers la Terre depuis l'Espace.
 
 L'apparition de \emph{capteurs numériques} a révolutionné le domaine de la télédétection, car permettant de s'abstraire du support physique, problématique de par sa quantité limité à bord, ainsi que sa réception.
@@ -144,6 +144,13 @@ Ce type de capteur présente aussi des inconvénients :
 Le fonctionnement de ce capteur est similaire à celui d'un appareil photographique disponible au grand public.
 
 Les cellules de détection sont réparties en forme de grille. Ainsi tous les pixels de l'image sont acquis de façon simultanée.
+Voici un schéma décrivant le fonctionnement d'un capteur de type \emph{matriciel} :
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.7]{Images/CCD_Sensor.png}
+		\caption{Capteur de type \emph{Matriciel}}
+	\end{center}
+\end{figure}
 
 Les avantages d'un capteur \emph{push broom} sont les suivants :
 \begin{itemize}
@@ -154,42 +161,66 @@ Ce type de capteur présente aussi des inconvénients :
 \begin{itemize}
 	\item Alignement des capteurs très difficile à réaliser de par le nombre très important de détecteurs et de leur répartition en forme de matrice.
 	\item Étalonnage radiométrique délicat en raison du grand nombre de détecteurs.
-	\item Difficultés d'assembler des prises de vue pour en faire des "plus grandes".
+	\item Difficultés d'assembler des prises de vue pour en faire des mosaïques.
 \end{itemize}
 \subsection{L'Orbite des Satellites}
-\subsection{Contrôle du Satellite}
+Le mouvement d'un satellite artificiel autour de la Terre, appelé \emph{orbite}, est qualifié de képlérien car il respecte les trois lois de Kepler :
+\begin{itemize}
+	\item \emph{Loi des orbites} : Le satellite décrit une trajectoire elliptique, l'un des foyer de l'ellipse étant la Terre. Dans le cas présent, l'ellipse est quasi-circulaire.
+	\item \emph{Loi des aires} : L'aire de la surface délimitée par la Terre et un arc $\wideparen{AB}$ de la trajectoire du satellite, noté $\wideparen{AB}T$, est égale à l'aire d'une autre surface définie par un autre arc $\wideparen{CD}$ de l'ellipse, , noté $\wideparen{CD}T$, si le temps de parcours de l'arc $\wideparen{AB}$, noté $t_{\wideparen{AB}}$, est égal à $t_{\wideparen{CD}}$.
+	\item \emph{Loi des périodes} : Le carré de la période $T$ d'un satellite est proportionnel au cube du demi-grand axe $a$ de la trajectoire elliptique du satellite : $\frac{T^2}{a^3} = \frac{4 \pi^2}{\mu}$
+\end{itemize}
+Deux types d'orbites sont principalement utilisé pour les satellites
+\subsubsection{L'Orbite Géostationnaire}
+L'orbite \emph{géostationnaire} implique comme son nom l'indique que la position du satellite est fixe par rapport à la Terre.
+Pour se faire, il faut que l'orbite du satellite soit circulaire autour de la Terre, et que la vitesse \emph{angulaire} du satellite soit égale à la vitesse \emph{angulaire} de la Terre.
+
+Ce type d'orbite est utilisé pour les satellites de télécommunication, ainsi que pour des applications de surveillance de la Terre comme la météorologie, nécessitant un survol constant d'une zone définie.
+\subsubsection{L'Orbite Héliosynchrone}
+L'orbite \emph{héliosynchrone} signifiant que le satellite soit "synchronisé" avec le soleil, ce qui en d'autres termes implique que le satellite doive tourner à la même vitesse autour de la Terre que la Terre autour du Soleil.
+
+On s'intéresse particulièrement aux orbites quasi-polaires héliosynchrones. En effet, le satellite se déplace presque dans selon une longitude et conserve un angle constant entre le plan d'orbite et la direction Terre-Soleil.
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.3]{Images/Orbite_Heliosynchrone.png}
+		\caption{Orbite Héliosynchrone}
+	\end{center}
+\end{figure}
+Ce type d'orbite est très intéressant pour l'imagerie spatiale car cela signifie que le satellite repasse à un point à la même heure de la journée, ce qui dans le cas d'un satellite d'observation nous permet de prendre des photographies avec une lumière ayant toujours le même angle d'incidence et donc un ensoleillement comparable.
 \section{Images Satellite}
-\subsection{Mosaïque}
-\subsection{Fusion d'Images}
-\subsection{Angles}
+
 \chapter{L'Apprentissage Machine}
 L'apprentissage machine permet d'accomplir des tâches traditionnellement compliquées pour les ordinateurs, mais vues comme simple pour l'humain.
 En effet, l'humain apprend par exemple dès le plus jeune âge à discerner les contours sur une image, d'en décrire le contenu et même de visualiser un objet sous différents angles. Des algorithmes classiques ont du mal à produire des bons résultats sur ce genre de problèmes.
 À l'inverse, les ordinateurs possèdent une capacité très supérieure à l'humain pour résoudre des calculs complexes, ou des problèmes d'ordre combinatoire.
+
 D'un point de vue scientifique et philosophique, l'apprentissage machine est très intéressant et soulève beaucoup de questions, car l'étude de l'apprentissage appliqué aux machines nous permettrait peut-être d'entrevoir certains principes définissant l'intelligence.
 \section{Définition d'un Algorithme Apprenant}
 Un algorithme apprenant est un algorithme capable d'utiliser des données pour accomplir des tâches. La définition la plus célèbre, proposée par T.M Mitchell, est la suivante :
 \begin{displayquote}
 	On dit qu'un algorithme apprend grâce à une expérience \emph{E}, par rapport à une classe de tâches à accomplir \emph{T}, dont on peut calculer la mesure de performance (ou d'accomplissement) \emph{P}, si sa capacité d'accomplir la tâche \emph{T}, mesurée par la performance \emph{P}, s'améliore avec l'expérience \emph{E}.
 \end{displayquote}
+
 Un tel algorithme basera son apprentissage sur un jeu de données. Un jeu de données est un ensemble d'exemples.
-\begin{center}
-	Chaque exemple, noté $e$, est composé d'une entrée, notée $x$, à laquelle on peut associer, dans le cas d'un apprentissage supervisé, une sortie attendue, notée $\hat{y}$.
-\end{center}
+Chaque exemple, noté $e$, est composé d'une entrée, notée $x$, à laquelle on peut associer, dans le cas d'un apprentissage supervisé, une sortie attendue, notée $\hat{y}$.
 \subsection{La Tâche}
 Le processus d'apprentissage ne représente pas la tâche. L'apprentissage symbolise les moyens d'acquérir la possibilité, qui peut-être aussi vue comme la capacité, d'accomplir une tâche en particulier.
 Par exemple, si l'on veut apprendre à un robot à lire, la tâche en question sera la capacité à lire.
+
 En apprentissage machine, une tâche, notée \emph{T}, consiste à faire, pour chaque exemple $e$, correspondre une entrée $x$ à un résultat de sortie $y$.
 Une entrée $x$ est au sens statistique un individu décrit par un ensemble de variables.
 \begin{center}
 	Un individu est représenté par un vecteur $x \in \mathbb{R}^n$, avec $n$ étant le nombre de variables décrivant l'individu et $x_i$ la $i$-ème variable.
 \end{center}
 Par exemple, une image est vue comme une matrice $I \in \mathbb{R}^{m \times n}$ de pixels, que nous pouvons projeter sur un vecteur $x \in \mathbb{R}^k$, avec $k = m \times n$.
+
 Voici à présent un aperçu non exhaustif des tâches.
 \subsubsection{Classification}
 La classification consiste à déterminer, pour une entrée $x \in \mathbb{R}^n$, en sortie, une ou plusieurs parmi $k$ catégories, ou classes, associées à l'entrée.
+
 Pour résoudre ce type de problème, l'algorithme apprenant doit produire une fonction $f : \mathbb{R}^n \in E$, avec $E$ étant un ensemble de dimension $k$.
 On notera que la structure de $E$ n'est pas fixée.
+
 On peut par exemple avoir :
 \begin{itemize}
 	\item $E = \{1,..,k\}$, dans ce cas, la classification est dite simple, car pour tout individu $x$ donné, il ne peut correspondre qu'une seule classe.
@@ -199,7 +230,9 @@ On peut par exemple avoir :
 La classification est par exemple utilisée pour la reconnaissance d'objets, l'entrée $x$ étant l'image, et la sortie $y$, la classe de l'objet dans l'image.
 \subsubsection{Régression}
 La régression consiste à prédire une valeur réelle en fonction d'un individu en entrée.
+
 L'algorithme doit par conséquent se comporter comme une fonction $f : \mathbb{R}^n \rightarrow \mathbb{R}$, en faisant correspond à un individu donné $x \in \mathbb{R}^n$, une prédiction $y \in \mathbb{R}$.
+
 On l'utilise par exemple pour l'approximation de fonctions modélisant un phénomène ou encore la prédiction des cours des actions.
 \subsubsection{Autres applications}
 Les deux applications citées ci-dessus sont les plus connues et les plus largement utilisées, toutefois il en existe un grand nombre telles que :
@@ -213,13 +246,17 @@ Les deux applications citées ci-dessus sont les plus connues et les plus largem
 Afin de quantifier les performances d'un algorithme d'apprentissage machine, il nous faut définir une mesure. Cette mesure, notée \emph{P}, est généralement spécifique à la tâche \emph{T} donnée à l'algorithme.
 Pour des tâches, telles que la classification, la transcription ou la traduction, on mesure généralement la précision, c'est à dire la proportion d'exemples ou la sortie proposée par le modèle est similaire à la sortie attendue.
 Néanmoins, cette mesure n'est pas générale, en effet, par exemple pour une tâche de régression, si l'écart entre la sortie produite et la sortie attendue est faible mais non nul, alors faut-il considérer le modèle comme valide ?
+
 Pour cela, nous définissons une mesure plus générale, une \emph{fonction de perte }associée.
 Cette fonction de perte n'a pas de forme particulière car elle dépend de la tâche \emph{T} à réaliser, mais elle décroît à mesure que la sortie $y$ produite par l'algorithme est "bonne".
+
 Afin de réaliser un bon apprentissage, il nous donc minimiser cette \emph{fonction de perte}.
+
 L'apprentissage machine se résume donc à optimiser notre algorithme pour modéliser au mieux une situation.
 		
 \subsection{L'Expérience}
 On peut distinguer deux grandes classes d'algorithmes d'apprentissage machines, les algorithmes d'apprentissage \emph{non-supervisés} et \emph{supervisés}.
+
 Une expérience \emph{E} peut être comprise comme le fait d'apprendre sur un \emph{jeu de données}.
 \subsubsection{Apprentissage non supervisé}
 Les algorithmes d'apprentissage machine non-supervisés ont pour but d'apprendre sur des jeux de données ne contenant que des entrées $x$, et par exemple apprendre la distribution de probabilité $p(x)$ du jeu de données, ou bien de répartir les données dans des clusters, par le biais d'une distance donnée.
@@ -230,7 +267,9 @@ Les algorithmes d'apprentissage machine supervisés ont pour but d'apprendre sur
 \subsection{Sous-apprentissage, Sur-apprentissage et Capacité d'un algorithme apprenant}
 L'un des défi, et intérêt, majeur en apprentissage machine est la possibilité de bien raisonner sur de nouveaux exemples encore inconnus de l'algorithme. Cette capacité de raisonnement s'appelle la généralisation.
 En effet, un algorithme apprenant s'appuie pour l'entraînement sur un ensemble d'apprentissage, ce qui nous permet de mesurer l'\emph{erreur d'apprentissage}, terme équivalent à la \emph{fonction de perte} sur les données d'apprentissage, et ainsi de la minimiser.
+
 Ce qui différencie un simple problème d'optimisation de l'apprentissage machine, est que nous souhaitons non seulement que notre algorithme ait une \emph{erreur d’apprentissage} faible, mais que sa capacité à généraliser, traduite par l'\emph{erreur de généralisation} ou \emph{erreur de test}, soit aussi petite que possible.
+
 Ainsi, pour juger de l'efficacité d'un algorithme apprenant, nous devons prendre en compte l'\emph{erreur d'apprentissage}, mais aussi que la différence entre l'\emph{erreur d'apprentissage} et l'\emph{erreur de test}.
 \subsubsection{Sous-apprentissage}
 Le phénomène de sous-apprentissage survient lorsque pour un problème donné et un modèle choisi, l'\emph{erreur d'apprentissage} n'est pas suffisamment faible pour obtenir de bons résultats.
@@ -239,11 +278,14 @@ On peut donc interpréter le sous-apprentissage comme étant l'incapacité d'un 
 Le phénomène de sur-apprentissage survient lorsque l'écart entre l'\emph{erreur d'apprentissage} et l'\emph{erreur de test} est trop grand. Cela signifie que notre modèle, proposé par l'algorithme d'apprentissage, a été capable d'apprendre suffisamment sur les exemples d'entraînement, mais n'est pas capable de généraliser sur des exemples de test, sur lesquels il n'a pas appris.
 \subsubsection{Capacité}
 On peut alors définir la \emph{capacité} d'un modèle comme étant la mesure théorique de ses performances d'apprentissage mais aussi de ses performances en terme de généralisation.
+
 Ainsi le modèle le plus adapté à notre problème aura une capacité suffisante pour apprendre correctement la fonction à produire par rapport aux données, mais ne sera pas trop grande, afin de garder un pouvoir suffisant de généralisation.
 			
 \subsubsection{Exemple}
 Nous allons maintenant introduire un exemple nous permettant d'illustrer ces concepts.
+
 La tâche \emph{T} est une régression polynomiale, c'est-à-dire que nous devons trouver un polynôme $P \in \mathbb{R}^{q}$ ajustant au mieux nos données.
+
 $P$ est donc de la forme :
 $$P(z) = b + \sum_{j=1}^{q}{\theta_j z^j}$$
 L'expérience \emph{E} est un ensemble de $n$ points $(x_i,y_i)$, que l'on peut résumer en deux vecteurs :
@@ -278,7 +320,6 @@ Si nous choisissons par contre un polynôme $P \in \mathbb{R}^9$, en minimisant 
 \end{figure}
 On peut s'apercevoir que même si la droite passe exactement par nos $10$ points, le modèle ne semblera pas ajuster d'éventuelles nouvelles données.
 			
-			
 Enfin, si l'on choisit un polynôme $P \in \mathbb{R}^2$, nous ajustons tous les points du jeu de données et le modèle semble suffisamment simple pour généraliser de nouvelles données.
 \begin{figure}[H]
 	\begin{center}
@@ -294,6 +335,7 @@ Afin d'améliorer les capacités de généralisation des algorithmes d'apprentis
 	Les hypothèses suffisantes les plus simples sont les plus vraisemblables.
 \end{displayquote}
 Ce principe de parcimonie, ou de simplicité, consiste à ne pas utiliser d'hypothèses spécifiques à un problème, si il existe des hypothèses générales plus simples répondant à ce même problème.
+
 Ainsi pour résoudre notre problème, notre modèle doit être suffisamment performant sur un problème spécifique, mais doit être assez général pour produire des résultats corrects si l'on change quelques hypothèses.
 \begin{figure}[H]
 	\begin{center}
@@ -303,22 +345,26 @@ Ainsi pour résoudre notre problème, notre modèle doit être suffisamment perf
 \end{figure}
 Dans cet exemple, nous choisirons bien entendu la courbe verte, car le modèle vert est beaucoup plus simple et nous semble plus cohérent par rapport à nos données.
 Cette recherche d'un modèle optimal mais suffisamment simple peut se faire en ajoutant une composante à la mesure de performance.
+
 En reprenant l'exemple précédent, nous pouvons ajouter à $J_0(x,y)$ une fonction $f$ arbitraire, qui aurait tendance à pénaliser l'effet de sur-apprentissage.
 Cette fonction $f$ peut dépendre par exemple des coefficients $\theta_i$ du polynôme.
 Ce qui nous donne une fonction :
 $$J(x,y,\theta) = J_0(x,y) + \lambda f(\theta)$$
 On peut choisir par exemple $f(\theta) = \sum_{i=1}^{q}{\theta_i^i}$ et ainsi pénaliser les coefficients d'ordre élevé, ainsi notre algorithme aura tendance à proposer des polynômes ayant des coefficients d'ordre élevé de petite taille, et ainsi réduire artificiellement l'ordre du polynôme choisi.
+
 Le terme de \emph{régularisation} est employé pour tout modification apportée à l'algorithme apprenant visant à réduire l'\emph{erreur de généralisation}, mais pas l'\emph{erreur d'apprentissage}.
 	
 \section{Paramétrisation et Validation d'un Algorithme}
 La plupart des algorithmes d'apprentissage machine sont paramétrés afin de contrôler plus précisément leur apprentissage.
 Ces paramètres s'appellent des \emph{hyper-paramètres}.
+
 Par exemple dans l'exemple de la régression polynomiale, nous avons utilisé deux \emph{hyper-paramètres} :
 \begin{itemize}
 	\item $q$ : le degré du polynôme $P$ utilisé.
 	\item $\lambda$ : le coefficient de décroissance appliquée à la fonction $f(\theta)$.
 \end{itemize}
 En effet, ces deux paramètres doivent être manuellement choisis par rapport à notre problème, en fonction de notre besoin de généralisation ($\lambda$) ou de performance sur l'apprentissage ($q$).
+
 Afin de vérifier que notre algorithme soit correctement paramétré, il nous faut construire un troisième jeu de données, appelé ensemble de validation.
 Voici les propriétés de ces jeux de données.
 \begin{itemize}
@@ -340,6 +386,7 @@ Ainsi la procédure d'expérimentation est la suivante :
 \section{Optimisation}
 Dans cette section, nous aborderons les grands principes utilisés pour réaliser l'apprentissage à proprement parler.
 Nous rappelons qu'en effet le but d'un algorithme d'apprentissage machine est s'améliorer à réaliser une tâche \emph{T} grâce à une expérience \emph{E}, cette amélioration étant mesurée par \emph{P}.
+
 Nous voulons donc ici, minimiser l'\emph{erreur d'apprentissage} afin d'améliorer nos performances sur la tâche à réaliser.
 \subsection{Méthodes exactes}
 Les méthodes exactes sont très pratiques, car elles permettent de trouver la solution de façon immédiate.
@@ -348,12 +395,14 @@ Pour résoudre le problème $min_{\theta}J(x,y)$, il nous faut donc annuler le g
 	$\nabla_{\theta} J(x,y) = 0$
 \end{center}
 Cela nécessite un certain travail en amont, dépendant entièrement du type d'algorithme utilisé.
+
 De plus il n'existe \textbf{pas toujours de solution exacte unique}.
 \subsubsection{Exemple}
 Prenons le cas de la régression polynomiale, le problème est le suivant :
 \begin{center}
 	$min_{\theta,b} J(x,y) = \frac{1}{2} (P(x)-y)^T(P(x)-y)$
-		$\leftrightarrow$ Trouver $\theta \in \mathbb{R}^q$ et $b \in \mathbb{R}$, tels que la fonction de perte $J(x,y)$ soit minimale.
+	
+	$\leftrightarrow$ Trouver $\theta \in \mathbb{R}^q$ et $b \in \mathbb{R}$, tels que la fonction de perte $J(x,y)$ soit minimale.
 \end{center}
 Pour rappel, 
 \begin{center}
@@ -394,15 +443,19 @@ Donc,
 		$\rightarrow \theta = (X^TX)^{-1} X^Ty$
 \end{center}
 Néanmoins une méthode exacte présente des inconvénients.
+
 Par exemple, pour calculer $\theta$, la complexité algorithmique est de l'ordre de $O(n^3)$, avec $n$ le nombre de données, à cause de l'inversion de matrice.
 Cette complexité cubique pose donc des problèmes quand $n$ est très grand.
 De plus cette méthode présente des problèmes de stabilité numérique, si le conditionnement de $X^TX$ est grand.
 		
 \subsection{Méthodes itératives}
 Nous avons vu dans un premier temps, que les méthodes exactes permettaient parfois avec, un peu de calcul formel, d'avoir une solution optimale à notre problème, et ce immédiatement.
+
 Une méthode itérative, comme son nom l'indique, converge vers le résultat après plusieurs itérations.
 Elles peuvent remplacer les méthodes exactes, quand celles-ci sont soit inapplicables, coûteuses ou inconnues. De plus lorsqu'un problème est mal conditionné, elles limitent la propagation des erreurs.
+
 Il existe un grand nombre de méthodes itératives, mais nous n'en aborderons qu'une seule catégorie, car utile pour la suite, les méthodes de descente du gradient.
+
 Les méthodes de descente de gradient, sont très utilisées en apprentissage machine, de par leur facilité d'implémentation, ainsi que de leur convergence plutôt rapide.
 \subsubsection{Algorithme général de Descente de Gradient}
 Voici à présent l'algorithme général du gradient, appliqué à une fonction $J(x,y,\theta)$.
@@ -425,7 +478,9 @@ Voici à présent l'algorithme général du gradient, appliqué à une fonction 
 	\end{algorithmic}
 \end{algorithm}
 Dans notre cas, nous souhaitons minimiser la fonction de perte de associée à notre modèle par rapport aux données d'apprentissage.
+
 Soit $x$ et $y \in \mathbb{R}^n$, les entrées et les sorties.
+
 On pose ici $J(x,y,\theta)$ l'erreur moyenne du modèle par rapport aux données d'apprentissage.
 $$J(x,y,\theta) = \frac{1}{n} \sum_{i=1}^{n}{J(x_i,y_i,\theta)}$$
 Donc,
@@ -433,8 +488,10 @@ $$\nabla_\theta J(x,y,\theta) = \frac{1}{n} \sum_{i=1}^{n}{\nabla_\theta J(x_i,y
 \			
 \subsubsection{Méthode de Descente de Gradient Stochastique}
 La réflexion derrière la descente de gradient stochastique est que le gradient de l'ensemble est la moyenne des gradients des couples $(x,y)$ .
+
 D'après la Loi des Grands Nombres, $$\mathbb{E}(X) \approx \frac{1}{n} \sum_{i=1}^{n}{x_i}$$
 Avec $X$ une distribution, dont les données $x_i$ sont issues.
+
 Par ailleurs, si l'on échantillonne de façon uniforme $m$ individus parmi les $n$ données d'apprentissage, on aura :
 $$\mathbb{E}(X) \approx \frac{1}{m} \sum_{i=1}^{m}{x_i}$$
 Ainsi,
@@ -466,12 +523,15 @@ L'intérêt de cette méthode repose principalement sur le fait que le gradient 
 L'apprentissage profond se différencie de l'apprentissage machine classique particulièrement sur deux points :
 \begin{itemize}
 	\item Il existe des dizaines, voire des centaines de classes d'algorithmes d'apprentissage pour résoudre des tâches variées, et par extension des problèmes très variés, cependant dans le cas de l'apprentissage profond, même si il existe des différences, le principe utilisé reste globalement le même.
-	      	      De ce fait leur capacité de généralisation est beaucoup plus forte, permettant ainsi de résoudre plus efficacement certains problèmes jugés difficiles à résoudre par des algorithmes d'apprentissage classiques.
-	      	\item Si le principe de l'algorithme reste globalement le même, la structure du modèle est quant à elle très variable, et il est même très important de la faire varier d'un problème à un autre, car elle est intrinsèquement dépendante du problème et de ses données.
+	
+	De ce fait leur capacité de généralisation est beaucoup plus forte, permettant ainsi de résoudre plus efficacement certains problèmes jugés difficiles à résoudre par des algorithmes d'apprentissage classiques.
+	\item Si le principe de l'algorithme reste globalement le même, la structure du modèle est quant à elle très variable, et il est même très important de la faire varier d'un problème à un autre, car elle est intrinsèquement dépendante du problème et de ses données.
 	      \end{itemize}
-Nous présenterons dans un premier temps le fonctionnement des réseaux totalement connectés, car les plus simples. Ainsi que différentes méthodes employées pour améliorer les performances des modèles.
-Puis nous verrons ensuite une variante, les réseaux convolutifs.
-Enfin nous aborderons succinctement différentes applications existantes appliquées à la vision.
+Nous présenterons, dans un premier temps, le fonctionnement des réseaux totalement connectés, car les plus simples. Ainsi que différentes méthodes employées pour améliorer les performances des modèles.
+
+Dans un second temps, nous verrons une variante, les réseaux convolutifs.
+
+Enfin, nous aborderons succinctement différentes applications existantes appliquées à la vision.
 \section{Réseaux de Neurones Profonds}
 Les réseaux de neurones profonds, aussi appelés \emph{Deep Feedforward Networks} définissent un \emph{mapping} entre un vecteur d'entrée $x$ et sa sortie associée $y$ de sorte que $y = f(x,\theta)$ et apprennent les paramètres $\theta$ de sorte à produire la meilleure estimation.
 Ils sont dits "\emph{feedforward}", ou en français à "propagation unique", car l'information se déplace à travers la fonction, depuis l'entrée $x$, puis par des étapes intermédiaires, pour arriver à la sortie $y$, sans aucun retour en arrière.
@@ -1027,9 +1087,9 @@ Donc $\forall k \in [0, C_S[, \ \forall i \in [0, H_S[, \ \forall j \in [0, W_S[
 $$S(k,i,j) = \sum_{l}\sum_{m}\sum_{n}{K_{k,l,m,n} \times I_{l,m + i, n + j}}$$
 Avec les indices de sommations suivants,
 \begin{itemize}
-	\item $l \in [0, C_K^{in}[$
-	\item $m \in [0, H_K[$ et $(m + i) \in [0, H_I[$
-	\item $n \in [0, W_K[$ et $(n + j) \in [0, W_I[$
+	\item $l \in [\![0, C_K^{in}[\![$
+	\item $m \in [\![0, H_K[\![$ et $(m + i) \in [\![0, H_I[\![$
+	\item $n \in [\![0, W_K[\![$ et $(n + j) \in [\![0, W_I[\![$
 \end{itemize}
 \subsubsection{Padding et Strides}
 \paragraph{Padding}
@@ -1087,9 +1147,9 @@ Donc $\forall k \in [0, C_S[, \ \forall i \in [0, H_S[, \ \forall j \in [0, W_S[
 $$S(k, i, j) = \sum_{l}\sum_{m}\sum_{n}{K_{k, l, m, n} \times {I'}_{l, m + i \times s_H, n + j \times s_W}}$$
 Avec,
 \begin{itemize}
-	\item $l \in [0, C_K^{in}[$
-	\item $m \in [0, H_K[$ et $(m + i \times s_H) \in [0, H_I[$
-	\item $n \in [0, W_K[$ et $(n + j \times s_W) \in [0, W_I[$
+	\item $l \in [\![0, C_K^{in}[\![$
+	\item $m \in [\![0, H_K[\![$ et $(m + i \times s_H) \in [\![0, H_{I'}[\![$
+	\item $n \in [\![0, W_K[\![$ et $(n + j \times s_W) \in [\![0, W_{I'}[\![$
 \end{itemize}
 \subsection{La Réduction de la Dimensionnalité}
 La \emph{réduction de la dimensionnalité} est un défi majeur en Statistiques et en Apprentissage Machine.
