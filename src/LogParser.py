@@ -11,7 +11,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     log_dir = args.log_dir
     csv_path = args.output
-    log_names = os.listdir(log_dir)
+    log_names = sorted(os.listdir(log_dir))
     lines = []
     for log_name in log_names:
         log_path = os.path.join(log_dir, log_name)
@@ -25,6 +25,7 @@ if __name__ == '__main__':
     regex_test_loss = re.compile('Test net output #1: loss = ([\.\deE+-]+)')
     regex_test_accuracy_0 = re.compile('Test net output #2: per_class_accuracy = ([\.\deE+-]+)')
     regex_test_accuracy_1 = re.compile('Test net output #3: per_class_accuracy = ([\.\deE+-]+)')
+    regex_test_accuracy_2 = re.compile('Test net output #4: per_class_accuracy = ([\.\deE+-]+)')
 
     iterations = []
     train_losses = []
@@ -32,6 +33,7 @@ if __name__ == '__main__':
     test_losses = []
     test_accuracies_0 = []
     test_accuracies_1 = []
+    test_accuracies_2 = []
     for line in lines:
         iteration = regex_iteration.findall(line)
         if iteration:
@@ -51,17 +53,12 @@ if __name__ == '__main__':
         test_accuracy_1 = regex_test_accuracy_1.findall(line)
         if test_accuracy_1:
             test_accuracies_1.append(float(test_accuracy_1[0]))
-
-    print iterations
-    print train_losses
-    print test_accuracies
-    print test_losses
-    print test_accuracies_0
-    print test_accuracies_1
-
+        test_accuracy_2 = regex_test_accuracy_2.findall(line)
+        if test_accuracy_2:
+            test_accuracies_2.append(float(test_accuracy_2[0]))
     with open(csv_path, "w") as csv_file:
         filewriter = csv.writer(csv_file, delimiter=",")
         filewriter.writerow(
-            ["Iteration", "Training Loss", "Test Loss", "Test Accuracy", "Class 0 Accuracy", "Class 1 Accuracy"])
-        for row in zip(iterations, train_losses, test_losses, test_accuracies, test_accuracies_0, test_accuracies_1):
+            ["Iteration", "Training Loss", "Test Loss", "Test Accuracy", "Class 0 Accuracy", "Class 1 Accuracy", "Class 2 Accuracy"])
+        for row in zip(iterations, train_losses, test_losses, test_accuracies, test_accuracies_0, test_accuracies_1, test_accuracies_2):
             filewriter.writerow(row)

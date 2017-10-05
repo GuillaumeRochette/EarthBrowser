@@ -14,7 +14,8 @@ net = caffe.Net(model_def, caffe.TEST, weights=model_weights)
 
 root_dir = "/home/grochette/Documents/SegNet"
 clean_data_dir = os.path.join(root_dir, "data/CleanData")
-cities = ["Vegas", "Paris", "Shanghai", "Khartoum"]
+# cities = ["Vegas", "Paris", "Shanghai", "Khartoum"]
+cities = ["Vegas"]
 mul_pan_paths = []
 label_paths = []
 for city in cities:
