@@ -59,6 +59,8 @@ if __name__ == '__main__':
     with open(csv_path, "w") as csv_file:
         filewriter = csv.writer(csv_file, delimiter=",")
         filewriter.writerow(
-            ["Iteration", "Training Loss", "Test Loss", "Test Accuracy", "Class 0 Accuracy", "Class 1 Accuracy", "Class 2 Accuracy"])
-        for row in zip(iterations, train_losses, test_losses, test_accuracies, test_accuracies_0, test_accuracies_1, test_accuracies_2):
+            ["Iteration", "Training Loss", "Test Loss", "Test Accuracy", "Class 0 Accuracy", "Class 1 Accuracy",
+             "Class 2 Accuracy"])
+        for row in zip(iterations, train_losses, test_losses, test_accuracies, test_accuracies_0, test_accuracies_1,
+                       test_accuracies_2):
             filewriter.writerow(row)
