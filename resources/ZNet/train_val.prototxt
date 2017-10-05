@@ -791,7 +791,7 @@ layer {
 		ignore_label: 3
 	}
 	infogain_loss_param {
-		source: "/home/grochette/Documents/SegNet/data/infogainH.binaryproto"
+		source: "/home/grochette/Documents/SegNet/data/OnlyVegas/infogainH.binaryproto"
 	}
 }
 layer {
