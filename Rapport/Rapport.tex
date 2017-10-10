@@ -211,19 +211,6 @@ Après avoir détaillé les différents types de capteurs optiques et différent
 À chaque image satellite, on associe des métadonnées, c'est-à-dire des données externes, qui ne sont pas des \emph{données images}, mais qui apportent des informations complémentaires à l'image.
 
 Voici une liste non-exhaustive des informations habituellement contenues dans les métadonnées.
-\subsubsection{Format de Fichier et Méthodes de Compression}
-Le format de fichier, aussi appelé \emph{driver}, spécifie la façon dont les données sont écrites sur le disque de stockage.
-Il existe de nombreux formats de fichiers offrant des possibilités de compression avec ou sans pertes.
-
-Le format le plus utilisé dans l'imagerie satellite est le format GeoTIFF, ou GTiff, qui est un dérivé du format TIFF. Il est très utilisé car de par sa flexibilité et le nombre de méthodes de compression existantes.
-
-On citera aussi les formats :
-\begin{itemize}
-	\item JPEG est le format le plus courant en photographie numérique, mais étant un format de compression avec pertes il est peu utilisé en imagerie spatiale.
-	\item JPEG2000 est un format propriétaire, successeur annoncé du JPEG, il offre de grandes possibilités de compression utilisant des ondelettes (ratio de 1:50), mais la lecture/écriture sont très lentes dues aux opérations de compression/décompression.
-	\item LUM est un format utilisé par le CNES en interne sur la chaîne de traitement des images et pour des simulations, c'est un fichier de format binaire accompagné de métadonnées.
-\end{itemize}
-
 \subsubsection{Le Système de Coordonnées}
 Un système de coordonnées est un référentiel permettant d'exprimer la position de points dans un espace, et par conséquent une position sur le globe terrestre.
 La Terre n'offre pas de surface géométriquement régulière, de ce fait on peut la représenter de différentes manières :
@@ -261,6 +248,21 @@ Pixel Size = (0.000002700000000,-0.000002700000000)
 La seconde composante de la taille d'un pixel est ici négative, car l'image à pour origine le coin supérieur gauche, le parcours de l'image se fait donc en avançant dans les longitudes (sens Ouest-Est) mais en descendant les latitudes (sens Nord-Sud).
 
 En ajoutant à ces connaissances la dimension de l'image en pixel, interpoler la position des autres coins de l'image. Ce calcul d'interpolation reste une approximation car il faut prendre en compte l'angle de visée du satellite par rapport au sol.
+
+\subsection{Format de Fichier et Méthodes de Compression}
+Le format de fichier, aussi appelé \emph{driver}, spécifie la façon dont les données sont écrites sur le disque de stockage.
+Il existe de nombreux formats de fichiers offrant des possibilités de compression avec ou sans pertes.
+
+Un format très utilisé dans l'imagerie spatiale est le format GeoTIFF, ou GTiff, qui est un dérivé du format TIFF. Il est très utilisé de par sa flexibilité et le nombre de méthodes de compression existantes.
+
+On citera aussi les formats :
+\begin{itemize}
+	\item JPEG est le format le plus courant en photographie numérique, mais étant un format de compression avec pertes il est peu utilisé en imagerie spatiale.
+	\item JPEG2000 est un format propriétaire, successeur annoncé du JPEG, il offre de grandes possibilités de compression utilisant des ondelettes (ratio de 1:50), mais la lecture/écriture sont très lentes dues aux opérations de compression/décompression.
+	\item LUM est un format utilisé par le CNES en interne sur la chaîne de traitement des images et pour des simulations, c'est un fichier de format binaire accompagné de métadonnées.
+\end{itemize}
+
+
 \subsection{Caractéristiques d'une Image Satellite}
 Nous allons à présent voir quelques propriétés concernant les images, ainsi que certaines particularités des images satellite.
 \subsubsection{Angle de visée}
@@ -276,14 +278,14 @@ Le \emph{nadir} est le vecteur normal à la surface terrestre depuis le satellit
 
 Le fait que l'angle de visée soit pratiquement toujours le même permet d'unifier les traitements à appliquer sur l'image brute.
 
-L'angle de visée est variable et ce qui permet de re-photographier une zone sans avoir à attendre une période orbitale entière, durant $26$ jours pour les satellites de la famille SPOT. Dans ce cas là, il faudra en plus corriger les images pour les ramener à un angle de vue proche du \emph{nadir}, on parle alors de \emph{dépointage} d'une image.
+L'angle de visée est variable et ce qui permet de re-photographier une zone sans avoir à attendre une période orbitale entière, durant environ $26$ jours pour les satellites de la famille SPOT. Dans ce cas là, il faudra en plus corriger les images pour les ramener à un angle de vue proche du \emph{nadir}, on parle alors de \emph{dépointage} d'une image.
 
 \subsubsection{Bandes et Fusion d'Images}
 Une image, et en particulier une image satellite, est constituée de bandes. 
 
 Chaque bande contient la réponse impulsionnelle de la scène sur une longueur d'onde donnée.
 
-Voici les caractéristiques radiométrique du satellite Pléiades :
+Voici les caractéristiques radiométriques du satellite Pléiades :
 \begin{center}
 	\begin{tabular}{|c|c|c|}
 	\hline
@@ -1397,8 +1399,13 @@ Les convolutions à strides $>1$ sont à l'heure actuelle \emph{à la mode}. Ell
 
 De plus, elles sont souvent suivies de fonctions d'activation, rendant la sortie plus robuste aux bruits stochastiques.
 Elle est utilisée dans plusieurs modèles très performants, justifiant ainsi sa popularité montante.
-\section{Applications à la vision par ordinateur}
+\section{Applications à la Vision par Ordinateur}
+Les applications basées sur les réseaux de neurones occupent une place de plus en plus importante dans la société, le champ d'application est très large, on les retrouve notamment dans des outils de reconnaissance vocale, par exemple : Siri, Cortana; dans des outils de vision par ordinateur, utilisés par exemple dans les voitures autonomes; ou bien encore dans la création d'intelligences artificielles, liés à des jeux de réflexion, comme Deep Mind au jeu de Go, ou encore des agents conversationnels.
+Pour ces applications, les performances des réseaux de neurones sont comparables voire supérieures à celles d'un humain.
+
+Nous allons dans cette partie présenter quelques tâches liées à la vision par ordinateur, où l'influence des réseaux de neurones est grande.
 \subsection{Classification}
+
 \subsection{Détection d'objets}
 \subsection{Segmentation d'images}
 \subsubsection{Segmentation de classes}
