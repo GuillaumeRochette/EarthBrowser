@@ -187,7 +187,144 @@ On s'intéresse particulièrement aux orbites quasi-polaires héliosynchrones. E
 	\end{center}
 \end{figure}
 Ce type d'orbite est très intéressant pour l'imagerie spatiale car cela signifie que le satellite repasse à un point à la même heure de la journée, ce qui dans le cas d'un satellite d'observation nous permet de prendre des photographies avec une lumière ayant toujours le même angle d'incidence et donc un ensoleillement comparable.
+\subsubsection{Trace au Sol et Fauchée d'un Satellite}
+La trace au sol est la projection de la trajectoire décrite par un satellite à la surface du globe terrestre.
+
+La fauchée d'un satellite est la la surface au sol couverte par la prise de vue du capteur optique.
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.4]{Images/Swath.png}
+		\caption{Fauchée d'un satellite}
+	\end{center}
+\end{figure}
+Dans le cas d'une orbite quasi-polaire, la trace au sol recouvrira alors presque toute la surface de la Terre (sauf aux pôles) $p$ périodes, permettant de photographier les même zones de façon périodique et constamment à la même d'heure grâce aux propriétés d'héliosynchronisme.
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.5]{Images/Trace_Sol_SPOT.jpg}
+		\caption{Trace au sol des satellites SPOT}
+	\end{center}
+\end{figure}
 \section{Images Satellite}
+Après avoir détaillé les différents types de capteurs optiques et différentes orbites utilisées pour les satellites, nous allons à présent développer un peu plus en détail le produit, les \emph{images satellite}.
+
+\subsection{Métadonnées}
+À chaque image satellite, on associe des métadonnées, c'est-à-dire des données externes, qui ne sont pas des \emph{données images}, mais qui apportent des informations complémentaires à l'image.
+
+Voici une liste non-exhaustive des informations habituellement contenues dans les métadonnées.
+\subsubsection{Le Système de Coordonnées}
+Un système de coordonnées est un référentiel permettant d'exprimer la position de points dans un espace, et par conséquent une position sur le globe terrestre.
+La Terre n'offre pas de surface géométriquement régulière, de ce fait on peut la représenter de différentes manières :
+\begin{itemize}
+	\item Une sphère est une approximation grossière de la Terre, venant du fait que la Terre est aplatie aux pôles, ce qui est dû à sa rotation. Mais cette approximation ne suffit pas une cartographie précise.
+	\item Un ellipsoïde, une ellipse en trois dimensions, nous permet de modéliser cet aplatissement. C'est ce modèle qui est retenu pour la cartographie.
+\end{itemize}
+
+Le système géodésique le plus courant est WGS 84 (World Geodetic System 1984), car utilisé par le système GPS. Il définit une représentation de l'ellipsoïde terrestre, ce système est référencé en $2$ dimensions, longitude et latitude, et en $3$ dimensions en ajoutant l'altitude.
+
+On peut aussi les exprimer en représentation plane, résultant d'une projection, parfois partielle, de l'ellipsoïde (en $3$ dimensions) sur un plan (en $2$ dimensions). On citera par exemple les projections de Mercator ou de Lambert.
+
+Ces informations, décrivant le système de coordonnées, sont contenues dans le \emph{Well-Known Text}, qui est une chaine de caractères structurée résumant la définition du repère géographique. En voici un exemple :
+
+\begin{verbatim}
+GEOGCS["WGS 84",
+    DATUM["WGS_1984",
+        SPHEROID["WGS 84",6378137,298.257223563,
+            AUTHORITY["EPSG","7030"]],
+        AUTHORITY["EPSG","6326"]],
+    PRIMEM["Greenwich",0],
+    UNIT["degree",0.0174532925199433],
+    AUTHORITY["EPSG","4326"]]
+\end{verbatim}
+
+\subsubsection{Positionnement et Résolution de l'Image}
+Il est indispensable d'associer à toute image satellite une position dans l'espace. Une origine, généralement le coin supérieur gauche, est définie dans le système de référencement.
+
+À cette origine, on associe la résolution spatiale de l'image, c'est-à-dire les dimensions d'un pixel dans l'espace projeté.
+Par exemple,
+\begin{verbatim}
+Origin = (32.503388399999999,15.548911199899999)
+Pixel Size = (0.000002700000000,-0.000002700000000)
+\end{verbatim}
+La seconde composante de la taille d'un pixel est ici négative, car l'image à pour origine le coin supérieur gauche, le parcours de l'image se fait donc en avançant dans les longitudes (sens Ouest-Est) mais en descendant les latitudes (sens Nord-Sud).
+
+En ajoutant à ces connaissances la dimension de l'image en pixel, interpoler la position des autres coins de l'image. Ce calcul d'interpolation reste une approximation car il faut prendre en compte l'angle de visée du satellite par rapport au sol.
+
+\subsection{Format de Fichier et Méthodes de Compression}
+Le format de fichier, aussi appelé \emph{driver}, spécifie la façon dont les données sont écrites sur le disque de stockage.
+Il existe de nombreux formats de fichiers offrant des possibilités de compression avec ou sans pertes.
+
+Un format très utilisé dans l'imagerie spatiale est le format GeoTIFF, ou GTiff, qui est un dérivé du format TIFF. Il est très utilisé de par sa flexibilité et le nombre de méthodes de compression existantes.
+
+On citera aussi les formats :
+\begin{itemize}
+	\item JPEG est le format le plus courant en photographie numérique, mais étant un format de compression avec pertes il est peu utilisé en imagerie spatiale.
+	\item JPEG2000 est un format propriétaire, successeur annoncé du JPEG, il offre de grandes possibilités de compression utilisant des ondelettes (ratio de 1:50), mais la lecture/écriture sont très lentes dues aux opérations de compression/décompression.
+	\item LUM est un format utilisé par le CNES en interne sur la chaîne de traitement des images et pour des simulations, c'est un fichier de format binaire accompagné de métadonnées.
+\end{itemize}
+
+
+\subsection{Caractéristiques d'une Image Satellite}
+Nous allons à présent voir quelques propriétés concernant les images, ainsi que certaines particularités des images satellite.
+\subsubsection{Angle de visée}
+Contrairement aux appareils photographiques classiques, où l'angle de visée dépend de celui qui tient l'appareil, l'angle de visée d'un satellite est généralement situé au \emph{nadir} de celui-ci.
+
+Le \emph{nadir} est le vecteur normal à la surface terrestre depuis le satellite. C'est donc le vecteur opposé du \emph{zénith}.
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.5]{Images/Nadir.png}
+		\caption{Nadir, Zénith et Horizons}
+	\end{center}
+\end{figure}
+
+Le fait que l'angle de visée soit pratiquement toujours le même permet d'unifier les traitements à appliquer sur l'image brute.
+
+L'angle de visée est variable et ce qui permet de re-photographier une zone sans avoir à attendre une période orbitale entière, durant environ $26$ jours pour les satellites de la famille SPOT. Dans ce cas là, il faudra en plus corriger les images pour les ramener à un angle de vue proche du \emph{nadir}, on parle alors de \emph{dépointage} d'une image.
+
+\subsubsection{Bandes et Fusion d'Images}
+Une image, et en particulier une image satellite, est constituée de bandes. 
+
+Chaque bande contient la réponse impulsionnelle de la scène sur une longueur d'onde donnée.
+
+Voici les caractéristiques radiométriques du satellite Pléiades :
+\begin{center}
+	\begin{tabular}{|c|c|c|}
+	\hline
+	Couleur & Bande Spectrale & Résolution \\
+	\hline 
+	Bleu & $430$-$550$nm & $2$m \\ 
+	\hline 
+	Vert & $490$-$610$nm & $2$m \\ 
+	\hline 
+	Rouge & $600$-$720$nm & $2$m \\ 
+	\hline 
+	Proche Infrarouge & $750$-$950$nm & $2$m \\ 
+	\hline 
+	Panchromatique & $480$-$830$nm & $0.5$m \\ 
+	\hline 
+	\end{tabular}
+\end{center}
+La bande panchromatique ne discrimine pas les couleurs, son domaine de sensibilité est similaire à la vision humaine, la bande spectrale est située autour de $400$-$750$nm. Ce sont des images en noir et blanc.
+
+Comme nous pouvons le voir sur le tableau, toutes les bandes produites par le satellite Pléiades ne sont pas à la même résolution, les bandes \emph{multispectrales} sont à $2$m, tandis que la bande \emph{panchromatique} est à $0.5$m.
+Pourtant le produit après traitement est composé des $4$ bandes couleurs échantillonnées à $0.5$m.
+
+Le traitement appliqué s'appelle la fusion d'images et repose sur :
+\begin{enumerate}
+	\item La transformée en ondelettes de l'image \emph{panchromatique haute résolution} en une image approximée, c'est-à-dire de plus basse résolution.
+	\item La substitution de l'image approximée par l'image \emph{multispectrale}.
+	\item La transformée inverse en ondelettes de l'image \emph{multispectrale} pour obtenir une image \emph{multispectrale haute résolution}.
+\end{enumerate}
+
+\subsubsection{Prétraitement d'une Image Satellite}
+Un grand nombre de traitements interviennent dans la correction géométrique des images afin que le produit final puisse être superposable à une carte.
+Voici un récapitulatif des niveaux de traitements pour une image satellite de la famille SPOT :
+\begin{itemize}
+	\item Niveau 1A : Correction des défauts radiométriques issus des écarts de sensibilité entre les détecteurs élémentaires.
+	\item Niveau 1B : Égalisation radiométrique et traitements géométriques relatifs aux variations d'altitude du satellite, à la rotation et à la courbure de la Terre, aux variations de l'angle de visée, etc.
+	\item Niveau 2A : Projection de l'image dans le référentiel WGS $84$, la localisation d'un pixel est précise à $300$m.
+	\item Niveau 2B : Correction géométriques : utilisation de points d'appuis au sol, de la modélisation de la dynamique de vol, etc.
+	\item Niveau 3 : Produit appelé \emph{orthoimage}, où l'erreur de localisation est encore diminuée grâce à des modèles numériques d'élévation pour ajuster le relief, l'erreur de localisation est de $10$m pour des images ayant une résolution de $10$m.
+\end{itemize}
 
 \chapter{L'Apprentissage Machine}
 L'apprentissage machine permet d'accomplir des tâches traditionnellement compliquées pour les ordinateurs, mais vues comme simple pour l'humain.
@@ -533,16 +670,22 @@ Dans un second temps, nous verrons une variante, les réseaux convolutifs.
 
 Enfin, nous aborderons succinctement différentes applications existantes appliquées à la vision.
 \section{Réseaux de Neurones Profonds}
-Les réseaux de neurones profonds, aussi appelés \emph{Deep Feedforward Networks} définissent un \emph{mapping} entre un vecteur d'entrée $x$ et sa sortie associée $y$ de sorte que $y = f(x,\theta)$ et apprennent les paramètres $\theta$ de sorte à produire la meilleure estimation.
+Les réseaux de neurones profonds, aussi appelés \emph{Deep Feedforward Networks}, définissent un \emph{mapping} entre un vecteur d'entrée $x$ et sa sortie associée $y$ de sorte que $y = f(x,\theta)$ et apprennent les paramètres $\theta$ de sorte à produire la meilleure estimation.
+
 Ils sont dits "\emph{feedforward}", ou en français à "propagation unique", car l'information se déplace à travers la fonction, depuis l'entrée $x$, puis par des étapes intermédiaires, pour arriver à la sortie $y$, sans aucun retour en arrière.
+
 Les réseaux de neurones permettant un \emph{feedback} ou \emph{retour d'expérience} sont appelés font partie de la classe des réseaux récurrents.
 Les réseaux de types "\emph{feedforward}" sont de loin les réseaux de neurones les plus utilisés.
+
 On utilise le mot \emph{réseau} dans l’appellation réseaux de neurones, car ils sont composés d'une multitude de fonctions \emph{simples}, organisées en réseau.
+
 On pourrait par exemple imaginer notre fonction $f(x,\theta)$ comme étant la composée de plusieurs fonctions, telle que $f(x,\theta) = u_{\theta_1} \circ v_{\theta_2} \circ w_{\theta_3}(x)$ avec $\theta = (\theta_1,\theta_2, \theta_3))$, un ensemble de paramètres.
 C'est par ailleurs cette architecture distribuée, qui grâce à une puissance de calcul grandissante, par le biais du calcul GPU, permet de résoudre des problèmes de plus en plus complexes.
 \subsection{Définition d'un Neurone Artificiel}
 Ce que l'on appelle \emph{neurone} est effectivement inspiré du fonctionnement d'un neurone biologique, bien que différent à bien des égards.
+
 Un neurone artificiel est une application $f : \mathbb{R}^p \rightarrow \mathbb{R}$, paramétrée par $\theta = (b,w) = (b, w_1, ..., w_p)$.
+
 Le réel $b$ s'appelle le biais, et le vecteur $w = (w_1, ..., w_p)$ s'appelle vecteur de poids.
 \begin{figure}[H]
 	\begin{center}
@@ -564,6 +707,7 @@ Cette application est la composée de deux fonctions distinctes :
 	      \end{itemize}
 \end{itemize}
 Il est important de garder à l'esprit que ces deux opérations successives sont distinctes, mais qu'elles sont regroupées ici pour montrer les similarités avec les neurones biologiques.
+
 Ainsi notre neurone peut être résumé par une fonction $f$ telle que :
 $$f_\theta(x) = g \circ h_\theta(x) = g(w^Tx + b)$$
 La sortie de notre neurone, par la suite notée $a$, est l'\emph{image} de la fonction $f$ par l'entrée $x$:
@@ -579,6 +723,7 @@ Avec la définition précédente d'un neurone, nous pouvons alors schématiser u
 Ici, chaque cercle représente un neurone, équivalent à ceux définis précédemment.
 Toutefois, sur la première couche, appelée \emph{couche d'entrée}, les neurones produisent en sortie, le \emph{vecteur d'entrée} $x$, ici $x \in \mathbb{R}^6$.
 On peut noter aussi que la dernière couche, appelée \emph{couche de sortie}, les neurones produisent le vecteur $y$, ici $y\in \mathbb{R}^1 = \mathbb{R}$.
+
 Attention, la description faite ici, n'est qu'à but pédagogique. Dans le cas courant, on ne considère pas un réseau en individualisant chaque neurone, mais plutôt couche par couche :
 \begin{figure}[H]
 	\begin{center}
@@ -587,7 +732,7 @@ Attention, la description faite ici, n'est qu'à but pédagogique. Dans le cas c
 	\end{center}
 \end{figure}
 
-Ainsi, pour décrire un réseau de neurones, nous mesurerons deux caractéristiques :
+Ainsi, pour décrire un réseau de neurones, nous considérons deux caractéristiques :
 \subsubsection{Profondeur}
 \begin{center}
 	Le nombre de couches d'un réseau de neurones est appelé \emph{profondeur}, plus ce nombre est élevé, plus la capacité théorique de généralisation est forte.
@@ -640,7 +785,7 @@ Pour les \emph{combinaisons} :
 On parle de \emph{propagation à sens unique} dans un réseau de neurones, car l'entrée $x$, affectée à la première couche, est transmise à la suivante, qui produira alors un vecteur de sortie.
 Ce vecteur de sortie sera alors considéré comme un vecteur d'entrée pour la couche suivante, qui produira à l'aide de cette entrée un autre vecteur de sortie.
 Et ainsi de suite, jusqu'à la dernière couche, qui produira finalement la sortie du réseau : $y$.
-\par			
+		
 Nous voilà à présent correctement armés pour voir la propagation dans un réseau de neurones.
 Voici l'algorithme de propagation au sein d'un réseau de neurones : 
 \begin{algorithm}[H]
@@ -667,6 +812,7 @@ Voici l'algorithme de propagation au sein d'un réseau de neurones :
 \end{algorithm}
 			
 Néanmoins, il existe aujourd'hui un grand nombre de bibliothèques permettant de faire du calcul matriciel de façon optimisée, appelées Basic Linear Algebra Subprograms (BLAS), telles que ATLAS, GotoBLAS, OpenBLAS.
+
 Pour rappel, $\elem{W}{k}{}{}$ représente la matrice des poids de la $k$-ème couche, et $\elem{a}{k-1}{}{}$ le vecteur de sortie de la $(k-1)$-ème couche.
 Par conséquent, on peut calculer le vecteur de sortie de la $k$-ème couche de la façon suivante :
 $$\elem{z}{k}{}{} = (\elem{W}{k}{}{})^T(\elem{a}{k-1}{}{}) + \elem{b}{k}{}{}$$
@@ -692,6 +838,7 @@ Ainsi,
 		
 L'algorithme de rétro-propagation est souvent à tort considéré comme étant la méthode d'optimisation utilisée pour minimiser la fonction de perte.
 C'est en effet le rôle d'une méthode de descente de gradient.
+
 Voici pour rappel une méthode générale de descente de gradient, vue dans la première partie :
 \begin{algorithm}[H]
 	\caption{Algorithme général de Descente de Gradient}
@@ -715,6 +862,7 @@ L'algorithme de rétro-propagation du gradient a pour simple but de calculer, de
 \subsubsection{Calcul formel du Gradient}
 			
 Il nous faut donc calculer $\frac{\partial J(x,y,\theta)}{\partial \elem{W}{k}{j}{i}}$, traduisant l'influence du poids $\elem{W}{k}{j}{i}$ sur la fonction de perte $J(x,y,\theta)$.
+
 Et $\frac{\partial J(x,y,\theta)}{\partial \elem{b}{k}{j}{}}$, qui traduit l'influence du biais $\elem{b}{k}{j}{}$ sur la fonction de perte $J(x,y,\theta)$.
 \begin{center}
 	\textbf{Toute dérivée partielle $\frac{\partial u}{\partial v}$ représente l'influence qu'a l'élément $v$ sur l'élément $u$.}
@@ -729,19 +877,21 @@ $$J(x,y,\theta) = C(\elem{a}{L}{}{}(x),y)$$
 				
 Commençons par calculer le gradient de l'erreur pour les poids de la couche de sortie, $\frac{\partial C}{\partial \elem{W}{L}{j}{i}}$.
 Ainsi que le gradient pour les biais de la couche de sortie, $\frac{\partial C}{\partial \elem{b}{L}{j}{}}$.
+
 Sur la dernière couche, nous avons
 $$\elem{z}{L}{j}{} = (\elem{W}{L}{j}{})^T(\elem{a}{L-1}{}{}) + \elem{b}{L}{j}{}$$
 Et
 $$\elem{a}{L}{j}{} = g(\elem{z}{L}{j}{})$$
 Utilisons à présent la règle de chaînage sur $\frac{\partial C}{\partial \elem{W}{L}{j}{i}}$, car $\elem{a}{L}{j}{}$ est une fonction composée.
+
 Nous obtenons donc,
 $$\left\{
 \begin{array}{l}
 	\frac{\partial C}{\partial \elem{W}{L}{j}{i}} = \frac{\partial C}{\partial \elem{a}{L}{j}{}} \times \frac{\partial \elem{a}{L}{j}{}}{\partial \elem{z}{L}{j}{}} \times \frac{\partial \elem{z}{L}{j}{}}{\partial \elem{W}{L}{j}{i}} 
-	\par                                                                                                                                                                                                                                
+	\\                                                                                                                                                                                                                                
 	                                                                                                                                                                                                                                    
 	\frac{\partial C}{\partial \elem{b}{L}{j}{}} = \frac{\partial C}{\partial \elem{a}{L}{j}{}} \times \frac{\partial \elem{a}{L}{j}{}}{\partial \elem{z}{L}{j}{}} \times \frac{\partial \elem{z}{L}{j}{}}{\partial \elem{b}{L}{j}{}}   
-	\par                                                                                                                                                                                                                                
+	\\                                                                                                                                                                                                                                
 \end{array}
 \right.$$
 				
@@ -774,26 +924,31 @@ $$\elem{\delta}{L}{j}{} = \frac{\partial C}{\partial \elem{a}{L}{j}{}} \times \f
 \paragraph{Calcul sur l'avant dernière couche}
 				
 Après avoir explicité les calculs des $\frac{\partial C}{\partial \elem{W}{L}{j}{i}}$ et $\frac{\partial C}{\partial \elem{b}{L}{j}{}}$, passons à présent au calcul sur l'avant dernière couche, soit aux $\frac{\partial C}{\partial \elem{W}{L-1}{j}{i}}$ et $\frac{\partial C}{\partial \elem{b}{L-1}{j}{}}$.
+
 Grâce à la \emph{chain rule}, nous obtenons de la même façon que précédemment,
 				
 $$\left\{
 \begin{array}{l}
 	\frac{\partial C}{\partial \elem{W}{L-1}{j}{i}} = \frac{\partial C}{\partial \elem{a}{L-1}{j}{}} \times \frac{\partial \elem{a}{L-1}{j}{}}{\partial \elem{z}{L-1}{j}{}} \times \frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{W}{L-1}{j}{i}} 
-	\par                                                                                                                                                                                                                                            
+	\\                                                                                                                                                                                                                                            
 	\frac{\partial C}{\partial \elem{b}{L-1}{j}{}} = \frac{\partial C}{\partial \elem{a}{L-1}{j}{}} \times \frac{\partial \elem{a}{L-1}{j}{}}{\partial \elem{z}{L-1}{j}{}} \times \frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{b}{L-1}{j}{}}   
-	\par                                                                                                                                                                                                                                            
+	\\                                                                                                                                                                                                                                            
 \end{array}
 \right.$$
 				
 On peut remarquer que l'utilisation de la \emph{Chain rule} permet d'exprimer facilement $\frac{\partial \elem{a}{L-1}{j}{}}{\partial \elem{z}{L-1}{j}{}}$, $\frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{W}{L-1}{j}{i}}$ et $\frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{b}{L-1}{j}{}}$.
 En effet si la fonction d'activation reste la même pour tout le réseau de neurones, alors le terme $\frac{\partial \elem{a}{L-1}{j}{}}{\partial \elem{z}{L-1}{j}{}}$ est la même que $\frac{\partial \elem{a}{L}{j}{}}{\partial \elem{z}{L}{j}{}}$ calculée plus haut.
+
 De même que précédemment $\frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{W}{L-1}{j}{i}}=\elem{a}{L-2}{i}{}$ et $\frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{b}{L-1}{j}{i}} = 1$, car
 $$\elem{z}{L-1}{j}{} = \sum_{i=1}^{S_{L-2}}{\elem{W}{L-1}{j}{i} \times \elem{a}{L-2}{i}{}} + \elem{b}{L-1}{j}{}$$
 				
 La difficulté réside ici, dans le calcul de $\frac{\partial C}{\partial \elem{a}{L-1}{j}{}}$.
 Si on trace un réseau de neurones quelconque.
+
 Prenons le $j$-ème neurone de la couche $L-1$, on peut voir qu'il transmet le résultat de son activation $\elem{a}{L-1}{j}{}$ à tous les neurones de la couche $L$.
+
 Cette diffusion d'informations a aussi un impact sur le coût, puisque si erreur il y a alors, les neurones de la couche $L$ en feront les "frais".
+
 Un neurone $\elem{a}{L-1}{i}{}$ propage l'erreur à un neurone $\elem{a}{L}{j}{}$ proportionnellement au poids $\elem{W}{L}{j}{i}$.
 				
 Nous devons donc décomposer $\frac{\partial C}{\partial \elem{a}{L-1}{j}{}}$, grâce à la \emph{chain rule}.
@@ -801,6 +956,7 @@ Nous devons donc décomposer $\frac{\partial C}{\partial \elem{a}{L-1}{j}{}}$, g
 Le résultat est le suivant :	
 $$\frac{\partial C}{\partial \elem{a}{L-1}{j}{}} = \sum_{l=1}^{L-1}{\frac{\partial C}{\partial \elem{a}{L}{l}{}} \times \frac{\partial \elem{a}{L}{l}{}}{\partial \elem{z}{L}{l}{}} \times \frac{\partial \elem{z}{L}{l}{}}{\partial \elem{a}{L-1}{l}{}}}$$
 En effet, le neurone $\elem{a}{L-1}{i}{}$ transfère son erreur à tous les neurones $\elem{a}{L}{j}{}$ de la couche suivante par le biais des poids, car $\frac{\partial \elem{z}{L}{l}{}}{\partial \elem{a}{L-1}{j}{}} = \elem{W}{L-1}{l}{j}$.
+
 On remarque par ailleurs que 
 $$\frac{\partial C}{\partial \elem{a}{L-1}{j}{}} = \sum_{l=1}^{L-1}{\elem{\delta}{L}{l}{} \times \frac{\partial \elem{z}{L}{l}{}}{\partial \elem{a}{L-1}{j}{}}}$$
 Car $$\elem{\delta}{L}{j}{} = \frac{\partial C}{\partial \elem{a}{L}{j}{}} \times \frac{\partial \elem{a}{L}{j}{}}{\partial \elem{z}{L}{j}{}}$$
@@ -813,10 +969,10 @@ Sur la couche $L$,
 $$\left\{
 \begin{array}{l}
 	\frac{\partial C}{\partial \elem{W}{L}{j}{i}} = \elem{\delta}{L}{j}{} \times \frac{\partial \elem{z}{L}{j}{}}{\partial \elem{W}{L}{j}{i}} = \elem{\delta}{L}{j}{} \times \elem{a}{L-1}{i}{} 
-	\par                                                                                                                                                                                        
+	\\                                                                                                                                                                                        
 	                                                                                                                                                                                            
 	\frac{\partial C}{\partial \elem{b}{L}{j}{}} = \elem{\delta}{L}{j}{} \times \frac{\partial \elem{z}{L}{j}{}}{\partial \elem{b}{L}{j}{}} = \elem{\delta}{L}{j}{}                             
-	\par                                                                                                                                                                                        
+	\\                                                                                                                                                                                        
 \end{array}
 \right.$$
 Avec,
@@ -825,9 +981,9 @@ Sur la couche $L-1$,
 $$\left\{
 \begin{array}{l}
 	\frac{\partial C}{\partial \elem{W}{L-1}{j}{i}} = \elem{\delta}{L-1}{j}{} \times \frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{W}{L-1}{j}{i}} = \elem{\delta}{L-1}{j}{} \times \elem{a}{L-2}{i}{} 
-	\par                                                                                                                                                                                                  
+	\\                                                                                                                                                                                                  
 	\frac{\partial C}{\partial \elem{b}{L-1}{j}{}} = \elem{\delta}{L-1}{j}{} \times \frac{\partial \elem{z}{L-1}{j}{}}{\partial \elem{b}{L-1}{j}{}} = \elem{\delta}{L-1}{j}{}                             
-	\par                                                                                                                                                                                                  
+	\\                                                                                                                                                                                                  
 \end{array}
 \right.$$
 Avec,
@@ -838,16 +994,17 @@ On a $\forall k = 1..L$,
 $$\left\{
 \begin{array}{l}
 	\frac{\partial C}{\partial \elem{W}{k}{j}{i}} = \elem{\delta}{k}{j}{} \times \frac{\partial \elem{z}{k}{j}{}}{\partial \elem{W}{k}{j}{i}} = \elem{\delta}{k}{j}{} \times \elem{a}{k-1}{i}{} 
-	\par                                                                                                                                                                                        
+	\\                                                                                                                                                                                        
 	\frac{\partial C}{\partial \elem{b}{k}{j}{}} = \elem{\delta}{k}{j}{} \times \frac{\partial \elem{z}{k}{j}{}}{\partial \elem{b}{k}{j}{}} = \elem{\delta}{k}{j}{}                             
-	\par                                                                                                                                                                                        
+	\\                                                                                                                                                                                        
 \end{array}
 \right.$$
 Avec $$\elem{\delta}{k}{j}{} = \left\{
 \begin{array}{l}
 	\frac{\partial C}{\partial \elem{a}{L-1}{j}{}}, \  si \ k=L                                                                                                                                                  
-	\par                                                                                                                                                                                                         
-	\sum_{l=1}^{k-1}{\elem{\delta}{k+1}{l}{} \times \frac{\partial \elem{z}{k+1}{l}{}}{\partial \elem{a}{k}{j}{}} \times \frac{\partial \elem{a}{k}{j}{}}{\partial \elem{z}{k}{j}{}}}, \ si \ k \in \{1 .. L-1\} 
+	\\                                                                                                                                                                                                         
+	\sum_{l=1}^{k-1}{\elem{\delta}{k+1}{l}{} \times \frac{\partial \elem{z}{k+1}{l}{}}{\partial \elem{a}{k}{j}{}} \times \frac{\partial \elem{a}{k}{j}{}}{\partial \elem{z}{k}{j}{}}}, \ si \ k \in \{1 .. L-1\}
+	\\
 \end{array}
 \right.$$
 				
@@ -885,7 +1042,8 @@ Ce qui nous permet d'exprimer l'algorithme de rétro-propagation de la façon su
 	\end{algorithmic}
 \end{algorithm}
 Cet algorithme nous permet donc de calculer de façon très efficace tous les $\frac{\partial C}{\partial \elem{W}{k}{j}{i}}$ et $\frac{\partial C}{\partial \elem{b}{k}{j}{}}$.
-Il existe une version privilégiant le calcul matriciel, permettant un calcul plus rapide, grâce aux bibliothèques de calcul matriciel.
+Il existe une version privilégiant le calcul matriciel, permettant un calcul plus rapide, grâce à des librairies de BLAS.
+
 Nous ne redémontrerons pas l'algorithme, mais nous en donneront toutefois la formulation.
 \begin{algorithm}[H]
 	\caption{Algorithme de Rétro-propagation Matriciel}
@@ -917,16 +1075,21 @@ Nous disposons à présent des éléments suivants :
 	\item L'algorithme de rétro-propagation, permettant le calcul du gradient de la fonction de perte de manière efficace.
 \end{itemize}
 Ainsi, nous disposons alors des éléments permettant de créer un réseau de neurones, ainsi que d'effectuer son apprentissage.
+
 Nous allons maintenant quitter cette partie plutôt calculatoire, pour s'intéresser aux différents moyens existants pour améliorer les capacités de généralisation de nos futurs réseaux de neurones.
 \subsection{Théorème d'Approximation Universelle}
 Les réseaux de neurones permettent de représenter universellement n'importe quelle fonction, dans le sens où il existe un réseau de neurones, ayant une architecture donnée, des poids et biais donnés, pouvant approximer une fonction en particulier.
+
 Le \emph{Théorème d'Approximation Universelle} nous dit qu'il existe un réseau suffisamment "grand" pour avoir la précision souhaitée sur les résultats.
+
 Toutefois, ce théorème ne dit pas quelle sera la taille de ce réseau, mais en affirme seulement l'existence.
 \subsection{Techniques de Régularisation}
 Un défi majeur en apprentissage machine est de choisir un algorithme qui aura de bons résultats,non seulement à l'apprentissage, mais aussi sur de nouvelles entrées.
 Les stratégies utilisées en apprentissage machine, permettant de réduire l'\emph{erreur de test}, parfois au dépend de l'\emph{erreur d'apprentissage}, sont appelées techniques de régularisation.
+
 Nous avons, dans le premier chapitre, vu les concepts généraux de la \emph{généralisation}, du \emph{sous-apprentissage} et du \emph{sur-apprentissage}.
 Nous verrons à présent des méthodes concrètes appliquées aux réseaux de neurones profonds.
+
 Certaines méthodes ajouteront des contraintes d'optimisation sur la fonction de perte, d'autres des restrictions sur les paramètres.
 Si les méthodes sont choisies avec soin, elles peuvent améliorer grandement la performance des réseaux de neurones profonds sur l'ensemble des données de test.
 \subsubsection{Pénalisation des paramètres}
@@ -948,6 +1111,7 @@ Ainsi le poids $\elem{W}{k}{j}{i}$ aura tendance à diminuer par rapport à une 
 Une des meilleures façons d'améliorer la capacité de généralisation d'un modèle, est de l'entraîner sur plus de données.
 Malheureusement, la taille des ensembles de données est généralement limitée.
 Une façon de contourner le problème est de créer artificiellement des données et de les ajouter à l'ensemble d'apprentissage.
+
 Cette méthode est principalement utilisée pour un domaine : la reconnaissance d'objets.
 En effet, il est très facile de transformer les données existantes par des transformations, telles que des rotations, des translations ou des homothéties, paramétrées aléatoirement.
 On peut aussi le faire sur d'autres types de données en ajoutant du \emph{bruit blanc} sur une partie des entrées.
@@ -964,12 +1128,14 @@ La méthode \emph{Dropout} est une méthode assez particulière de régularisati
 \end{figure}
 Ainsi les différents sous-modèles se partagent les paramètres $\theta$ du modèle original.
 Il en résulte un modèle beaucoup plus robuste, car les différents sous-modèles entraînent une recherche de paramètres pour atteindre des minima différents.
+
 Cela incite donc à une convergence vers un minimum local partagé par les différents sous-modèles.
 Ce minimum local est de façon générale un bien meilleur minimum que ceux propres aux sous-modèles.
 Cette méthode présente toutefois un inconvénient, elle est difficile à implémenter, mais est présente dans la plupart des librairies d'apprentissage profond.
 \section{Réseaux Convolutifs}
 Les réseaux de neurones convolutifs sont une famille particulière de réseaux de neurones, qui excelle en terme de performance dans le domaine de la vision par ordinateur.
-Ils sont en effet spécialisés dans le traitement de données ayant une structure en forme de grille, c'est à dire que les données sont liées spatialement ou temporellement.
+Ils sont spécialisés dans le traitement de données ayant une structure en forme de grille, c'est à dire que les données sont liées spatialement ou temporellement.
+
 Voici des exemples de données ayant ce genre de structure :
 \begin{itemize}
 	\item Les séries temporelles pouvant être vue comme une grille de dimension $1$, car assimilables à des signaux, ayant pour unité un intervalle de temps fixe.
@@ -980,6 +1146,7 @@ Dans un second temps, nous discuterons de l'intérêt des convolutions dans les 
 Enfin nous parlerons d'une opération très souvent complémentaire à celle de \emph{convolution}, appelée \emph{pooling}.
 \subsection{L'Opérateur de Convolution}
 L'opérateur de convolution est un opérateur bilinéaire, c'est-à-dire linéaire par rapport à chacune des opérandes, et commutatif, généralement noté $*$.
+
 En traitement du signal, cet opérateur représente l’interaction entre un filtre et un signal.
 Elle peut être vue comme une moyenne mobile d'un signal pondérée par une fonction appelée \emph{noyau}.
 \subsubsection{Cas continu}
@@ -991,6 +1158,7 @@ $$(f *g)(n) = \sum_{m = -\infty}^{+\infty}{f(n-m)g(m)} = \sum_{m = -\infty}^{+\i
 \subsubsection{Application aux images}
 On rappelle qu'une image $I$ de $M$ lignes et $N$ colonnes est décrite par une fonction discrète $I(i,j)$ à support fini $S \subset \mathbb{Z}^2$ et à valeurs dans $\mathbb{R}$ ou $\mathbb{N}$.
 Puisque l'image, décrite par la fonction $I$ est nulle en dehors du support, on peut réécrire le produit de convolution entre des bornes finies.
+
 Le produit de convolution en un point $(i,j)$ de deux images $I$ et $K$, noté $I * K$ est défini tel que,
 On choisira d'imiter la notation matricielle pour plus de clarté.
 $$(I*K)_{i,j} = \sum_{m}\sum_{n}{I_{m,n}K_{i-m,j-n}} = (K*I)_{i,j} = \sum_{m}\sum_{n}{K_{m,n}I_{i-m,j-n}}$$
@@ -1003,39 +1171,49 @@ Voici un exemple d'application de la convolution sur une image :
 	\end{center}
 \end{figure}
 Dans cet exemple de convolution entre une image $I$, $(8,3)$ et un noyau $K$, $(2,2)$, on peut remarquer tout d'abord, que la image issue de la convolution est de forme $(6,2)$.
+
 En effet la convolution sans \emph{padding} réduit la taille de la fenêtre.
 Si l'image $I$ est de taille $(m,n)$ et le noyau de taille $(k,l)$ alors l'image convolutée sera de taille $(m-k+1,n-l+1)$.
 \subsubsection{Convolution et Corrélation Croisée}
-Nous avons défini précédemment la convolution entre deux images, ici une \emph{map de features} $I$ et un noyau $K$, de la façon suivante :
-Nous parlerons ici de façon plus générale de tenseurs.
+Nous avons défini précédemment la convolution entre deux images, ici une \emph{map de features} $I$ et un noyau $K$.
+
+Nous parlerons ici de façon plus générale de convolution entre tenseurs.
 \begin{center}
 	Un \emph{tenseur} est un \emph{tableau multi-dimensionnel}.
-		L'\emph{ordre} d'un tenseur est égal à la dimension du tableau.
+	
+	L'\emph{ordre} d'un tenseur est égal à la dimension du tableau.
 \end{center}
 Par exemple, une image en couleurs (RGB) de $256 \times 256$ pixels peut être décrite par un tenseur d'ordre $3$.
 Nous écrirons alors que la dimension de l'image est $3 \times 256 \times 256$, ou bien encore $256 \times 256 \times 3$.
+
 Toutefois, d'un point de vue machine, nous indexons celle variant le plus lentement en premier et celle variant le plus rapidement en dernier. Nous retiendrons ici l'écriture $3 \times 256 \times 256$.
+
 Nous avons défini précédemment la convolution entre deux tenseurs d'ordre $2$, ici une \emph{map de features} $I$ et un noyau $K$, de la façon suivante :
 $$(K*I)_{i,j} = \sum_{m}\sum_{n}{K_{m,n}I_{i-m,j-n}}$$
 qui est équivalente à 
 $$(I*K)_{i,j} = \sum_{m}\sum_{n}{I_{m,n}K_{i-m,j-n}}$$
 Mais dans la pratique, le noyau $K$ étant beaucoup plus "\emph{petit}" que $I$, la première formule est préférable, au niveau du calcul des bornes des indices $m$ et $n$.
 Par conséquent, même si la propriété de commutativité existe, une seule expression de la convolution nous intéresse.
+
 La corrélation croisée, très proche de la convolution, s'écrit de la façon suivante:
 $$(K*I)_{i,j} = \sum_{m}\sum_{n}{K_{m,n}I_{i+m,j+n}}$$
 La différence étant par rapport au sens de l'indexation. Cette opération n'est pas commutative contrairement à la convolution, mais étant donnée que seule l'opération $K*I$ nous intéresse, cette propriété ne nous apporte rien.
+
 Il est à noter que dans beaucoup de librairies d'Apprentissage Machine, l'opération de convolution est implémentée en tant que corrélation croisée. Dans la suite, nous appellerons convolution les deux opérations sans distinction.
 			
 \subsection{Intérêts de la Convolution dans les Réseaux de Neurones}
 La convolution s'appuie sur trois idées importantes permettant l'amélioration des performances, l'\emph{interaction partielle}, le \emph{partage des paramètres} et l'\emph{invariance par translation}.
 \subsubsection{L'interaction partielle}
 Dans les réseaux de neurones traditionnels, le passage de l'information d'une couche à la suivante se fait en autre par la multiplication matricielle du vecteur d'entrée $\elem{a}{k-1}{}{}$ de dimension $m$, par la matrice $\elem{W}{k}{}{}$ de dimension $m \times n$, la sortie du neurone $\elem{a}{k-1}{}{}$ sera donc de dimension $n$.
+
 Pour rappel :
 $$\elem{z}{k}{}{} = (\elem{W}{k}{}{})^T(\elem{a}{k-1}{}{}) + \elem{b}{k}{}{}$$
 On voit donc qu'ici l'interaction, ou connectivité, est totale puisque toutes les entrées $\elem{a}{k-1}{j}{}$ sont connectées par les poids $\elem{W}{k}{j}{i}$ aux sorties $\elem{a}{k-1}{i}{}$.
 Dans le cas où l'on travaille avec des images, on peut se demander si pour un pixel donné l'information apportée par un pixel situé à l'extrême opposé de l'image est pertinente.
+
 Ainsi, envisager une connectivité partielle entre le vecteur d'entrée $\elem{a}{k-1}{}{}$ et le vecteur de sortie $\elem{a}{k-1}{}{}$ peut sembler intéressante si l'information apportée s'apparente à du bruit.
 La convolution nous permet en effet cette interaction partielle, en effet la dimension du noyau $\elem{W}{k}{}{}$, de la forme $k \times n$, et si $k < m$ alors l'interaction sera en effet partielle.
+
 Voici à présent la représentation de l'interaction partielle dans un cas matriciel, plus illustratif qu'un simple cas vectoriel:
 \begin{figure}[H]
 	\begin{center}
@@ -1047,6 +1225,7 @@ Voici à présent la représentation de l'interaction partielle dans un cas matr
 \subsubsection{Le partage des paramètres et invariance par translation}
 Dans un réseau convolutif, chaque paramètre du noyau est utilisé à toutes les positions du vecteur d'entrée, sauf peut-être pour les premiers et derniers éléments du vecteur d'entrée.
 Ainsi le partage de paramètres pour la convolution signifie qu'au lieu d'apprendre pour chaque élément du vecteur d'entrée un paramètre associé, un filtre unique, \emph{composé d'un petit nombre de paramètre}, sera appris en rapport au vecteur d'entrée.
+
 Dans le cas de la figure précédente, où la fenêtre est de dimension $5 \times 5$, un seul noyau de dimension $5 \times 5$ sera appris pour cette couche de convolution.
 Ce partage de paramètres permet alors à notre couche de convolution d'être invariante par translation.
 En effet supposons que le noyau de notre couche soit entraîné à détecter un motif, ou \emph{feature} en particulier sur une image. Le noyau unique, et donc partagé à toutes les sous-régions de l'entrée, pourra détecter le motif peu importe sa position dans l'image.
@@ -1055,9 +1234,11 @@ Cette propriété d'invariance par translation rend les couches de convolutions 
 				
 \subsection{La Convolution appliquée aux Réseaux de Neurones}
 Le terme \emph{convolution} employé dans le contexte de l'apprentissage profond, diffère quelque peu de la convolution mathématique définie comme ci-dessus.
+
 Tout d'abord, quand on parle d'une convolution dans le contexte des réseaux de neurones, il s'agit en fait de plusieurs convolutions menées en parallèle.
-Énumérons à présent les différents noyaux $K$ de convolutions, en fonction de $I$ le tenseur d'entrée et de $S$ le tenseur de sortie:
-\begin{itemize}
+
+Énumérons à présent les différents noyaux $K$ de convolutions, en fonction de $I$ le tenseur d'entrée et de $S$ le tenseur de sortie souhaité:
+\begin{enumerate}
 	\item Soient $I$ de dimensions $(H_I,W_I)$ et $S$ de dimensions $(H_S, W_S)$,\\
 	Et si $H_I > H_S + 1$ et $W_I > W_S + 1$,\\
 	Alors $K$ sera de dimensions :
@@ -1073,7 +1254,7 @@ Tout d'abord, quand on parle d'une convolution dans le contexte des réseaux de 
 	Alors $K$ sera de dimensions :
 	$$(C_K^{out}, C_K^{in}, H_K, W_K) = (C_S, C_I, H_I - H_S + 1, W_I - W_S + 1)$$
 	Cette convolution nous permet d'extraire $C_S$ \emph{features} croisées entre les $C_I$ \emph{canaux} de chaque sous-région de $I$.\\	
-\end{itemize}
+\end{enumerate}
 
 Cette dernière expression est l'expression générale de la convolution.
 On peut remarquer pour le premier cas, que $(H_I,W_I) = (1, H_I,W_I)$, $(H_S,W_S) = (1, H_S,W_S)$ et $(H_I,W_I) = (1, 1,  H_I,W_I)$
@@ -1083,8 +1264,10 @@ Soient $I$ de dimensions $(C_I, H_I,W_I)$ et $S$ de dimensions $(C_S, H_S, W_S)$
 Et si $H_I > H_S + 1$ et $W_I > W_S + 1$,\\
 Alors $K$ sera de dimensions :
 $$(C_K^{out}, C_K^{in}, H_K, W_K) = (C_S, C_I, H_I - H_S + 1, W_I - W_S + 1)$$
+
 Donc $\forall k \in [0, C_S[, \ \forall i \in [0, H_S[, \ \forall j \in [0, W_S[$,
 $$S(k,i,j) = \sum_{l}\sum_{m}\sum_{n}{K_{k,l,m,n} \times I_{l,m + i, n + j}}$$
+
 Avec les indices de sommations suivants,
 \begin{itemize}
 	\item $l \in [\![0, C_K^{in}[\![$
@@ -1094,11 +1277,13 @@ Avec les indices de sommations suivants,
 \subsubsection{Padding et Strides}
 \paragraph{Padding}
 Nous avons pu observer précédemment que la convolution ne préservait pas les dimensions spatiales, la hauteur et la largeur, entre le tenseur d'entrée $I$ et le tenseur de sortie $S$.
-Soit $I$ un tenseur de dimensions $(H_I, W_I)$ et $K$ un noyau de dimensions $(H_K, W_K)$,\\
-Alors $S$ aura les dimensions suivantes :
+
+Soit $I$ un tenseur de dimensions $(H_I, W_I)$ et $K$ un noyau de dimensions $(H_K, W_K)$, alors $S$ aura les dimensions suivantes :
 $$(H_S, W_S) = (H_I - H_K + 1, W_I - W_K + 1)$$
 Toutefois il peut être intéressant dans certains cas de préserver ces dimensions.
-Le \emph{padding}, signifiant \emph{rembourrage}, permet de remédier à ce problème. Cette méthode consiste à créer un tenseur $I'$, en ajoutant à $I$ des lignes et colonnes de zéros sur ses \emph{bords}.\\
+
+Le \emph{padding}, signifiant \emph{rembourrage}, permet de remédier à ce problème. Cette méthode consiste à créer un tenseur $I'$, en ajoutant à $I$ des lignes et colonnes de zéros sur ses \emph{bords}.
+
 Ainsi, $$(H_{I'}, W_{I'}) = (H_I + p_H, W_I + p_W)$$
 Donc si on applique la convolution à $I'$,
 $$(H_S, W_S) = (H_I + p_H - H_K + 1, W_I + p_W - W_K + 1)$$
@@ -1109,7 +1294,8 @@ Dans le cas où les dimensions du noyau sont impaires, le \emph{padding} se fera
 Dans le cas où les dimensions du noyau sont paires, le \emph{padding} est par convention pour les bords \emph{haut} et \emph{gauche} de $I$.
 
 \subparagraph{Exemple}
-Dans le cas d'une convolution de noyau $K$ de dimensions $(3, 3)$ appliquée à un tenseur $I$ de dimensions $(3,3)$, si on veut garder $S$ de même dimensions que $I$.\\
+Dans le cas d'une convolution de noyau $K$ de dimensions $(3, 3)$ appliquée à un tenseur $I$ de dimensions $(3,3)$, si on veut garder $S$ de même dimensions que $I$.
+
 Soit
 $$I =
 \begin{pmatrix}
@@ -1130,13 +1316,17 @@ $$
 \paragraph{Strides}
 Le terme anglais \emph{stride} peut être traduit en français par le \emph{pas de déplacement}.\\
 Augmenter le pas de déplacement dans une convolution à pour effet de diminuer la dimension du tenseur de sortie $S$.
+
 Nous n'allons pas ici expliciter l'impact de ce changement sur les effets de l'apprentissage, un lien sera fait dans la partie dédiée au \emph{Pooling}, mais simplement décrire les modifications sur la sortie.
 $$(H_S, W_S) = ((H_I - H_K) / s_H + 1, (W_I - W_K) / s_W + 1)$$
 Les divisions sont ici \emph{entières} car les dimensions de sorties sont forcément entières.
 \subsubsection{Convolution généralisée}
-Soient $I$ de dimensions $(C_I, H_I,W_I)$,\\
-$S$ de dimensions $(C_S, H_S, W_S)$,\\
-et $K$ de dimensions $(C_K^{out}, C_K^{in}, H_K, W_K)$, avec $C_K^{out} = C_S$ et $C_K^{in} = C_I$\\
+Soient $I$ de dimensions $(C_I, H_I,W_I)$,
+
+$S$ de dimensions $(C_S, H_S, W_S)$,
+
+$K$ de dimensions $(C_K^{out}, C_K^{in}, H_K, W_K)$, avec $C_K^{out} = C_S$ et $C_K^{in} = C_I$.
+
 Il nous faut alors trouver $(p_H, p_W)$ et $(s_H, s_W)$, tels que :
 $$(C_S, H_S, W_S) = (C_S, (H_I + p_H - H_K) / s_H + 1, (W_I + p_W - W_K) / s_W + 1)$$
 On pose alors $I'$ le tenseur "\emph{rembourré}" de $I$, avec 
@@ -1153,17 +1343,22 @@ Avec,
 \end{itemize}
 \subsection{La Réduction de la Dimensionnalité}
 La \emph{réduction de la dimensionnalité} est un défi majeur en Statistiques et en Apprentissage Machine.
+
 Prenons un exemple pour illustrer le problème.
 Imaginons que nous souhaitons classifier des images issues d'Internet de dimensions $(3,256,256)$, en $1000$ classes distinctes.
 Ce problème revient à devoir trouver un \emph{mapping} entre un tenseur d'entrée de dimensions $(3, 256, 256)$ et un tenseur de sortie de dimension $(1000)$.
-On remarque qu'on peut transformer le tenseur d'entrée en un tenseur de dimension $(3 \times 256 \times 256) = (196608)$.
+
+On remarque qu'on peut transformer le tenseur d'entrée en un tenseur de dimension $(3 \times 256 \times 256) = (196\ 608)$.
+
 On peut alors se poser plusieurs questions,
 \begin{itemize}
 	\item Quelles sont les variables significatives parmi les $196608$ variables disponibles ?
 	\item Comment \emph{transformer}, ou \emph{modeler}, cette quantité d'information pour en extraire l'essentiel, c'est à dire sa classe ?
 \end{itemize}
-Tout d'abord la première question n'a pas vraiment de sens dans de nombreux domaines, et particulièrement en \emph{vision par ordinateur}, car les pixels d'une image sont liés spatialement. Ils sont donc dépendants de leurs voisins.
+
+Tout d'abord la première question n'a pas vraiment de sens dans de nombreux domaines, et particulièrement en \emph{vision par ordinateur}, car les pixels d'une image sont liés spatialement. Chaque variable est donc dépendante de ses voisins.
 La deuxième est plus beaucoup plus intéressante.
+
 Une approche plutôt naïve pourrait suggérer de transformer l'image de dimensions $(3, 256, 256)$ en niveaux de gris de dimensions $(1, 256, 256)$ puis de la \emph{redimensionner} en $(1, 32, 32)$, ce qui nous permet d'obtenir un tenseur d'entrée de dimension $(1024)$.
 \begin{figure}[H]
 	\begin{center}
@@ -1172,8 +1367,9 @@ Une approche plutôt naïve pourrait suggérer de transformer l'image de dimensi
 	\end{center}
 \end{figure}
 Ici les dimensions d'entrées et de sorties sont comparables, nous pouvons donc "choisir" plus facilement les combinaisons de variables à effectuer pour classifier les images. Toutefois la perte d'information, due aux pré-traitements appliqués aux données, est grande, ce qui aura un impact potentiel sur la performance de notre algorithme apprenant.
+
 Une approche un peu plus réfléchie pourrait suggérer d'une part de ne pas réduire la dimension des données non pas pendant le pré-traitement, mais surtout d'autre part, d'éviter de la réduire d'un seul coup, mais plutôt petit à petit.
-Nous allons lister deux transformations très efficaces appliquées aux réseaux de neurones, en particulier convolutifs.
+
 \subsubsection{Pooling d'informations}
 Le \emph{pooling}, signifiant \emph{mise en commun}, consiste à résumer l'information apportée par les valeurs de sorties proches en une seule valeur.
 Il existe deux déclinaisons du \emph{pooling},
@@ -1187,7 +1383,7 @@ Soit $I$ un tenseur de dimensions $(C_I, H_I, W_I)$, et une fonction de \emph{po
 Alors $S$ sera de dimensions :
 $$(C_S, H_S, W_S) = (C_I, (H_I + p_H - H_K) / s_H + 1, (W_I + p_W - W_K) / s_W + 1))$$
 
-Ces deux déclinaisons sont utilisées dans des contextes assez différents.
+Ces deux déclinaisons de pooling sont utilisées dans des contextes assez différents.
 \paragraph{Max-Pooling}
 Le \emph{max pooling} est principalement utilisé pour réduire la dimension des données de façon spatiale, c'est une méthode robuste aux bruits ambients, car elle ne transmet que l'information ayant le plus d'intensité.
 \begin{figure}[H]
@@ -1200,10 +1396,16 @@ Le \emph{max pooling} est principalement utilisé pour réduire la dimension des
 L'\emph{average pooling} est principalement utilisé pour réduire la dimension des données au niveau des canaux, car elle permet de prendre en compte les valeurs des différentes \emph{features} et de les agréger.
 \paragraph{Pooling par Convolution}
 Les convolutions à strides $>1$ sont à l'heure actuelle \emph{à la mode}. Elles font le travail à la fois de couches de convolution, mais aussi de couches de \emph{pooling}, permettant ainsi d'une part de simplifier le modèle, ce qui réduit le nombre de \emph{floating-point operations}, mais aussi d'avoir une opération de \emph{pooling} plus "maléable", car la fonction calculée n'est pas statique, mais sera amenée à évoluer lors de la rétro-propagation.
+
 De plus, elles sont souvent suivies de fonctions d'activation, rendant la sortie plus robuste aux bruits stochastiques.
 Elle est utilisée dans plusieurs modèles très performants, justifiant ainsi sa popularité montante.
-\section{Applications à la vision par ordinateur}
+\section{Applications à la Vision par Ordinateur}
+Les applications basées sur les réseaux de neurones occupent une place de plus en plus importante dans la société, le champ d'application est très large, on les retrouve notamment dans des outils de reconnaissance vocale, par exemple : Siri, Cortana; dans des outils de vision par ordinateur, utilisés par exemple dans les voitures autonomes; ou bien encore dans la création d'intelligences artificielles, liés à des jeux de réflexion, comme Deep Mind au jeu de Go, ou encore des agents conversationnels.
+Pour ces applications, les performances des réseaux de neurones sont comparables voire supérieures à celles d'un humain.
+
+Nous allons dans cette partie présenter quelques tâches liées à la vision par ordinateur, où l'influence des réseaux de neurones est grande.
 \subsection{Classification}
+
 \subsection{Détection d'objets}
 \subsection{Segmentation d'images}
 \subsubsection{Segmentation de classes}
