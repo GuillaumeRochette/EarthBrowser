@@ -27,7 +27,7 @@ Création d'un Moteur de Recherche dans les Images Satellite}
 \tableofcontents
 	
 \chapter{Introduction}
-\section{Présentation de l'entreprise}
+\section{Présentation de l'Entreprise}
 \subsection{Le Groupe Thales}
 Le groupe Thales, historiquement fabricant d'électronique, est un acteur français majeur dans les secteurs de l'aéronautique, le spatial, la défense, la sécurité et le transport terrestre.
 \begin{figure}[H]
@@ -62,7 +62,7 @@ Le groupe Thales, et par extension Thales Services, est organisé de façon \emp
 \end{figure}
 Ce stage s'effectue dans le \emph{Centre de Compétences} \textbf{Logiciel Orienté Machine} de la \emph{Région Sud-Ouest}.
 \section{Problématique(s)}
-\section{Objectifs du stage}
+\section{Objectifs du Stage}
 \chapter{L'Imagerie Satellite}
 De tout temps, l'humain a toujours souhaité pouvoir observer le monde, que ce soit à des fins militaires, scientifiques ou à simple but de contemplation.
 
@@ -249,7 +249,7 @@ La seconde composante de la taille d'un pixel est ici négative, car l'image à 
 
 En ajoutant à ces connaissances la dimension de l'image en pixel, interpoler la position des autres coins de l'image. Ce calcul d'interpolation reste une approximation car il faut prendre en compte l'angle de visée du satellite par rapport au sol.
 
-\subsection{Format de Fichier et Méthodes de Compression}
+\subsection{Compression et Formats de Fichier}
 Le format de fichier, aussi appelé \emph{driver}, spécifie la façon dont les données sont écrites sur le disque de stockage.
 Il existe de nombreux formats de fichiers offrant des possibilités de compression avec ou sans pertes.
 
@@ -371,7 +371,7 @@ La régression consiste à prédire une valeur réelle en fonction d'un individu
 L'algorithme doit par conséquent se comporter comme une fonction $f : \mathbb{R}^n \rightarrow \mathbb{R}$, en faisant correspond à un individu donné $x \in \mathbb{R}^n$, une prédiction $y \in \mathbb{R}$.
 
 On l'utilise par exemple pour l'approximation de fonctions modélisant un phénomène ou encore la prédiction des cours des actions.
-\subsubsection{Autres applications}
+\subsubsection{Autres Applications}
 Les deux applications citées ci-dessus sont les plus connues et les plus largement utilisées, toutefois il en existe un grand nombre telles que :
 \begin{itemize}
 	\item La transcription, consistant à traduire des données sans structure particulière en données ayant une structure discrète. Par exemple, extraire le texte d'une image, ou la reconnaissance vocale.
@@ -395,13 +395,13 @@ L'apprentissage machine se résume donc à optimiser notre algorithme pour modé
 On peut distinguer deux grandes classes d'algorithmes d'apprentissage machines, les algorithmes d'apprentissage \emph{non-supervisés} et \emph{supervisés}.
 
 Une expérience \emph{E} peut être comprise comme le fait d'apprendre sur un \emph{jeu de données}.
-\subsubsection{Apprentissage non supervisé}
+\subsubsection{Apprentissage Non-Supervisé}
 Les algorithmes d'apprentissage machine non-supervisés ont pour but d'apprendre sur des jeux de données ne contenant que des entrées $x$, et par exemple apprendre la distribution de probabilité $p(x)$ du jeu de données, ou bien de répartir les données dans des clusters, par le biais d'une distance donnée.
-\subsubsection{Apprentissage supervisé}
+\subsubsection{Apprentissage Supervisé}
 Les algorithmes d'apprentissage machine supervisés ont pour but d'apprendre sur un jeu de données, à associer une entrée $x$ à une sortie $y$, que l'on veut proche de la sortie attendue $\hat{y}$. Ce qui peut être vu comme l'apprentissage de la probabilité de $p(y|x)$.
 	
-\section{Contraintes d'apprentissage et régularisation}
-\subsection{Sous-apprentissage, Sur-apprentissage et Capacité d'un algorithme apprenant}
+\section{Contraintes d'Apprentissage et Régularisation}
+\subsection{Sous-apprentissage, Sur-apprentissage et Capacité d'un Algorithme Apprenant}
 L'un des défi, et intérêt, majeur en apprentissage machine est la possibilité de bien raisonner sur de nouveaux exemples encore inconnus de l'algorithme. Cette capacité de raisonnement s'appelle la généralisation.
 En effet, un algorithme apprenant s'appuie pour l'entraînement sur un ensemble d'apprentissage, ce qui nous permet de mesurer l'\emph{erreur d'apprentissage}, terme équivalent à la \emph{fonction de perte} sur les données d'apprentissage, et ainsi de la minimiser.
 
@@ -594,7 +594,7 @@ Elles peuvent remplacer les méthodes exactes, quand celles-ci sont soit inappli
 Il existe un grand nombre de méthodes itératives, mais nous n'en aborderons qu'une seule catégorie, car utile pour la suite, les méthodes de descente du gradient.
 
 Les méthodes de descente de gradient, sont très utilisées en apprentissage machine, de par leur facilité d'implémentation, ainsi que de leur convergence plutôt rapide.
-\subsubsection{Algorithme général de Descente de Gradient}
+\subsubsection{Algorithme de Descente de Gradient}
 Voici à présent l'algorithme général du gradient, appliqué à une fonction $J(x,y,\theta)$.
 \begin{algorithm}[H]
 	\caption{Algorithme général de Descente de Gradient}
@@ -623,7 +623,7 @@ $$J(x,y,\theta) = \frac{1}{n} \sum_{i=1}^{n}{J(x_i,y_i,\theta)}$$
 Donc,
 $$\nabla_\theta J(x,y,\theta) = \frac{1}{n} \sum_{i=1}^{n}{\nabla_\theta J(x_i,y_i,\theta)}$$
 \			
-\subsubsection{Méthode de Descente de Gradient Stochastique}
+\subsubsection{Algorithme de Descente de Gradient Stochastique}
 La réflexion derrière la descente de gradient stochastique est que le gradient de l'ensemble est la moyenne des gradients des couples $(x,y)$ .
 
 D'après la Loi des Grands Nombres, $$\mathbb{E}(X) \approx \frac{1}{n} \sum_{i=1}^{n}{x_i}$$
@@ -746,7 +746,7 @@ On parlera d'apprentissage très profond, lorsque le nombre de couches cachées 
 Nous pouvons par ailleurs noter que le nombre de paramètres $\theta = (b,w) = (b,w_1,..,w_p)$ d'un neurone n'est pas arbitraire.
 En effet, la \emph{largeur} de chaque couche est égale au nombre de paramètres $\theta$ des neurones de la couche suivante.
 Par ailleurs, la \emph{largeur} de la première couche est égale à la taille du vecteur d'entrée $x$.
-\subsubsection{Expression générale}
+\subsubsection{Expression Gnérale}
 On explicitera généralement l'architecture d'un réseau de neurones par un vecteur $s \in \mathbb{N}^L$.
 Ainsi $S = (S_1, S_2, ..., S_L)$ représente un réseau de neurones de \emph{profondeur} $L$ ($L$ couches), chacune possédant $s_i$ neurones ayant $s_{i-1}$ poids et un biais par neurone.
 \subsection{Notations}
@@ -859,7 +859,7 @@ Voici pour rappel une méthode générale de descente de gradient, vue dans la p
 \end{algorithm}
 L'algorithme de rétro-propagation du gradient a pour simple but de calculer, de façon élégante, le gradient $\nabla_\theta J(x,y,\theta)$, avec $\theta$ représentant ici tous les paramètres du modèle, c'est à dire l'ensemble des poids $\elem{W}{k}{j}{i}$ et des biais $\elem{b}{k}{j}{}$.
 		
-\subsubsection{Calcul formel du Gradient}
+\subsubsection{Calcul Formel du Gradient}
 			
 Il nous faut donc calculer $\frac{\partial J(x,y,\theta)}{\partial \elem{W}{k}{j}{i}}$, traduisant l'influence du poids $\elem{W}{k}{j}{i}$ sur la fonction de perte $J(x,y,\theta)$.
 
@@ -1092,7 +1092,7 @@ Nous verrons à présent des méthodes concrètes appliquées aux réseaux de ne
 
 Certaines méthodes ajouteront des contraintes d'optimisation sur la fonction de perte, d'autres des restrictions sur les paramètres.
 Si les méthodes sont choisies avec soin, elles peuvent améliorer grandement la performance des réseaux de neurones profonds sur l'ensemble des données de test.
-\subsubsection{Pénalisation des paramètres}
+\subsubsection{Pénalisation des Paramètres}
 La pénalisation des paramètres est une des premières formes de régularisation, utilisée depuis les débuts de l'apprentissage machine.
 Cette régularisation limite la capacité de modèles, tels que les réseaux de neurones, les régressions linéaires, polynomiales et logistiques, en ajoutant une composante de pénalisation des paramètres $\Omega(\theta)$ à la fonction de perte $J(x,y,\theta)$, tel que
 $$J(x,y,\theta) = J_0(x,y,\theta) + \lambda \Omega(\theta)$$
@@ -1107,7 +1107,7 @@ $$\tilde{J}(x,y,\theta) = J(x,y,\theta) + \frac{\lambda}{2} w^T w$$
 Par conséquent le gradient s'écrit de la façon suivante,
 $$\nabla_\theta \tilde{J}(x,y,\theta) = \nabla_\theta J(x,y,\theta) + \lambda w$$
 Ainsi le poids $\elem{W}{k}{j}{i}$ aura tendance à diminuer par rapport à une fraction de lui même.
-\subsubsection{Augmentation du jeu de données}
+\subsubsection{Augmentation du Jeu de Données}
 Une des meilleures façons d'améliorer la capacité de généralisation d'un modèle, est de l'entraîner sur plus de données.
 Malheureusement, la taille des ensembles de données est généralement limitée.
 Une façon de contourner le problème est de créer artificiellement des données et de les ajouter à l'ensemble d'apprentissage.
@@ -1115,7 +1115,7 @@ Une façon de contourner le problème est de créer artificiellement des donnée
 Cette méthode est principalement utilisée pour un domaine : la reconnaissance d'objets.
 En effet, il est très facile de transformer les données existantes par des transformations, telles que des rotations, des translations ou des homothéties, paramétrées aléatoirement.
 On peut aussi le faire sur d'autres types de données en ajoutant du \emph{bruit blanc} sur une partie des entrées.
-\subsubsection{Arrêt prématuré}
+\subsubsection{Arrêt Prématuré}
 Lors de qu'un modèle avec une capacité suffisante pour sur-apprendre, on observe généralement que tandis ce que l'\emph{erreur d'apprentissage} continue de diminuer, l'\emph{erreur d'entraînement} recommence à augmenter.
 Cela signifie que nous avons atteint un \emph{minimum local} sur les données de test, il convient alors d'arrêter l'apprentissage avant que l'\emph{erreur de généralisation} empire.
 \subsubsection{Dropout}
@@ -1149,13 +1149,13 @@ L'opérateur de convolution est un opérateur bilinéaire, c'est-à-dire linéai
 
 En traitement du signal, cet opérateur représente l’interaction entre un filtre et un signal.
 Elle peut être vue comme une moyenne mobile d'un signal pondérée par une fonction appelée \emph{noyau}.
-\subsubsection{Cas continu}
+\subsubsection{Cas Continu}
 Le produit de convolution de deux fonctions réelles ou complexes $f$ et $g$ est défini tel que,
 $$(f * g)(x) = \int_{-\infty}^{+\infty}{f(x-t)g(t)dt} = \int_{-\infty}^{+\infty}{f(t)g(x-t)dt}$$
-\subsubsection{Cas discret}
+\subsubsection{Cas Discret}
 Le produit de convolution de deux suites $f$ et $g$ est défini tel que,
 $$(f *g)(n) = \sum_{m = -\infty}^{+\infty}{f(n-m)g(m)} = \sum_{m = -\infty}^{+\infty}{f(m)g(n-m)}$$
-\subsubsection{Application aux images}
+\subsubsection{Application aux Images}
 On rappelle qu'une image $I$ de $M$ lignes et $N$ colonnes est décrite par une fonction discrète $I(i,j)$ à support fini $S \subset \mathbb{Z}^2$ et à valeurs dans $\mathbb{R}$ ou $\mathbb{N}$.
 Puisque l'image, décrite par la fonction $I$ est nulle en dehors du support, on peut réécrire le produit de convolution entre des bornes finies.
 
@@ -1203,7 +1203,7 @@ Il est à noter que dans beaucoup de librairies d'Apprentissage Machine, l'opér
 			
 \subsection{Intérêts de la Convolution dans les Réseaux de Neurones}
 La convolution s'appuie sur trois idées importantes permettant l'amélioration des performances, l'\emph{interaction partielle}, le \emph{partage des paramètres} et l'\emph{invariance par translation}.
-\subsubsection{L'interaction partielle}
+\subsubsection{L'interaction Partielle}
 Dans les réseaux de neurones traditionnels, le passage de l'information d'une couche à la suivante se fait en autre par la multiplication matricielle du vecteur d'entrée $\elem{a}{k-1}{}{}$ de dimension $m$, par la matrice $\elem{W}{k}{}{}$ de dimension $m \times n$, la sortie du neurone $\elem{a}{k-1}{}{}$ sera donc de dimension $n$.
 
 Pour rappel :
@@ -1222,7 +1222,7 @@ Voici à présent la représentation de l'interaction partielle dans un cas matr
 	\end{center}
 \end{figure}
 			
-\subsubsection{Le partage des paramètres et invariance par translation}
+\subsubsection{Le Partage des Paramètres et Invariance}
 Dans un réseau convolutif, chaque paramètre du noyau est utilisé à toutes les positions du vecteur d'entrée, sauf peut-être pour les premiers et derniers éléments du vecteur d'entrée.
 Ainsi le partage de paramètres pour la convolution signifie qu'au lieu d'apprendre pour chaque élément du vecteur d'entrée un paramètre associé, un filtre unique, \emph{composé d'un petit nombre de paramètre}, sera appris en rapport au vecteur d'entrée.
 
@@ -1370,7 +1370,7 @@ Ici les dimensions d'entrées et de sorties sont comparables, nous pouvons donc 
 
 Une approche un peu plus réfléchie pourrait suggérer d'une part de ne pas réduire la dimension des données non pas pendant le pré-traitement, mais surtout d'autre part, d'éviter de la réduire d'un seul coup, mais plutôt petit à petit.
 
-\subsubsection{Pooling d'informations}
+\subsubsection{Pooling d'Information}
 Le \emph{pooling}, signifiant \emph{mise en commun}, consiste à résumer l'information apportée par les valeurs de sorties proches en une seule valeur.
 Il existe deux déclinaisons du \emph{pooling},
 \begin{itemize}
@@ -1403,13 +1403,72 @@ Elle est utilisée dans plusieurs modèles très performants, justifiant ainsi s
 Les applications basées sur les réseaux de neurones occupent une place de plus en plus importante dans la société, le champ d'application est très large, on les retrouve notamment dans des outils de reconnaissance vocale, par exemple : Siri, Cortana; dans des outils de vision par ordinateur, utilisés par exemple dans les voitures autonomes; ou bien encore dans la création d'intelligences artificielles, liés à des jeux de réflexion, comme Deep Mind au jeu de Go, ou encore des agents conversationnels.
 Pour ces applications, les performances des réseaux de neurones sont comparables voire supérieures à celles d'un humain.
 
-Nous allons dans cette partie présenter quelques tâches liées à la vision par ordinateur, où l'influence des réseaux de neurones est grande.
+Nous allons dans cette partie présenter quelques tâches liées à la vision par ordinateur, domaine dans lequel l'influence des réseaux de neurones est grande.
 \subsection{Classification}
+La classification est sans doute le problème le plus simple en matière de vision, il s'agit de prédire l'appartenance d'une image à une classe, généralement liée aux objets liés dans l'image.
+\subsubsection{Datasets}
+Un des premiers \emph{datasets} d'images pour la classification est le MNIST, composé de $70000$ images noir et blanc de $28 \times 28$ pixels, chacune contenant un chiffre manuscrit.
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.3]{Images/MNIST_Digits.png}
+		\caption{Données issues de MNIST}
+	\end{center}
+\end{figure}
+Même si la l'intérêt à reconnaître les chiffres est limité, ce \emph{dataset} a longtemps servi au niveau académique de \emph{benchmark} pour comparer les différents modèles.
 
-\subsection{Détection d'objets}
-\subsection{Segmentation d'images}
-\subsubsection{Segmentation de classes}
-\subsubsection{Segmentation d'instances}
+On citera aussi les \emph{datasets} CIFAR-10, CIFAR-100, et ImageNet.
+CIFAR-10 et CIFAR-100 sont composés chacun de $60000$ images RGB de $32 \times 32$ pixels, réparties en $10$ classes pour le premier et $100$ classes pour le second.
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.3]{Images/CIFAR-10.png}
+		\caption{Données issues de CIFAR-10}
+	\end{center}
+\end{figure}
+ImageNet contient une base de classification d'images contenant plus de $10$ millions d'URLs d'images de taille variable réparties en $1000$ classes. Les images sont majoritairement issues de sites comme Flickr.
+Ce \emph{dataset}, créé en $2009$, fait l'objet d'une compétition depuis $2010$, qui a permis de réaliser des progrès impressionnants en traitement d'images.
+\subsubsection{Architectures de Modèles}
+En $2011$, l'erreur de classification était de $25\%$. En $2012$, le réseau de neurones convolutifs AlexNet, composé de $8$ couches, atteignait alors $16\%$ d'erreur. En $2014$, GoogLeNet ($22$ couches), suivi de près par VGG-16 ($16$ couches), remportait la compétition avec une erreur de $6.7\%$ (respectivement $7.3\%$). En $2015$, ResNet, un réseau de $152$ couches, atteignait alors $3.6\%$. En moyenne, un humain non-entraîné réalise environ $10\%$ d'erreur et un humain entraîné $5\%$.
+\subsection{Détection d'Objets}
+La détection d'objets consiste à prédire la classe et l'emplacement d'un ou plusieurs objets dans une image. L'emplacement d'un objet est généralement défini par une \emph{bounding box}, ou région d'intérêt, représentée par un rectangle entourant l'objet.
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.3]{Images/Pascal_VOC_Detection.jpg}
+		\caption{Image et \emph{bounding boxes} issues de Pascal VOC}
+	\end{center}
+\end{figure}
+
+\subsubsection{Datasets}
+Le \emph{dataset} Pascal VOC est composé de $11530$ images contenant au total $27450$ régions d'intérêt décrivant $20$ classes.
+
+ImageNet possède aussi une base de détection d'objets contenant environ $450000$ images contenant $475000$ objets référencés répartis en $200$ classes.
+\subsubsection{Architectures de Modèles}
+Deux architectures remarquables sont les réseaux de type R-CNN et YOLO, l'une par ses performances exceptionnelles, l'autre par le compromis réalisé entre performances et vitesse d'éxécution.
+
+Les architectures de type R-CNN se caractérisent par un schéma de fonctionnement divisé en deux parties, la première étant un réseau de neurones assurant la localisation potentielle d'objets, la seconde étant un autre réseau de neurones dédié à la classification de chacune des zones potentielles.
+
+Les architectures de type YOLO ont à l'inverse la particularité d'effectuer en parallèle la localisation et la classification des objets, proposant ainsi une grande vitesse d'exécution.
+\subsection{Segmentation d'Images}
+Comme pour la détection d'objets, la segmentation vise à identifier les objets appartenant à une classe et à les localiser sur l'image.
+La différence apparaît sur la sortie produite, dans le cas de la segmentation, cela consiste à prédire, pour chaque pixel de l'image, sa classe.
+La segmentation répond à des besoins de précision plus élevés que la détection d'objets, du fait de la prédiction d'un masque de la taille de l'image d'entrée.
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.2]{Images/Pascal_VOC_Segmentation.png}
+		\caption{Image et masque de classes issus de Pascal VOC}
+	\end{center}
+\end{figure}
+Un des avantages de la segmentation d'images par rapport à la détection d'objets, outre le gain potentiel de précision, est qu'il est possible à partir d'un masque de segmentation de produire des \emph{bounding boxes} en utilisant la polygonisation des masques. L'opération inverse n'est pas vraiment intéressante puisque les polygones sont des rectangles.
+\subsubsection{Datasets}
+Pascal VOC possède aussi une base de segmentation d'images contenant $2913$ images décrivant $20$ classes.
+Microsoft COCO (Common Objects in Context) contient $328000$ images décrivant $91$ classes.
+
+Ces deux \emph{datasets} possèdent la particularité de segmenter les images d'une part selon la classe mais aussi en fonction de l'instance, permettant ainsi de différencier deux objets de même nature au sein d'une image.
+\subsubsection{Architectures de Modèles}
+Deux architectures remarquables sont les réseaux de type FCN et DeconvNet, elles utilisent toutes les deux le principe de décomposer l'image en \emph{features} par convolutions successives, puis de reconstituer l'image en image segmentée en appliquant plusieurs couches de déconvolutions.
+
+Les architectures de type FCN reconstituent l'image en combinant les \emph{features} dé-convolutées avec les \emph{features} après \emph{pooling}.
+
+Les architectures de type DeconvNet reconstituent l'image en utilisant des couches d'\emph{unpooling}, inversant l'effet des couches de \emph{pooling}. Nous reviendront en détail leur fonctionnement dans la suite.
 \chapter{L'Apprentissage Profond appliqué à l'Imagerie Satellite}
 \section{Présentation des données}
 \subsection{Données SpaceNet}
