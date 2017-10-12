@@ -69,7 +69,7 @@ Le potentiel de l'apprentissage profond à réaliser des tâches jugées complex
 Pour certaines applications de vision, la machine offre aujourd'hui des performances supérieures à celles d'un humain.
 Les avancées les plus spectaculaires à ce jour sont majoritairement réalisées sur des images provenant de la photographie grand-public, avec ses particularités et ses contraintes.
 
-Thales Services, dont le client principal est le Centre National d'Études Spatiales (CNES), produit des suites de logiciels utilisés dans la chaîne de traitement d'images pour des satellites tels que Pléiades, SPOT ou encore Sentinel-2.
+Thales Services, dont l'un des clients est le Centre National d'Études Spatiales (CNES), produit des suites de logiciels utilisés dans la chaîne de traitement d'images pour des satellites tels que Pléiades, SPOT ou encore Sentinel-2.
 
 L'application de méthodes d'apprentissage profond à des images satellites est prometteuse mais encore peu utilisée, justifiant l'intérêt et la volonté de Thales Services de monter en compétence dans ce domaine.
 
@@ -214,11 +214,11 @@ La fauchée d'un satellite est la la surface au sol couverte par la prise de vue
 		\caption{Fauchée d'un satellite}
 	\end{center}
 \end{figure}
-Dans le cas d'une orbite quasi-polaire, la trace au sol recouvrira alors presque toute la surface de la Terre (sauf aux pôles) $p$ périodes, permettant de photographier les même zones de façon périodique et constamment à la même d'heure grâce aux propriétés d'héliosynchronisme.
+Dans le cas d'une orbite quasi-polaire, la trace au sol recouvrira alors presque toute la surface de la Terre (sauf aux pôles), permettant de revisiter les zones de façon périodique et à la même d'heure grâce aux propriétés d'héliosynchronisme.
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[scale=0.5]{Images/Trace_Sol_SPOT.jpg}
-		\caption{Trace au sol des satellites SPOT}
+		\caption{Trace au sol des satellites SPOT sur 24h}
 	\end{center}
 \end{figure}
 \section{Images Satellite}
@@ -275,11 +275,9 @@ Un format très utilisé dans l'imagerie spatiale est le format GeoTIFF, ou GTif
 On citera aussi les formats :
 \begin{itemize}
 	\item JPEG est le format le plus courant en photographie numérique, mais étant un format de compression avec pertes il est peu utilisé en imagerie spatiale.
-	\item JPEG2000 est un format propriétaire, successeur annoncé du JPEG, il offre de grandes possibilités de compression utilisant des ondelettes (ratio de 1:50), mais la lecture/écriture sont très lentes dues aux opérations de compression/décompression.
+	\item JPEG2000 est un format propriétaire, successeur annoncé du JPEG, il offre de grandes possibilités de compression utilisant des ondelettes (ratio de $1:50$), mais la lecture/écriture sont très lentes dues aux opérations de compression/décompression.
 	\item LUM est un format utilisé par le CNES en interne sur la chaîne de traitement des images et pour des simulations, c'est un fichier de format binaire accompagné de métadonnées.
 \end{itemize}
-
-
 \subsection{Caractéristiques d'une Image Satellite}
 Nous allons à présent voir quelques propriétés concernant les images, ainsi que certaines particularités des images satellite.
 \subsubsection{Angle de visée}
@@ -1489,6 +1487,47 @@ Les architectures de type DeconvNet reconstituent l'image en utilisant des couch
 \chapter{L'Apprentissage Profond appliqué à l'Imagerie Satellite}
 \section{Présentation des données}
 \subsection{Données SpaceNet}
+SpaceNet est une base de données d'images satellite très haute résolution issue de la collaboration entre CosmiQ Works, Digital Globe et NVIDIA.
+Elle constitue la première base de données d'image très haute résolution disponible au grand public.
+Les données sont hébergées par Amazon, sur les serveurs AWS S3 (Amazon Web Services Simple Storage Service).
+
+La base de données SpaceNet actuelle fut construite en deux temps, lors des deux éditions du SpaceNet Challenge, elle couvre 5 zones géographiques :
+\begin{itemize}
+	\item Rio de Janeiro, Brésil.
+	\item Las Vegas, États-Unis.
+	\item Paris, France.
+	\item Shanghai, Chine.
+	\item Khartoum, Soudan.
+\end{itemize}
+
+La première édition du SpaceNet Challenge ne portait que sur Rio de Janeiro, les images provenant du satellite WorldView-2.
+La seconde édition du SpaceNet Challenge portait sur Las Vegas, Paris, Shanghai et Khartoum, les images provenant du satellite WorldView-3.
+
+Les deux satellites proviennent de la même famile, WorldView. WorldView-2 fut envoyé en orbite le 8 octobre 2009, tandis que WorldView-3 fut lancé le 13 août 2014.
+Les deux satellites ont des caractéristiques similaires, mais se différencient sur la résolution au sol des capteurs optiques.
+\begin{center}
+	\begin{tabular}{|c|c|c|}
+	\hline 
+	Résolution & WorldView-2 & WorldView-3 \\ 
+	\hline 
+	Bande Panchromatique & 0.46m & 0.31m \\ 
+	\hline 
+	Bandes Multispectrales & 1.84m & 1.24m \\ 
+	\hline 
+	\end{tabular} 
+\end{center}
+
+\begin{tabular}{|c|c|c|c|c|}
+\hline 
+Panchromatique & Côtier & Bleu & Vert & Jaune \\ 
+\hline 
+450-800nm & 400-450nm & 450-510nm & 510-580nm & 585-625nm \\ 
+\hline 
+Rouge & Rouge Frontière & Proche Infrarouge 1 & Proche Infrarouge 2 & • \\ 
+\hline 
+630-690nm & 705-745nm & 775-895nm & 860-1040nm & • \\ 
+\hline 
+\end{tabular} 
 \subsection{Données Pléiades}
 \section{Cartographie Automatisée par Segmentation de Classes}
 \subsection{Protocole expérimental}
