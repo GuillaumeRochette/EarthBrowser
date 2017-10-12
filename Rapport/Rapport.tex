@@ -280,9 +280,11 @@ On citera aussi les formats :
 \subsection{Caractéristiques d'une Image Satellite}
 Nous allons à présent voir quelques propriétés concernant les images, ainsi que certaines particularités des images satellite.
 \subsubsection{Angle de visée}
-Contrairement aux appareils photographiques classiques, où l'angle de visée dépend de celui qui tient l'appareil, l'angle de visée d'un satellite est généralement situé au \emph{nadir} de celui-ci.
+Pour les appareils photographiques classiques, l'angle de visée dépend de celui qui tient l'appareil, il en est de même pour les satellites. 
 
-Le \emph{nadir} est le vecteur normal à la surface terrestre depuis le satellite. C'est donc le vecteur opposé du \emph{zénith}.
+L'angle de visée est variable et ce qui permet de re-photographier une zone sans avoir à attendre une période orbitale entière, durant environ $26$ jours pour les satellites de la famille SPOT.
+
+Cependant pour pouvoir obtenir de "belles" images, afin de pouvoir les exploiter de façon optimale il faut re-projeter l'image pour se retrouver au \emph{nadir}, le \emph{nadir} étant le vecteur normal à la surface terrestre depuis le satellite. C'est donc le vecteur opposé du \emph{zénith}.
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[scale=0.5]{Images/Nadir.png}
@@ -290,10 +292,7 @@ Le \emph{nadir} est le vecteur normal à la surface terrestre depuis le satellit
 	\end{center}
 \end{figure}
 
-Le fait que l'angle de visée soit pratiquement toujours le même permet d'unifier les traitements à appliquer sur l'image brute.
-
-L'angle de visée est variable et ce qui permet de re-photographier une zone sans avoir à attendre une période orbitale entière, durant environ $26$ jours pour les satellites de la famille SPOT. Dans ce cas là, il faudra en plus corriger les images pour les ramener à un angle de vue proche du \emph{nadir}, on parle alors de \emph{dépointage} d'une image.
-
+Le fait que l'angle de visée re-projeté soit pratiquement toujours le même permet d'unifier les traitements à appliquer sur l'image et simplifier son exploitation ultérieure.
 \subsubsection{Bandes et Fusion d'Images}
 Une image, et en particulier une image satellite, est constituée de bandes. 
 
