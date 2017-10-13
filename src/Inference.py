@@ -9,6 +9,12 @@ import matplotlib.pyplot as plt
 
 
 def plottable(data, disp_channels=None):
+    """
+    Alter data to make it plottable.
+    :param data: 3-D Array (C,H,W) to be plotted.
+    :param disp_channels: Channels to keep for plotting.
+    :return: 3-D Array of uint8 ready for plot.
+    """
     if disp_channels:
         data = data[disp_channels]
     img = np.transpose(data, axes=[1, 2, 0])
@@ -38,10 +44,13 @@ if __name__ == '__main__':
     channels = args.channels
     disp_channels = args.disp_channels
 
+    # Loads network according to model definition and weights.
     net = caffe.Net(model, caffe.TEST, weights=weights)
 
+    # Lists data.
     data_paths = sorted(glob.glob(os.path.join(data_dir, "*")))
     label_dir = args.label_dir
+    # Lists labels if given as argument.
     if label_dir:
         label_paths = sorted(glob.glob(os.path.join(label_dir, "*")))
 
@@ -49,13 +58,15 @@ if __name__ == '__main__':
     while True:
         i = int(input()) % len(data_paths)
         data_path = data_paths[i]
-        print data_path
+        # Open data raster.
         data = np.array(gdal.Open(data_path).ReadAsArray())
+        print data_path
         print data.shape, data.dtype
+        # Open label raster if provided.
         if label_dir:
             label_path = label_paths[i]
-            print label_path
             label = np.array(gdal.Open(label_path).ReadAsArray())
+            print label_path
             print label.shape, label.dtype
 
         # Select the channels that were chosen for training.

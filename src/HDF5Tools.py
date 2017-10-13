@@ -96,7 +96,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Set up the HDF5 Database with ready-for-use data.")
     parser.add_argument("--input_dir", required=True,
                         help="Directory containing the city directories, themselves containing data and labels.")
-    parser.add_argument("--output_dir", required=True, help="Directory where the HDF5 files will be written.")
+    parser.add_argument("--output_dir", required=True, help="ABSOLUTE PATH of the directory where the HDF5 files will be written.")
     parser.add_argument("--channels", nargs="+", type=int,
                         help="Channels to keep for multispectral images, WV3 -> PHR = [1,2,4,6].")
     parser.add_argument("--ratio", default=0.9, type=float,

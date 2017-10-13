@@ -2,7 +2,7 @@ import csv
 import os
 import re
 import argparse
-
+# Dirty log parser, don't question ...
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Parse multiple log files into one csv file.")
     parser.add_argument("--log_dir", required=True, help="Path to the directory containing the logs.")

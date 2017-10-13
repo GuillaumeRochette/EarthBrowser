@@ -10,6 +10,12 @@ import matplotlib.pyplot as plt
 
 
 def plottable(data, disp_channels=None):
+    """
+    Alter data to make it plottable.
+    :param data: 3-D Array (C,H,W) to be plotted.
+    :param disp_channels: Channels to keep for plotting.
+    :return: 3-D Array of uint8 ready for plot.
+    """
     if disp_channels:
         data = data[disp_channels]
     img = np.transpose(data, axes=[1, 2, 0])
@@ -41,14 +47,15 @@ if __name__ == '__main__':
     channels = args.channels
     disp_channels = args.disp_channels
 
+    # Loads network according to model definition and weights.
     net = caffe.Net(model, caffe.TEST, weights=weights)
 
+    # Checks if the layer is in the network.
     if layer not in net.blobs:
         raise TypeError("Invalid layer name, please check the deploy.prototxt for model definition.")
 
+    # Lists data.
     data_paths = sorted(glob.glob(os.path.join(data_dir, "*")))
-
-    # random.shuffle(data_paths)
 
     print "There are currently {} listed data and labels.".format(len(data_paths))
     features = []
@@ -56,28 +63,34 @@ if __name__ == '__main__':
     batch = []
     for data_path in data_paths:
         print data_path
+        # Open data raster.
         data = np.array(gdal.Open(data_path).ReadAsArray())
         # Select the channels that were chosen for training.
         if channels:
             data = data[channels, ...]
         batch.append(data)
         if len(batch) >= batch_size:
+            # An image is a 3-D tensor/blob, but Caffe only accept 4-D tensor/blob for batch computation.
+            # See the deploy.prototxt to check data shapes.
             batch = np.array(batch)
             print batch.shape, batch.dtype
             out = net.forward(data=batch, end=layer)
             feature_batch = np.array(out[layer], dtype=np.float16)
             print feature_batch.shape, feature_batch.dtype
+            # Collect the batch of features and add it to the total.
             features.append(feature_batch)
             batch = []
     features = np.concatenate(features)
     print features.shape, features.dtype
+    # Reshape features to 1-D array for future cross-correlation.
     features = features.reshape(features.shape[0], np.prod(features.shape[1:]))
     print features.shape, features.dtype
 
+    # Compute the correlation matrix.
     corr_mat = np.corrcoef(features)
     print corr_mat.shape, corr_mat.dtype
-    print corr_mat.min(), corr_mat.max(), corr_mat.mean()
 
+    # Display the 8 most correlated to the selected image.
     while True:
         i = int(input()) % len(data_paths)
         corr_vect = corr_mat[i]

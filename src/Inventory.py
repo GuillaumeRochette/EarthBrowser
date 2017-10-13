@@ -10,6 +10,11 @@ gdal.UseExceptions()
 
 
 def compute_distribution(label_paths):
+    """
+    Compute the distribution of the labels contained in the dataset.
+    :param label_paths: Array of label_path.
+    :return: Dict(label_value, count)
+    """
     print "{} labels.".format(len(label_paths))
     occurrences = {}
     for i, label_path in enumerate(label_paths):
@@ -37,6 +42,7 @@ if __name__ == '__main__':
     input_dir = args.input_dir
     output_dir = args.output_dir
     cities = os.listdir(input_dir)
+    # Lists labels.
     label_paths = []
     for city in cities:
         city_dir = os.path.join(input_dir, city)
@@ -46,11 +52,16 @@ if __name__ == '__main__':
     dist = compute_distribution(label_paths)
     print dist
     occurences = np.array(dist.values(), dtype=np.float32)
+    # Ignores the labels corresponding to the edge of the rasterized polygons,
+    # which will be ignored during training.
     occurences = occurences[:-1]
     L = len(occurences)
+    # Computes the weights according to the inverse frequency.
     weights = occurences.sum() / (occurences * L)
+    # Creates the (diagonal) matrix containing the weights.
     H = np.diag(weights)
     print H
+    # Blob it then store it as a binaryproto for Caffe ingestion.
     blob = caffe.io.array_to_blobproto(H.reshape((1, 1, L, L)))
     with open(os.path.join(output_dir, "infogainH.binaryproto"), 'wb') as f:
         f.write(blob.SerializeToString())
