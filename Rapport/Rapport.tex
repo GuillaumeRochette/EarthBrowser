@@ -79,11 +79,13 @@ Les objectifs de ce stage sont les suivants :
 	\item Proposer et évaluer des modèles pour les applications proposées.
 \end{itemize}
 
-Nous aborderons dans un premier temps le sujet de l'imagerie spatiale, où nous présenterons le fonctionnement général d'un satellite de télédétection, ainsi que les problématiques liées aux images satellite.
+Dans un premier temps, nous aborderons l'imagerie spatiale, présentant ses enjeux, le fonctionnement général d'un satellite de télédétection, et enfin les caractéristiques et problématiques liées aux images satellite.
 
-Ensuite, nous présenterons les généralités de l'apprentissage machine, suivies par une présentation plus précise de l'apprentissage profond, dans laquelle nous expliquerons en détail le fonctionnement des réseaux de neurones, ainsi que les variantes existantes.
+Dans un second temps, nous définirons l'apprentissage machine et ses concepts clés.
 
-Enfin, nous présenterons les applications réalisées au cours de ce stage permettant d'extraire des informations des images satellite, en utilisant des modèles d'apprentissage profond. Les tâches que nous présenterons sont la segmentation d'images et la recherche de similarités dans les images.
+Dans un troisième temps, nous définirons précisément le domaine de l'apprentissage profond, nous expliquerons en détail le fonctionnement des réseaux de neurones, les motivations de cette science, ainsi qu'une explication détaillée des réseaux de neurones spécialisés dans le traitement des images
+
+Enfin, nous ferons le lien entre apprentissage profond et imagerie spatiale, justifiant l'utilité d'appliquer le premier au second, ainsi que les applications réalisées au cours de ce stage permettant d'extraire des informations des images satellite. Les tâches que nous présenterons sont la segmentation d'images et la recherche de similarités.
 
 \chapter{L'Imagerie Satellite}
 De tout temps, l'humain a toujours souhaité pouvoir observer le monde, que ce soit à des fins militaires, scientifiques ou à simple but de contemplation.
@@ -1515,6 +1517,8 @@ Ces initiatives ont permis de réaliser de grandes avancées dans le projet, mai
 
 
 Avec les progrès récents de l'apprentissage profond, permettant d'obtenir d'excellentes performances en vision par ordinateur, et le besoin immense d'automatiser la cartographie de la Terre, il semble intéressant d'utiliser des méthodes telle que la segmentation d'images pour identifier précisément des infrastructures.
+
+Cela permettrait d'établir de façon automatisée des cartes détaillées de la surface du globe, permettant une utilisation civile, militaire ou encore humanitaire, permettant ainsi de comparer les cartes avant et après une catastrophe naturelle.
 \subsection{Présentation des Données}
 SpaceNet est une base de données d'images satellite très haute résolution pour la détection et segmentation de bâtiments.
 
@@ -1573,7 +1577,7 @@ Les images multispectrales de la seconde édition font $650 \times 650$ pixels e
 
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.2]{Images/MUL_PAN.png}
+		\includegraphics[scale=0.175]{Images/MUL_PAN.png}
 		\caption{Images (RGB, 8-bits, Correction $[2-98]\%$) extraites des zones Vegas, Paris, Shanghai et Khartoum}
 	\end{center}
 \end{figure}
@@ -1666,10 +1670,28 @@ L'opération de rasterisation consiste produire, à partir des données vectorie
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[scale=0.3]{Images/MUL_PAN_Label_Vegas.png}
-		\caption{Image et Masque de Segmentation}
+		\caption{Image et Masque de Segmentation produit par couplage des données SpaceNet et OpenStreetMap (Las Vegas)}
 	\end{center}
 \end{figure}
+Les labels d'OpenStreetMap sont très libres au niveau des informations qu'ils contiennent, le champ \emph{properties}, donnant des informations sur l'objet décrit, n'est pas systématiquement présent ou partiellement renseigné. Il est donc difficile de catégoriser chaque donnée.
+
+Nous avons choisi dans le cas où les labels de SpaceNet sont combinés avec ceux provenant d'OpenStreetMap, que seuls les \emph{Polygons} et les \emph{LineStrings} non fermées seront rasterisés.
+
+Cela dégrade quelque peu la qualité des données car nous considérons que tous les \emph{Polygons} représentent des bâtiments et que toutes les \emph{LineStrings} représentent des routes. Même si les \emph{Polygons} représentent quasiment tout le temps des bâtiments, les \emph{LineStrings} représentent parfois des cours d'eau, ou encore des délimitations administratives.
+
+C'est pourquoi il faudra prendre en compte ces erreurs contenues dans le \emph{dataset} au moment d'analyser les résultats des différents modèles.
+
+Le contour des objets rasterisés, ici en jaune, n'appartient pas à la même classe que son objet, ceci est fait pour pallier aux erreurs de localisation des objets. En effet un pixel faisant parti du contour d'un objet ne sera pas évalué lors du calcul de la perte et de la précision, cela permet aux modèles de ne pas se focaliser sur les détails mais plus sur le cœur de l'objet.
 \subsection{Expériences}
+Nous avons effectué plusieurs expériences parmi lesquels nous souhaitons présenter les deux ayant produit les résultats les plus intéressants.
+
+La première exploite exploite toutes les données des quatre zones géographiques, c'est-à-dire Las Vegas, Paris, Shanghai et Khartoum, et utilise uniquement les labels de SpaceNet.
+La segmentation réalisée est donc binaire, car cela revient à prédire pour chaque pixel de l'image si il fait partie d'un bâtiment ou non.
+
+La seconde expérience exploite uniquement les données de la région de Las Vegas, mais utilise des labels provenant de SpaceNet et d'OpenStreetMap.
+
+\subsubsection{DeconvNet}
+
 
 \subsection{Résultats}
 \subsection{Comparaisons entre modèles}
