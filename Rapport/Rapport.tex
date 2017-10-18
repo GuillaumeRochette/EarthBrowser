@@ -32,7 +32,7 @@ Création d'un Moteur de Recherche dans les Images Satellite}
 Le groupe Thales, historiquement fabricant d'électronique, est un acteur français majeur dans les secteurs de l'aéronautique, le spatial, la défense, la sécurité et le transport terrestre.
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.3]{Images/Secteurs_Activites.png}
+		\includegraphics[scale=0.4]{Images/Secteurs_Activites.png}
 		\caption{Secteurs d'activités de Thales}
 	\end{center}
 \end{figure}
@@ -56,7 +56,7 @@ Elle est implantée sur tout le territoire français, chaque site ayant des spé
 Le groupe Thales, et par extension Thales Services, est organisé de façon \emph{matricielle}, c'est-à-dire par zones géographiques et par domaines d'activités.
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.4]{Images/Matrice_Thales_Services.png}
+		\includegraphics[scale=0.5]{Images/Matrice_Thales_Services.png}
 		\caption{Organisation matricielle de Thales Services}
 	\end{center}
 \end{figure}
@@ -75,9 +75,15 @@ L'application de méthodes d'apprentissage profond à des images satellites est 
 Les objectifs de ce stage sont les suivants :
 \begin{itemize}
 	\item Apporter des connaissances relatives à l'apprentissage profond appliqué au traitement de l'image.
-	\item Déterminer des opportunités d'application de l'apprentissage profond à la recherche dans les images.
+	\item Déterminer des opportunités d'application de vision par ordinateur pour des images satellite, telle que de la segmentation d'image ou de la recherche de similarités.
 	\item Proposer et évaluer des modèles pour les applications proposées.
 \end{itemize}
+
+Nous aborderons dans un premier temps le sujet de l'imagerie spatiale, où nous présenterons le fonctionnement général d'un satellite de télédétection, ainsi que les problématiques liées aux images satellite.
+
+Ensuite, nous présenterons les généralités de l'apprentissage machine, suivies par une présentation plus précise de l'apprentissage profond, dans laquelle nous expliquerons en détail le fonctionnement des réseaux de neurones, ainsi que les variantes existantes.
+
+Enfin, nous présenterons les applications réalisées au cours de ce stage permettant d'extraire des informations des images satellite, en utilisant des modèles d'apprentissage profond. Les tâches que nous présenterons sont la segmentation d'images et la recherche de similarités dans les images.
 
 \chapter{L'Imagerie Satellite}
 De tout temps, l'humain a toujours souhaité pouvoir observer le monde, que ce soit à des fins militaires, scientifiques ou à simple but de contemplation.
@@ -239,7 +245,7 @@ Le système géodésique le plus courant est WGS 84 (World Geodetic System 1984)
 
 On peut aussi les exprimer en représentation plane, résultant d'une projection, parfois partielle, de l'ellipsoïde (en $3$ dimensions) sur un plan (en $2$ dimensions). On citera par exemple les projections de Mercator ou de Lambert.
 
-Ces informations, décrivant le système de coordonnées, sont contenues dans le \emph{Well-Known Text}, qui est une chaine de caractères structurée résumant la définition du repère géographique. En voici un exemple :
+Ces informations, décrivant le système de coordonnées, sont contenues dans le \emph{Well-Known Text}, qui est une chaîne de caractères structurée résumant la définition du repère géographique. En voici un exemple :
 
 \begin{verbatim}
 GEOGCS["WGS 84",
@@ -759,7 +765,7 @@ On parlera d'apprentissage très profond, lorsque le nombre de couches cachées 
 Nous pouvons par ailleurs noter que le nombre de paramètres $\theta = (b,w) = (b,w_1,..,w_p)$ d'un neurone n'est pas arbitraire.
 En effet, la \emph{largeur} de chaque couche est égale au nombre de paramètres $\theta$ des neurones de la couche suivante.
 Par ailleurs, la \emph{largeur} de la première couche est égale à la taille du vecteur d'entrée $x$.
-\subsubsection{Expression Gnérale}
+\subsubsection{Expression Générale}
 On explicitera généralement l'architecture d'un réseau de neurones par un vecteur $s \in \mathbb{N}^L$.
 Ainsi $S = (S_1, S_2, ..., S_L)$ représente un réseau de neurones de \emph{profondeur} $L$ ($L$ couches), chacune possédant $s_i$ neurones ayant $s_{i-1}$ poids et un biais par neurone.
 \subsection{Notations}
@@ -919,7 +925,7 @@ $$\elem{z}{L}{j}{} = \sum_{i=1}^{S_{L-1}}{\elem{W}{L}{j}{i} \times \elem{a}{L-1}
 				
 Ces deux expressions traduisent l'influence des poids $\elem{W}{L}{j}{i}$ et du biais $\elem{b}{L}{j}{}$ sur l'agrégat, ou résultat de la fonction d'agrégation, $\elem{z}{L}{j}{}$
 				
-Pour la suite, nous allons poser $\elem{\delta}{L}{j}{} = \frac{\partial C}{\partial \elem{a}{L}{j}{}} \times \frac{\partial \elem{a}{L}{j}{}}{\partial \elem{z}{L}{j}{}}$, cela interviendra quand nous montrerons le caractère récursif de la rétropropagation.
+Pour la suite, nous allons poser $\elem{\delta}{L}{j}{} = \frac{\partial C}{\partial \elem{a}{L}{j}{}} \times \frac{\partial \elem{a}{L}{j}{}}{\partial \elem{z}{L}{j}{}}$, cela interviendra quand nous montrerons le caractère récursif de la rétro-propagation.
 				
 Finalement, nous obtenons,
 $$\left\{
@@ -1398,7 +1404,7 @@ $$(C_S, H_S, W_S) = (C_I, (H_I + p_H - H_K) / s_H + 1, (W_I + p_W - W_K) / s_W +
 
 Ces deux déclinaisons de pooling sont utilisées dans des contextes assez différents.
 \paragraph{Max-Pooling}
-Le \emph{max pooling} est principalement utilisé pour réduire la dimension des données de façon spatiale, c'est une méthode robuste aux bruits ambients, car elle ne transmet que l'information ayant le plus d'intensité.
+Le \emph{max pooling} est principalement utilisé pour réduire la dimension des données de façon spatiale, c'est une méthode robuste aux bruits ambiants, car elle ne transmet que l'information ayant le plus d'intensité.
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[scale=0.6]{Images/Pooling_Layer.png}
@@ -1408,7 +1414,7 @@ Le \emph{max pooling} est principalement utilisé pour réduire la dimension des
 \paragraph{Average Pooling}
 L'\emph{average pooling} est principalement utilisé pour réduire la dimension des données au niveau des canaux, car elle permet de prendre en compte les valeurs des différentes \emph{features} et de les agréger.
 \paragraph{Pooling par Convolution}
-Les convolutions à strides $>1$ sont à l'heure actuelle \emph{à la mode}. Elles font le travail à la fois de couches de convolution, mais aussi de couches de \emph{pooling}, permettant ainsi d'une part de simplifier le modèle, ce qui réduit le nombre de \emph{floating-point operations}, mais aussi d'avoir une opération de \emph{pooling} plus "maléable", car la fonction calculée n'est pas statique, mais sera amenée à évoluer lors de la rétro-propagation.
+Les convolutions à strides $>1$ sont à l'heure actuelle \emph{à la mode}. Elles font le travail à la fois de couches de convolution, mais aussi de couches de \emph{pooling}, permettant ainsi d'une part de simplifier le modèle, ce qui réduit le nombre de \emph{floating-point operations}, mais aussi d'avoir une opération de \emph{pooling} plus "malléable", car la fonction calculée n'est pas statique, mais sera amenée à évoluer lors de la rétro-propagation.
 
 De plus, elles sont souvent suivies de fonctions d'activation, rendant la sortie plus robuste aux bruits stochastiques.
 Elle est utilisée dans plusieurs modèles très performants, justifiant ainsi sa popularité montante.
@@ -1455,7 +1461,7 @@ Le \emph{dataset} Pascal VOC est composé de $11530$ images contenant au total $
 
 ImageNet possède aussi une base de détection d'objets contenant environ $450000$ images contenant $475000$ objets référencés répartis en $200$ classes.
 \subsubsection{Architectures de Modèles}
-Deux architectures remarquables sont les réseaux de type R-CNN et YOLO, l'une par ses performances exceptionnelles, l'autre par le compromis réalisé entre performances et vitesse d'éxécution.
+Deux architectures remarquables sont les réseaux de type R-CNN et YOLO, l'une par ses performances exceptionnelles, l'autre par le compromis réalisé entre performances et vitesse d’exécution.
 
 Les architectures de type R-CNN se caractérisent par un schéma de fonctionnement divisé en deux parties, la première étant un réseau de neurones assurant la localisation potentielle d'objets, la seconde étant un autre réseau de neurones dédié à la classification de chacune des zones potentielles.
 
@@ -1483,10 +1489,37 @@ Les architectures de type FCN reconstituent l'image en combinant les \emph{featu
 
 Les architectures de type DeconvNet reconstituent l'image en utilisant des couches d'\emph{unpooling}, inversant l'effet des couches de \emph{pooling}. Nous reviendront en détail leur fonctionnement dans la suite.
 \chapter{L'Apprentissage Profond appliqué à l'Imagerie Satellite}
-\section{Présentation des données}
-\subsection{Données SpaceNet}
-SpaceNet est une base de données d'images satellite très haute résolution issue de la collaboration entre CosmiQ Works, DigitalGlobe et NVIDIA.
-Elle constitue la première base de données d'image très haute résolution disponible au grand public.
+\section{Cartographie Automatisée par Segmentation de Classes}
+La cartographie de la Terre a toujours été une des priorités de l'humain.
+Les cartes ont surtout servi dans un premier temps à la navigation maritime et à une utilisation militaire. Elles ont tout le temps fait l'objet de convoitise, à tel point qu'au Portugal au XVI ème siècle le transfert de cartes à un étranger était passible de la peine de mort. L'aéronautique permet ensuite d'affiner les cartes, mais sur des volumes toujours restreints. L'arrivée des satellites de télédétection permet alors d'acquérir en quasi temps réel des images de la Terre.
+
+Cette masse de données à traiter conduit à la formation de la géomatique, discipline consistant en trois activités principales la collecte, le traitement et la diffusion des données géographiques.
+
+Il existe plusieurs types de cartographie, parmi lesquelles on retrouve :
+\begin{itemize}
+	\item La cartographie physique, ou topographie, répertoriant les reliefs du terrain.
+	\item La cartographie humaine, mesurant des indices sociologiques.
+	\item La cartographie administrative, répertoriant les frontières entre les pays.
+	\item Les cartographies de type historique, biologique, etc.
+\end{itemize}
+
+Pour manipuler ces données, d'échelle parfois mondiale, on utilise des Systèmes d'Information Géographique, permettant de collecter, traiter, analyser, et enfin de présenter ces données.
+
+Dans ce rapport, nous nous intéresserons principalement à la cartographie administrative et plus particulièrement à la cartographie d'infrastructures, telles que les routes et les bâtiments.
+
+Aujourd'hui la majorité des données concernant les infrastructures ont été collectées "à la main".
+Dans le cas d'OpenStreetMap, la base de données géographiques est remplie par les utilisateurs, soit en relevant des positions GPS en allant directement sur le terrain, soit en cartographiant depuis des images spatiales.
+Ce processus est très long et ne permet pas encore une cartographie globale de toutes les infrastructures sur Terre.
+Toutefois, certaines administrations publiques ont partagé des bases de données, notamment l'intégralité du cadastre français mis à disposition par la Direction générale des Finances publiques ou encore la base de données TIGER, concernant les routes, divisions administratives et points d'eau des États-Unis.
+Ces initiatives ont permis de réaliser de grandes avancées dans le projet, mais ne permettent pas de cartographier toute la surface du globe.
+
+
+Avec les progrès récents de l'apprentissage profond, permettant d'obtenir d'excellentes performances en vision par ordinateur, et le besoin immense d'automatiser la cartographie de la Terre, il semble intéressant d'utiliser des méthodes telle que la segmentation d'images pour identifier précisément des infrastructures.
+\subsection{Présentation des Données}
+SpaceNet est une base de données d'images satellite très haute résolution pour la détection et segmentation de bâtiments.
+
+Elle est issue de la collaboration entre CosmiQ Works, DigitalGlobe et NVIDIA.
+C'est une des premières bases de données d'image très haute résolution disponible au grand public.
 Les données sont hébergées par Amazon, sur les serveurs AWS S3 (Amazon Web Services Simple Storage Service).
 
 La base de données SpaceNet actuelle fut construite en deux temps, lors des deux éditions du SpaceNet Challenge, elle couvre 5 zones géographiques :
@@ -1515,8 +1548,8 @@ Les deux satellites ont des caractéristiques similaires, mais se différencient
 	Bande Panchromatique & 0.46m & 0.31m \\ 
 	\hline 
 	Bandes Multispectrales & 1.84m & 1.24m \\ 
-	\hline 
-	\end{tabular} 
+	\hline
+	\end{tabular}	
 \end{center}
 
 Les satellites WorldView-2 et WorldView-3 possèdent un capteur panchromatique et $8$ capteurs multispectraux, qui décrivent les couleurs suivantes :
@@ -1538,6 +1571,13 @@ Nous n'utiliserons que les données issues de la deuxième édition du SpaceNet 
 
 Les images multispectrales de la seconde édition font $650 \times 650$ pixels et ont une résolution au sol de 0.31m et sont encodées sur $16$ bits.
 
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.2]{Images/MUL_PAN.png}
+		\caption{Images (RGB, 8-bits, Correction $[2-98]\%$) extraites des zones Vegas, Paris, Shanghai et Khartoum}
+	\end{center}
+\end{figure}
+
 Voici la distribution des images en fonction des zones géographiques :
 \begin{center}
 	 \begin{tabular}{|c|c|c|c|c|c|}
@@ -1551,11 +1591,86 @@ Voici la distribution des images en fonction des zones géographiques :
 	\end{tabular}
  \end{center} 
 \subsubsection{Labels}
+\paragraph{Labels issus de SpaceNet}
 Le SpaceNet Challenge consiste à détecter les bâtiments visibles depuis les images satellites.
 
-\subsection{Données Pléiades}
-\section{Cartographie Automatisée par Segmentation de Classes}
-\subsection{Protocole expérimental}
+La labellisation des données a été réalisé grâce à Amazon Mechanical Turk, une plateforme de crowdsourcing spécialisée dans la constitution de \emph{datasets} pour des problèmes d'intelligence artificielle.
+
+À chaque image du \emph{dataset} correspond un fichier GeoJSON contenant l'empreinte au sol des différents bâtiments, sous forme de polygones.
+Ces polygones sont représentés par des ensembles de coordonnées géodésiques, c'est-à-dire sous forme d'un couple latitude et longitude.
+
+Voici un extrait de fichier GeoJSON issu de SpaceNet :
+\begin{verbatim}
+{
+  "type": "FeatureCollection",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "OBJECTID": 0,
+        "FID_VEGAS_": 0,
+        "Id": 0,
+        "FID_Vegas": 0,
+        "Name": "None",
+        "AREA": 0.000000,
+        "Shape_Leng": 0.000000,
+        "Shape_Le_1": 0.000000,
+        "SISL": 0.000000,
+        "OBJECTID_1": 0,
+        "Shape_Le_2": 0.000000,
+        "Shape_Le_3": 0.000811,
+        "Shape_Area": 0.000000,
+        "partialBuilding": 1.000000,
+        "partialDec": 0.556769
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-115.302252599989529, 36.208218543364502, 0.0],
+            [-115.302260806999982, 36.208218603000034, 0.0], 
+            [-115.302261041999941, 36.208197527000038, 0.0]
+            [...]
+          ]
+        ]
+      }
+    }
+[...]
+}
+\end{verbatim}
+Le \emph{dataset} SpaceNet ne contient que des polygones.
+Il existe, pour le format GeoJSON, plusieurs types d'objets géométriques simples:
+\begin{itemize}
+	\item \emph{Point}, représentant un point.
+	\item \emph{LineString}, un ensemble ouvert ou fermé de points.
+	\item \emph{Polygon}, une surface délimitée par un ensemble fermé de points. Par exemple, un triangle ABC sera représenté par ABCA.
+\end{itemize}
+\paragraph{Labels issus d'OpenStreetMap}
+Les labels de SpaceNet, produit par l'Amazon Mechanical Turk, ne localisent que les bâtiments dans les images. Cependant d'autres informations directement observables depuis les images existent, comme par exemple les routes, où encore les cours d'eau.
+C'est pourquoi il a été jugé intéressant de compléter les labels originels de SpaceNet par des labels issus d'OpenStreetMap.
+Ces labels sont disponibles au format GeoJSON et il est facile de les récupérer depuis l'API d'OpenStreetMap.
+Cependant ces labels ne sont pas de même qualité que ceux provenant du \emph{dataset} SpaceNet, car ils sont issus d'un travail communautaire, il est donc possible que.
+Il est important de garder à l'esprit que ces labels sont issus d'un projet communautaire, ils peuvent donc faire l'objet d'imprécisions, par exemple concernant la localisation des éléments géographique, potentiellement due aux imprécisions de GPS amateurs, ou parfois tout simplement manquants, car personne n'a encore répertorié la zone géographique en question.
+\paragraph{Rasterisation des Labels}
+Les labels issus de SpaceNet ou d'OpenStreetMap sont proposés sous forme vectorielle et donc par conséquent utilisables pour de la détection d'objets.
+Les labels vectoriels, au même titre que les images vectorielles, possèdent l'avantage d'être quasiment invariants à la résolution de l'image.
+Mais pour réaliser de la segmentation d'images, il nous faut pouvoir produire un label au format matriciel de même dimensions que l'image d'entrée.
+L'opération permettant de produire une image matricielle à partir d'une image vectorielle s'appelle rasterisation. Bien que l'opération ne soit pas bijective, car irréversible à cause de la résolution finie de l'image matricielle. Il existe une opération effectuant la transformation inverse, on parlera alors de polygonisation.
+L'opération de rasterisation consiste produire, à partir des données vectorielles, ainsi que des dimensions et la résolution de l'image souhaitée, une image matricielle où chaque pixel prend une valeur selon si il est contenu ou non dans un polygone.
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.3]{Images/MUL_PAN_Label_Vegas.png}
+		\caption{Image et Masque de Segmentation}
+	\end{center}
+\end{figure}
+\subsection{Expériences}
+
 \subsection{Résultats}
 \subsection{Comparaisons entre modèles}
 \section{Recherche de Similarités entre Images}
@@ -1563,4 +1678,10 @@ Le SpaceNet Challenge consiste à détecter les bâtiments visibles depuis les i
 \subsection{Résultats}
 \subsection{Comparaisons entre modèles}
 \chapter{Conclusion}
+\chapter*{Bibliographie}
+\begin{itemize}
+	\item Deep Learning : \url{http://deeplearning.net/}
+	\item Deep Learning Book : \url{http://www.deeplearningbook.org/}
+	\item Neural Networks and Deep Learning : \url{http://neuralnetworksanddeeplearning.com/}
+\end{itemize}
 \end{document}
