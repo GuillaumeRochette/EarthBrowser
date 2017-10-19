@@ -1493,7 +1493,7 @@ Les architectures de type DeconvNet reconstituent l'image en utilisant des couch
 \chapter{L'Apprentissage Profond appliqué à l'Imagerie Satellite}
 \section{Cartographie Automatisée par Segmentation de Classes}
 La cartographie de la Terre a toujours été une des priorités de l'humain.
-Les cartes ont surtout servi dans un premier temps à la navigation maritime et à une utilisation militaire. Elles ont tout le temps fait l'objet de convoitise, à tel point qu'au Portugal au XVI ème siècle le transfert de cartes à un étranger était passible de la peine de mort. L'aéronautique permet ensuite d'affiner les cartes, mais sur des volumes toujours restreints. L'arrivée des satellites de télédétection permet alors d'acquérir en quasi temps réel des images de la Terre.
+Les cartes ont surtout servi dans un premier temps à la navigation maritime et à une utilisation militaire. Elles ont tout le temps fait l'objet de convoitise, à tel point qu'au Portugal au XVI ème siècle le transfert de cartes à un étranger était passible de la peine de mort. L'aéronautique a ensuite permis d'affiner les cartes, mais sur des volumes toujours restreints. L'arrivée des satellites de télédétection permet alors d'acquérir quasiment en temps réel des images de la Terre.
 
 Cette masse de données à traiter conduit à la formation de la géomatique, discipline consistant en trois activités principales la collecte, le traitement et la diffusion des données géographiques.
 
@@ -1571,7 +1571,7 @@ Les satellites WorldView-2 et WorldView-3 possèdent un capteur panchromatique e
 	\end{tabular}
 \end{center}
 
-Nous n'utiliserons que les données issues de la deuxième édition du SpaceNet Challenge, car les images multispectrales de Rio de Janeiro ont une résolution d'1.84m, car elles n'ont pas été fusionnées avec la bande panchromatique.
+Nous n'utiliserons que les données issues de la deuxième édition du SpaceNet Challenge, car les images multispectrales de la première édition n'ont pas été fusionnées avec la bande panchromatique laissant la résolution à 1.84m.
 
 Les images multispectrales de la seconde édition font $650 \times 650$ pixels et ont une résolution au sol de 0.31m et sont encodées sur $16$ bits.
 
@@ -1598,7 +1598,7 @@ Voici la distribution des images en fonction des zones géographiques :
 \paragraph{Labels issus de SpaceNet}
 Le SpaceNet Challenge consiste à détecter les bâtiments visibles depuis les images satellites.
 
-La labellisation des données a été réalisé grâce à Amazon Mechanical Turk, une plateforme de crowdsourcing spécialisée dans la constitution de \emph{datasets} pour des problèmes d'intelligence artificielle.
+La labellisation des données a été réalisée par l'Amazon Mechanical Turk, une plateforme de crowdsourcing spécialisée dans la constitution de \emph{datasets} pour des problèmes d'intelligence artificielle.
 
 À chaque image du \emph{dataset} correspond un fichier GeoJSON contenant l'empreinte au sol des différents bâtiments, sous forme de polygones.
 Ces polygones sont représentés par des ensembles de coordonnées géodésiques, c'est-à-dire sous forme d'un couple latitude et longitude.
@@ -1656,17 +1656,16 @@ Il existe, pour le format GeoJSON, plusieurs types d'objets géométriques simpl
 	\item \emph{Polygon}, une surface délimitée par un ensemble fermé de points. Par exemple, un triangle ABC sera représenté par ABCA.
 \end{itemize}
 \paragraph{Labels issus d'OpenStreetMap}
-Les labels de SpaceNet, produit par l'Amazon Mechanical Turk, ne localisent que les bâtiments dans les images. Cependant d'autres informations directement observables depuis les images existent, comme par exemple les routes, où encore les cours d'eau.
+Les labels de SpaceNet, produit par l'Amazon Mechanical Turk, ne localisent que les bâtiments dans les images. Cependant d'autres informations directement observables depuis les images existent, comme par exemple les routes, ou encore les cours d'eau.
 C'est pourquoi il a été jugé intéressant de compléter les labels originels de SpaceNet par des labels issus d'OpenStreetMap.
 Ces labels sont disponibles au format GeoJSON et il est facile de les récupérer depuis l'API d'OpenStreetMap.
-Cependant ces labels ne sont pas de même qualité que ceux provenant du \emph{dataset} SpaceNet, car ils sont issus d'un travail communautaire, il est donc possible que.
-Il est important de garder à l'esprit que ces labels sont issus d'un projet communautaire, ils peuvent donc faire l'objet d'imprécisions, par exemple concernant la localisation des éléments géographique, potentiellement due aux imprécisions de GPS amateurs, ou parfois tout simplement manquants, car personne n'a encore répertorié la zone géographique en question.
+Cependant ces labels ne sont pas de même qualité que ceux provenant du \emph{dataset} SpaceNet, il est important de garder à l'esprit que ces labels sont issus d'un projet communautaire, ils peuvent donc faire l'objet d'imprécisions, par exemple concernant la localisation des éléments géographique, potentiellement due aux imprécisions de GPS amateurs, ou parfois tout simplement manquants, car personne n'a encore répertorié la zone géographique en question.
 \paragraph{Rasterisation des Labels}
 Les labels issus de SpaceNet ou d'OpenStreetMap sont proposés sous forme vectorielle et donc par conséquent utilisables pour de la détection d'objets.
 Les labels vectoriels, au même titre que les images vectorielles, possèdent l'avantage d'être quasiment invariants à la résolution de l'image.
 Mais pour réaliser de la segmentation d'images, il nous faut pouvoir produire un label au format matriciel de même dimensions que l'image d'entrée.
 L'opération permettant de produire une image matricielle à partir d'une image vectorielle s'appelle rasterisation. Bien que l'opération ne soit pas bijective, car irréversible à cause de la résolution finie de l'image matricielle. Il existe une opération effectuant la transformation inverse, on parlera alors de polygonisation.
-L'opération de rasterisation consiste produire, à partir des données vectorielles, ainsi que des dimensions et la résolution de l'image souhaitée, une image matricielle où chaque pixel prend une valeur selon si il est contenu ou non dans un polygone.
+L'opération de rasterisation consiste à produire, à partir des données vectorielles, ainsi que des dimensions et la résolution de l'image souhaitée, une image matricielle où chaque pixel prend une valeur selon si il est contenu ou non dans un polygone.
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[scale=0.3]{Images/MUL_PAN_Label_Vegas.png}
@@ -1685,13 +1684,13 @@ C'est pourquoi il faudra prendre en compte ces erreurs contenues dans le \emph{d
 
 Le contour des objets rasterisés, ici en jaune, n'appartient pas à la même classe que son objet, ceci est fait pour pallier aux erreurs de localisation des objets. En effet un pixel faisant parti du contour d'un objet ne sera pas évalué lors du calcul de la perte et de la précision, cela permet aux modèles de ne pas se focaliser sur les détails mais plus sur le cœur de l'objet.
 \subsection{Expériences}
-Nous avons effectué plusieurs expériences parmi lesquels nous souhaitons présenter les deux ayant produit les résultats les plus intéressants.
+Nous souhaitons présenter deux expériences ayant produit les résultats les plus significatifs.
 
-La première exploite exploite toutes les données des quatre zones géographiques, c'est-à-dire Las Vegas, Paris, Shanghai et Khartoum, et utilise uniquement les labels de SpaceNet.
-La segmentation réalisée est donc binaire, car cela revient à prédire pour chaque pixel de l'image si il fait partie d'un bâtiment ou non.
+La première expérience couvre les quatre zones géographiques, c'est-à-dire Las Vegas, Paris, Shanghai et Khartoum, et utilise uniquement les labels provenant de SpaceNet.
+La segmentation réalisée est binaire, car cela revient à prédire pour chaque pixel de l'image son appartenance à un bâtiment ou non.
 
-La seconde expérience exploite uniquement les données de la région de Las Vegas, mais utilise des labels provenant de SpaceNet et d'OpenStreetMap.
-La segmentation sera multi-classes, il faudra en effet prédire pour chaque pixel de l'image si il fait partie d'un bâtiment, d'une route ou bien d'aucune de ces deux classes.
+La seconde expérience exploite uniquement les données de la région de Las Vegas,  et utilise des labels provenant de SpaceNet et d'OpenStreetMap.
+La segmentation sera multi-classes, il faudra en effet prédire pour chaque pixel de l'image son appartenance à un bâtiment, ou une route, ou bien d'aucune de ces deux classes.
 
 Avant de présenter chacune des expériences et de comparer les modèles utilisés, nous allons d'abord présenter l'architecture ayant inspiré ces modèles, nommée DeconvNet.
 
