@@ -1700,7 +1700,6 @@ DeconvNet est un réseau de neurones créé par H.Noh, en 2015, de l'université
 
 Nous allons d'abord décrire son architecture, puis discuter des avantages et inconvénients de celle-ci.
 
-\paragraph{Architecture}
 DeconvNet est un réseau convolutif introduisant un nouveau type de couche, l'\emph{unpooling}, faisant la particularité de ce modèle.
 
 DeconvNet est un réseau de neurones composé de deux parties, la première est composée de couches de convolution et de \emph{pooling}, décomposant l'image en une \emph{map de features}; et la seconde est composée de couches de déconvolution et d'\emph{unpooling}, construisant à partir de la \emph{map de features} l'image segmentée.
@@ -1708,7 +1707,7 @@ DeconvNet est un réseau de neurones composé de deux parties, la première est 
 La première partie n'est autre que le réseau de neurones VGG-16, classé second lors de l'ILSVRC 2014.
 La seconde partie peut être vu comme le symétrique de la première reconstruisant l'image segmentée.
 
-\subparagraph{Unpooling}
+\paragraph{Unpooling}
 Le principe d'une couche de \emph{max pooling} est de filtrer le bruit tout en réduisant la dimension des données. Cette réduction de la dimension est souvent de nature spatiale, créant une perte d'informations spatiales.
 Pour pallier à cela, H.Noh a créé le concept de couche d'\emph{unpooling}, produisant l'effet quasi-inverse.
 L'idée est la suivante, si lors de l'opération de \emph{pooling}, nous retenons les indices des activations maximales, alors nous pouvons ensuite reconstruire une \emph{carte à trous} des activations dans la dimension originelle.
@@ -1721,7 +1720,7 @@ Voici un schéma décrivant l'opération d'\emph{unpooling} :
 \end{figure}
 Comme on peut le voir dans la couche de \emph{pooling}, l'activation la plus élévée, ici la plus sombre, est transmise dans la \emph{map de features}, ainsi que sa position dans la \emph{map des indices}. Alors lors de l'\emph{unpooling}, nous réutiliserons la \emph{map des indices} pour recréer la \emph{map de features} à ses dimensions précédentes.
 
-\subparagraph{Déconvolution}
+\paragraph{Déconvolution}
 Une couche de convolution a pour effet de convoluter un noyau à une \emph{map de  features}, qui grossièrement dit, revient calculer une moyenne pondérée sur un ensemble de valeurs spatialement proches.
 Elle permet ainsi de calculer de nouvelles \emph{features} à partir d'une \emph{map de features} existante.
 La déconvolution effectue l'opération inverse, c'est-à-dire de partir d'une \emph{feature} pour produire une \emph{map de features}
@@ -1732,8 +1731,13 @@ Voici un schéma décrivant la relation entre une convolution et une déconvolut
 		\caption{Couches de convolution et de déconvolution}
 	\end{center}
 \end{figure}
+Comme on peut le voir, la couche de convolution agrège des entrées voisines par une moyenne pondérée qui sera transmise à la couche suivante.
+La couche de déconvolution réalise l'opération inverse, à partir d'une seule entrée elle reconstitue le voisinage d'entrées.
 
-Voici le détail de l'architecture de DeconvNet :
+\paragraph{Architecture}
+Après avoir expliqué le fonctionnement des couches de déconvolution et d'\emph{unpooling}, nous allons présenter l'architecture de DeconvNet et expliquer certaines particularités.
+
+Voici le détail de l'architecture de DeconvNet, en ommettant les couches de \emph{Batch Normalization} et d'activation ReLU présentes après chaque couche de convolution:
 \begin{center}
 	\begin{tabular}{|c|c|c|c|c|c|}
 	\hline 
@@ -1779,7 +1783,7 @@ Voici le détail de l'architecture de DeconvNet :
 	\hline
 	fc6 & $(7, 7)$ & 4096 & 1 & 0 & $(4096, 1, 1)$ \\
 	\hline
-	fc6 & $(1, 1)$ & 4096 & 1 & 0 & $(4096, 1, 1)$ \\
+	fc7 & $(1, 1)$ & 4096 & 1 & 0 & $(4096, 1, 1)$ \\
 	\hline
 	deconv-fc6 & $(7, 7)$ & 512 & 1 & 0 & $(512, 7, 7)$ \\
 	\hline
@@ -1798,6 +1802,13 @@ Voici le détail de l'architecture de DeconvNet :
 	deconv4\_$2$ & $(3, 3)$ & 512 & 1 & 1 & $(512, 28, 28)$ \\
 	\hline
 	deconv4\_$3$ & $(3, 3)$ & 256 & 1 & 1 & $(256, 28, 28)$ \\
+	\hline
+	\end{tabular} 
+\end{center}
+\begin{center}
+	\begin{tabular}{|c|c|c|c|c|c|}
+	\hline 
+	Nom & Noyau & Features & Stride & Pad & Dimensions \\ 
 	\hline
 	unpool3 & $(2, 2)$ & - & 2 & 2 & $(256, 56, 56)$ \\
 	\hline
@@ -1823,8 +1834,49 @@ Voici le détail de l'architecture de DeconvNet :
 	\hline
 	\end{tabular} 
 \end{center}
-\subsection{Résultats}
-\subsection{Comparaisons entre modèles}
+On peut tout de suite remarquer que le réseau est symétrique, la couche \emph{fc7} étant le point central de cette symétrie.
+
+Comme évoqué précédemment, l'idée est dans un premier temps de décomposer l'image en \emph{map de features} par convolutions successives (et de \emph{pooling}), puis dans un second temps de reconstituer une version segmentée de l'image par déconvolution (et d'\emph{unpooling}).
+
+La première partie du réseau, de \emph{conv1\_$1$} à \emph{fc7}, n'est autre que le réseau VGG-16, crée par K.Simonyan, classé second lors de l'ILSVRC 2014.
+
+Ce réseau est l'un des plus utilisés (ou réutilisés, comme ici) en vision par ordinateur, car il est d'une extrême simplicité.
+Il n'utilise que des convolutions de noyau $(3, 3)$, qui sont jugées robustes pour l'apprentissage.
+
+On peut remarquer que les convolutions sont regroupées ici en 5 blocs, chaque bloc étant séparé par une couche de \emph{pooling}.
+Si l'on fait abstraction des couches d'activation ReLU, chaque bloc de convolution se résume comme une composée de convolutions.
+Or on peut remarquer que deux convolutions $(3, 3)$ successives équivalent à une convolution $(5, 5)$, venant de la propriété de majoration du support :
+
+Soit $f$ et $g \in L^2(\mathbb{R}^n)$ alors,
+$$supp(f * g) \subset \overline{supp(f) + supp(g)} = \{ x + y | x \in supp(f), y \in supp(g) \}$$
+
+Ainsi l'architecture VGG-16 peut être alors approximée simplement par un réseau comprenant $5$ couches de convolutions entrecoupés de couches d'activation et de \emph{pooling}, les deux premières étant $(5,5)$ et les trois suivantes étant $(7,7)$.
+Ce modèle serait bien moins stable à l'apprentissage, mais aussi moins performant, car l'insertion d'activations entre les convolutions permet d'encore mieux séparer les plans de solutions.
+
+La seconde partie du réseau, propre à DeconvNet, utilise les couches de déconvolution et d'\emph{unpooling} détaillées précédemment. On remarquera aussi l'utilisation de déconvolutions successives de noyau $(3, 3)$, pour les mêmes raisons que les convolutions de la première partie.
+
+Enfin la couche de sortie effectue le mapping entre les \emph{features} produite et le nombre de classes souhaitées en sortie, par une convolution de noyau $(1, 1)$.
+
+La philosophie de l'architecture DeconvNet pourrait se résumer à dans un premier temps décomposer l'image en \emph{features} très profondes à travers 13 couches de convolution entrecoupées de \emph{pooling}, puis de réduire l'image en un vecteur de 4096 \emph{features}, avant de reconstituer une image segmentée à travers 13 couches de déconvolution entrecoupées d'\emph{unpooling}.
+
+\paragraph{Avantages et Inconvénients}
+Nous allons à présent lister les différents avantages et inconvénients de l'architecture DeconvNet.
+Les avantages sont les suivants :
+\begin{itemize}
+	\item Simplicité et élégance de conception.
+	\item Réutilisation de VGG-16, modèle très performant en vision par ordinateur.
+	\item Grande finesse de segmentation des détails des objets.
+	\item $69\%$ de précision sur PASCAL VOC 2012, offrant les meilleures performances en 2015.
+\end{itemize}
+Les inconvénients sont les suivants :
+\begin{itemize}
+	\item Très grand nombre de \emph{FLOPs}, nécessitant des GPUs très puissantes.
+	\item Apprentissage complexe, divisé en deux phases, chacune ayant un ensemble d'apprentissage distinct.
+\end{itemize}
+
+\subsubsection{Première Expérience}
+%N'ayant pas de cartes graphiques suffisamment puissantes
+\subsubsection{Deuxième Expérience}
 \section{Recherche de Similarités entre Images}
 \subsection{Protocole expérimental}
 \subsection{Résultats}
