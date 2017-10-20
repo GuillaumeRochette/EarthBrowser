@@ -2033,6 +2033,50 @@ On remarque ici que le modèle a tendance à mieux classifier l'absence de bâti
 On constate aussi qu'il n'y a pas d'améliorations par rapport à SegNet5.
 
 \subparagraph{Exemples de Résultats}
+Nous allons à présent comparer les résultats produits par SegNet5 et SegNet7.
+
+En haut à gauche, l'image de SpaceNet, bandes RGB, corrigée 8bits.
+
+En bas à gauche, le masque de segmentation produit par les labels de SpaceNet et OpenStreetMap.
+
+En haut au milieu, la \emph{map} de probabilités de SegNet5, représentée comme une image RGB.
+
+En bas au milieu, le masque de segmentation de SegNet5, obtenu en récupérant l'\emph{argmax} de la \emph{map} de probabilité.
+
+En haut à droite, la \emph{map} de probabilités de SegNet7, représentée comme une image RGB.
+
+En bas à droite, le masque de segmentation de SegNet7, obtenu en récupérant l'\emph{argmax} de la \emph{map} de probabilité.
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.2]{Images/SegNets_Vegas.png}
+		\caption{Inférences de SegNet5 et SegNet7 sur Vegas}
+	\end{center}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.2]{Images/SegNets_Paris.png}
+		\caption{Inférences de SegNet5 et SegNet7 sur Paris}
+	\end{center}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.2]{Images/SegNets_Shanghai.png}
+		\caption{Inférences de SegNet5 et SegNet7 sur Shanghai}
+	\end{center}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.2]{Images/SegNets_Khartoum.png}
+		\caption{Inférences de SegNet5 et SegNet7 sur Khartoum}
+	\end{center}
+\end{figure}
+
+On s'aperçoit sur chacun des exemples, que SegNet5 réussit systématiquement mieux que SegNet7, ce qui va dans le sens des suppositions émises dans l'analyse des résultats.
+Sur Paris, la différence est flagrante, SegNet5 réalise une segmentation à peu près fidèle, tandis que la seconde est totalement fausse.
 
 \subsubsection{Deuxième Expérience}
 Une analyse empirique de la première expérience laisse suggérer que les réseaux SegNet5 et SegNet7 souffre de \emph{tunnel vision}.
@@ -2188,10 +2232,40 @@ La matrice de confusion est la suivante :
 
 De ces deux modèles, le premier semble plus performant que le second, ce qui indique peut être que garder l'information spatialisée sur le bloc central est important.
 \subparagraph{Exemples de Résultats}
+Nous allons à présent comparer les résultats produits par ZNet et ZNet2.
 
-\subsection{Protocole expérimental}
-\subsection{Résultats}
-\subsection{Comparaisons entre modèles}
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.2]{Images/ZNets_1983.png}
+		\caption{Inférences de ZNet et ZNet2}
+	\end{center}
+\end{figure}
+
+En haut à gauche, l'image de SpaceNet, bandes RGB, corrigée 8bits.
+
+En bas à gauche, le masque de segmentation produit par les labels de SpaceNet et OpenStreetMap.
+
+En haut au milieu, la \emph{map} de probabilités de ZNet, représentée comme une image RGB.
+
+En bas au milieu, le masque de segmentation de ZNet, obtenu en récupérant l'\emph{argmax} de la \emph{map} de probabilité.
+
+En haut à droite, la \emph{map} de probabilités de ZNet2, représentée comme une image RGB.
+
+En bas à droite, le masque de segmentation de ZNet2, obtenu en récupérant l'\emph{argmax} de la \emph{map} de probabilité.
+
+On voit pour cette image, que le résultat est beaucoup plus "propre" pour le premier modèle que le second, il y a moins bruit de segmentation sur la sortie, c'est à dire de petites tâches n'ayant pas lieu d'être.
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.2]{Images/ZNets_5000.png}
+		\caption{Inférences de ZNet et ZNet2}
+	\end{center}
+\end{figure}
+
+Pour cet exemple, le résultat semble toujours meilleur dans le cas où l'information reste spatialisée, en effet, le contour des bâtiments est beaucoup plus précis, même dans les cas où les bâtiments sont collés.
+Il y a par ailleurs moins d'artefacts sur la route.
+
+\subsection{Conclusion}
 \chapter{Conclusion}
 \chapter*{Bibliographie}
 \begin{itemize}
