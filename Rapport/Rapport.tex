@@ -2060,6 +2060,7 @@ Nous avons aussi décider de diviser par 2 le nombre de \emph{features} calculé
 
 Nous avons donc décider de créer deux modèles se différenciant sur le bloc central, en voici leur définitions :
 
+\begin{center}
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
 \hline 
 Couche & \multicolumn{2}{c|}{Noyau} & \multicolumn{2}{c|}{Features} & \multicolumn{2}{c|}{Pad} & \multicolumn{2}{c|}{Stride} & \multicolumn{2}{c|}{Dimensions en sortie}\\ 
@@ -2115,25 +2116,12 @@ deconv1\_$2$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{32} & \multic
 Output & \multicolumn{2}{c|}{$(1, 1)$} & \multicolumn{2}{c|}{3} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{0} & \multicolumn{2}{c|}{$(3, 224, 224)$}\\ 
 \hline
 \end{tabular} 
+\end{center}
+Les différences par rapport à la première expérience sont l'utilisation de couche de \emph{pooling} ayant un noyau $(4, 4)$ et un pas de déplacement de 4, permettant de réduire rapidement les dimensions des \emph{map de features}.
 
-Comme nous pouvons le voir, les deux modèles possèdent un bloc central différent de DeconvNet.
-Dans DeconvNet, l'entrée était de dimension $(512, 7, 7)$, puis ramené à un vecteur de 4096 \emph{features} dans la couche $fc6$, ce qui dé-spatialisait entièrement l'information.
-Ici dans le bloc central l'information reste spatialisée, car on ne passe pas de $(256, 56, 56)$ (ou $(512, 28, 28)$) à un vecteur de $n$ \emph{features}.
-
+Les différences entre les deux modèles se font au niveau du bloc central, dans l'un, l'information reste spatialisée, nous opérons seulement deux convolutions $(3, 3)$ comme dans l'expérience précédente et dans l'autre, nous reprenons un bloc similaire à celui de DeconvNet.
 \paragraph{Hyper-paramètres}
-Nous allons à présent lister les hyper-paramètres liés aux apprentissages effectués.
-\subparagraph{Algorithme de Descente de Gradient}
-Nous avons choisi d'utiliser, comme algorithme de descente la variante \emph{Adam}, signifiant \emph{Adaptative Moment Estimation}, qui utilise le moment des gradients précédents et qui moyenne l'amplitude des gradients calculés.
-Nous avons utilisé les paramètres préconisés par les auteurs, à savoir $\beta = 0.9$, $\gamma = 0.999$ et $\alpha = 0.1$.
-Pour plus de détails, voir en annexe.
-\subparagraph{Régularisation $L^2$}
-Nous avons choisi d'utiliser, comme taux de régularisation $L^2$, $\lambda = 0.0005$, qui est une valeur couramment choisie en vision par ordinateur.
-\subparagraph{Proportions de données d'apprentissage}
-Il est courant dans le cas de la segmentation d'images de prendre $90\%$ des données pour l'ensemble d'apprentissage et $10\%$ pour l'ensemble de validation.
-\subparagraph{Taille d'un \emph{mini-batch}}
-Nous avons fixé la taille d'un mini-batch à $64$, valeur communément utilisée dans la littérature.
-\subparagraph{Nombre d'itérations}
-Nous avons fixé à $50000$ le nombre d'itérations lors de l'apprentissage, valeur jugée suffisante, au delà de laquelle si un modèle n'a toujours pas suffisamment appris, alors sa capacité sera remise en question.
+Les hyper-paramètres restent les même par rapport à l'expérience précédente.
 \paragraph{Résultats}
 \subparagraph{Graphes des Pertes}
 Voici le graphe des pertes du modèle SegNet5 :

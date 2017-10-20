@@ -130,11 +130,11 @@ def aggregate_features(sp_path, osm_path):
     :return: GeoJSON features.
     """
     features = []
-    with open(osm_path, "r") as osm_file:
-        geojson = json.load(osm_file)
-    features += geojson["features"]
     with open(sp_path, "r") as sp_file:
         geojson = json.load(sp_file)
+    features += geojson["features"]
+    with open(osm_path, "r") as osm_file:
+        geojson = json.load(osm_file)
     features += geojson["features"]
     return features
 
