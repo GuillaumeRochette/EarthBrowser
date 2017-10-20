@@ -95,10 +95,10 @@ De tout temps, l'humain a toujours souhaité pouvoir observer le monde, que ce s
 
 Les besoins en matière de \emph{télédétection} sont plus anciens que les premiers satellites artificiels. Dès la fin du XIX ème siècle, lors du siège de Paris en $1870$, des ballons effectuaient des missions de reconnaissance en utilisant les progrès en matière de photographie.
 
-Jusqu'aux années $1970$, la télédétection servait majoritairement à l'espionnage et la cartographie, principalement réalisée par le biais d'appareils photographies emporté dans des avions.
-Les premières images de la Terre depuis l'Espace ont été réalisé de cette même manière, des appareils photographiques à microfilm étaient embarqués dans des satellites artificiels. Il est à noter qu'un défi de taille était la réception de ces microfilms alors largués vers la Terre depuis l'Espace.
+Jusqu'aux années $1970$, la télédétection servait majoritairement à l'espionnage et la cartographie, principalement réalisée par le biais d'appareils photographiques emportés dans des avions.
+Les premières images de la Terre depuis l'Espace ont été réalisées de cette même manière, des appareils photographiques à microfilm étaient embarqués dans des satellites artificiels. Il est à noter qu'un défi de taille était la réception de ces microfilms alors largués vers la Terre depuis l'Espace.
 
-L'apparition de \emph{capteurs numériques} a révolutionné le domaine de la télédétection, car permettant de s'abstraire du support physique, problématique de par sa quantité limité à bord, ainsi que sa réception.
+L'apparition de \emph{capteurs numériques} a révolutionné le domaine de la télédétection, car permettant de s'abstraire du support physique, problématique de par sa quantité limitée à bord, ainsi que sa réception.
 
 Nous aborderons d'abord le fonctionnement d'un \emph{satellite d'observation}, puis nous survolerons les différentes particularités d'une image satellite.
 \section{Fonctionnement d'un Satellite d'Observation}
@@ -115,7 +115,7 @@ Selon leur longueur d'onde, les ondes électromagnétique portent des noms diff�
 Le domaine \emph{optique} est la réunion du domaine du visible et de l'infrarouge (I.R.).
 Bien que les satellites puissent embarquer aussi d'autres types de capteurs, nous n'en parlerons pas, car cela n'a pas de rapport avec l'Imagerie Satellite.
 
-Par ailleurs, nous nous focaliserons uniquement sur les capteurs passifs, c'est à dire des capteurs qui ne font que mesurer le rayonnement d'un objet, contrairement aux capteurs actifs, comme les radars qui émettent un rayonnement et en observent l'écho sur l'objet.
+Par ailleurs, nous nous focaliserons uniquement sur les capteurs passifs, c'est-à-dire des capteurs qui ne font que mesurer le rayonnement d'un objet, contrairement aux capteurs actifs, comme les radars qui émettent un rayonnement et en observent l'écho sur l'objet.
 \subsubsection{Capteurs de type Whisk Broom}
 Ce sont les premiers capteurs historiques utilisés pour l'imagerie satellite, utilisés par exemple dès $1970$ sur les satellites du programme LANDSAT de la NASA.
 
@@ -131,8 +131,8 @@ Voici un schéma décrivant le fonctionnement d'un capteur de type \emph{whisk b
 \end{figure}
 Les avantages d'un capteur \emph{whisk broom} sont les suivants :
 \begin{itemize}
-	\item Étant donné qu'un seul capteur n'est utilisé, l'étalonnage de l'appareil est facile, permettant ainsi un rendu homogène de l'image.
-	\item La fauchée, c'est-à-dire la largeur au sol de l'image, peut-être très large.
+	\item Étant donné qu'un seul capteur est utilisé, l'étalonnage de l'appareil est facile, permettant ainsi un rendu homogène de l'image.
+	\item La fauchée, c'est-à-dire la largeur au sol de l'image, peut être très large.
 \end{itemize}
 Ce type de capteur présente aussi des inconvénients :
 \begin{itemize}
@@ -140,13 +140,13 @@ Ce type de capteur présente aussi des inconvénients :
 	\item Le temps d'intégration, c'est-à-dire le temps d'acquisition requis pour effectuer une mesure, est le fruit d'un compromis entre une bonne qualité radiométrique et la résolution au sol. En effet, pour obtenir une mesure de qualité, on préfère faire une moyenne sur un grand nombre d'acquisitions, limité par la vitesse orbitale du satellite et l'amplitude des oscillations du capteur, impactant directement la largeur de la fauchée.
 \end{itemize}
 \subsubsection{Capteurs de type Push Broom}
-Le fonctionnement de ces capteurs est inspiré des scanners et photocopieurs grand-publics apparus dans les années $1980$.
+Le fonctionnement de ces capteurs est inspiré des scanners et photocopieurs grand-public apparus dans les années $1980$.
 
 Le premier satellite équipé d'un tel dispositif était SPOT $1$, un satellite conçu par le CNES en $1986$.
 Le principe de fonctionnement est assez simple, au lieu d'utiliser une unique cellule comme pour les capteurs \emph{whisk broom}, on utilise des lignes, aussi appelées barrettes, de cellules de détection.
 Ainsi l'acquisition est simultanée pour les détecteurs composants une seule et même ligne.
 
-Une image, composées de $m$ lignes et $n$ colonnes, est donc le résultat de $n$ acquisitions simultanées répétées à $m$ intervalles de temps suivant trajectoire du satellite.
+Une image, composées de $m$ lignes et $n$ colonnes, est donc le résultat de $n$ acquisitions simultanées répétées à $m$ intervalles de temps suivant la trajectoire du satellite.
 
 Voici un schéma décrivant le fonctionnement d'un capteur de type \emph{push broom} :
 \begin{figure}[H]
@@ -179,7 +179,7 @@ Voici un schéma décrivant le fonctionnement d'un capteur de type \emph{matrici
 	\end{center}
 \end{figure}
 
-Les avantages d'un capteur \emph{push broom} sont les suivants :
+Les avantages d'un capteur \emph{matriciel} sont les suivants :
 \begin{itemize}
 	\item Grâce à l'acquisition simultanée de tous les pixels de l'image, il ne peut y avoir de perturbations géométriques, sauf en cas de flou de bougé.
 	\item Possibilité de photographier une zone selon plusieurs angles (de visée).
@@ -200,13 +200,13 @@ Le mouvement d'un satellite artificiel autour de la Terre, appelé \emph{orbite}
 Deux types d'orbites sont principalement utilisé pour les satellites
 \subsubsection{L'Orbite Géostationnaire}
 L'orbite \emph{géostationnaire} implique comme son nom l'indique que la position du satellite est fixe par rapport à la Terre.
-Pour se faire, il faut que l'orbite du satellite soit circulaire autour de la Terre, et que la vitesse \emph{angulaire} du satellite soit égale à la vitesse \emph{angulaire} de la Terre.
+Il faut que l'orbite du satellite soit circulaire autour de la Terre, et que la vitesse \emph{angulaire} du satellite soit égale à la vitesse \emph{angulaire} de la Terre.
 
 Ce type d'orbite est utilisé pour les satellites de télécommunication, ainsi que pour des applications de surveillance de la Terre comme la météorologie, nécessitant un survol constant d'une zone définie.
 \subsubsection{L'Orbite Héliosynchrone}
-L'orbite \emph{héliosynchrone} signifiant que le satellite soit "synchronisé" avec le soleil, ce qui en d'autres termes implique que le satellite doive tourner à la même vitesse autour de la Terre que la Terre autour du Soleil.
+L'orbite \emph{héliosynchrone} signifie que le satellite est "synchronisé" avec le soleil, ce qui en d'autres termes implique que le satellite doive tourner à la même vitesse autour de la Terre que la Terre autour du Soleil.
 
-On s'intéresse particulièrement aux orbites quasi-polaires héliosynchrones. En effet, le satellite se déplace presque dans selon une longitude et conserve un angle constant entre le plan d'orbite et la direction Terre-Soleil.
+On s'intéresse particulièrement aux orbites quasi-polaires héliosynchrones. En effet, le satellite se déplace presque selon une longitude et conserve un angle constant entre le plan d'orbite et la direction Terre-Soleil.
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[scale=0.3]{Images/Orbite_Heliosynchrone.png}
@@ -217,7 +217,7 @@ Ce type d'orbite est très intéressant pour l'imagerie spatiale car cela signif
 \subsubsection{Trace au Sol et Fauchée d'un Satellite}
 La trace au sol est la projection de la trajectoire décrite par un satellite à la surface du globe terrestre.
 
-La fauchée d'un satellite est la la surface au sol couverte par la prise de vue du capteur optique.
+La fauchée d'un satellite est la surface au sol couverte par la prise de vue du capteur optique.
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[scale=0.4]{Images/Swath.png}
@@ -242,7 +242,7 @@ Voici une liste non-exhaustive des informations habituellement contenues dans le
 Un système de coordonnées est un référentiel permettant d'exprimer la position de points dans un espace, et par conséquent une position sur le globe terrestre.
 La Terre n'offre pas de surface géométriquement régulière, de ce fait on peut la représenter de différentes manières :
 \begin{itemize}
-	\item Une sphère est une approximation grossière de la Terre, venant du fait que la Terre est aplatie aux pôles, ce qui est dû à sa rotation. Mais cette approximation ne suffit pas une cartographie précise.
+	\item Une sphère est une approximation grossière de la Terre, venant du fait que la Terre est aplatie aux pôles, ce qui est dû à sa rotation. Mais cette approximation ne suffit pas pour de la cartographie précise.
 	\item Un ellipsoïde, une ellipse en trois dimensions, nous permet de modéliser cet aplatissement. C'est ce modèle qui est retenu pour la cartographie.
 \end{itemize}
 
@@ -293,7 +293,7 @@ Nous allons à présent voir quelques propriétés concernant les images, ainsi 
 \subsubsection{Angle de visée}
 Pour les appareils photographiques classiques, l'angle de visée dépend de celui qui tient l'appareil, il en est de même pour les satellites. 
 
-L'angle de visée est variable et ce qui permet de re-photographier une zone sans avoir à attendre une période orbitale entière, durant environ $26$ jours pour les satellites de la famille SPOT.
+L'angle de visée est variable, permettant de re-photographier une zone sans avoir à attendre une période orbitale entière, durant environ $26$ jours pour les satellites de la famille SPOT.
 
 Cependant pour pouvoir obtenir de "belles" images, afin de pouvoir les exploiter de façon optimale il faut re-projeter l'image pour se retrouver au \emph{nadir}, le \emph{nadir} étant le vecteur normal à la surface terrestre depuis le satellite. C'est donc le vecteur opposé du \emph{zénith}.
 \begin{figure}[H]
@@ -327,7 +327,7 @@ Voici les caractéristiques radiométriques du satellite Pléiades :
 	\hline 
 	\end{tabular}
 \end{center}
-La bande panchromatique ne discrimine pas les couleurs, son domaine de sensibilité est similaire à la vision humaine, la bande spectrale est située autour de $400$-$750$nm. Ce sont des images en noir et blanc.
+La bande panchromatique ne discrimine pas les couleurs, son domaine de sensibilité est similaire à la vision humaine, autour de $400$-$750$nm. Ce sont des images en noir et blanc.
 
 Comme nous pouvons le voir sur le tableau, toutes les bandes produites par le satellite Pléiades ne sont pas à la même résolution, les bandes \emph{multispectrales} sont à $2$m, tandis que la bande \emph{panchromatique} est à $0.5$m.
 Pourtant le produit après traitement est composé des $4$ bandes couleurs échantillonnées à $0.5$m.
@@ -351,7 +351,7 @@ Voici un récapitulatif des niveaux de traitements pour une image satellite de l
 \end{itemize}
 
 \chapter{L'Apprentissage Machine}
-L'apprentissage machine permet d'accomplir des tâches traditionnellement compliquées pour les ordinateurs, mais vues comme simple pour l'humain.
+L'apprentissage machine permet d'accomplir des tâches traditionnellement compliquées pour les ordinateurs, mais considérées simples pour l'humain.
 En effet, l'humain apprend par exemple dès le plus jeune âge à discerner les contours sur une image, d'en décrire le contenu et même de visualiser un objet sous différents angles. Des algorithmes classiques ont du mal à produire des bons résultats sur ce genre de problèmes.
 À l'inverse, les ordinateurs possèdent une capacité très supérieure à l'humain pour résoudre des calculs complexes, ou des problèmes d'ordre combinatoire.
 
@@ -365,7 +365,7 @@ Un algorithme apprenant est un algorithme capable d'utiliser des données pour a
 Un tel algorithme basera son apprentissage sur un jeu de données. Un jeu de données est un ensemble d'exemples.
 Chaque exemple, noté $e$, est composé d'une entrée, notée $x$, à laquelle on peut associer, dans le cas d'un apprentissage supervisé, une sortie attendue, notée $\hat{y}$.
 \subsection{La Tâche}
-Le processus d'apprentissage ne représente pas la tâche. L'apprentissage symbolise les moyens d'acquérir la possibilité, qui peut-être aussi vue comme la capacité, d'accomplir une tâche en particulier.
+Le processus d'apprentissage ne représente pas la tâche. L'apprentissage symbolise les moyens d'acquérir la possibilité, qui peut être aussi vue comme la capacité, d'accomplir une tâche en particulier.
 Par exemple, si l'on veut apprendre à un robot à lire, la tâche en question sera la capacité à lire.
 
 En apprentissage machine, une tâche, notée \emph{T}, consiste à faire, pour chaque exemple $e$, correspondre une entrée $x$ à un résultat de sortie $y$.
@@ -411,7 +411,7 @@ Néanmoins, cette mesure n'est pas générale, en effet, par exemple pour une t�
 Pour cela, nous définissons une mesure plus générale, une \emph{fonction de perte }associée.
 Cette fonction de perte n'a pas de forme particulière car elle dépend de la tâche \emph{T} à réaliser, mais elle décroît à mesure que la sortie $y$ produite par l'algorithme est "bonne".
 
-Afin de réaliser un bon apprentissage, il nous donc minimiser cette \emph{fonction de perte}.
+Afin de réaliser un bon apprentissage, il nous faut donc minimiser cette \emph{fonction de perte}.
 
 L'apprentissage machine se résume donc à optimiser notre algorithme pour modéliser au mieux une situation.
 		
@@ -426,7 +426,7 @@ Les algorithmes d'apprentissage machine supervisés ont pour but d'apprendre sur
 	
 \section{Contraintes d'Apprentissage et Régularisation}
 \subsection{Sous-apprentissage, Sur-apprentissage et Capacité d'un Algorithme Apprenant}
-L'un des défi, et intérêt, majeur en apprentissage machine est la possibilité de bien raisonner sur de nouveaux exemples encore inconnus de l'algorithme. Cette capacité de raisonnement s'appelle la généralisation.
+L'un des défis majeurs en apprentissage machine est la possibilité de bien raisonner sur de nouveaux exemples encore inconnus de l'algorithme. Cette capacité de raisonnement s'appelle la généralisation.
 En effet, un algorithme apprenant s'appuie pour l'entraînement sur un ensemble d'apprentissage, ce qui nous permet de mesurer l'\emph{erreur d'apprentissage}, terme équivalent à la \emph{fonction de perte} sur les données d'apprentissage, et ainsi de la minimiser.
 
 Ce qui différencie un simple problème d'optimisation de l'apprentissage machine, est que nous souhaitons non seulement que notre algorithme ait une \emph{erreur d’apprentissage} faible, mais que sa capacité à généraliser, traduite par l'\emph{erreur de généralisation} ou \emph{erreur de test}, soit aussi petite que possible.
@@ -513,7 +513,7 @@ Ce qui nous donne une fonction :
 $$J(x,y,\theta) = J_0(x,y) + \lambda f(\theta)$$
 On peut choisir par exemple $f(\theta) = \sum_{i=1}^{q}{\theta_i^i}$ et ainsi pénaliser les coefficients d'ordre élevé, ainsi notre algorithme aura tendance à proposer des polynômes ayant des coefficients d'ordre élevé de petite taille, et ainsi réduire artificiellement l'ordre du polynôme choisi.
 
-Le terme de \emph{régularisation} est employé pour tout modification apportée à l'algorithme apprenant visant à réduire l'\emph{erreur de généralisation}, mais pas l'\emph{erreur d'apprentissage}.
+Le terme de \emph{régularisation} est employé pour toute modification apportée à l'algorithme apprenant visant à réduire l'\emph{erreur de généralisation}, mais pas l'\emph{erreur d'apprentissage}.
 	
 \section{Paramétrisation et Validation d'un Algorithme}
 La plupart des algorithmes d'apprentissage machine sont paramétrés afin de contrôler plus précisément leur apprentissage.
@@ -541,7 +541,7 @@ Ainsi la procédure d'expérimentation est la suivante :
 	\item Estimation de la capacité de généralisation du modèle sur l'ensemble de validation.
 	\item Si la capacité à généraliser est trop faible, c'est à dire que l'\emph{erreur de validation} est trop élevée, on modifie les hyper-paramètres, puis retour à l'étape d'apprentissage, sinon on passe à l'étape suivante.
 	\item Évaluation finale des performances du modèle sur l'ensemble de test.
-	\item Si l'\emph{erreur de test} est trop élevée, alors il retourner à la première étape et choisir un nouveau modèle, sinon on valide le modèle.
+	\item Si l'\emph{erreur de test} est trop élevée, alors il faut retourner à la première étape et choisir un nouveau modèle, sinon on valide le modèle.
 \end{enumerate}
 	
 \section{Optimisation}
@@ -638,7 +638,7 @@ Voici à présent l'algorithme général du gradient, appliqué à une fonction 
 		\RETURN $\theta_{k+1}$
 	\end{algorithmic}
 \end{algorithm}
-Dans notre cas, nous souhaitons minimiser la fonction de perte de associée à notre modèle par rapport aux données d'apprentissage.
+Dans notre cas, nous souhaitons minimiser la fonction de perte associée à notre modèle par rapport aux données d'apprentissage.
 
 Soit $x$ et $y \in \mathbb{R}^n$, les entrées et les sorties.
 
@@ -698,7 +698,7 @@ Les réseaux de neurones profonds, aussi appelés \emph{Deep Feedforward Network
 
 Ils sont dits "\emph{feedforward}", ou en français à "propagation unique", car l'information se déplace à travers la fonction, depuis l'entrée $x$, puis par des étapes intermédiaires, pour arriver à la sortie $y$, sans aucun retour en arrière.
 
-Les réseaux de neurones permettant un \emph{feedback} ou \emph{retour d'expérience} sont appelés font partie de la classe des réseaux récurrents.
+Les réseaux de neurones permettant un \emph{feedback} ou \emph{retour d'expérience} font partie de la classe des réseaux récurrents.
 Les réseaux de types "\emph{feedforward}" sont de loin les réseaux de neurones les plus utilisés.
 
 On utilise le mot \emph{réseau} dans l’appellation réseaux de neurones, car ils sont composés d'une multitude de fonctions \emph{simples}, organisées en réseau.
@@ -796,12 +796,12 @@ Pour les \emph{sorties} :
 	\item Une sortie d'un neurone noté $\elem{a}{k}{j}{}$ sera la sortie du $j$-ème neurone, situé dans la $k$-ème couche.
 	\item Par conséquent $\elem{a}{k}{}{}$ représente le vecteur de sortie de la $k$-ème couche, mais aussi le vecteur d'entrée de la $(k+1)$-ème couche.
 	\item Le vecteur d'entrée $x$, sera noté $\elem{a}{0}{}{}$.
-	\item Le vecteur de sortie $y$, sera noté $\elem{a}{L}{}{}$ dans réseau de $L$ couches.
+	\item Le vecteur de sortie $y$, sera noté $\elem{a}{L}{}{}$ dans un réseau de $L$ couches.
 	      \end{itemize}
 Enfin, les résultats de la fonction de combinaison sont de même dimensions que les sorties de couche.
 Pour les \emph{combinaisons} :
 \begin{itemize}
-	\item Une combinaison noté $\elem{z}{k}{j}{}$ sera la combinaison du $j$-ème neurone, situé dans la $k$-ème couche.
+	\item Une combinaison notée $\elem{z}{k}{j}{}$ sera la combinaison du $j$-ème neurone, situé dans la $k$-ème couche.
 	\item Par conséquent $\elem{z}{k}{}{}$ représente le vecteur des combinaisons de la $k$-ème couche.
 	      \end{itemize}
 			
@@ -1109,7 +1109,7 @@ Le \emph{Théorème d'Approximation Universelle} nous dit qu'il existe un résea
 Toutefois, ce théorème ne dit pas quelle sera la taille de ce réseau, mais en affirme seulement l'existence.
 \subsection{Techniques de Régularisation}
 Un défi majeur en apprentissage machine est de choisir un algorithme qui aura de bons résultats,non seulement à l'apprentissage, mais aussi sur de nouvelles entrées.
-Les stratégies utilisées en apprentissage machine, permettant de réduire l'\emph{erreur de test}, parfois au dépend de l'\emph{erreur d'apprentissage}, sont appelées techniques de régularisation.
+Les stratégies utilisées en apprentissage machine, permettant de réduire l'\emph{erreur de test}, parfois aux dépends de l'\emph{erreur d'apprentissage}, sont appelées techniques de régularisation.
 
 Nous avons, dans le premier chapitre, vu les concepts généraux de la \emph{généralisation}, du \emph{sous-apprentissage} et du \emph{sur-apprentissage}.
 Nous verrons à présent des méthodes concrètes appliquées aux réseaux de neurones profonds.
@@ -1140,7 +1140,7 @@ Cette méthode est principalement utilisée pour un domaine : la reconnaissance 
 En effet, il est très facile de transformer les données existantes par des transformations, telles que des rotations, des translations ou des homothéties, paramétrées aléatoirement.
 On peut aussi le faire sur d'autres types de données en ajoutant du \emph{bruit blanc} sur une partie des entrées.
 \subsubsection{Arrêt Prématuré}
-Lors de qu'un modèle avec une capacité suffisante pour sur-apprendre, on observe généralement que tandis ce que l'\emph{erreur d'apprentissage} continue de diminuer, l'\emph{erreur d'entraînement} recommence à augmenter.
+Pour un modèle avec une capacité suffisante pour sur-apprendre, on observe généralement que tandis que l'\emph{erreur d'apprentissage} continue de diminuer, l'\emph{erreur d'entraînement} recommence à augmenter.
 Cela signifie que nous avons atteint un \emph{minimum local} sur les données de test, il convient alors d'arrêter l'apprentissage avant que l'\emph{erreur de généralisation} empire.
 \subsubsection{Dropout}
 La méthode \emph{Dropout} est une méthode assez particulière de régularisation, qui consiste à entraîner tour à tour des sous-réseaux de notre réseaux de neurones.
@@ -1162,7 +1162,7 @@ Ils sont spécialisés dans le traitement de données ayant une structure en for
 
 Voici des exemples de données ayant ce genre de structure :
 \begin{itemize}
-	\item Les séries temporelles pouvant être vue comme une grille de dimension $1$, car assimilables à des signaux, ayant pour unité un intervalle de temps fixe.
+	\item Les séries temporelles pouvant être vues comme une grille de dimension $1$, car assimilables à des signaux, ayant pour unité un intervalle de temps fixe.
 	\item Les images, pouvant être considérées comme étant des grilles de dimensions $2$ de pixels.
 \end{itemize}
 Dans un premier temps, nous définirons rapidement l'opérateur de convolution.
@@ -1194,7 +1194,7 @@ Voici un exemple d'application de la convolution sur une image :
 		\caption{Exemple de convolution entre une image $I$, $(8,3)$ et un noyau $K$, $(2,2)$}
 	\end{center}
 \end{figure}
-Dans cet exemple de convolution entre une image $I$, $(8,3)$ et un noyau $K$, $(2,2)$, on peut remarquer tout d'abord, que la image issue de la convolution est de forme $(6,2)$.
+Dans cet exemple de convolution entre une image $I$, $(8,3)$ et un noyau $K$, $(2,2)$, on peut remarquer tout d'abord, que l'image issue de la convolution est de forme $(6,2)$.
 
 En effet la convolution sans \emph{padding} réduit la taille de la fenêtre.
 Si l'image $I$ est de taille $(m,n)$ et le noyau de taille $(k,l)$ alors l'image convolutée sera de taille $(m-k+1,n-l+1)$.
@@ -1228,7 +1228,7 @@ Il est à noter que dans beaucoup de librairies d'Apprentissage Machine, l'opér
 \subsection{Intérêts de la Convolution dans les Réseaux de Neurones}
 La convolution s'appuie sur trois idées importantes permettant l'amélioration des performances, l'\emph{interaction partielle}, le \emph{partage des paramètres} et l'\emph{invariance par translation}.
 \subsubsection{L'interaction Partielle}
-Dans les réseaux de neurones traditionnels, le passage de l'information d'une couche à la suivante se fait en autre par la multiplication matricielle du vecteur d'entrée $\elem{a}{k-1}{}{}$ de dimension $m$, par la matrice $\elem{W}{k}{}{}$ de dimension $m \times n$, la sortie du neurone $\elem{a}{k-1}{}{}$ sera donc de dimension $n$.
+Dans les réseaux de neurones traditionnels, le passage de l'information d'une couche à la suivante se fait par la multiplication matricielle du vecteur d'entrée $\elem{a}{k-1}{}{}$ de dimension $m$, par la matrice $\elem{W}{k}{}{}$ de dimension $m \times n$, la sortie du neurone $\elem{a}{k-1}{}{}$ sera donc de dimension $n$.
 
 Pour rappel :
 $$\elem{z}{k}{}{} = (\elem{W}{k}{}{})^T(\elem{a}{k-1}{}{}) + \elem{b}{k}{}{}$$
@@ -1381,7 +1381,7 @@ On peut alors se poser plusieurs questions,
 \end{itemize}
 
 Tout d'abord la première question n'a pas vraiment de sens dans de nombreux domaines, et particulièrement en \emph{vision par ordinateur}, car les pixels d'une image sont liés spatialement. Chaque variable est donc dépendante de ses voisins.
-La deuxième est plus beaucoup plus intéressante.
+La deuxième est plus beaucoup intéressante.
 
 Une approche plutôt naïve pourrait suggérer de transformer l'image de dimensions $(3, 256, 256)$ en niveaux de gris de dimensions $(1, 256, 256)$ puis de la \emph{redimensionner} en $(1, 32, 32)$, ce qui nous permet d'obtenir un tenseur d'entrée de dimension $(1024)$.
 \begin{figure}[H]
@@ -1438,7 +1438,7 @@ Un des premiers \emph{datasets} d'images pour la classification est le MNIST, co
 		\caption{Données issues de MNIST}
 	\end{center}
 \end{figure}
-Même si la l'intérêt à reconnaître les chiffres est limité, ce \emph{dataset} a longtemps servi au niveau académique de \emph{benchmark} pour comparer les différents modèles.
+Même si l'intérêt à reconnaître les chiffres est limité, ce \emph{dataset} a longtemps servi au niveau académique de \emph{benchmark} pour comparer les différents modèles.
 
 On citera aussi les \emph{datasets} CIFAR-10, CIFAR-100, et ImageNet.
 CIFAR-10 et CIFAR-100 sont composés chacun de $60000$ images RGB de $32 \times 32$ pixels, réparties en $10$ classes pour le premier et $100$ classes pour le second.
@@ -1686,6 +1686,8 @@ De plus, les \emph{LineStrings} forment des courbes, elles ont donc une aire nul
 C'est pourquoi il faudra prendre en compte ces erreurs contenues dans le \emph{dataset} au moment d'analyser les résultats des différents modèles.
 
 Le contour des objets rasterisés, ici en jaune, n'appartient pas à la même classe que son objet, ceci est fait pour pallier aux erreurs de localisation des objets. En effet un pixel faisant parti du contour d'un objet ne sera pas évalué lors du calcul de la perte et de la précision, cela permet aux modèles de ne pas se focaliser sur les détails mais plus sur le cœur de l'objet.
+\subsection{Calcul GPU et Framework Deep Learning}
+A FAIRE
 \subsection{Expériences}
 Nous souhaitons présenter deux expériences ayant produit les résultats les plus significatifs.
 
@@ -1724,7 +1726,7 @@ Voici un schéma décrivant l'opération d'\emph{unpooling} :
 Comme on peut le voir dans la couche de \emph{pooling}, l'activation la plus élévée, ici la plus sombre, est transmise dans la \emph{map de features}, ainsi que sa position dans la \emph{map des indices}. Alors lors de l'\emph{unpooling}, nous réutiliserons la \emph{map des indices} pour recréer la \emph{map de features} à ses dimensions précédentes.
 
 \paragraph{Déconvolution}
-Une couche de convolution a pour effet de convoluter un noyau à une \emph{map de  features}, qui grossièrement dit, revient calculer une moyenne pondérée sur un ensemble de valeurs spatialement proches.
+Une couche de convolution a effectue un produit matriciel entre un noyau et une fenêtre d'une \emph{map de  features}, qui grossièrement dit, revient calculer une moyenne pondérée sur un ensemble de valeurs spatialement proches.
 Elle permet ainsi de calculer de nouvelles \emph{features} à partir d'une \emph{map de features} existante.
 La déconvolution effectue l'opération inverse, c'est-à-dire de partir d'une \emph{feature} pour produire une \emph{map de features}
 Voici un schéma décrivant la relation entre une convolution et une déconvolution :
@@ -1806,13 +1808,13 @@ Voici le détail de l'architecture de DeconvNet, en ommettant les couches de \em
 	\hline
 	deconv4\_$3$ & $(3, 3)$ & 256 & 1 & 1 & $(256, 28, 28)$ \\
 	\hline
-	\end{tabular} 
-\end{center}
-\begin{center}
-	\begin{tabular}{|c|c|c|c|c|c|}
-	\hline 
-	Couche & Noyau & Features & Stride & Pad & Dimensions en sortie \\ 
-	\hline
+%	\end{tabular} 
+%\end{center}
+%\begin{center}
+%	\begin{tabular}{|c|c|c|c|c|c|}
+%	\hline 
+%	Couche & Noyau & Features & Stride & Pad & Dimensions en sortie \\ 
+%	\hline
 	unpool3 & $(2, 2)$ & - & 2 & 0 & $(256, 56, 56)$ \\
 	\hline
 	deconv3\_$1$ & $(3, 3)$ & 256 & 1 & 1 & $(256, 56, 56)$ \\
@@ -1992,37 +1994,38 @@ Voyons à présent les meilleures performances des modèles.
 
 La précision est calculée de la façon suivante :
 $$Accuracy(X) = \frac{1}{|X|}\sum_{x \in X} {\frac{1}{|I| \times |J|}\sum_{i \in I, j \in J} {\mathds{1}_{\{x_{i, j} = l_{i, j}\}}}}$$
+Avec $x_{i, j}$ l'\emph{argmax} de couche \emph{output} du modèle aux coordonnées $(i, j)$, et $l_{i,j}$ la valeur du label aux coordonnées $(i, j)$.
 Ce qui revient à calculer la moyenne sur toutes les données de l'ensemble, de la moyenne du nombre de pixels correctement classifiés sur le nombre total de pixels.
 
-Pour SegNet5, l'itération 46500 a la plus basse erreur de test.
+Pour SegNet5, l'itération 46500 semble être la meilleure.
 
 La précision globale est de $0.892154$, ce qui signifie qu'environ $\frac{9}{10}$ des pixels sont correctement classifiés.
 
 La matrice de confusion est la suivante :
 \begin{center}
-\begin{tabularx}{0.5\textwidth}{c|c c|}
-	Réel/Prédit & Bâtiment & \multicolumn{1}{c}{Non-Bâtiment} \\
-	\hhline{---}
-	Bâtiment & 0.747 \cellcolor[gray]{.8} & 0.253 \\
-	Non-Bâtiment & 0.114 & 0.886 \cellcolor[gray]{.8}\\
-	\hhline{~--}
-\end{tabularx}
+	\begin{tabularx}{0.5\textwidth}{c|c c|}
+		Réel/Prédit & Bâtiment & Absence \\
+		\hhline{---}
+		Bâtiment & 0.747 \cellcolor[gray]{.8} & 0.253 \\
+		Absence & 0.114 & 0.886 \cellcolor[gray]{.8}\\
+		\hhline{~--}
+	\end{tabularx}
 \end{center}
 
 
-Pour SegNet7, l'itération 47000 a la plus basse erreur de test.
+Pour SegNet7, l'itération 47000 semble être la meilleure.
 
 La précision globale est de $0.911284$.
 
 La matrice de confusion est la suivante :
 \begin{center}
-\begin{tabularx}{0.5\textwidth}{c|c c|}
-	Réel/Prédit & Bâtiment & \multicolumn{1}{c}{Non-Bâtiment} \\
-	\hhline{---}
-	Bâtiment & 0.672245 \cellcolor[gray]{.8} & 0.327755 \\
-	Non-Bâtiment & 0.080381 & 0.919619 \cellcolor[gray]{.8}\\
-	\hhline{~--}
-\end{tabularx}
+	\begin{tabularx}{0.5\textwidth}{c|c c|}
+		Réel/Prédit & Bâtiment & Absence \\
+		\hhline{---}
+		Bâtiment & 0.672245 \cellcolor[gray]{.8} & 0.327755 \\
+		Absence & 0.080381 & 0.919619 \cellcolor[gray]{.8}\\
+		\hhline{~--}
+	\end{tabularx}
 \end{center}
 
 On remarque ici que le modèle a tendance à mieux classifier l'absence de bâtiments que la présence de bâtiments.
@@ -2030,7 +2033,6 @@ On remarque ici que le modèle a tendance à mieux classifier l'absence de bâti
 On constate aussi qu'il n'y a pas d'améliorations par rapport à SegNet5.
 
 \subparagraph{Exemples de Résultats}
-
 
 \subsubsection{Deuxième Expérience}
 Une analyse empirique de la première expérience laisse suggérer que les réseaux SegNet5 et SegNet7 souffre de \emph{tunnel vision}.
@@ -2124,67 +2126,69 @@ Les différences entre les deux modèles se font au niveau du bloc central, dans
 Les hyper-paramètres restent les même par rapport à l'expérience précédente.
 \paragraph{Résultats}
 \subparagraph{Graphes des Pertes}
-Voici le graphe des pertes du modèle SegNet5 :
+Voici le graphe des pertes du modèle ZNet :
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.6]{Images/Losses_SegNet5.png}
-		\caption{Graphe de la fonction de perte pour le modèle SegNet5}
+		\includegraphics[scale=0.6]{Images/Losses_ZNet.png}
+		\caption{Graphe de la fonction de perte pour le modèle ZNet}
+	\end{center}
+\end{figure}
+L'écart entre l'erreur d'apprentissage et l'erreur de test reste faible avant l'itération 40000, on peut donc conclure qu'il n'y a peu ou pas de sur-apprentissage avant 40000 itérations.
+De plus l'erreur varie de façon peu erratique, ce qui est signe d'un bon apprentissage.
+
+Voici le graphe des pertes du modèle ZNet2 :
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.6]{Images/Losses_ZNet2.png}
+		\caption{Graphe de la fonction de perte pour le modèle ZNet2}
 	\end{center}
 \end{figure}
 L'écart entre l'erreur d'apprentissage et l'erreur de test est faible, on peut donc conclure qu'il n'y a peu ou pas de sur-apprentissage.
 De plus l'erreur ne varie pas de façon particulièrement erratique, ce qui est signe d'un bon apprentissage.
-
-Voici le graphe des pertes du modèle SegNet7 :
-\begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.6]{Images/Losses_SegNet7.png}
-		\caption{Graphe de la fonction de perte pour le modèle SegNet7}
-	\end{center}
-\end{figure}
-Ici l'écart entre l'erreur d'apprentissage et l'erreur de test est grande, ce qui laisse supposer du sur-apprentissage.
-De plus l'erreur varie de façon erratique, signe d'un mauvais apprentissage.
 \subparagraph{Analyse des Résultats}
 Voyons à présent les meilleures performances des modèles.
 
-La précision est calculée de la façon suivante :
-$$Accuracy(X) = \frac{1}{|X|}\sum_{x \in X} {\frac{1}{|I| \times |J|}\sum_{i \in I, j \in J} {\mathds{1}_{\{x_{i, j} = l_{i, j}\}}}}$$
-Ce qui revient à calculer la moyenne sur toutes les données de l'ensemble, de la moyenne du nombre de pixels correctement classifiés sur le nombre total de pixels.
+La précision est calculée de la même façon que précédemment.
 
-Pour SegNet5, l'itération 46500 a la plus basse erreur de test.
+Pour ZNet, l'itération 37000 semble être la meilleure.
 
-La précision globale est de $0.892154$, ce qui signifie qu'environ $\frac{9}{10}$ des pixels sont correctement classifiés.
+La précision globale est de $0.83479$.
 
 La matrice de confusion est la suivante :
 \begin{center}
-\begin{tabularx}{0.5\textwidth}{c|c c|}
-	Réel/Prédit & Bâtiment & \multicolumn{1}{c}{Non-Bâtiment} \\
-	\hhline{---}
-	Bâtiment & 0.747 \cellcolor[gray]{.8} & 0.253 \\
-	Non-Bâtiment & 0.114 & 0.886 \cellcolor[gray]{.8}\\
-	\hhline{~--}
-\end{tabularx}
+	\begin{tabularx}{0.5\textwidth}{c|c c c|}
+		Réel/Prédit & Bâtiment & Route & Absence \\
+		\hhline{----}
+		Bâtiment & 0.825 \cellcolor[gray]{.8} & \multicolumn{2}{c|}{0.175} \\
+		Route & 0.262* & 0.738 \cellcolor[gray]{.8} & 0.262*\\
+		Absence & \multicolumn{2}{c}{0.176} & 0.824 \cellcolor[gray]{.8}\\
+		\hhline{~---}
+	\end{tabularx}
 \end{center}
 
+La matrice de confusion n'est pas complète, car Caffe ne produit pas l'ensemble des informations lors de l'évaluation du modèle.
 
-Pour SegNet7, l'itération 47000 a la plus basse erreur de test.
+L'étoile, *, signifie que la valeur est partagée entre les deux champs.
 
-La précision globale est de $0.911284$.
+Pour ZNet2, l'itération 34000 semble être la meilleure.
+
+La précision globale est de $0.777292$.
 
 La matrice de confusion est la suivante :
 \begin{center}
-\begin{tabularx}{0.5\textwidth}{c|c c|}
-	Réel/Prédit & Bâtiment & \multicolumn{1}{c}{Non-Bâtiment} \\
-	\hhline{---}
-	Bâtiment & 0.672245 \cellcolor[gray]{.8} & 0.327755 \\
-	Non-Bâtiment & 0.080381 & 0.919619 \cellcolor[gray]{.8}\\
-	\hhline{~--}
-\end{tabularx}
+	\begin{tabularx}{0.5\textwidth}{c|c c c|}
+		Réel/Prédit & Bâtiment & Route & Absence \\
+		\hhline{----}
+		Bâtiment & 0.868 \cellcolor[gray]{.8} & \multicolumn{2}{c|}{0.132} \\
+		Route & 0.278* & 0.722 \cellcolor[gray]{.8} & 0.278*\\
+		Absence & \multicolumn{2}{c}{0.25} & 0.75 \cellcolor[gray]{.8}\\
+		\hhline{~---}
+	\end{tabularx}
 \end{center}
 
-On remarque ici que le modèle a tendance à mieux classifier l'absence de bâtiments que la présence de bâtiments.
+De ces deux modèles, le premier semble plus performant que le second, ce qui indique peut être que garder l'information spatialisée sur le bloc central est important.
+\subparagraph{Exemples de Résultats}
 
-On constate aussi qu'il n'y a pas d'améliorations par rapport à SegNet5.
-\section{Recherche de Similarités entre Images}
 \subsection{Protocole expérimental}
 \subsection{Résultats}
 \subsection{Comparaisons entre modèles}
