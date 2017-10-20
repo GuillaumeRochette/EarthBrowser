@@ -1,10 +1,10 @@
 import argparse
 import glob
-import numpy as np
 import os
 from osgeo import gdal
 
 import caffe
+import numpy as np
 
 gdal.UseExceptions()
 

@@ -35,14 +35,14 @@ Création d'un Moteur de Recherche dans les Images Satellite}
 Le groupe Thales, historiquement fabricant d'électronique, est un acteur français majeur dans les secteurs de l'aéronautique, le spatial, la défense, la sécurité et le transport terrestre.
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.4]{Images/Secteurs_Activites.png}
+		\includegraphics[scale=0.5]{Images/Secteurs_Activites.png}
 		\caption{Secteurs d'activités de Thales}
 	\end{center}
 \end{figure}
 Le groupe Thales est implanté dans $56$ pays et emploie $64000$ salariés, dont $34000$ collaborateurs répartis dans $70$ sites en France.
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.4]{Images/Chiffres_Cles.png}
+		\includegraphics[scale=0.5]{Images/Chiffres_Cles.png}
 		\caption{Chiffres Clés du Groupe Thales}
 	\end{center}
 \end{figure}
@@ -52,14 +52,14 @@ Thales Services est une entreprise spécialisée dans les activités de concepti
 Elle est implantée sur tout le territoire français, chaque site ayant des spécialisations différentes.
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.75]{Images/TS_France.png}
+		\includegraphics[scale=1.0]{Images/TS_France.png}
 		\caption{Implantation de Thales Services en France}
 	\end{center}
 \end{figure}
 Le groupe Thales, et par extension Thales Services, est organisé de façon \emph{matricielle}, c'est-à-dire par zones géographiques et par domaines d'activités.
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.5]{Images/Matrice_Thales_Services.png}
+		\includegraphics[scale=0.7]{Images/Matrice_Thales_Services.png}
 		\caption{Organisation matricielle de Thales Services}
 	\end{center}
 \end{figure}
@@ -82,13 +82,13 @@ Les objectifs de ce stage sont les suivants :
 	\item Proposer et évaluer des modèles pour les applications proposées.
 \end{itemize}
 
-Dans un premier temps, nous aborderons l'imagerie spatiale, présentant ses enjeux, le fonctionnement général d'un satellite de télédétection, et enfin les caractéristiques et problématiques liées aux images satellite.
+Dans le premier chapitre, nous aborderons l'imagerie spatiale, présentant ses enjeux, le fonctionnement général d'un satellite de télédétection, et enfin les caractéristiques et problématiques liées aux images satellite.
 
-Dans un second temps, nous définirons l'apprentissage machine et ses concepts clés.
+Dans le second chapitre, nous définirons l'apprentissage machine et ses concepts clés.
 
-Dans un troisième temps, nous définirons précisément le domaine de l'apprentissage profond, nous expliquerons en détail le fonctionnement des réseaux de neurones, les motivations de cette science, ainsi qu'une explication détaillée des réseaux de neurones spécialisés dans le traitement des images
+Dans le troisième chapitre, nous définirons précisément le domaine de l'apprentissage profond, nous expliquerons en détail le fonctionnement des réseaux de neurones, les motivations de cette science, ainsi qu'une explication détaillée des réseaux de neurones spécialisés dans le traitement des images
 
-Enfin, nous ferons le lien entre apprentissage profond et imagerie spatiale, justifiant l'utilité d'appliquer le premier au second, ainsi que les applications réalisées au cours de ce stage permettant d'extraire des informations des images satellite. Les tâches que nous présenterons sont la segmentation d'images et la recherche de similarités.
+Dans le quatrième chapitre, nous ferons le lien entre apprentissage profond et imagerie spatiale, justifiant l'utilité d'appliquer le premier au second, ainsi que les applications réalisées au cours de ce stage permettant d'extraire des informations des images satellite. Les tâches que nous présenterons sont la segmentation d'images et la recherche de similarités.
 
 \chapter{L'Imagerie Satellite}
 De tout temps, l'humain a toujours souhaité pouvoir observer le monde, que ce soit à des fins militaires, scientifiques ou à simple but de contemplation.
@@ -108,7 +108,7 @@ Puis nous aborderons les différents mécanismes relatif au contrôle de la traj
 Selon leur longueur d'onde, les ondes électromagnétique portent des noms différents
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.5]{Images/Spectre_Electromagnetique.png}
+		\includegraphics[scale=0.7]{Images/Spectre_Electromagnetique.png}
 		\caption{Domaines du spectre électromagnétique}
 	\end{center}
 \end{figure}
@@ -125,7 +125,7 @@ En anglais, le terme \emph{whisk broom} désigne des balais à \emph{fouetter}, 
 Voici un schéma décrivant le fonctionnement d'un capteur de type \emph{whisk broom} :
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.7]{Images/Whisk_Broom.jpg}
+		\includegraphics[scale=1.]{Images/Whisk_Broom.jpg}
 		\caption{Capteur de type \emph{Whisk Broom}}
 	\end{center}
 \end{figure}
@@ -151,7 +151,7 @@ Une image, composées de $m$ lignes et $n$ colonnes, est donc le résultat de $n
 Voici un schéma décrivant le fonctionnement d'un capteur de type \emph{push broom} :
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.7]{Images/Push_Broom.jpg}
+		\includegraphics[scale=1.]{Images/Push_Broom.jpg}
 		\caption{Capteur de type \emph{Push Broom}}
 	\end{center}
 \end{figure}
@@ -220,14 +220,14 @@ La trace au sol est la projection de la trajectoire décrite par un satellite à
 La fauchée d'un satellite est la surface au sol couverte par la prise de vue du capteur optique.
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.4]{Images/Swath.png}
+		\includegraphics[scale=0.5]{Images/Swath.png}
 		\caption{Fauchée d'un satellite}
 	\end{center}
 \end{figure}
 Dans le cas d'une orbite quasi-polaire, la trace au sol recouvrira alors presque toute la surface de la Terre (sauf aux pôles), permettant de revisiter les zones de façon périodique et à la même d'heure grâce aux propriétés d'héliosynchronisme.
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.5]{Images/Trace_Sol_SPOT.jpg}
+		\includegraphics[scale=0.6]{Images/Trace_Sol_SPOT.jpg}
 		\caption{Trace au sol des satellites SPOT sur 24h}
 	\end{center}
 \end{figure}
@@ -298,7 +298,7 @@ L'angle de visée est variable, permettant de re-photographier une zone sans avo
 Cependant pour pouvoir obtenir de "belles" images, afin de pouvoir les exploiter de façon optimale il faut re-projeter l'image pour se retrouver au \emph{nadir}, le \emph{nadir} étant le vecteur normal à la surface terrestre depuis le satellite. C'est donc le vecteur opposé du \emph{zénith}.
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.5]{Images/Nadir.png}
+		\includegraphics[scale=0.9]{Images/Nadir.png}
 		\caption{Nadir, Zénith et Horizons}
 	\end{center}
 \end{figure}
@@ -349,6 +349,11 @@ Voici un récapitulatif des niveaux de traitements pour une image satellite de l
 	\item Niveau 2B : Correction géométriques : utilisation de points d'appuis au sol, de la modélisation de la dynamique de vol, etc.
 	\item Niveau 3 : Produit appelé \emph{orthoimage}, où l'erreur de localisation est encore diminuée grâce à des modèles numériques d'élévation pour ajuster le relief, l'erreur de localisation est de $10$m pour des images ayant une résolution de $10$m.
 \end{itemize}
+\section{Conclusion}
+Dans ce chapitre, nous avons entraperçu le domaine de l'imagerie spatiale.
+C'est un domaine extrêmement complexe, où se mêlent des disciplines telles que la mécanique képlerienne, l'électronique ou encore le traitement d'image.
+
+Ce chapitre a permis au lecteur de comprendre la nature d'une image satellite, permettra de comprendre par la suite, le raisonnement employé dans le quatrième chapitre portant sur les applications pratiques.
 
 \chapter{L'Apprentissage Machine}
 L'apprentissage machine permet d'accomplir des tâches traditionnellement compliquées pour les ordinateurs, mais considérées simples pour l'humain.
@@ -680,6 +685,12 @@ L'ensemble des $m$ variables extraites de $x$ s'appelle \emph{mini-lot} ou \emph
 	\end{algorithmic}
 \end{algorithm}
 L'intérêt de cette méthode repose principalement sur le fait que le gradient moyen du \emph{mini-batch} est une très bonne approximation du gradient moyen calculé sur l'ensemble des données, et nous permet ainsi d'ajuster les paramètres du modèle plus souvent, permettant généralement une convergence plus rapide.
+
+\section{Conclusion}
+Ce chapitre nous a permis de poser les bases de l'apprentissage machine, sans toutefois se focaliser sur quelque algorithme apprenant.
+
+Il permettra au lecteur de pouvoir saisir pleinement le concept et les motivations de l'apprentissage profond évoqué dans le chapitre suivant.
+
 \chapter{L'Apprentissage Profond}
 L'apprentissage profond se différencie de l'apprentissage machine classique particulièrement sur deux points :
 \begin{itemize}
@@ -713,7 +724,7 @@ Un neurone artificiel est une application $f : \mathbb{R}^p \rightarrow \mathbb{
 Le réel $b$ s'appelle le biais, et le vecteur $w = (w_1, ..., w_p)$ s'appelle vecteur de poids.
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.5]{Images/Neuron.png}
+		\includegraphics[scale=0.6]{Images/Neuron.png}
 		\caption{Schéma de représentation d'un Neurone}
 	\end{center}
 \end{figure}
@@ -740,7 +751,7 @@ $$a = f_\theta(x) = g \circ h_\theta(x) = g(w^Tx + b)$$
 Avec la définition précédente d'un neurone, nous pouvons alors schématiser un réseau de neurones de la façon suivante :
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.5]{Images/Neural_Network.png}
+		\includegraphics[scale=0.6]{Images/Neural_Network.png}
 		\caption{Schéma pédagogique de représentation d'un Réseau de Neurones}
 	\end{center}
 \end{figure}
@@ -1386,7 +1397,7 @@ La deuxième est plus beaucoup intéressante.
 Une approche plutôt naïve pourrait suggérer de transformer l'image de dimensions $(3, 256, 256)$ en niveaux de gris de dimensions $(1, 256, 256)$ puis de la \emph{redimensionner} en $(1, 32, 32)$, ce qui nous permet d'obtenir un tenseur d'entrée de dimension $(1024)$.
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.25]{Images/Lena.jpg}
+		\includegraphics[scale=0.4]{Images/Lena.jpg}
 		\caption{Pré-traitement d'une image}
 	\end{center}
 \end{figure}
@@ -1444,7 +1455,7 @@ On citera aussi les \emph{datasets} CIFAR-10, CIFAR-100, et ImageNet.
 CIFAR-10 et CIFAR-100 sont composés chacun de $60000$ images RGB de $32 \times 32$ pixels, réparties en $10$ classes pour le premier et $100$ classes pour le second.
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.3]{Images/CIFAR-10.png}
+		\includegraphics[scale=0.4]{Images/CIFAR-10.png}
 		\caption{Données issues de CIFAR-10}
 	\end{center}
 \end{figure}
@@ -1456,7 +1467,7 @@ En $2011$, l'erreur de classification était de $25\%$. En $2012$, le réseau de
 La détection d'objets consiste à prédire la classe et l'emplacement d'un ou plusieurs objets dans une image. L'emplacement d'un objet est généralement défini par une \emph{bounding box}, ou région d'intérêt, représentée par un rectangle entourant l'objet.
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.3]{Images/Pascal_VOC_Detection.jpg}
+		\includegraphics[scale=0.40625]{Images/Pascal_VOC_Detection.jpg}
 		\caption{Image et \emph{bounding boxes} issues de Pascal VOC}
 	\end{center}
 \end{figure}
@@ -1477,7 +1488,7 @@ La différence apparaît sur la sortie produite, dans le cas de la segmentation,
 La segmentation répond à des besoins de précision plus élevés que la détection d'objets, du fait de la prédiction d'un masque de la taille de l'image d'entrée.
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.2]{Images/Pascal_VOC_Segmentation.png}
+		\includegraphics[scale=0.4]{Images/Pascal_VOC_Segmentation.png}
 		\caption{Image et masque de classes issus de Pascal VOC}
 	\end{center}
 \end{figure}
@@ -1493,6 +1504,12 @@ Deux architectures remarquables sont les réseaux de type FCN et DeconvNet, elle
 Les architectures de type FCN reconstituent l'image en combinant les \emph{features} dé-convolutées avec les \emph{features} après \emph{pooling}.
 
 Les architectures de type DeconvNet reconstituent l'image en utilisant des couches d'\emph{unpooling}, inversant l'effet des couches de \emph{pooling}. Nous reviendront en détail leur fonctionnement dans la suite.
+
+\section{Conclusion}
+
+Dans ce chapitre, nous avons expliqué de façon détaillée le fonctionnement des réseaux de neurones classiques, l'utilité des réseaux de neurones convolutifs pour le traitement d'image, ainsi que quelques exemples d'utilisation des réseaux de neurones pour le traitement d'image.
+
+Ce chapitre est sans doute le plus utile pour comprendre les applications évoquées dans le quatrième chapitre.
 \chapter{L'Apprentissage Profond appliqué à l'Imagerie Satellite}
 \section{Cartographie Automatisée par Segmentation de Classes}
 La cartographie de la Terre a toujours été une des priorités de l'humain.
@@ -1580,7 +1597,7 @@ Les images multispectrales de la seconde édition font $650 \times 650$ pixels e
 
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.175]{Images/MUL_PAN.png}
+		\includegraphics[scale=0.3]{Images/MUL_PAN.png}
 		\caption{Images (RGB, 8-bits, Correction $[2-98]\%$) extraites des zones Vegas, Paris, Shanghai et Khartoum}
 	\end{center}
 \end{figure}
@@ -1672,7 +1689,7 @@ L'opération de rasterisation consiste à produire, à partir des données vecto
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[scale=0.3]{Images/MUL_PAN_Label_Vegas.png}
-		\caption{Image et Masque de Segmentation produit par couplage des données SpaceNet et OpenStreetMap (Las Vegas)}
+		\caption{Image et Masque de Segmentation produit par couplage des labels issus de SpaceNet et d'OpenStreetMap (Las Vegas)}
 	\end{center}
 \end{figure}
 Les labels d'OpenStreetMap sont très libres au niveau des informations qu'ils contiennent, le champ \emph{properties}, donnant des informations sur l'objet décrit, n'est pas systématiquement présent ou partiellement renseigné. Il est donc difficile de catégoriser chaque donnée.
@@ -1686,8 +1703,35 @@ De plus, les \emph{LineStrings} forment des courbes, elles ont donc une aire nul
 C'est pourquoi il faudra prendre en compte ces erreurs contenues dans le \emph{dataset} au moment d'analyser les résultats des différents modèles.
 
 Le contour des objets rasterisés, ici en jaune, n'appartient pas à la même classe que son objet, ceci est fait pour pallier aux erreurs de localisation des objets. En effet un pixel faisant parti du contour d'un objet ne sera pas évalué lors du calcul de la perte et de la précision, cela permet aux modèles de ne pas se focaliser sur les détails mais plus sur le cœur de l'objet.
-\subsection{Calcul GPU et Framework Deep Learning}
-A FAIRE
+\subsection{Calcul GPU et Caffe}
+\subsubsection{Calcul GPU}
+Dans le chapitre portant sur l'apprentissage profond, nous avons proposé les algorithmes de propagation et de rétro-propagation en version matricielle.
+
+Les réseaux de neurones de type \emph{feedforward} sont entièrement parallélisables.
+
+L'intérêt du calcul matriciel est de pouvoir le distribuer sur plusieurs processeurs.
+
+Les processeurs CPU sont très rapides, mais ne sont pas optimisés pour des calculs entièrement parallélisables, car le nombre de cœurs dans un processeur CPU est très limité pour diverses raisons.
+
+Les processeurs GPU, quant à eux sont moins rapides, mais possèdent beaucoup plus de cœurs que les processeurs GPU, le rapport est de l'ordre de $10^2$. Néanmoins une contrainte subsiste : la mémoire GPU.
+
+La mémoire GPU coûte beaucoup plus cher, de manière générale, que la mémoire CPU. Néanmoins si l'ensemble du réseau de neurones rentre en mémoire GPU, alors un processeur GPU est généralement 50 à 100 plus performant qu'un processeur CPU.
+
+C'est pour toutes ces raisons que nous allons employer des \emph{frameworks} implémentant le calcul GPU.
+
+Nous utiliserons l'API de calcul GPU \emph{CUDA}, développé par NVIDIA.
+
+\subsubsection{Caffe}
+Le \emph{framework} utilisé dans les applications que nous avons développées s'appelle Caffe.
+
+Il développé sous license BSD par le \emph{Berkeley AI Research} et une communauté de contributeurs.
+
+Il est très utilisé en milieu académique pour plusieurs raisons :
+\begin{itemize}
+	\item Il est très facile et encouragé de développer son propre \emph{fork} de Caffe.
+	\item La syntaxe, en \emph{protobuf}, permettant de créer des modèles est très éloignée de l'implémentation machine.
+	\item Les modèles produits sont facilement réutilisables, facilitant leur diffusion.
+\end{itemize}
 \subsection{Expériences}
 Nous souhaitons présenter deux expériences ayant produit les résultats les plus significatifs.
 
@@ -1994,7 +2038,8 @@ Voyons à présent les meilleures performances des modèles.
 
 La précision est calculée de la façon suivante :
 $$Accuracy(X) = \frac{1}{|X|}\sum_{x \in X} {\frac{1}{|I| \times |J|}\sum_{i \in I, j \in J} {\mathds{1}_{\{x_{i, j} = l_{i, j}\}}}}$$
-Avec $x_{i, j}$ l'\emph{argmax} de couche \emph{output} du modèle aux coordonnées $(i, j)$, et $l_{i,j}$ la valeur du label aux coordonnées $(i, j)$.
+Avec $x_{i, j}$, l'\emph{argmax} de couche \emph{output} du modèle aux coordonnées $(i, j)$, et $l_{i,j}$, la valeur du label aux coordonnées $(i, j)$.
+
 Ce qui revient à calculer la moyenne sur toutes les données de l'ensemble, de la moyenne du nombre de pixels correctement classifiés sur le nombre total de pixels.
 
 Pour SegNet5, l'itération 46500 semble être la meilleure.
@@ -2049,28 +2094,28 @@ En bas à droite, le masque de segmentation de SegNet7, obtenu en récupérant l
 
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.2]{Images/SegNets_Vegas.png}
+		\includegraphics[scale=0.225]{Images/SegNets_Vegas.png}
 		\caption{Inférences de SegNet5 et SegNet7 sur Vegas}
 	\end{center}
 \end{figure}
 
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.2]{Images/SegNets_Paris.png}
+		\includegraphics[scale=0.225]{Images/SegNets_Paris.png}
 		\caption{Inférences de SegNet5 et SegNet7 sur Paris}
 	\end{center}
 \end{figure}
 
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.2]{Images/SegNets_Shanghai.png}
+		\includegraphics[scale=0.225]{Images/SegNets_Shanghai.png}
 		\caption{Inférences de SegNet5 et SegNet7 sur Shanghai}
 	\end{center}
 \end{figure}
 
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.2]{Images/SegNets_Khartoum.png}
+		\includegraphics[scale=0.225]{Images/SegNets_Khartoum.png}
 		\caption{Inférences de SegNet5 et SegNet7 sur Khartoum}
 	\end{center}
 \end{figure}
@@ -2079,7 +2124,7 @@ On s'aperçoit sur chacun des exemples, que SegNet5 réussit systématiquement m
 Sur Paris, la différence est flagrante, SegNet5 réalise une segmentation à peu près fidèle, tandis que la seconde est totalement fausse.
 
 \subsubsection{Deuxième Expérience}
-Une analyse empirique de la première expérience laisse suggérer que les réseaux SegNet5 et SegNet7 souffre de \emph{tunnel vision}.
+Une analyse empirique de la première expérience laisse suggérer que les réseaux SegNet5 et SegNet7 n'arrivent pas à considérer l'image d'entrée dans son ensemble.
 En effet, commme on peut le voir, un grand bâtiment sur l'image n'est pas détecté comme un bloc unique de pixels, mais plutôt comme la réunion de plusieurs petits blocs.
 
 Après réflexion, nous sommes arrivés à la conclusion que cela était du au fait que le réseau ne zoomait pas assez.
@@ -2236,7 +2281,7 @@ Nous allons à présent comparer les résultats produits par ZNet et ZNet2.
 
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.2]{Images/ZNets_1983.png}
+		\includegraphics[scale=0.225]{Images/ZNets_1983.png}
 		\caption{Inférences de ZNet et ZNet2}
 	\end{center}
 \end{figure}
@@ -2257,7 +2302,7 @@ On voit pour cette image, que le résultat est beaucoup plus "propre" pour le pr
 
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.2]{Images/ZNets_5000.png}
+		\includegraphics[scale=0.225]{Images/ZNets_5000.png}
 		\caption{Inférences de ZNet et ZNet2}
 	\end{center}
 \end{figure}

@@ -1,11 +1,11 @@
+import argparse
 import glob
-import numpy as np
 import os
 from osgeo import gdal
-import argparse
 
 import caffe
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 def plottable(data, disp_channels=None):
@@ -87,15 +87,16 @@ if __name__ == '__main__':
         img = plottable(data, disp_channels)
         # Creates an probability map that can be displayed with matplotlib.
         p_img = plottable(probability_map)
+        # p_img = probability_map[1]
         # Plot.
         if label_dir:
             plt.figure()
             plt.subplot(2, 2, 1)
             plt.imshow(img)
             plt.subplot(2, 2, 2)
-            plt.imshow(label)
-            plt.subplot(2, 2, 3)
             plt.imshow(p_img)
+            plt.subplot(2, 2, 3)
+            plt.imshow(label)
             plt.subplot(2, 2, 4)
             plt.imshow(classification)
             plt.show()

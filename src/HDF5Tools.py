@@ -1,10 +1,11 @@
 import argparse
 import glob
-import h5py
-import numpy as np
 import os
 import random
 from osgeo import gdal
+
+import h5py
+import numpy as np
 
 
 def split_train_val_sets(data_paths, labels_paths, split_ratio=0.9, seed=None):
@@ -96,7 +97,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Set up the HDF5 Database with ready-for-use data.")
     parser.add_argument("--input_dir", required=True,
                         help="Directory containing the city directories, themselves containing data and labels.")
-    parser.add_argument("--output_dir", required=True, help="ABSOLUTE PATH of the directory where the HDF5 files will be written.")
+    parser.add_argument("--output_dir", required=True,
+                        help="ABSOLUTE PATH of the directory where the HDF5 files will be written.")
     parser.add_argument("--channels", nargs="+", type=int,
                         help="Channels to keep for multispectral images, WV3 -> PHR = [1,2,4,6].")
     parser.add_argument("--ratio", default=0.9, type=float,

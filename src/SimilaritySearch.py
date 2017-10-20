@@ -1,12 +1,11 @@
+import argparse
 import glob
-import numpy as np
 import os
 from osgeo import gdal
-import argparse
-import random
 
 import caffe
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 def plottable(data, disp_channels=None):

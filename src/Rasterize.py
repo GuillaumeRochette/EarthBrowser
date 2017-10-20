@@ -1,11 +1,11 @@
+import argparse
 import json
 import logging
-import numpy as np
 import os
 import shapely.geometry as sg
 import sys
-import argparse
 
+import numpy as np
 import rasterio
 import rasterio.features as rf
 

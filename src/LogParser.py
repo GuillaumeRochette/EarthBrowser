@@ -1,7 +1,8 @@
+import argparse
 import csv
 import os
 import re
-import argparse
+
 # Dirty log parser, don't question ...
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Parse multiple log files into one csv file.")
@@ -66,11 +67,13 @@ if __name__ == '__main__':
             filewriter.writerow(
                 ["Iteration", "Training Loss", "Test Loss", "Test Accuracy", "Class 0 Accuracy", "Class 1 Accuracy",
                  "Class 2 Accuracy"])
-            for row in zip(iterations, train_losses, test_losses, test_accuracies, test_accuracies_0, test_accuracies_1,
-                           test_accuracies_2):
+            for i, row in enumerate(
+                    zip(iterations, train_losses, test_losses, test_accuracies, test_accuracies_0, test_accuracies_1,
+                        test_accuracies_2)):
                 filewriter.writerow(row)
         else:
             filewriter.writerow(
                 ["Iteration", "Training Loss", "Test Loss", "Test Accuracy", "Class 0 Accuracy", "Class 1 Accuracy"])
-            for row in zip(iterations, train_losses, test_losses, test_accuracies, test_accuracies_0, test_accuracies_1):
+            for row in zip(iterations, train_losses, test_losses, test_accuracies, test_accuracies_0,
+                           test_accuracies_1):
                 filewriter.writerow(row)
