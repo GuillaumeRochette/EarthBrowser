@@ -12,6 +12,9 @@
 \usepackage{dsfont}
 \usepackage{yhmath}
 \usepackage{hyperref}
+\usepackage{tabularx}
+\usepackage{colortbl}
+\usepackage{hhline}
 \usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
 
 \author{Guillaume Rochette}
@@ -1741,21 +1744,21 @@ Voici le détail de l'architecture de DeconvNet, en ommettant les couches de \em
 \begin{center}
 	\begin{tabular}{|c|c|c|c|c|c|}
 	\hline 
-	Nom & Noyau & Features & Stride & Pad & Dimensions \\ 
+	Couche & Noyau & Features & Stride & Pad & Dimensions en sortie \\ 
 	\hline 
-	Input & - & - & - & - & $(3, 224, 224)$\\ 
+	Input & - & - & - & - & $(4, 224, 224)$\\ 
 	\hline 
 	conv1\_$1$ & $(3, 3)$ & 64 & 1 & 1 & $(64, 224, 224)$ \\
 	\hline 
 	conv1\_$2$ & $(3, 3)$ & 64 & 1 & 1 & $(64, 224, 224)$ \\
 	\hline 
-	pool1 & $(2, 2)$ & - & 2 & 2 & $(64, 112, 112)$ \\
+	pool1 & $(2, 2)$ & - & 2 & 0 & $(64, 112, 112)$ \\
 	\hline 
 	conv2\_$1$ & $(3, 3)$ & 128 & 1 & 1 & $(128, 112, 112)$ \\
 	\hline 
 	conv2\_$2$ & $(3, 3)$ & 128 & 1 & 1 & $(128, 112, 112)$ \\
 	\hline 
-	pool2 & $(2, 2)$ & - & 2 & 2 & $(128, 56, 56)$ \\
+	pool2 & $(2, 2)$ & - & 2 & 0 & $(128, 56, 56)$ \\
 	\hline 
 	conv3\_$1$ & $(3, 3)$ & 256 & 1 & 1 & $(256, 56, 56)$ \\
 	\hline 
@@ -1763,7 +1766,7 @@ Voici le détail de l'architecture de DeconvNet, en ommettant les couches de \em
 	\hline 
 	conv3\_$3$ & $(3, 3)$ & 256 & 1 & 1 & $(256, 56, 56)$ \\
 	\hline 
-	pool3 & $(2, 2)$ & - & 2 & 2 & $(256, 28, 28)$ \\
+	pool3 & $(2, 2)$ & - & 2 & 0 & $(256, 28, 28)$ \\
 	\hline 
 	conv4\_$1$ & $(3, 3)$ & 512 & 1 & 1 & $(512, 28, 28)$ \\
 	\hline 
@@ -1771,7 +1774,7 @@ Voici le détail de l'architecture de DeconvNet, en ommettant les couches de \em
 	\hline 
 	conv4\_$3$ & $(3, 3)$ & 512 & 1 & 1 & $(512, 28, 28)$ \\
 	\hline 
-	pool4 & $(2, 2)$ & - & 2 & 2 & $(512, 14, 14)$ \\
+	pool4 & $(2, 2)$ & - & 2 & 0 & $(512, 14, 14)$ \\
 	\hline 
 	conv5\_$1$ & $(3, 3)$ & 512 & 1 & 1 & $(512, 14, 14)$ \\
 	\hline
@@ -1779,7 +1782,7 @@ Voici le détail de l'architecture de DeconvNet, en ommettant les couches de \em
 	\hline
 	conv5\_$3$ & $(3, 3)$ & 512 & 1 & 1 & $(512, 14, 14)$ \\
 	\hline
-	pool5 & $(2, 2)$ & - & 2 & 2 & $(512, 7, 7)$ \\
+	pool5 & $(2, 2)$ & - & 2 & 0 & $(512, 7, 7)$ \\
 	\hline
 	fc6 & $(7, 7)$ & 4096 & 1 & 0 & $(4096, 1, 1)$ \\
 	\hline
@@ -1787,7 +1790,7 @@ Voici le détail de l'architecture de DeconvNet, en ommettant les couches de \em
 	\hline
 	deconv-fc6 & $(7, 7)$ & 512 & 1 & 0 & $(512, 7, 7)$ \\
 	\hline
-	unpool5 & $(2, 2)$ & - & 2 & 2 & $(512, 14, 14)$ \\
+	unpool5 & $(2, 2)$ & - & 2 & 0 & $(512, 14, 14)$ \\
 	\hline
 	deconv5\_$1$ & $(3, 3)$ & 512 & 1 & 1 & $(512, 14, 14)$ \\
 	\hline
@@ -1795,7 +1798,7 @@ Voici le détail de l'architecture de DeconvNet, en ommettant les couches de \em
 	\hline
 	deconv5\_$3$ & $(3, 3)$ & 512 & 1 & 1 & $(512, 14, 14)$ \\
 	\hline
-	unpool4 & $(2, 2)$ & - & 2 & 2 & $(512, 28, 28)$ \\
+	unpool4 & $(2, 2)$ & - & 2 & 0 & $(512, 28, 28)$ \\
 	\hline
 	deconv4\_$1$ & $(3, 3)$ & 512 & 1 & 1 & $(512, 28, 28)$ \\
 	\hline
@@ -1808,9 +1811,9 @@ Voici le détail de l'architecture de DeconvNet, en ommettant les couches de \em
 \begin{center}
 	\begin{tabular}{|c|c|c|c|c|c|}
 	\hline 
-	Nom & Noyau & Features & Stride & Pad & Dimensions \\ 
+	Couche & Noyau & Features & Stride & Pad & Dimensions en sortie \\ 
 	\hline
-	unpool3 & $(2, 2)$ & - & 2 & 2 & $(256, 56, 56)$ \\
+	unpool3 & $(2, 2)$ & - & 2 & 0 & $(256, 56, 56)$ \\
 	\hline
 	deconv3\_$1$ & $(3, 3)$ & 256 & 1 & 1 & $(256, 56, 56)$ \\
 	\hline
@@ -1818,13 +1821,13 @@ Voici le détail de l'architecture de DeconvNet, en ommettant les couches de \em
 	\hline
 	deconv3\_$3$ & $(3, 3)$ & 128 & 1 & 1 & $(128, 56, 56)$ \\
 	\hline
-	unpool2 & $(2, 2)$ & - & 2 & 2 & $(128, 112, 112)$ \\
+	unpool2 & $(2, 2)$ & - & 2 & 0 & $(128, 112, 112)$ \\
 	\hline
 	deconv2\_$1$ & $(3, 3)$ & 128 & 1 & 1 & $(128, 112, 112)$ \\
 	\hline
 	deconv2\_$2$ & $(3, 3)$ & 64 & 1 & 1 & $(64, 112, 112)$ \\
 	\hline
-	unpool1 & $(2, 2)$ & - & 2 & 2 & $(64, 224, 224)$ \\
+	unpool1 & $(2, 2)$ & - & 2 & 0 & $(64, 224, 224)$ \\
 	\hline
 	deconv1\_$1$ & $(3, 3)$ & 64 & 1 & 1 & $(64, 224, 224)$ \\
 	\hline
@@ -1875,8 +1878,324 @@ Les inconvénients sont les suivants :
 \end{itemize}
 
 \subsubsection{Première Expérience}
-%N'ayant pas de cartes graphiques suffisamment puissantes
+N'ayant pas de cartes graphiques suffisamment puissantes en terme de capacité de mémoire, seulement $4$ Go, il n'a pas été possible de reprendre l'architecture de DeconvNet et l'entraîner à la segmentation d'images avec les labels provenant uniquement de SpaceNet, ce qui en fait de la segmentation binaire.
+
+Des architectures, réutilisant les notions de convolution, \emph{pooling}, déconvolution et \emph{unpooling}, ont été esquissées.
+Ces architectures peuvent être vues comme des versions allégées de DeconvNet.
+
+\paragraph{Architectures}
+Afin de produire et entraîner une version allégée de DeconvNet, nous avons décidé, pour la première expérience, d'enlever des couches proche du \emph{centre de symétrie} du réseau.
+
+En effet, les couches les plus gourmandes en matières de nombre de paramètres d'apprentissage sont les couches \emph{fc6} et \emph{deconv-fc6}, car ce sont des convolutions ayant des noyaux de dimensions $(4096, 512, 7, 7)$ et $(512, 4096, 7, 7)$, soit $102760448 \approx 1.02 \times 10^8$ paramètres à ajuster pour chacune de ces deux couches, ce qui représente environ $822$ Mo par couche.
+
+Nous avons donc défini plusieurs modèles allégés de DeconvNet dans l'optique de les comparer, la logique de leur conception est simple, on pouvait remarquer que DeconvNet était constitué de 11 blocs de couches, dont 5 blocs de convolution, 5 de déconvolution et 1 bloc central.
+Nous avons donc décider de créer des modèles contenant 5 et 7 blocs, en voici leur définitions :
+\begin{center}
+	\begin{tabular}{|c|c|c|c|c|c|c|c|}
+	\hline 
+	Couche & Noyau & Features & Stride & Pad & Dimensions en sortie & SegNet5 & SegNet7\\ 
+	\hline 
+	Input & - & - & - & - & $(4, 224, 224)$ & \checkmark & \checkmark \\ 
+	\hline 
+	conv1\_$1$ & $(3, 3)$ & 64 & 1 & 1 & $(64, 224, 224)$ & \checkmark & \checkmark \\
+	\hline 
+	conv1\_$2$ & $(3, 3)$ & 64 & 1 & 1 & $(64, 224, 224)$ & \checkmark & \checkmark \\
+	\hline 
+	pool1 & $(2, 2)$ & - & 2 & 0 & $(64, 112, 112)$ & \checkmark & \checkmark \\
+	\hline 
+	conv2\_$1$ & $(3, 3)$ & 128 & 1 & 1 & $(128, 112, 112)$ & \checkmark & \checkmark \\
+	\hline 
+	conv2\_$2$ & $(3, 3)$ & 128 & 1 & 1 & $(128, 112, 112)$ & \checkmark & \checkmark \\
+	\hline 
+	pool2 & $(2, 2)$ & - & 2 & 0 & $(128, 56, 56)$ & \checkmark & \checkmark \\
+	\hline 
+	conv3\_$1$ & $(3, 3)$ & 256 & 1 & 1 & $(256, 56, 56)$ & \checkmark & \checkmark \\
+	\hline 
+	conv3\_$2$ & $(3, 3)$ & 256 & 1 & 1 & $(256, 56, 56)$ & \checkmark & \checkmark \\
+	\hline 
+	conv3\_$3$ & $(3, 3)$ & 256 & 1 & 1 & $(256, 56, 56)$ & - & \checkmark \\
+	\hline 
+	pool3 & $(2, 2)$ & - & 2 & 0 & $(256, 28, 28)$ & - & \checkmark \\
+	\hline 
+	conv4\_$1$ & $(3, 3)$ & 512 & 1 & 1 & $(512, 28, 28)$ & - & \checkmark \\
+	\hline 
+	conv4\_$2$ & $(3, 3)$ & 512 & 1 & 1 & $(512, 28, 28)$ & - & \checkmark \\
+	\hline
+	deconv4\_$3$ & $(3, 3)$ & 256 & 1 & 1 & $(256, 28, 28)$ & - & \checkmark \\
+	\hline
+	unpool3 & $(2, 2)$ & - & 2 & 0 & $(256, 56, 56)$ & - & \checkmark \\
+	\hline
+	deconv3\_$1$ & $(3, 3)$ & 256 & 1 & 1 & $(256, 56, 56)$ & - & \checkmark \\
+	\hline
+	deconv3\_$2$ & $(3, 3)$ & 256 & 1 & 1 & $(256, 56, 56)$ & - & \checkmark \\
+	\hline
+	deconv3\_$3$ & $(3, 3)$ & 128 & 1 & 1 & $(128, 56, 56)$ & \checkmark & \checkmark \\
+	\hline
+	unpool2 & $(2, 2)$ & - & 2 & 0 & $(128, 112, 112)$ & \checkmark & \checkmark \\
+	\hline
+	deconv2\_$1$ & $(3, 3)$ & 128 & 1 & 1 & $(128, 112, 112)$ & \checkmark & \checkmark \\
+	\hline
+	deconv2\_$2$ & $(3, 3)$ & 64 & 1 & 1 & $(64, 112, 112)$ & \checkmark & \checkmark \\
+	\hline
+	unpool1 & $(2, 2)$ & - & 2 & 0 & $(64, 224, 224)$ & \checkmark & \checkmark \\
+	\hline
+	deconv1\_$1$ & $(3, 3)$ & 64 & 1 & 1 & $(64, 224, 224)$ & \checkmark & \checkmark \\
+	\hline
+	deconv1\_$2$ & $(3, 3)$ & 64 & 1 & 1 & $(64, 224, 224)$ & \checkmark & \checkmark \\
+	\hline
+	Output & $(1, 1)$ & 2 & 1 & 0 & $(2, 224, 224)$ & \checkmark & \checkmark \\
+	\hline
+	\end{tabular} 
+\end{center}
+
+Comme nous pouvons le voir, les deux modèles possèdent un bloc central différent de DeconvNet.
+Dans DeconvNet, l'entrée était de dimension $(512, 7, 7)$, puis ramené à un vecteur de 4096 \emph{features} dans la couche $fc6$, ce qui dé-spatialisait entièrement l'information.
+Ici dans le bloc central l'information reste spatialisée, car on ne passe pas de $(256, 56, 56)$ (ou $(512, 28, 28)$) à un vecteur de $n$ \emph{features}.
+
+\paragraph{Hyper-paramètres}
+Nous allons à présent lister les hyper-paramètres liés aux apprentissages effectués.
+\subparagraph{Algorithme de Descente de Gradient}
+Nous avons choisi d'utiliser, comme algorithme de descente la variante \emph{Adam}, signifiant \emph{Adaptative Moment Estimation}, qui utilise le moment des gradients précédents et qui moyenne l'amplitude des gradients calculés.
+Nous avons utilisé les paramètres préconisés par les auteurs, à savoir $\beta = 0.9$, $\gamma = 0.999$ et $\alpha = 0.1$.
+Pour plus de détails, voir en annexe.
+\subparagraph{Régularisation $L^2$}
+Nous avons choisi d'utiliser, comme taux de régularisation $L^2$, $\lambda = 0.0005$, qui est une valeur couramment choisie en vision par ordinateur.
+\subparagraph{Proportions de données d'apprentissage}
+Il est courant dans le cas de la segmentation d'images de prendre $90\%$ des données pour l'ensemble d'apprentissage et $10\%$ pour l'ensemble de validation.
+\subparagraph{Taille d'un \emph{mini-batch}}
+Nous avons fixé la taille d'un mini-batch à $64$, valeur communément utilisée dans la littérature.
+\subparagraph{Nombre d'itérations}
+Nous avons fixé à $50000$ le nombre d'itérations lors de l'apprentissage, valeur jugée suffisante, au delà de laquelle si un modèle n'a toujours pas suffisamment appris, alors sa capacité sera remise en question.
+\paragraph{Résultats}
+\subparagraph{Graphes des Pertes}
+Voici le graphe des pertes du modèle SegNet5 :
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.6]{Images/Losses_SegNet5.png}
+		\caption{Graphe de la fonction de perte pour le modèle SegNet5}
+	\end{center}
+\end{figure}
+L'écart entre l'erreur d'apprentissage et l'erreur de test est faible, on peut donc conclure qu'il n'y a peu ou pas de sur-apprentissage.
+De plus l'erreur ne varie pas de façon particulièrement erratique, ce qui est signe d'un bon apprentissage.
+
+Voici le graphe des pertes du modèle SegNet7 :
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.6]{Images/Losses_SegNet7.png}
+		\caption{Graphe de la fonction de perte pour le modèle SegNet7}
+	\end{center}
+\end{figure}
+Ici l'écart entre l'erreur d'apprentissage et l'erreur de test est grande, ce qui laisse supposer du sur-apprentissage.
+De plus l'erreur varie de façon erratique, signe d'un mauvais apprentissage.
+\subparagraph{Analyse des Résultats}
+Voyons à présent les meilleures performances des modèles.
+
+La précision est calculée de la façon suivante :
+$$Accuracy(X) = \frac{1}{|X|}\sum_{x \in X} {\frac{1}{|I| \times |J|}\sum_{i \in I, j \in J} {\mathds{1}_{\{x_{i, j} = l_{i, j}\}}}}$$
+Ce qui revient à calculer la moyenne sur toutes les données de l'ensemble, de la moyenne du nombre de pixels correctement classifiés sur le nombre total de pixels.
+
+Pour SegNet5, l'itération 46500 a la plus basse erreur de test.
+
+La précision globale est de $0.892154$, ce qui signifie qu'environ $\frac{9}{10}$ des pixels sont correctement classifiés.
+
+La matrice de confusion est la suivante :
+\begin{center}
+\begin{tabularx}{0.5\textwidth}{c|c c|}
+	Réel/Prédit & Bâtiment & \multicolumn{1}{c}{Non-Bâtiment} \\
+	\hhline{---}
+	Bâtiment & 0.747 \cellcolor[gray]{.8} & 0.253 \\
+	Non-Bâtiment & 0.114 & 0.886 \cellcolor[gray]{.8}\\
+	\hhline{~--}
+\end{tabularx}
+\end{center}
+
+
+Pour SegNet7, l'itération 47000 a la plus basse erreur de test.
+
+La précision globale est de $0.911284$.
+
+La matrice de confusion est la suivante :
+\begin{center}
+\begin{tabularx}{0.5\textwidth}{c|c c|}
+	Réel/Prédit & Bâtiment & \multicolumn{1}{c}{Non-Bâtiment} \\
+	\hhline{---}
+	Bâtiment & 0.672245 \cellcolor[gray]{.8} & 0.327755 \\
+	Non-Bâtiment & 0.080381 & 0.919619 \cellcolor[gray]{.8}\\
+	\hhline{~--}
+\end{tabularx}
+\end{center}
+
+On remarque ici que le modèle a tendance à mieux classifier l'absence de bâtiments que la présence de bâtiments.
+
+On constate aussi qu'il n'y a pas d'améliorations par rapport à SegNet5.
+
+\subparagraph{Exemples de Résultats}
+
+
 \subsubsection{Deuxième Expérience}
+Une analyse empirique de la première expérience laisse suggérer que les réseaux SegNet5 et SegNet7 souffre de \emph{tunnel vision}.
+En effet, commme on peut le voir, un grand bâtiment sur l'image n'est pas détecté comme un bloc unique de pixels, mais plutôt comme la réunion de plusieurs petits blocs.
+
+Après réflexion, nous sommes arrivés à la conclusion que cela était du au fait que le réseau ne zoomait pas assez.
+
+Dans le cas de SegNet5, on ne s'intéresse ici qu'à la résolution de l'image et des \emph{map de features}.
+Les couches \emph{pool1} et \emph{pool2}, divisent chacune la résolution de l'image par 2, soit par $2 \times 2 = 4$ après \emph{pool2}.
+De ce fait, les \emph{map de features} après \emph{pool2}, ont pour résolution spatiale $(56, 56)$, un pixel de ces couches représente seulement une zone de $(4, 4)$ pixels de l'image originale.
+
+Passons à présent aux couches \emph{conv3\_$1$} et \emph{conv3\_$2$}, ce sont toutes les deux des convolutions $(3, 3)$, ce qui équivaut grossièrement à une convolution $(5, 5)$.
+
+On rappelle qu'une convolution s'apparente à une moyenne pondérée sur un voisinage. On comprend donc que le réseau prend en compte les \emph{features} d'un pixel et de son voisinage $(5, 5)$, et porte un "avis" quand à la nature des objets contenus dans ce voisinage.
+
+Ici une fenêtre $(5, 5)$ de pixels, représente une zone de $(20, 20)$ pixels de l'image originale. Et c'est à peu près sur cette quantité d'information que le réseau va pouvoir juger si oui ou non la fenêtre $(5, 5)$ représente un bâtiment.
+
+Or les données SpaceNet ont une résolution de 0.31cm, une fenêtre de pixels de dimensions $(20, 20)$ au sol représente, une zone de $6.2 \times 6.2\ m^2$, ce qui est évidemment beaucoup plus petit que la plupart des bâtiments ou maisons.
+
+Dans cette deuxième expérience, nous avons recréé deux versions miniatures de DeconvNet.
+\paragraph{Architectures}
+Au lieu d'enlever des couches proche du \emph{centre de symétrie} du réseau, comme réalisé dans la première expérience, nous avons plutôt décider de compacter l'architecture DeconvNet.
+
+Ainsi les modèles conçus réduisent plus rapidement la dimension de l'image en employant des couches de \emph{pooling} ayant un plus grand champ-récepteur.
+
+Nous avons aussi décider de diviser par 2 le nombre de \emph{features} calculées à chaque convolution, dans le but d’accélérer les calculs.
+
+Nous avons donc décider de créer deux modèles se différenciant sur le bloc central, en voici leur définitions :
+
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+\hline 
+Couche & \multicolumn{2}{c|}{Noyau} & \multicolumn{2}{c|}{Features} & \multicolumn{2}{c|}{Pad} & \multicolumn{2}{c|}{Stride} & \multicolumn{2}{c|}{Dimensions en sortie}\\ 
+\hline 
+Input & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{$(4, 224, 224)$}\\ 
+\hline 
+conv1\_$1$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{32} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(32, 224, 224)$}\\ 
+\hline
+conv1\_$2$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{32} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(32, 224, 224)$}\\ 
+\hline 
+pool1 & \multicolumn{2}{c|}{$(4, 4)$} & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{4} & \multicolumn{2}{c|}{0} & \multicolumn{2}{c|}{$(32, 56, 56)$}\\ 
+\hline 
+conv2\_$1$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{64} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(64, 56, 56)$}\\ 
+\hline
+conv2\_$2$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{64} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(64, 56, 56)$}\\ 
+\hline 
+pool2 & \multicolumn{2}{c|}{$(4, 4)$} & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{4} & \multicolumn{2}{c|}{0} & \multicolumn{2}{c|}{$(64, 14, 14)$}\\ 
+\hline 
+conv3\_$1$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{128} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(128, 14, 14)$}\\ 
+\hline
+conv3\_$2$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{128} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(128, 14, 14)$}\\ 
+\hline
+conv3\_$3$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{128} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(128, 14, 14)$}\\ 
+\hline 
+pool3 & \multicolumn{2}{c|}{$(2, 2)$} & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{2} & \multicolumn{2}{c|}{0} & \multicolumn{2}{c|}{$(128, 7, 7)$}\\ 
+\hline 
+conv4\_$1$ & $(3,3)$ & $(7, 7)$ & \multicolumn{2}{c|}{256} & 1 & 0 & 1 & 1 & $(256, 7, 7)$ & $(256, 1, 1)$ \\
+\hline
+conv4\_$2$ & $(3,3)$ & $(1, 1)$ & \multicolumn{2}{c|}{256} & 1 & 0 & 1 & 1 & $(256, 7, 7)$ & $(256, 1, 1)$ \\
+\hline
+deconv4\_$3$ & $(3,3)$ & $(7, 7)$ & \multicolumn{2}{c|}{128} & 1 & 0 & 1 & 1 & $(128, 7, 7)$ & $(128, 7, 7)$ \\
+\hline
+unpool3 & \multicolumn{2}{c|}{$(2, 2)$} & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{2} & \multicolumn{2}{c|}{0} & \multicolumn{2}{c|}{$(128, 14, 14)$}\\ 
+\hline
+deconv3\_$1$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{128} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(128, 14, 14)$}\\ 
+\hline
+deconv3\_$2$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{128} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(128, 14, 14)$}\\ 
+\hline
+deconv3\_$3$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{64} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(64, 14, 14)$}\\ 
+\hline
+unpool2 & \multicolumn{2}{c|}{$(4, 4)$} & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{4} & \multicolumn{2}{c|}{0} & \multicolumn{2}{c|}{$(64, 56, 56)$}\\ 
+\hline
+deconv2\_$1$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{64} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(64, 56, 56)$}\\ 
+\hline
+deconv2\_$2$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{32} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(32, 56, 56)$}\\ 
+\hline
+unpool1 & \multicolumn{2}{c|}{$(4, 4)$} & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{4} & \multicolumn{2}{c|}{0} & \multicolumn{2}{c|}{$(32, 224, 224)$}\\ 
+\hline
+deconv1\_$1$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{32} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(32, 224, 224)$}\\ 
+\hline
+deconv1\_$2$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{32} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(32, 224, 224)$}\\ 
+\hline
+Output & \multicolumn{2}{c|}{$(1, 1)$} & \multicolumn{2}{c|}{3} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{0} & \multicolumn{2}{c|}{$(3, 224, 224)$}\\ 
+\hline
+\end{tabular} 
+
+Comme nous pouvons le voir, les deux modèles possèdent un bloc central différent de DeconvNet.
+Dans DeconvNet, l'entrée était de dimension $(512, 7, 7)$, puis ramené à un vecteur de 4096 \emph{features} dans la couche $fc6$, ce qui dé-spatialisait entièrement l'information.
+Ici dans le bloc central l'information reste spatialisée, car on ne passe pas de $(256, 56, 56)$ (ou $(512, 28, 28)$) à un vecteur de $n$ \emph{features}.
+
+\paragraph{Hyper-paramètres}
+Nous allons à présent lister les hyper-paramètres liés aux apprentissages effectués.
+\subparagraph{Algorithme de Descente de Gradient}
+Nous avons choisi d'utiliser, comme algorithme de descente la variante \emph{Adam}, signifiant \emph{Adaptative Moment Estimation}, qui utilise le moment des gradients précédents et qui moyenne l'amplitude des gradients calculés.
+Nous avons utilisé les paramètres préconisés par les auteurs, à savoir $\beta = 0.9$, $\gamma = 0.999$ et $\alpha = 0.1$.
+Pour plus de détails, voir en annexe.
+\subparagraph{Régularisation $L^2$}
+Nous avons choisi d'utiliser, comme taux de régularisation $L^2$, $\lambda = 0.0005$, qui est une valeur couramment choisie en vision par ordinateur.
+\subparagraph{Proportions de données d'apprentissage}
+Il est courant dans le cas de la segmentation d'images de prendre $90\%$ des données pour l'ensemble d'apprentissage et $10\%$ pour l'ensemble de validation.
+\subparagraph{Taille d'un \emph{mini-batch}}
+Nous avons fixé la taille d'un mini-batch à $64$, valeur communément utilisée dans la littérature.
+\subparagraph{Nombre d'itérations}
+Nous avons fixé à $50000$ le nombre d'itérations lors de l'apprentissage, valeur jugée suffisante, au delà de laquelle si un modèle n'a toujours pas suffisamment appris, alors sa capacité sera remise en question.
+\paragraph{Résultats}
+\subparagraph{Graphes des Pertes}
+Voici le graphe des pertes du modèle SegNet5 :
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.6]{Images/Losses_SegNet5.png}
+		\caption{Graphe de la fonction de perte pour le modèle SegNet5}
+	\end{center}
+\end{figure}
+L'écart entre l'erreur d'apprentissage et l'erreur de test est faible, on peut donc conclure qu'il n'y a peu ou pas de sur-apprentissage.
+De plus l'erreur ne varie pas de façon particulièrement erratique, ce qui est signe d'un bon apprentissage.
+
+Voici le graphe des pertes du modèle SegNet7 :
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.6]{Images/Losses_SegNet7.png}
+		\caption{Graphe de la fonction de perte pour le modèle SegNet7}
+	\end{center}
+\end{figure}
+Ici l'écart entre l'erreur d'apprentissage et l'erreur de test est grande, ce qui laisse supposer du sur-apprentissage.
+De plus l'erreur varie de façon erratique, signe d'un mauvais apprentissage.
+\subparagraph{Analyse des Résultats}
+Voyons à présent les meilleures performances des modèles.
+
+La précision est calculée de la façon suivante :
+$$Accuracy(X) = \frac{1}{|X|}\sum_{x \in X} {\frac{1}{|I| \times |J|}\sum_{i \in I, j \in J} {\mathds{1}_{\{x_{i, j} = l_{i, j}\}}}}$$
+Ce qui revient à calculer la moyenne sur toutes les données de l'ensemble, de la moyenne du nombre de pixels correctement classifiés sur le nombre total de pixels.
+
+Pour SegNet5, l'itération 46500 a la plus basse erreur de test.
+
+La précision globale est de $0.892154$, ce qui signifie qu'environ $\frac{9}{10}$ des pixels sont correctement classifiés.
+
+La matrice de confusion est la suivante :
+\begin{center}
+\begin{tabularx}{0.5\textwidth}{c|c c|}
+	Réel/Prédit & Bâtiment & \multicolumn{1}{c}{Non-Bâtiment} \\
+	\hhline{---}
+	Bâtiment & 0.747 \cellcolor[gray]{.8} & 0.253 \\
+	Non-Bâtiment & 0.114 & 0.886 \cellcolor[gray]{.8}\\
+	\hhline{~--}
+\end{tabularx}
+\end{center}
+
+
+Pour SegNet7, l'itération 47000 a la plus basse erreur de test.
+
+La précision globale est de $0.911284$.
+
+La matrice de confusion est la suivante :
+\begin{center}
+\begin{tabularx}{0.5\textwidth}{c|c c|}
+	Réel/Prédit & Bâtiment & \multicolumn{1}{c}{Non-Bâtiment} \\
+	\hhline{---}
+	Bâtiment & 0.672245 \cellcolor[gray]{.8} & 0.327755 \\
+	Non-Bâtiment & 0.080381 & 0.919619 \cellcolor[gray]{.8}\\
+	\hhline{~--}
+\end{tabularx}
+\end{center}
+
+On remarque ici que le modèle a tendance à mieux classifier l'absence de bâtiments que la présence de bâtiments.
+
+On constate aussi qu'il n'y a pas d'améliorations par rapport à SegNet5.
 \section{Recherche de Similarités entre Images}
 \subsection{Protocole expérimental}
 \subsection{Résultats}
@@ -1887,5 +2206,50 @@ Les inconvénients sont les suivants :
 	\item Deep Learning : \url{http://deeplearning.net/}
 	\item Deep Learning Book : \url{http://www.deeplearningbook.org/}
 	\item Neural Networks and Deep Learning : \url{http://neuralnetworksanddeeplearning.com/}
+\end{itemize}
+\chapter*{Annexes}
+\section{Algorithme de Descente de Gradient : Adam}
+La méthode \emph{Adam}, signifiant \emph{Adaptative Moment Estimation}, est une amélioration de la méthode \emph{RMSProp}.\\
+Cette méthode utilise à la fois le concept de moyenne mobile ainsi que le concept d'utilisation des moments, c'est à dire d'utiliser aussi les gradients précédents :
+$$\theta_{k+1} = \theta_k - \alpha \nabla_\theta J(x,y,\theta_k) - \beta \nabla_\theta J(x,y,\theta_{k-1})$$
+
+On définit alors la matrice $G_k$ de la même façon que dans \emph{RMSProp}:
+$$G_k = \gamma G_{k-1} + (1-\gamma)(\nabla_\theta J(x,y,\theta_k)\odot\nabla_\theta J(x,y,\theta_k)) \times I_n$$
+On définit par ailleurs $m_k$, le moment du gradient $\nabla_\theta J(x,y,\theta)$, tel que :
+$$m_k = \beta m_{k-1} + (1-\beta) \nabla_\theta J(x,y,\theta_k) $$
+On peut remarquer que $m_k$ est lui même une moyenne mobile des gradients.
+Nous utiliserons alors les estimateurs non-biaisés de $m_k$ et $G_k$ :
+$$\hat{m}_k = \frac{m_k}{1-\beta^k} $$
+et
+$$\hat{G}_k = \frac{G_k}{1-\gamma^k}$$
+Ainsi à chaque itération, nous appliquerons à $\theta$, la formule suivante :
+$$\theta_{k+1} = \theta_k - \alpha (\hat{G}_k)^{-\frac{1}{2}} \hat{m}_k$$
+Nous avons alors l'algorithme suivant :
+\begin{algorithm}[H]
+	\caption{Algorithme de Descente de Gradient Stochastique utilisant \emph{Adam}}
+	\begin{algorithmic}
+	    \REQUIRE {
+	    $x$ et $y \in \mathbb{R}^n$,\\
+	    $m < n$,\\
+	    $\theta_0$, les paramètres initiaux du modèle, initialisés aléatoirement,\\
+	    $\beta = 0.9$, $\gamma = 0.999$, $\alpha = 0.001$.\\
+	    et $\epsilon > 0$, seuil de tolérance.
+	     }
+	    \REPEAT
+	    	\STATE $\hat{x},\hat{y} = sample(x,y,m)$
+	    	\STATE Calcul de $\nabla_\theta J(\hat{x},\hat{y},\theta_k)$.
+	    	\STATE $m_k = \beta m_{k-1} + (1-\beta) \nabla_\theta J(x,y,\theta_k)$
+	    	\STATE $\hat{m}_k = \frac{m_k}{1-\beta^k} $
+	    	\STATE $G_k = \gamma G_{k-1} + (1-\gamma)\nabla_\theta J(x,y,\theta_k)\odot\nabla_\theta J(x,y,\theta_k) \times I_n$
+	    	\STATE $\hat{G}_k = \frac{G_k}{1-\gamma^k}$
+	    	\STATE $\theta_{k+1} = \theta_k - \alpha (\hat{G}_k)^{-\frac{1}{2}} \times \hat{m}_k$
+	    \UNTIL{$\nabla_\theta J(\hat{x},\hat{y},\theta_k) \leq \epsilon$}
+	    \RETURN $\theta_{k+1}$
+	\end{algorithmic}
+\end{algorithm}
+Nous retiendrons cet algorithme pour résoudre les problèmes d'optimisation pour deux raisons :
+\begin{itemize}
+	\item Il ne nécessite pas de pas de paramétrisation, si ce n'est le choix de la taille des mini-lots $m$, ne nécessitant peu de tests.
+	\item Il offre une convergence très rapide, grâce à la méthode des moments, et stable, grâce à la normalisation non biaisée du gradient $\nabla_\theta J(x,y,\theta)$.
 \end{itemize}
 \end{document}

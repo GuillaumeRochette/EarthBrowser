@@ -7,10 +7,12 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Parse multiple log files into one csv file.")
     parser.add_argument("--log_dir", required=True, help="Path to the directory containing the logs.")
     parser.add_argument("--output", required=True, help="Path of the csv file to be created.")
+    parser.add_argument("--classes", required=True, type=int, help="Specifiy number of classes, must be 2 or 3.")
 
     args = parser.parse_args()
     log_dir = args.log_dir
     csv_path = args.output
+    classes = args.classes
     log_names = sorted(os.listdir(log_dir))
     lines = []
     for log_name in log_names:
@@ -20,20 +22,21 @@ if __name__ == '__main__':
                 lines.append(line)
 
     regex_iteration = re.compile('Iteration (\d+), Testing net')
-    regex_train_loss = re.compile('Train net output #0: loss = ([\.\deE+-]+)')
-    regex_test_accuracy = re.compile('Test net output #0: accuracy = ([\.\deE+-]+)')
-    regex_test_loss = re.compile('Test net output #1: loss = ([\.\deE+-]+)')
-    regex_test_accuracy_0 = re.compile('Test net output #2: per_class_accuracy = ([\.\deE+-]+)')
-    regex_test_accuracy_1 = re.compile('Test net output #3: per_class_accuracy = ([\.\deE+-]+)')
-    regex_test_accuracy_2 = re.compile('Test net output #4: per_class_accuracy = ([\.\deE+-]+)')
-
     iterations = []
+    regex_train_loss = re.compile('Train net output #0: loss = ([\.\deE+-]+)')
     train_losses = []
+    regex_test_accuracy = re.compile('Test net output #0: accuracy = ([\.\deE+-]+)')
     test_accuracies = []
+    regex_test_loss = re.compile('Test net output #1: loss = ([\.\deE+-]+)')
     test_losses = []
+    regex_test_accuracy_0 = re.compile('Test net output #2: per_class_accuracy = ([\.\deE+-]+)')
     test_accuracies_0 = []
+    regex_test_accuracy_1 = re.compile('Test net output #3: per_class_accuracy = ([\.\deE+-]+)')
     test_accuracies_1 = []
-    test_accuracies_2 = []
+    if classes == 3:
+        regex_test_accuracy_2 = re.compile('Test net output #4: per_class_accuracy = ([\.\deE+-]+)')
+        test_accuracies_2 = []
+
     for line in lines:
         iteration = regex_iteration.findall(line)
         if iteration:
@@ -53,14 +56,21 @@ if __name__ == '__main__':
         test_accuracy_1 = regex_test_accuracy_1.findall(line)
         if test_accuracy_1:
             test_accuracies_1.append(float(test_accuracy_1[0]))
-        test_accuracy_2 = regex_test_accuracy_2.findall(line)
-        if test_accuracy_2:
-            test_accuracies_2.append(float(test_accuracy_2[0]))
+        if classes == 3:
+            test_accuracy_2 = regex_test_accuracy_2.findall(line)
+            if test_accuracy_2:
+                test_accuracies_2.append(float(test_accuracy_2[0]))
     with open(csv_path, "w") as csv_file:
         filewriter = csv.writer(csv_file, delimiter=",")
-        filewriter.writerow(
-            ["Iteration", "Training Loss", "Test Loss", "Test Accuracy", "Class 0 Accuracy", "Class 1 Accuracy",
-             "Class 2 Accuracy"])
-        for row in zip(iterations, train_losses, test_losses, test_accuracies, test_accuracies_0, test_accuracies_1,
-                       test_accuracies_2):
-            filewriter.writerow(row)
+        if classes == 3:
+            filewriter.writerow(
+                ["Iteration", "Training Loss", "Test Loss", "Test Accuracy", "Class 0 Accuracy", "Class 1 Accuracy",
+                 "Class 2 Accuracy"])
+            for row in zip(iterations, train_losses, test_losses, test_accuracies, test_accuracies_0, test_accuracies_1,
+                           test_accuracies_2):
+                filewriter.writerow(row)
+        else:
+            filewriter.writerow(
+                ["Iteration", "Training Loss", "Test Loss", "Test Accuracy", "Class 0 Accuracy", "Class 1 Accuracy"])
+            for row in zip(iterations, train_losses, test_losses, test_accuracies, test_accuracies_0, test_accuracies_1):
+                filewriter.writerow(row)
