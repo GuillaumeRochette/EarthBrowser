@@ -1513,6 +1513,7 @@ Les architectures de type DeconvNet reconstituent l'image en utilisant des couch
 
 \section{Conclusion}
 Dans ce chapitre, nous avons tenté de donner au lecteur un aperçu du domaine de l'apprentissage machine.
+
 Nous avons défini les réseaux de neurones, expliqué de façon détaillée le fonctionnement des réseaux de neurones, avec les notions de propagation et de rétro-propagation, ainsi que plusieurs méthodes pour améliorer la qualité de l'apprentissage.
 
 Nous avons proposé une définition générale de la convolution, abordé le sujet de la réduction de la dimensionnalité, puis justifié l'utilité des réseaux de neurones convolutifs pour le traitement d'image, en finissant par décrire les tâches les plus courantes en vision par ordinateur.
@@ -2324,7 +2325,22 @@ On voit pour cette image, que le résultat est beaucoup plus "propre" pour le pr
 
 Pour cet exemple, le résultat semble toujours meilleur dans le cas où l'information reste spatialisée, en effet, le contour des bâtiments est beaucoup plus précis, même dans les cas où les bâtiments sont collés. Il y aussi moins d'artefacts sur la route.
 \subsection{Conclusion}
-Dans cette partie dédiée à la cartographie automatisée
+Dans cette partie, nous avons décrit l'utilisation de l'apprentissage profond pour de la cartographie automatisée.
+
+Nous avons vu différentes raisons motivant l'usage de la cartographie automatisée, présenté les données issues de SpaceNet croisées avec la base de données OpenStreetMap, et expliqué brièvement l'opération de rasterisation, permettant la transformation de données vectorielles en données matricielles.
+
+Nous avons succinctement évoqué les motivations concernant le calcul sur GPU, et présenté le \emph{framework} d'apprentissage profond Caffe, utilisé pour nos modèles.
+
+Puis, nous avons présenté l'architecture DéconvNet,ayant inspiré nos modèles de segmentation.
+
+Notre première expérience qui consistait à prédire des masques de segmentation des bâtiments sur l'ensemble des données de SpaceNet était satisfaisante, même si les modèles créés, Deconv5 et Deconv7, souffraient de vision tunnelisée.
+
+La seconde expérience consistait à prédire des masques de segmentation des bâtiments et des routes sur la zone géographique de Las Vegas.
+Cette expérience a tenté de corriger ce défaut en agrandissant la fenêtre et la stride des couches de \emph{pooling}, permettant considérer l'image dans son ensemble.
+Deux modèles ont été créés, ZoomNet et ZoomNet, se différenciant sur le bloc central, le premier gardant l'information spatialisée, le second la dé-spatialisant.
+Les résultats obtenus sont de meilleure qualité que ceux obtenus dans la première expérience, car plus fins et moins bruités.
+
+Ces deux expériences nous permettent alors de formuler des règles empiriques quand à l'importance de réduire la dimensionnalité des données pour éviter le problème de vision tunnelisée, ainsi que formuler l'hypothèse de garder l'information spatialisée dans le bloc central.
 \section{Recherche de Similarités}
 
 Une piste envisagée au début du stage était de proposer une solution réalisant de la classification d'images en proposant une méthode partiellement supervisée, appelée classification dynamique de \emph{patchs} d'images.
@@ -2397,7 +2413,7 @@ Nous n’utiliserons que 3 des 4 bandes disponibles, les bandes Rouge, Vert et B
 	\end{center}
 \end{figure}
 
-L'image a été découpée en 47742 \emph{patchs} de dimensions $(3, 64, 64)$, interpolés aux dimensions $(3, 32, 32)$, puis décomposés en \emph{features} par le premier modèle, entraîné sur CIFAR-10.
+L'image a été découpée en 47742 \emph{patchs} de dimensions $(3, 64, 64)$, interpolés aux dimensions $(3, 32, 32)$, puis décomposés en \emph{features} à différents niveaux par le premier modèle, entraîné sur CIFAR-10.
 
 Nous avons ensuite calculé la matrice des corrélations des 47742 décomposition en \emph{features} des images.
 
@@ -2406,11 +2422,35 @@ L'image en haut à gauche est l'image de référence, puis de gauche à de droit
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[scale=0.9]{Images/CommerceCity_Correlation_1.png}
-		\includegraphics[scale=0.9]{Images/CommerceCity_Correlation_2.png}
-		\caption{Exemples de \emph{patchs} corrélés}
+		\caption{Exemples de corrélation de \emph{patchs} décomposés en \emph{features} de bas niveau}
 	\end{center}
 \end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.9]{Images/CommerceCity_Correlation_2.png}
+		\caption{Exemples de corrélation de \emph{patchs} décomposés en \emph{features} de haut niveau}
+	\end{center}
+\end{figure}
+
+Comme on peut le remarquer sur les deux figures, les images sont globalement similaires.
+
+Toutefois, pour la première figure, on remarque que les similarités entre les patchs sont au niveau de la localisation des voitures, qui sont de petits éléments dans l'image.
+
+À l'inverse dans la seconde figure, les patchs similaires ont en commun un croisement entre deux routes, mais que la position des arbres ou la présence de voitures ne présentent pas d'importance.
 \subsection{Conclusion}
+Dans cette partie nous avons décrit le concept de recherche de similarités dans les images.
+
+Nous avons dans un premier temps souhaité réaliser de la classification dynamique d'images.
+Cette application ne sera finalement pas complètement réalisée, d'une part par un manque de données, et d'autre part car l'intérêt de cette application est faible.
+En effet, classifier des patchs d'images est bien moins intéressant en terme de précision que de segmenter ces mêmes patchs.
+C'est pourquoi, nous n'avons pas décider de nous attarder sur cette tâche et de nous tourner vers la segmentation d'images, développée plus haut.
+
+Toutefois, le concept de recherche de similarités reste intéressant indépendamment de la classification dynamique pour au moins deux raisons :
+\begin{itemize}
+	\item L'extraction de \emph{features} peut se faire sur la sortie de n'importe quelle couche de n'importe quel modèle, permettant de décomposer l'image en \emph{features} de plus ou moins haut niveau et permettant ainsi d'observer plusieurs niveaux de similarités.
+	\item 
+\end{itemize}
 \chapter{Conclusion}
 \chapter*{Bibliographie}
 \begin{itemize}
