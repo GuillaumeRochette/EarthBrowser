@@ -351,7 +351,11 @@ Voici un récapitulatif des niveaux de traitements pour une image satellite de l
 \end{itemize}
 \section{Conclusion}
 Dans ce chapitre, nous avons entraperçu le domaine de l'imagerie spatiale.
-C'est un domaine extrêmement complexe, où se mêlent des disciplines telles que la mécanique képlerienne, l'électronique ou encore le traitement d'image.
+Nous avons brièvement listé les différents types de capteurs optiques ainsi que deux types d'orbites utilisées pour les satellites artificiels.
+
+Nous avons aussi détaillé différentes caractéristiques d'une image satellite, ainsi que la structure des fichiers contenant ces images.
+
+C'est un domaine extrêmement complexe, où se mêlent des disciplines telles que la mécanique képlerienne, l'électronique ou encore le traitement d'image, et où l'erreur n'est pas tolérée.
 
 Ce chapitre a permis au lecteur de comprendre la nature d'une image satellite, permettra de comprendre par la suite, le raisonnement employé dans le quatrième chapitre portant sur les applications pratiques.
 
@@ -689,7 +693,9 @@ L'intérêt de cette méthode repose principalement sur le fait que le gradient 
 \section{Conclusion}
 Ce chapitre nous a permis de poser les bases de l'apprentissage machine, sans toutefois se focaliser sur quelque algorithme apprenant.
 
-Il permettra au lecteur de pouvoir saisir pleinement le concept et les motivations de l'apprentissage profond évoqué dans le chapitre suivant.
+Nous avons défini clairement la notion d'apprentissage machine, évoqué différentes contraintes liées à l'apprentissage, et expliqué les notions de validation et d'optimisation de tels algorithmes
+
+Ce chapitre permettra au lecteur de pouvoir saisir pleinement le concept et les motivations de l'apprentissage profond évoqué dans le chapitre suivant.
 
 \chapter{L'Apprentissage Profond}
 L'apprentissage profond se différencie de l'apprentissage machine classique particulièrement sur deux points :
@@ -1506,8 +1512,10 @@ Les architectures de type FCN reconstituent l'image en combinant les \emph{featu
 Les architectures de type DeconvNet reconstituent l'image en utilisant des couches d'\emph{unpooling}, inversant l'effet des couches de \emph{pooling}. Nous reviendront en détail leur fonctionnement dans la suite.
 
 \section{Conclusion}
+Dans ce chapitre, nous avons tenté de donner au lecteur un aperçu du domaine de l'apprentissage machine.
+Nous avons défini les réseaux de neurones, expliqué de façon détaillée le fonctionnement des réseaux de neurones, avec les notions de propagation et de rétro-propagation, ainsi que plusieurs méthodes pour améliorer la qualité de l'apprentissage.
 
-Dans ce chapitre, nous avons expliqué de façon détaillée le fonctionnement des réseaux de neurones classiques, l'utilité des réseaux de neurones convolutifs pour le traitement d'image, ainsi que quelques exemples d'utilisation des réseaux de neurones pour le traitement d'image.
+Nous avons proposé une définition générale de la convolution, abordé le sujet de la réduction de la dimensionnalité, puis justifié l'utilité des réseaux de neurones convolutifs pour le traitement d'image, en finissant par décrire les tâches les plus courantes en vision par ordinateur.
 
 Ce chapitre est sans doute le plus utile pour comprendre les applications évoquées dans le quatrième chapitre.
 \chapter{L'Apprentissage Profond appliqué à l'Imagerie Satellite}
@@ -1947,7 +1955,7 @@ Nous avons donc décider de créer des modèles contenant 5 et 7 blocs, en voici
 \begin{center}
 	\begin{tabular}{|c|c|c|c|c|c|c|c|}
 	\hline 
-	Couche & Noyau & Features & Stride & Pad & Dimensions en sortie & SegNet5 & SegNet7\\ 
+	Couche & Noyau & Features & Stride & Pad & Dimensions en sortie & Deconv5 & Deconv7\\ 
 	\hline 
 	Input & - & - & - & - & $(4, 224, 224)$ & \checkmark & \checkmark \\ 
 	\hline 
@@ -2022,21 +2030,21 @@ Nous avons fixé la taille d'un mini-batch à $64$, valeur communément utilisé
 Nous avons fixé à $50000$ le nombre d'itérations lors de l'apprentissage, valeur jugée suffisante, au delà de laquelle si un modèle n'a toujours pas suffisamment appris, alors sa capacité sera remise en question.
 \paragraph{Résultats}
 \subparagraph{Graphes des Pertes}
-Voici le graphe des pertes du modèle SegNet5 :
+Voici le graphe des pertes du modèle Deconv5 :
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.6]{Images/Losses_SegNet5.png}
-		\caption{Graphe de la fonction de perte pour le modèle SegNet5}
+		\includegraphics[scale=0.6]{Images/Losses_Deconv5.png}
+		\caption{Graphe de la fonction de perte pour le modèle Deconv5}
 	\end{center}
 \end{figure}
 L'écart entre l'erreur d'apprentissage et l'erreur de test est faible, on peut donc conclure qu'il n'y a peu ou pas de sur-apprentissage.
 De plus l'erreur ne varie pas de façon particulièrement erratique, ce qui est signe d'un bon apprentissage.
 
-Voici le graphe des pertes du modèle SegNet7 :
+Voici le graphe des pertes du modèle Deconv7 :
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.6]{Images/Losses_SegNet7.png}
-		\caption{Graphe de la fonction de perte pour le modèle SegNet7}
+		\includegraphics[scale=0.6]{Images/Losses_Deconv7.png}
+		\caption{Graphe de la fonction de perte pour le modèle Deconv7}
 	\end{center}
 \end{figure}
 Ici l'écart entre l'erreur d'apprentissage et l'erreur de test est grande, ce qui laisse supposer du sur-apprentissage.
@@ -2050,7 +2058,7 @@ Avec $x_{i, j}$, l'\emph{argmax} de couche \emph{output} du modèle aux coordonn
 
 Ce qui revient à calculer la moyenne sur toutes les données de l'ensemble, de la moyenne du nombre de pixels correctement classifiés sur le nombre total de pixels.
 
-Pour SegNet5, l'itération 46500 semble être la meilleure.
+Pour Deconv5, l'itération 46500 semble être la meilleure.
 
 La précision globale est de $0.892154$, ce qui signifie qu'environ $\frac{9}{10}$ des pixels sont correctement classifiés.
 
@@ -2066,7 +2074,7 @@ La matrice de confusion est la suivante :
 \end{center}
 
 
-Pour SegNet7, l'itération 47000 semble être la meilleure.
+Pour Deconv7, l'itération 47000 semble être la meilleure.
 
 La précision globale est de $0.911284$.
 
@@ -2083,61 +2091,61 @@ La matrice de confusion est la suivante :
 
 On remarque ici que le modèle a tendance à mieux classifier l'absence de bâtiments que la présence de bâtiments.
 
-On constate aussi qu'il n'y a pas d'améliorations par rapport à SegNet5.
+On constate aussi qu'il n'y a pas d'améliorations par rapport à Deconv5.
 
 \subparagraph{Exemples de Résultats}
-Nous allons à présent comparer les résultats produits par SegNet5 et SegNet7.
+Nous allons à présent comparer les résultats produits par Deconv5 et Deconv7.
 
 En haut à gauche, l'image de SpaceNet, bandes RGB, corrigée 8bits.
 
 En bas à gauche, le masque de segmentation produit par les labels de SpaceNet et OpenStreetMap.
 
-En haut au milieu, la \emph{map} de probabilités de SegNet5, représentée comme une image RGB.
+En haut au milieu, la \emph{map} de probabilités de Deconv5, représentée comme une image RGB.
 
-En bas au milieu, le masque de segmentation de SegNet5, obtenu en récupérant l'\emph{argmax} de la \emph{map} de probabilité.
+En bas au milieu, le masque de segmentation de Deconv5, obtenu en récupérant l'\emph{argmax} de la \emph{map} de probabilité.
 
-En haut à droite, la \emph{map} de probabilités de SegNet7, représentée comme une image RGB.
+En haut à droite, la \emph{map} de probabilités de Deconv7, représentée comme une image RGB.
 
-En bas à droite, le masque de segmentation de SegNet7, obtenu en récupérant l'\emph{argmax} de la \emph{map} de probabilité.
+En bas à droite, le masque de segmentation de Deconv7, obtenu en récupérant l'\emph{argmax} de la \emph{map} de probabilité.
 
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.225]{Images/SegNets_Vegas.png}
-		\caption{Inférences de SegNet5 et SegNet7 sur Vegas}
+		\includegraphics[scale=0.225]{Images/Deconvs_Vegas.png}
+		\caption{Inférences de Deconv5 et Deconv7 sur Vegas}
 	\end{center}
 \end{figure}
 
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.225]{Images/SegNets_Paris.png}
-		\caption{Inférences de SegNet5 et SegNet7 sur Paris}
+		\includegraphics[scale=0.225]{Images/Deconvs_Paris.png}
+		\caption{Inférences de Deconv5 et Deconv7 sur Paris}
 	\end{center}
 \end{figure}
 
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.225]{Images/SegNets_Shanghai.png}
-		\caption{Inférences de SegNet5 et SegNet7 sur Shanghai}
+		\includegraphics[scale=0.225]{Images/Deconvs_Shanghai.png}
+		\caption{Inférences de Deconv5 et Deconv7 sur Shanghai}
 	\end{center}
 \end{figure}
 
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.225]{Images/SegNets_Khartoum.png}
-		\caption{Inférences de SegNet5 et SegNet7 sur Khartoum}
+		\includegraphics[scale=0.225]{Images/Deconvs_Khartoum.png}
+		\caption{Inférences de Deconv5 et Deconv7 sur Khartoum}
 	\end{center}
 \end{figure}
 
-On s'aperçoit sur chacun des exemples, que SegNet5 réussit systématiquement mieux que SegNet7, ce qui va dans le sens des suppositions émises dans l'analyse des résultats.
-Sur Paris, la différence est flagrante, SegNet5 réalise une segmentation à peu près fidèle, tandis que la seconde est totalement fausse.
+On s'aperçoit sur chacun des exemples, que Deconv5 réussit systématiquement mieux que Deconv7, ce qui va dans le sens des suppositions émises dans l'analyse des résultats.
+Sur Paris, la différence est flagrante, Deconv5 réalise une segmentation à peu près fidèle, tandis que la seconde est totalement fausse.
 
 \subsubsection{Deuxième Expérience}
-Une analyse empirique de la première expérience laisse suggérer que les réseaux SegNet5 et SegNet7 n'arrivent pas à considérer l'image d'entrée dans son ensemble.
+Une analyse empirique de la première expérience laisse suggérer que les réseaux Deconv5 et Deconv7 n'arrivent pas à considérer l'image d'entrée dans son ensemble.
 En effet, commme on peut le voir, un grand bâtiment sur l'image n'est pas détecté comme un bloc unique de pixels, mais plutôt comme la réunion de plusieurs petits blocs.
 
 Après réflexion, nous sommes arrivés à la conclusion que cela était dû au fait que le réseau ne zoomait pas assez.
 
-Dans le cas de SegNet5, on ne s'intéresse ici qu'à la résolution de l'image et des \emph{map de features}.
+Dans le cas de Deconv5, on ne s'intéresse ici qu'à la résolution de l'image et des \emph{map de features}.
 Les couches \emph{pool1} et \emph{pool2}, divisent chacune la résolution de l'image par 2, soit par $2 \times 2 = 4$ après \emph{pool2}.
 De ce fait, les \emph{map de features} après \emph{pool2}, ont pour résolution spatiale $(56, 56)$, un pixel de ces couches représente seulement une zone de $(4, 4)$ pixels de l'image originale.
 
@@ -2222,21 +2230,21 @@ Les différences entre les deux modèles se font au niveau du bloc central, dans
 Les hyper-paramètres restent les même par rapport à l'expérience précédente.
 \paragraph{Résultats}
 \subparagraph{Graphes des Pertes}
-Voici le graphe des pertes du modèle ZNet :
+Voici le graphe des pertes du modèle ZoomNet :
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.6]{Images/Losses_ZNet.png}
-		\caption{Graphe de la fonction de perte pour le modèle ZNet}
+		\includegraphics[scale=0.6]{Images/Losses_ZoomNet.png}
+		\caption{Graphe de la fonction de perte pour le modèle ZoomNet}
 	\end{center}
 \end{figure}
 L'écart entre l'erreur d'apprentissage et l'erreur de test reste faible avant l'itération 40000, on peut donc conclure qu'il n'y a peu ou pas de sur-apprentissage avant 40000 itérations.
 De plus l'erreur varie de façon peu erratique, ce qui est signe d'un bon apprentissage.
 
-Voici le graphe des pertes du modèle ZNet2 :
+Voici le graphe des pertes du modèle ZoomNet2 :
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.6]{Images/Losses_ZNet2.png}
-		\caption{Graphe de la fonction de perte pour le modèle ZNet2}
+		\includegraphics[scale=0.6]{Images/Losses_ZoomNet2.png}
+		\caption{Graphe de la fonction de perte pour le modèle ZoomNet2}
 	\end{center}
 \end{figure}
 L'écart entre l'erreur d'apprentissage et l'erreur de test est faible, on peut donc conclure qu'il n'y a peu ou pas de sur-apprentissage.
@@ -2246,7 +2254,7 @@ Voyons à présent les meilleures performances des modèles.
 
 La précision est calculée de la même façon que précédemment.
 
-Pour ZNet, l'itération 37000 semble être la meilleure.
+Pour ZoomNet, l'itération 37000 semble être la meilleure.
 
 La précision globale est de $0.83479$.
 
@@ -2266,7 +2274,7 @@ La matrice de confusion n'est pas complète, car Caffe ne produit pas l'ensemble
 
 L'étoile, *, signifie que la valeur est partagée entre les deux champs.
 
-Pour ZNet2, l'itération 34000 semble être la meilleure.
+Pour ZoomNet2, l'itération 34000 semble être la meilleure.
 
 La précision globale est de $0.777292$.
 
@@ -2284,12 +2292,12 @@ La matrice de confusion est la suivante :
 
 De ces deux modèles, le premier semble plus performant que le second, ce qui indique peut être que garder l'information spatialisée sur le bloc central est important.
 \subparagraph{Exemples de Résultats}
-Nous allons à présent comparer les résultats produits par ZNet et ZNet2.
+Nous allons à présent comparer les résultats produits par ZoomNet et ZoomNet2.
 
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.225]{Images/ZNets_1983.png}
-		\caption{Inférences de ZNet et ZNet2}
+		\includegraphics[scale=0.225]{Images/ZoomNets_1983.png}
+		\caption{Inférences de ZoomNet et ZoomNet2}
 	\end{center}
 \end{figure}
 
@@ -2297,26 +2305,26 @@ En haut à gauche, l'image de SpaceNet, bandes RGB, corrigée 8bits.
 
 En bas à gauche, le masque de segmentation produit par les labels de SpaceNet et OpenStreetMap.
 
-En haut au milieu, la \emph{map} de probabilités de ZNet, représentée comme une image RGB.
+En haut au milieu, la \emph{map} de probabilités de ZoomNet, représentée comme une image RGB.
 
-En bas au milieu, le masque de segmentation de ZNet, obtenu en récupérant l'\emph{argmax} de la \emph{map} de probabilité.
+En bas au milieu, le masque de segmentation de ZoomNet, obtenu en récupérant l'\emph{argmax} de la \emph{map} de probabilité.
 
-En haut à droite, la \emph{map} de probabilités de ZNet2, représentée comme une image RGB.
+En haut à droite, la \emph{map} de probabilités de ZoomNet2, représentée comme une image RGB.
 
-En bas à droite, le masque de segmentation de ZNet2, obtenu en récupérant l'\emph{argmax} de la \emph{map} de probabilité.
+En bas à droite, le masque de segmentation de ZoomNet2, obtenu en récupérant l'\emph{argmax} de la \emph{map} de probabilité.
 
 On voit pour cette image, que le résultat est beaucoup plus "propre" pour le premier modèle que le second, il y a moins bruit de segmentation sur la sortie, c'est à dire de petites tâches n'ayant pas lieu d'être.
 
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.225]{Images/ZNets_5000.png}
-		\caption{Inférences de ZNet et ZNet2}
+		\includegraphics[scale=0.225]{Images/ZoomNets_5000.png}
+		\caption{Inférences de ZoomNet et ZoomNet2}
 	\end{center}
 \end{figure}
 
 Pour cet exemple, le résultat semble toujours meilleur dans le cas où l'information reste spatialisée, en effet, le contour des bâtiments est beaucoup plus précis, même dans les cas où les bâtiments sont collés. Il y aussi moins d'artefacts sur la route.
 \subsection{Conclusion}
-
+Dans cette partie dédiée à la cartographie automatisée
 \section{Recherche de Similarités}
 
 Une piste envisagée au début du stage était de proposer une solution réalisant de la classification d'images en proposant une méthode partiellement supervisée, appelée classification dynamique de \emph{patchs} d'images.
