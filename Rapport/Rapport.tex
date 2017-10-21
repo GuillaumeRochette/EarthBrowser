@@ -86,7 +86,7 @@ Dans le premier chapitre, nous aborderons l'imagerie spatiale, présentant ses e
 
 Dans le second chapitre, nous définirons l'apprentissage machine et ses concepts clés.
 
-Dans le troisième chapitre, nous définirons précisément le domaine de l'apprentissage profond, nous expliquerons en détail le fonctionnement des réseaux de neurones, les motivations de cette science, ainsi qu'une explication détaillée des réseaux de neurones spécialisés dans le traitement des images
+Dans le troisième chapitre, nous définirons précisément le domaine de l'apprentissage profond, nous expliquerons en détail le fonctionnement des réseaux de neurones, les motivations de cette discipline, ainsi qu'une explication détaillée des réseaux de neurones spécialisés dans le traitement des images
 
 Dans le quatrième chapitre, nous ferons le lien entre apprentissage profond et imagerie spatiale, justifiant l'utilité d'appliquer le premier au second, ainsi que les applications réalisées au cours de ce stage permettant d'extraire des informations des images satellite. Les tâches que nous présenterons sont la segmentation d'images et la recherche de similarités.
 
@@ -100,12 +100,12 @@ Les premières images de la Terre depuis l'Espace ont été réalisées de cette
 
 L'apparition de \emph{capteurs numériques} a révolutionné le domaine de la télédétection, car permettant de s'abstraire du support physique, problématique de par sa quantité limitée à bord, ainsi que sa réception.
 
-Nous aborderons d'abord le fonctionnement d'un \emph{satellite d'observation}, puis nous survolerons les différentes particularités d'une image satellite.
+Nous aborderons d'abord le fonctionnement d'un \emph{satellite d'observation}, puis nous survolerons certaines particularités d'une image satellite.
 \section{Fonctionnement d'un Satellite d'Observation}
 Nous allons d'abord présenter brièvement le fonctionnement des différents types de capteurs numériques existants.
-Puis nous aborderons les différents mécanismes relatif au contrôle de la trajectoire du satellite.
+Puis nous aborderons les différents mécanismes relatifs au contrôle de la trajectoire du satellite.
 \subsection{Capteurs Optiques}
-Selon leur longueur d'onde, les ondes électromagnétique portent des noms différents
+Selon leur longueur d'onde, les ondes électromagnétique portent des noms différents.
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[scale=0.7]{Images/Spectre_Electromagnetique.png}
@@ -157,9 +157,9 @@ Voici un schéma décrivant le fonctionnement d'un capteur de type \emph{push br
 \end{figure}
 Les avantages d'un capteur \emph{push broom} sont les suivants :
 \begin{itemize}
-	\item Simplicité du système.
-	\item Perturbations géométriques seulement le long des colonnes.
-	\item Larges fauchées grâce à la miniaturisation des cellules.
+	\item La simplicité du système.
+	\item Il ne peut y avoir des perturbations géométriques seulement le long des colonnes.
+	\item Des larges fauchées grâce à la miniaturisation des cellules.
 \end{itemize}
 Ce type de capteur présente aussi des inconvénients :
 \begin{itemize}
@@ -182,13 +182,13 @@ Voici un schéma décrivant le fonctionnement d'un capteur de type \emph{matrici
 Les avantages d'un capteur \emph{matriciel} sont les suivants :
 \begin{itemize}
 	\item Grâce à l'acquisition simultanée de tous les pixels de l'image, il ne peut y avoir de perturbations géométriques, sauf en cas de flou de bougé.
-	\item Possibilité de photographier une zone selon plusieurs angles (de visée).
+	\item La possibilité de photographier une zone selon plusieurs angles (de visée).
 \end{itemize}
 Ce type de capteur présente aussi des inconvénients :
 \begin{itemize}
-	\item Alignement des capteurs très difficile à réaliser de par le nombre très important de détecteurs et de leur répartition en forme de matrice.
-	\item Étalonnage radiométrique délicat en raison du grand nombre de détecteurs.
-	\item Difficultés d'assembler des prises de vue pour en faire des mosaïques.
+	\item L'alignement des capteurs très difficile à réaliser de par le nombre très important de détecteurs et de leur répartition en forme de matrice.
+	\item L'étalonnage radiométrique délicat en raison du grand nombre de détecteurs.
+	\item La difficulté d'assembler des prises de vue pour en faire des mosaïques.
 \end{itemize}
 \subsection{L'Orbite des Satellites}
 Le mouvement d'un satellite artificiel autour de la Terre, appelé \emph{orbite}, est qualifié de képlérien car il respecte les trois lois de Kepler :
@@ -200,7 +200,7 @@ Le mouvement d'un satellite artificiel autour de la Terre, appelé \emph{orbite}
 Deux types d'orbites sont principalement utilisé pour les satellites
 \subsubsection{L'Orbite Géostationnaire}
 L'orbite \emph{géostationnaire} implique comme son nom l'indique que la position du satellite est fixe par rapport à la Terre.
-Il faut que l'orbite du satellite soit circulaire autour de la Terre, et que la vitesse \emph{angulaire} du satellite soit égale à la vitesse \emph{angulaire} de la Terre.
+Il faut que l'orbite du satellite soit circulaire autour de la Terre, et que la vitesse \emph{angulaire} du satellite soit égale à la vitesse \emph{angulaire} de la Terre. L'orbite se situe à environ 36000 kilomètres d'altitude.
 
 Ce type d'orbite est utilisé pour les satellites de télécommunication, ainsi que pour des applications de surveillance de la Terre comme la météorologie, nécessitant un survol constant d'une zone définie.
 \subsubsection{L'Orbite Héliosynchrone}
@@ -274,7 +274,7 @@ Pixel Size = (0.000002700000000,-0.000002700000000)
 \end{verbatim}
 La seconde composante de la taille d'un pixel est ici négative, car l'image à pour origine le coin supérieur gauche, le parcours de l'image se fait donc en avançant dans les longitudes (sens Ouest-Est) mais en descendant les latitudes (sens Nord-Sud).
 
-En ajoutant à ces connaissances la dimension de l'image en pixel, interpoler la position des autres coins de l'image. Ce calcul d'interpolation reste une approximation car il faut prendre en compte l'angle de visée du satellite par rapport au sol.
+En ajoutant à ces connaissances la dimension de l'image en pixel, nous pouvons interpoler la position des autres coins de l'image. Ce calcul d'interpolation reste une approximation car il faut prendre en compte l'angle de visée du satellite par rapport au sol.
 
 \subsection{Compression et Formats de Fichier}
 Le format de fichier, aussi appelé \emph{driver}, spécifie la façon dont les données sont écrites sur le disque de stockage.
@@ -1593,6 +1593,14 @@ Les satellites WorldView-2 et WorldView-3 possèdent un capteur panchromatique e
 
 Nous n'utiliserons que les données issues de la deuxième édition du SpaceNet Challenge, car les images multispectrales de la première édition n'ont pas été fusionnées avec la bande panchromatique laissant la résolution à 1.84m.
 
+Par ailleurs, dans l'optique de rendre compatibles les modèles avec des données issues des satellites Pléiades, nous avons choisi de ne garder que 4 des 8 bandes disponibles :
+\begin{itemize}
+	\item Le Bleu.
+	\item Le Vert.
+	\item Le Rouge.
+	\item Le Proche Infrarouge 1.
+\end{itemize}
+
 Les images multispectrales de la seconde édition font $650 \times 650$ pixels et ont une résolution au sol de 0.31m et sont encodées sur $16$ bits.
 
 \begin{figure}[H]
@@ -1679,7 +1687,7 @@ Il existe, pour le format GeoJSON, plusieurs types d'objets géométriques simpl
 Les labels de SpaceNet, produit par l'Amazon Mechanical Turk, ne localisent que les bâtiments dans les images. Cependant d'autres informations directement observables depuis les images existent, comme par exemple les routes, ou encore les cours d'eau.
 C'est pourquoi il a été jugé intéressant de compléter les labels originels de SpaceNet par des labels issus d'OpenStreetMap.
 Ces labels sont disponibles au format GeoJSON et il est facile de les récupérer depuis l'API d'OpenStreetMap.
-Cependant ces labels ne sont pas de même qualité que ceux provenant du \emph{dataset} SpaceNet, il est important de garder à l'esprit que ces labels sont issus d'un projet communautaire, ils peuvent donc faire l'objet d'imprécisions, par exemple concernant la localisation des éléments géographique, potentiellement due aux imprécisions de GPS amateurs, ou parfois tout simplement manquants, car personne n'a encore répertorié la zone géographique en question.
+Cependant ces labels ne sont pas de même qualité que ceux provenant du \emph{dataset} SpaceNet, il est important de garder à l'esprit que ces labels sont issus d'un projet communautaire, ils peuvent donc faire l'objet d'imprécisions, par exemple concernant la localisation des éléments géographiques, potentiellement due aux imprécisions de GPS amateurs, ou parfois tout simplement manquants, car personne n'a encore répertorié la zone géographique en question.
 \paragraph{Rasterisation des Labels}
 Les labels issus de SpaceNet ou d'OpenStreetMap sont proposés sous forme vectorielle et donc par conséquent utilisables pour de la détection d'objets.
 Les labels vectoriels, au même titre que les images vectorielles, possèdent l'avantage d'être quasiment invariants à la résolution de l'image.
@@ -1934,7 +1942,7 @@ Afin de produire et entraîner une version allégée de DeconvNet, nous avons d�
 
 En effet, les couches les plus gourmandes en matières de nombre de paramètres d'apprentissage sont les couches \emph{fc6} et \emph{deconv-fc6}, car ce sont des convolutions ayant des noyaux de dimensions $(4096, 512, 7, 7)$ et $(512, 4096, 7, 7)$, soit $102760448 \approx 1.02 \times 10^8$ paramètres à ajuster pour chacune de ces deux couches, ce qui représente environ $822$ Mo par couche.
 
-Nous avons donc défini plusieurs modèles allégés de DeconvNet dans l'optique de les comparer, la logique de leur conception est simple, on pouvait remarquer que DeconvNet était constitué de 11 blocs de couches, dont 5 blocs de convolution, 5 de déconvolution et 1 bloc central.
+Nous avons donc défini plusieurs modèles allégés de DeconvNet dans l'optique de les comparer, la logique de leur conception est simple, on pouvait remarquer que DeconvNet était constitué de 11 blocs de couches, répartis en 5 blocs de convolution, 5 bloc de déconvolution et 1 bloc central.
 Nous avons donc décider de créer des modèles contenant 5 et 7 blocs, en voici leur définitions :
 \begin{center}
 	\begin{tabular}{|c|c|c|c|c|c|c|c|}
@@ -2127,7 +2135,7 @@ Sur Paris, la différence est flagrante, SegNet5 réalise une segmentation à pe
 Une analyse empirique de la première expérience laisse suggérer que les réseaux SegNet5 et SegNet7 n'arrivent pas à considérer l'image d'entrée dans son ensemble.
 En effet, commme on peut le voir, un grand bâtiment sur l'image n'est pas détecté comme un bloc unique de pixels, mais plutôt comme la réunion de plusieurs petits blocs.
 
-Après réflexion, nous sommes arrivés à la conclusion que cela était du au fait que le réseau ne zoomait pas assez.
+Après réflexion, nous sommes arrivés à la conclusion que cela était dû au fait que le réseau ne zoomait pas assez.
 
 Dans le cas de SegNet5, on ne s'intéresse ici qu'à la résolution de l'image et des \emph{map de features}.
 Les couches \emph{pool1} et \emph{pool2}, divisent chacune la résolution de l'image par 2, soit par $2 \times 2 = 4$ après \emph{pool2}.
@@ -2146,7 +2154,6 @@ Dans cette deuxième expérience, nous avons recréé deux versions miniatures d
 Au lieu d'enlever des couches proche du \emph{centre de symétrie} du réseau, comme réalisé dans la première expérience, nous avons plutôt décider de compacter l'architecture DeconvNet.
 
 Ainsi les modèles conçus réduisent plus rapidement la dimension de l'image en employant des couches de \emph{pooling} ayant un plus grand champ-récepteur.
-
 Nous avons aussi décider de diviser par 2 le nombre de \emph{features} calculées à chaque convolution, dans le but d’accélérer les calculs.
 
 Nous avons donc décider de créer deux modèles se différenciant sur le bloc central, en voici leur définitions :
