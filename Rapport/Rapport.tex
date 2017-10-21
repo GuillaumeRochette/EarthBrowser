@@ -2307,10 +2307,94 @@ On voit pour cette image, que le résultat est beaucoup plus "propre" pour le pr
 	\end{center}
 \end{figure}
 
-Pour cet exemple, le résultat semble toujours meilleur dans le cas où l'information reste spatialisée, en effet, le contour des bâtiments est beaucoup plus précis, même dans les cas où les bâtiments sont collés.
-Il y a par ailleurs moins d'artefacts sur la route.
+Pour cet exemple, le résultat semble toujours meilleur dans le cas où l'information reste spatialisée, en effet, le contour des bâtiments est beaucoup plus précis, même dans les cas où les bâtiments sont collés. Il y aussi moins d'artefacts sur la route.
 
-\subsection{Conclusion}
+\section{Recherche de Similarités}
+
+Une piste envisagée au début du stage était de proposer une solution réalisant de la classification d'images en proposant une méthode partiellement supervisée, appelée classification dynamique de \emph{patchs} d'images.
+Un patch d'une image satellite est une sous-région de l'image satellite.
+
+Nous verrons ensuite des résultats de recherche de similarités dans le cas d'images satellite.
+
+\subsection{Classification Dynamique}
+La classification dynamique se décompose en trois étapes :
+\begin{enumerate}
+	\item L'entraînement d'un modèle à une tâche de vision par ordinateur quelconque.
+	\item La création semi-supervisée d'un \emph{dataset} de classification d'images.
+	\item L'entraînement d'un second modèle à la classification d'images sur le \emph{dataset} précédemment créé.
+\end{enumerate}
+
+\subsubsection{Première Étape : Classification Générique d'Images}
+Nous avons décidé d'entraîner des modèles à la classification d'images, car c'est la tâche de vision la plus élémentaire, et sans doute la plus facile.
+
+Pour la première partie, nous avons mené deux expériences :
+\begin{itemize}
+	\item Entraîner un modèle de classification sur le \emph{dataset} CIFAR-10.
+	\item Réutiliser un modèle déjà entraîné sur le \emph{dataset} ImageNet.
+\end{itemize}
+
+\paragraph{Première Expérience}
+La première expérience avait pour but principal de se familiariser avec TensorFlow, un framework développé par Google.
+
+Le modèle créé était une version "miniaturisée" de VGG-16, adaptée pour classifier des images de dimension $(3, 32, 32)$ issues de CIFAR-10 en 10 catégories.
+
+\paragraph{Seconde Expérience}
+La seconde expérience réutilisait le modèle VGG-16, déjà entraîné sur ImageNet.
+
+\subsubsection{Deuxième Étape : Création Semi-Supervisée d'un Dataset}
+L'étape de création semi-supervisée d'un \emph{dataset} s'apparentait réellement à de la recherche de similarités entre images.
+
+L'idée est simple, le calcul du coefficient de corrélation de Pearson  est une mesure de la corrélation entre deux variables.
+
+Il se calcule de la façon suivante :
+$$\rho_{X,Y} = \frac{cov(X,Y)}{\sigma_X \sigma_Y}$$
+Avec $cov(X,Y)$, la covariance entre $X$ et $Y$ et $\sigma_X$, $\sigma_Y$, les variances respectives de $X$ et $Y$.
+
+Une approche naïve pourrait suggérer de directement calculer la matrice des corrélations entre les images à traiter. Malheureusement, les images satellite sont naturellement bruitées, à cause entre autre de la végétation, des reliefs, etc.
+On sait cependant que les réseaux de neurones entraînés une tâche de vision par ordinateur sont capables d'extraire des informations importantes d'une image, en faisant abstraction du bruit.
+On parle alors d'extraction de \emph{features} d'une image.
+En effet, nous avons vu dans le chapitre portant sur l'apprentissage profond, qu'une image est décomposée en \emph{maps de features} successives.
+Ainsi, au lieu de calculer la matrice de corrélations directement entre les images, nous pouvons plutôt calculer la matrice des corrélations entre les décompositions en \emph{features} des images.
+
+Ce nouveau calcul de corrélations revient à effectuer une \emph{recherche de similarités entre images} si la décomposition en \emph{features} est "sensée".
+
+
+Il nous faut ensuite récupérer les images les plus corrélées entre elles et les placer dans différentes classes, en utilisant par exemple le $k$\emph{-means clustering}, permettant ainsi la création d'un \emph{dataset}.
+
+\subsubsection{Troisième Étape : Classification d'Images}
+
+La troisième étape est très simple, il suffit juste d'effectuer l'apprentissage d'un modèle de classification le \emph{dataset} précédemment créé.
+
+Nous n'avons pas réalisé cette étape, car nous n'avions pas suffisamment de données à l'époque.
+
+\subsection{Résultats}
+L'image utilisée pour la recherche de similarités est une image de Commerce City, Colorado, États-Unis, provient du satellite Pléiades.
+
+Les dimensions de l'image sont $(4, 14029, 14012)$, la résolution est de 0.5m, l'image occupe 1.6Go sur le disque.
+
+Nous n’utiliserons que 3 des 4 bandes disponibles, les bandes Rouge, Vert et Bleu, car le modèle VGG-16 n'a été entraîné que sur des images RGB.
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.9]{Images/CommerceCity.png}
+		\caption{Image (RGB, 8bits, Correction $[2-98]\%$) de Commerce City}
+	\end{center}
+\end{figure}
+
+L'image a été découpée en 47742 \emph{patchs} de dimensions $(3, 64, 64)$, interpolés aux dimensions $(3, 32, 32)$, puis décomposés en \emph{features} par le premier modèle, entraîné sur CIFAR-10.
+
+Nous avons ensuite calculé la matrice des corrélations des 47742 décomposition en \emph{features} des images.
+
+L'image en haut à gauche est l'image de référence, puis de gauche à de droite et de haut en bas, sont les 8 images les plus corrélées.
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.9]{Images/CommerceCity_Correlation_1.png}
+		\includegraphics[scale=0.9]{Images/CommerceCity_Correlation_2.png}
+		\caption{Exemples de \emph{patchs} corrélés}
+	\end{center}
+\end{figure}
+
 \chapter{Conclusion}
 \chapter*{Bibliographie}
 \begin{itemize}
@@ -2324,7 +2408,7 @@ La méthode \emph{Adam}, signifiant \emph{Adaptative Moment Estimation}, est une
 Cette méthode utilise à la fois le concept de moyenne mobile ainsi que le concept d'utilisation des moments, c'est à dire d'utiliser aussi les gradients précédents :
 $$\theta_{k+1} = \theta_k - \alpha \nabla_\theta J(x,y,\theta_k) - \beta \nabla_\theta J(x,y,\theta_{k-1})$$
 
-On définit alors la matrice $G_k$ de la même façon que dans \emph{RMSProp}:
+On définit alors la matrice $G_k$ :
 $$G_k = \gamma G_{k-1} + (1-\gamma)(\nabla_\theta J(x,y,\theta_k)\odot\nabla_\theta J(x,y,\theta_k)) \times I_n$$
 On définit par ailleurs $m_k$, le moment du gradient $\nabla_\theta J(x,y,\theta)$, tel que :
 $$m_k = \beta m_{k-1} + (1-\beta) \nabla_\theta J(x,y,\theta_k) $$
