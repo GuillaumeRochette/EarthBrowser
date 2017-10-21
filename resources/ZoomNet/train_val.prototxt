@@ -1,4 +1,4 @@
-name: "ZNet"
+name: "ZoomNet"
 layer {
 	name: "data"
 	type: "HDF5Data"

@@ -1,4 +1,4 @@
-name: "ZNet"
+name: "ZoomNet2"
 layer {
   name: "input"
   type: "Input"

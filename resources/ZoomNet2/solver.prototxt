@@ -13,9 +13,9 @@ iter_size: 4
 max_iter: 50000
 
 test_iter: 1733
-test_interval: 500
+test_interval: 250
 
-display: 500
+display: 250
 
-snapshot: 500
-snapshot_prefix: "snapshots/znet"
+snapshot: 250
+snapshot_prefix: "snapshots/zoomnet2"

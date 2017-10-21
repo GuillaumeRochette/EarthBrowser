@@ -9,13 +9,13 @@ momentum2: 0.999
 weight_decay: 0.0005
 lr_policy: "fixed"
 
-iter_size: 4
+iter_size: 32
 max_iter: 50000
 
-test_iter: 1733
-test_interval: 250
+test_iter: 4767
+test_interval: 500
 
-display: 250
+display: 500
 
-snapshot: 250
-snapshot_prefix: "snapshots/znet2"
+snapshot: 500
+snapshot_prefix: "snapshots/deconv7_infogain"

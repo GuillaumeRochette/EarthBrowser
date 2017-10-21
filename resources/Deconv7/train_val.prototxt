@@ -1,4 +1,4 @@
-name: "SegNet7"
+name: "Deconv7"
 layer {
 	name: "data"
 	type: "HDF5Data"

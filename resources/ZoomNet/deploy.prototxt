@@ -1,4 +1,4 @@
-name: "SegNet7"
+name: "ZoomNet"
 layer {
   name: "input"
   type: "Input"
@@ -24,7 +24,7 @@ layer {
 	bottom: "data"
 	top: "conv1_1"
 	convolution_param {
-		num_output: 64
+		num_output: 32
 		pad: 1
 		kernel_size: 3
 		stride: 1
@@ -48,7 +48,7 @@ layer {
 	bottom: "conv1_1"
 	top: "conv1_2"
 	convolution_param {
-		num_output: 64
+		num_output: 32
 		pad: 1
 		kernel_size: 3
 		stride: 1
@@ -75,8 +75,8 @@ layer {
 	top: "pool1_argmax_count"
 	pooling_param {
 		pool: MAX
-		kernel_size: 2
-		stride: 2
+		kernel_size: 4
+		stride: 4
 	}
 }
 layer {
@@ -85,7 +85,7 @@ layer {
 	bottom: "pool1"
 	top: "conv2_1"
 	convolution_param {
-		num_output: 128
+		num_output: 64
 		pad: 1
 		kernel_size: 3
 		stride: 1
@@ -109,7 +109,7 @@ layer {
 	bottom: "conv2_1"
 	top: "conv2_2"
 	convolution_param {
-		num_output: 128
+		num_output: 64
 		pad: 1
 		kernel_size: 3
 		stride: 1
@@ -136,8 +136,8 @@ layer {
 	top: "pool2_argmax_count"
 	pooling_param {
 		pool: MAX
-		kernel_size: 2
-		stride: 2
+		kernel_size: 4
+		stride: 4
 	}
 }
 layer {
@@ -146,7 +146,7 @@ layer {
 	bottom: "pool2"
 	top: "conv3_1"
 	convolution_param {
-		num_output: 256
+		num_output: 128
 		pad: 1
 		kernel_size: 3
 		stride: 1
@@ -170,7 +170,7 @@ layer {
 	bottom: "conv3_1"
 	top: "conv3_2"
 	convolution_param {
-		num_output: 256
+		num_output: 128
 		pad: 1
 		kernel_size: 3
 		stride: 1
@@ -194,7 +194,7 @@ layer {
 	bottom: "conv3_2"
 	top: "conv3_3"
 	convolution_param {
-		num_output: 256
+		num_output: 128
 		pad: 1
 		kernel_size: 3
 		stride: 1
@@ -231,7 +231,7 @@ layer {
 	bottom: "pool3"
 	top: "conv4_1"
 	convolution_param {
-		num_output: 512
+		num_output: 256
 		pad: 1
 		kernel_size: 3
 		stride: 1
@@ -255,7 +255,7 @@ layer {
 	bottom: "conv4_1"
 	top: "conv4_2"
 	convolution_param {
-		num_output: 512
+		num_output: 256
 		pad: 1
 		kernel_size: 3
 		stride: 1
@@ -279,7 +279,7 @@ layer {
 	bottom: "conv4_2"
 	top: "deconv4_3"
 	convolution_param {
-		num_output: 256
+		num_output: 128
 		pad: 1
 		kernel_size: 3
 		stride: 1
@@ -316,7 +316,7 @@ layer {
 	bottom: "unpool3"
 	top: "deconv3_1"
 	convolution_param {
-		num_output: 256
+		num_output: 128
 		pad: 1
 		kernel_size: 3
 		stride: 1
@@ -340,7 +340,7 @@ layer {
 	bottom: "deconv3_1"
 	top: "deconv3_2"
 	convolution_param {
-		num_output: 256
+		num_output: 128
 		pad: 1
 		kernel_size: 3
 		stride: 1
@@ -364,7 +364,7 @@ layer {
 	bottom: "deconv3_2"
 	top: "deconv3_3"
 	convolution_param {
-		num_output: 128
+		num_output: 64
 		pad: 1
 		kernel_size: 3
 		stride: 1
@@ -391,8 +391,8 @@ layer {
 	top: "unpool2"
 	pooling_param {
 		pool: MAX
-		kernel_size: 2
-		stride: 2
+		kernel_size: 4
+		stride: 4
 	}
 }
 layer {
@@ -401,7 +401,7 @@ layer {
 	bottom: "unpool2"
 	top: "deconv2_1"
 	convolution_param {
-		num_output: 128
+		num_output: 64
 		pad: 1
 		kernel_size: 3
 		stride: 1
@@ -425,7 +425,7 @@ layer {
 	bottom: "deconv2_1"
 	top: "deconv2_2"
 	convolution_param {
-		num_output: 64
+		num_output: 32
 		pad: 1
 		kernel_size: 3
 		stride: 1
@@ -452,8 +452,8 @@ layer {
 	top: "unpool1"
 	pooling_param {
 		pool: MAX
-		kernel_size: 2
-		stride: 2
+		kernel_size: 4
+		stride: 4
 	}
 }
 layer {
@@ -462,7 +462,7 @@ layer {
 	bottom: "unpool1"
 	top: "deconv1_1"
 	convolution_param {
-		num_output: 64
+		num_output: 32
 		pad: 1
 		kernel_size: 3
 		stride: 1
@@ -486,7 +486,7 @@ layer {
 	bottom: "deconv1_1"
 	top: "deconv1_2"
 	convolution_param {
-		num_output: 64
+		num_output: 32
 		pad: 1
 		kernel_size: 3
 		stride: 1
@@ -510,7 +510,7 @@ layer {
 	bottom: "deconv1_2"
 	top: "segmentation"
 	convolution_param {
-		num_output: 2
+		num_output: 3
 		pad: 0
 		kernel_size: 1
 	}
