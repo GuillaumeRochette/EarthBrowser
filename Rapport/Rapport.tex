@@ -2340,7 +2340,7 @@ Cette expérience a tenté de corriger ce défaut en agrandissant la fenêtre et
 Deux modèles ont été créés, ZoomNet et ZoomNet, se différenciant sur le bloc central, le premier gardant l'information spatialisée, le second la dé-spatialisant.
 Les résultats obtenus sont de meilleure qualité que ceux obtenus dans la première expérience, car plus fins et moins bruités.
 
-Ces deux expériences nous permettent alors de formuler des règles empiriques quand à l'importance de réduire la dimensionnalité des données pour éviter le problème de vision tunnelisée, ainsi que formuler l'hypothèse de garder l'information spatialisée dans le bloc central.
+Ces deux expériences nous permettent alors de formuler des règles empiriques quand à l'importance de réduire la dimensionnalité spatiale des données pour éviter le problème de vision tunnelisée, ainsi que formuler l'hypothèse de garder l'information spatialisée dans le bloc central.
 \section{Recherche de Similarités}
 
 Une piste envisagée au début du stage était de proposer une solution réalisant de la classification d'images en proposant une méthode partiellement supervisée, appelée classification dynamique de \emph{patchs} d'images.
@@ -2359,19 +2359,9 @@ La classification dynamique se décompose en trois étapes :
 \subsubsection{Première Étape : Classification Générique d'Images}
 Nous avons décidé d'entraîner des modèles à la classification d'images, car c'est la tâche de vision la plus élémentaire, et sans doute la plus facile.
 
-Pour la première partie, nous avons mené deux expériences :
-\begin{itemize}
-	\item Entraîner un modèle de classification sur le \emph{dataset} CIFAR-10.
-	\item Réutiliser un modèle déjà entraîné sur le \emph{dataset} ImageNet.
-\end{itemize}
-
-\paragraph{Première Expérience}
-La première expérience avait pour but principal de se familiariser avec TensorFlow, un framework développé par Google.
+Cette première partie avait pour but principal de se familiariser avec TensorFlow, un framework développé par Google.
 
 Le modèle créé était une version "miniaturisée" de VGG-16, adaptée pour classifier des images de dimension $(3, 32, 32)$ issues de CIFAR-10 en 10 catégories.
-
-\paragraph{Seconde Expérience}
-La seconde expérience réutilisait le modèle VGG-16, déjà entraîné sur ImageNet.
 
 \subsubsection{Deuxième Étape : Création Semi-Supervisée d'un Dataset}
 L'étape de création semi-supervisée d'un \emph{dataset} s'apparentait réellement à de la recherche de similarités entre images.
@@ -2437,21 +2427,49 @@ Comme on peut le remarquer sur les deux figures, les images sont globalement sim
 
 Toutefois, pour la première figure, on remarque que les similarités entre les patchs sont au niveau de la localisation des voitures, qui sont de petits éléments dans l'image.
 
-À l'inverse dans la seconde figure, les patchs similaires ont en commun un croisement entre deux routes, mais que la position des arbres ou la présence de voitures ne présentent pas d'importance.
+À l'inverse dans la seconde figure, les patchs similaires ont en commun un croisement entre deux routes, mais que la position des arbres ou la présence de voitures ne présentent peu ou pas d'importance.
+
+Il est par contre impossible de produire ici une analyse quantitative des résultats, car il n'y a pas d'objectifs précis à atteindre. Nous ne pouvons pas faire autre chose que de juger les résultats en se posant nous même la question si les patchs semblent similaires.
 \subsection{Conclusion}
 Dans cette partie nous avons décrit le concept de recherche de similarités dans les images.
 
 Nous avons dans un premier temps souhaité réaliser de la classification dynamique d'images.
-Cette application ne sera finalement pas complètement réalisée, d'une part par un manque de données, et d'autre part car l'intérêt de cette application est faible.
+Cette application ne sera finalement pas entièrement réalisée, d'une part par un manque de données, et d'autre part car l'intérêt de cette application est faible.
 En effet, classifier des patchs d'images est bien moins intéressant en terme de précision que de segmenter ces mêmes patchs.
 C'est pourquoi, nous n'avons pas décider de nous attarder sur cette tâche et de nous tourner vers la segmentation d'images, développée plus haut.
 
 Toutefois, le concept de recherche de similarités reste intéressant indépendamment de la classification dynamique pour au moins deux raisons :
 \begin{itemize}
-	\item L'extraction de \emph{features} peut se faire sur la sortie de n'importe quelle couche de n'importe quel modèle, y compris une image segmentée. Cette flexibilité permettant de décomposer l'image en \emph{features} de plus ou moins haut niveau et permettant ainsi d'observer plusieurs niveaux de similarités.
-	\item 
+	\item L'extraction de \emph{features} peut se faire sur la sortie de n'importe quelle couche. Cette flexibilité permettant de décomposer l'image en \emph{features} de plus ou moins haut niveau et permettant ainsi d'observer plusieurs niveaux de similarités.
+	\item L'extraction des \emph{features} peut se faire sur n'importe quel modèle, permettant de comparer la représentation de l'information entre ces différents modèles.
 \end{itemize}
+
+Ce travail met toutefois en exergue la capacité des réseaux de neurones à extraire de l'information d'images satellite sans même avoir appris sur ce genre d'images.
 \chapter{Conclusion}
+Dans ce rapport de Stage de Fin d'Études, nous avons pu aborder de nombreux sujets.
+
+Tout d'abord, le sujet de l'\emph{Imagerie Satellite}, dans lequel nous avons esquissé le fonctionnement d'un satellite de télédétection, ainsi qu'évoqué certaines particularités des images satellite.
+Ce chapitre nous a permis d'appréhender à quel point le domaine était complexe et de comprendre par la suite les raisonnements employés dans la suite.
+
+Nous avons ensuite aborder de nombreux points concernant l'\emph{Apprentissage Machine}, en présentant les motivations, définissant la notion d'apprentissage ainsi que les diverses contraintes et le potentiel de tels algorithmes.
+Ce chapitre avait pour but d'introduire la discipline pour en présenter une branche très particulière, l'\emph{Apprentissage Profond}.
+
+Puis, nous avons défini les fondements de l'\emph{Apprentissage Profond}, en expliquant le fonctionnement des réseaux de neurones, ainsi que diverses techniques favorisant l'apprentissage de ceux-ci. Nous avons ensuite expliqué le fort potentiel de l'\emph{Apprentissage Profond} et le traitement d'image, grâce aux réseaux convolutifs.
+Ce chapitre nous a permis de justifier les choix d'architecture évoqués dans la dernière partie.
+
+Enfin, nous avons présenté deux applications de l'\emph{Apprentissage Profond} appliqué à l'\emph{Imagerie Satellite}.
+
+La première application proposée était une tâche de \emph{segmentation d'image} en vue d'automatiser le processus de cartographie.
+Nous avons pour cela mené deux expériences, la première consistait à identifier les bâtiments sur des images satellite. La seconde visait à améliorer les résultats de la première, d'une part en proposant d'identifier les routes en additions des bâtiments, ainsi qu'en proposant une nouvelle architecture visant à corriger les problèmes liées à la première.
+Ces deux expériences nous ont permis de formuler des règles empiriques quand à l'importance de réduire la dimensionnalité spatiale des données pour éviter le problème de vision tunnelisée, ainsi que formuler l'hypothèse de garder l'information spatialisée dans toute l'architecture.
+
+La seconde application proposée portait sur la \emph{recherche de similarités} dans les images.
+Cette première application découle d'une première idée de \emph{classification dynamique}, idée qui n'a pas aboutie.
+Cette application s'appuie la décomposition en \emph{features} opérée par un réseau de neurones, permettant de ne garder que l'information essentielle.
+Le champ d'application de la recherche de similarités est très vaste,
+on peut imaginer pouvoir repérer des anomalies dans les images lors de son traitement, et ainsi pouvoir les corriger.
+
+
 \chapter*{Bibliographie}
 \begin{itemize}
 	\item Deep Learning : \url{http://deeplearning.net/}
