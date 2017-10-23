@@ -11,6 +11,7 @@
 \usepackage{wasysym}
 \usepackage{dsfont}
 \usepackage{yhmath}
+\usepackage{natbib}
 \usepackage{hyperref}
 \usepackage{tabularx}
 \usepackage{colortbl}
@@ -105,6 +106,8 @@ Dans le troisième chapitre, nous définirons précisément le domaine de l'appr
 Dans le quatrième chapitre, nous ferons le lien entre apprentissage profond et imagerie spatiale, justifiant l'utilité d'appliquer le premier au second, ainsi que les applications réalisées au cours de ce stage permettant d'extraire des informations des images satellite. Les tâches que nous présenterons sont la segmentation d'images et la recherche de similarités.
 
 \chapter{L'Imagerie Satellite}
+Cette partie s'appuie sur l'ouvrage de référence en la matière \cite{CNES/ONERA/IGN2008}.
+
 De tout temps, l'humain a toujours souhaité pouvoir observer le monde, que ce soit à des fins militaires, scientifiques ou à simple but de contemplation.
 
 Les besoins en matière de \emph{télédétection} sont plus anciens que les premiers satellites artificiels. Dès la fin du XIX ème siècle, lors du siège de Paris en $1870$, des ballons effectuaient des missions de reconnaissance en utilisant les progrès en matière de photographie.
@@ -126,7 +129,7 @@ Selon leur longueur d'onde, les ondes électromagnétique portent des noms diff�
 		\caption{Domaines du spectre électromagnétique}
 	\end{center}
 \end{figure}
-Le domaine \emph{optique} est la réunion du domaine du visible et de l'infrarouge (I.R.).
+Le domaine \emph{optique} est la réunion du domaine du visible et de l'infrarouge (I.R.) \cite{Wikipedia2017d}.
 Bien que les satellites puissent embarquer aussi d'autres types de capteurs, nous n'en parlerons pas, car cela n'a pas de rapport avec l'Imagerie Satellite.
 
 Par ailleurs, nous nous focaliserons uniquement sur les capteurs passifs, c'est-à-dire des capteurs qui ne font que mesurer le rayonnement d'un objet, contrairement aux capteurs actifs, comme les radars qui émettent un rayonnement et en observent l'écho sur l'objet.
@@ -136,10 +139,10 @@ Ce sont les premiers capteurs historiques utilisés pour l'imagerie satellite, u
 Le fonctionnement de ce type de capteur s'apparente au mécanisme des premiers scanners, c'est à dire une unique cellule de détection, qui nécessitait un double balayage selon les axes des lignes et des colonnes pour décrire la scène.
 En anglais, le terme \emph{whisk broom} désigne des balais à \emph{fouetter}, comme par exemple des plumeaux.
 
-Voici un schéma décrivant le fonctionnement d'un capteur de type \emph{whisk broom} :
+Voici un schéma décrivant le fonctionnement d'un capteur de type \emph{whisk broom} \cite{Hillen2009a}:
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=1.]{Images/Whisk_Broom.jpg}
+		\includegraphics[scale=0.5]{Images/Whisk_Broom.jpg}
 		\caption{Capteur de type \emph{Whisk Broom}}
 	\end{center}
 \end{figure}
@@ -162,10 +165,10 @@ Ainsi l'acquisition est simultanée pour les détecteurs composants une seule et
 
 Une image, composées de $m$ lignes et $n$ colonnes, est donc le résultat de $n$ acquisitions simultanées répétées à $m$ intervalles de temps suivant la trajectoire du satellite.
 
-Voici un schéma décrivant le fonctionnement d'un capteur de type \emph{push broom} :
+Voici un schéma décrivant le fonctionnement d'un capteur de type \emph{push broom} \cite{Hillen2009}:
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=1.]{Images/Push_Broom.jpg}
+		\includegraphics[scale=0.5]{Images/Push_Broom.jpg}
 		\caption{Capteur de type \emph{Push Broom}}
 	\end{center}
 \end{figure}
@@ -313,7 +316,7 @@ Cependant pour pouvoir obtenir de "belles" images, afin de pouvoir les exploiter
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[scale=0.9]{Images/Nadir.png}
-		\caption{Nadir, Zénith et Horizons}
+		\caption{Nadir, Zénith et Horizons \cite{Wikipedia2017a}}
 	\end{center}
 \end{figure}
 
@@ -323,7 +326,7 @@ Une image, et en particulier une image satellite, est constituée de bandes.
 
 Chaque bande contient la réponse impulsionnelle de la scène sur une longueur d'onde donnée.
 
-Voici les caractéristiques radiométriques du satellite Pléiades :
+Voici les caractéristiques radiométriques du satellite Pléiades \cite{Wikipedia2017b}:
 \begin{center}
 	\begin{tabular}{|c|c|c|}
 	\hline
@@ -355,7 +358,7 @@ Le traitement appliqué s'appelle la fusion d'images et repose sur :
 
 \subsubsection{Prétraitement d'une Image Satellite}
 Un grand nombre de traitements interviennent dans la correction géométrique des images afin que le produit final puisse être superposable à une carte.
-Voici un récapitulatif des niveaux de traitements pour une image satellite de la famille SPOT :
+Voici un récapitulatif des niveaux de traitements pour une image satellite de la famille SPOT \cite{Space2010}:
 \begin{itemize}
 	\item Niveau 1A : Correction des défauts radiométriques issus des écarts de sensibilité entre les détecteurs élémentaires.
 	\item Niveau 1B : Égalisation radiométrique et traitements géométriques relatifs aux variations d'altitude du satellite, à la rotation et à la courbure de la Terre, aux variations de l'angle de visée, etc.
@@ -374,6 +377,7 @@ C'est un domaine extrêmement complexe, où se mêlent des disciplines telles qu
 Ce chapitre a permis au lecteur de comprendre la nature d'une image satellite, permettra de comprendre par la suite, le raisonnement employé dans le quatrième chapitre portant sur les applications pratiques.
 
 \chapter{L'Apprentissage Machine}
+Cette partie s'appuie en partie sur l'ouvrage \cite{Goodfellow2016}.
 L'apprentissage machine permet d'accomplir des tâches traditionnellement compliquées pour les ordinateurs, mais considérées simples pour l'humain.
 En effet, l'humain apprend par exemple dès le plus jeune âge à discerner les contours sur une image, d'en décrire le contenu et même de visualiser un objet sous différents angles. Des algorithmes classiques ont du mal à produire des bons résultats sur ce genre de problèmes.
 À l'inverse, les ordinateurs possèdent une capacité très supérieure à l'humain pour résoudre des calculs complexes, ou des problèmes d'ordre combinatoire.
@@ -524,7 +528,7 @@ Ainsi pour résoudre notre problème, notre modèle doit être suffisamment perf
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[scale=0.5]{Images/Regularization.png}
-		\caption{Dilemme du choix entre deux modèles}
+		\caption{Dilemme du choix entre deux modèles \cite{Wikipedia2017c}}
 	\end{center}
 \end{figure}
 Dans cet exemple, nous choisirons bien entendu la courbe verte, car le modèle vert est beaucoup plus simple et nous semble plus cohérent par rapport à nos données.
@@ -671,7 +675,7 @@ Donc,
 $$\nabla_\theta J(x,y,\theta) = \frac{1}{n} \sum_{i=1}^{n}{\nabla_\theta J(x_i,y_i,\theta)}$$
 \			
 \subsubsection{Algorithme de Descente de Gradient Stochastique}
-La réflexion derrière la descente de gradient stochastique est que le gradient de l'ensemble est la moyenne des gradients des couples $(x,y)$ .
+La réflexion derrière la descente de gradient stochastique est que le gradient de l'ensemble est la moyenne des gradients des couples $(x,y)$ \cite{Bottou2010}.
 
 D'après la Loi des Grands Nombres, $$\mathbb{E}(X) \approx \frac{1}{n} \sum_{i=1}^{n}{x_i}$$
 Avec $X$ une distribution, dont les données $x_i$ sont issues.
@@ -712,6 +716,7 @@ Nous avons défini clairement la notion d'apprentissage machine, évoqué diffé
 Ce chapitre permettra au lecteur de pouvoir saisir pleinement le concept et les motivations de l'apprentissage profond évoqué dans le chapitre suivant.
 
 \chapter{L'Apprentissage Profond}
+Cette partie s'appuie en partie sur les ouvrages de\cite{Goodfellow2016} et \cite{Nielsen2015}.
 L'apprentissage profond se différencie de l'apprentissage machine classique particulièrement sur deux points :
 \begin{itemize}
 	\item Il existe des dizaines, voire des centaines de classes d'algorithmes d'apprentissage pour résoudre des tâches variées, et par extension des problèmes très variés, cependant dans le cas de l'apprentissage profond, même si il existe des différences, le principe utilisé reste globalement le même.
@@ -756,7 +761,7 @@ Cette application est la composée de deux fonctions distinctes :
 	\item Une fonction d'\emph{activation} $g : \mathbb{R} \rightarrow \mathbb{R}$, \emph{non-linéaire}.
 	      	      Des exemples :
 	      \begin{itemize}
-	      	\item \emph{ReLU}, pour \emph{Rectified Linear Unit} : $g(z) = max(0,z)$
+	      	\item \emph{ReLU} \cite{Glorot2011}, pour \emph{Rectified Linear Unit} : $g(z) = max(0,z)$
 	      	\item \emph{Sigmoïde} : $g(z) = \frac{1}{1+e^{-z}}$
 	      	\item \emph{Tangente hyperbolique} : $g(z) = \tanh(z)$
 	      \end{itemize}
@@ -891,7 +896,7 @@ Ainsi,
 			
 \subsection{Rétro-propagation du Gradient}
 		
-L'algorithme de rétro-propagation est souvent à tort considéré comme étant la méthode d'optimisation utilisée pour minimiser la fonction de perte.
+L'algorithme de rétro-propagation \cite{Werbos1974} est souvent à tort considéré comme étant la méthode d'optimisation utilisée pour minimiser la fonction de perte.
 C'est en effet le rôle d'une méthode de descente de gradient.
 
 Voici pour rappel une méthode générale de descente de gradient, vue dans la première partie :
@@ -1135,7 +1140,7 @@ Nous allons maintenant quitter cette partie plutôt calculatoire, pour s'intére
 \subsection{Théorème d'Approximation Universelle}
 Les réseaux de neurones permettent de représenter universellement n'importe quelle fonction, dans le sens où il existe un réseau de neurones, ayant une architecture donnée, des poids et biais donnés, pouvant approximer une fonction en particulier.
 
-Le \emph{Théorème d'Approximation Universelle} nous dit qu'il existe un réseau suffisamment "grand" pour avoir la précision souhaitée sur les résultats.
+Le \emph{Théorème d'Approximation Universelle} \cite{Hornik1991} nous dit qu'il existe un réseau suffisamment "grand" pour avoir la précision souhaitée sur les résultats.
 
 Toutefois, ce théorème ne dit pas quelle sera la taille de ce réseau, mais en affirme seulement l'existence.
 \subsection{Techniques de Régularisation}
@@ -1149,7 +1154,7 @@ Certaines méthodes ajouteront des contraintes d'optimisation sur la fonction de
 Si les méthodes sont choisies avec soin, elles peuvent améliorer grandement la performance des réseaux de neurones profonds sur l'ensemble des données de test.
 \subsubsection{Pénalisation des Paramètres}
 La pénalisation des paramètres est une des premières formes de régularisation, utilisée depuis les débuts de l'apprentissage machine.
-Cette régularisation limite la capacité de modèles, tels que les réseaux de neurones, les régressions linéaires, polynomiales et logistiques, en ajoutant une composante de pénalisation des paramètres $\Omega(\theta)$ à la fonction de perte $J(x,y,\theta)$, tel que
+Cette régularisation \cite{Ng2004} limite la capacité de modèles, tels que les réseaux de neurones, les régressions linéaires, polynomiales et logistiques, en ajoutant une composante de pénalisation des paramètres $\Omega(\theta)$ à la fonction de perte $J(x,y,\theta)$, tel que
 $$J(x,y,\theta) = J_0(x,y,\theta) + \lambda \Omega(\theta)$$
 Avec $\lambda \geq 0$, un hyper-paramètre pondérant la contribution de la composante de pénalisation.
 Si $\lambda = 0$, il n'y a pas de régularisation.
@@ -1165,16 +1170,16 @@ Ainsi le poids $\elem{W}{k}{j}{i}$ aura tendance à diminuer par rapport à une 
 \subsubsection{Augmentation du Jeu de Données}
 Une des meilleures façons d'améliorer la capacité de généralisation d'un modèle, est de l'entraîner sur plus de données.
 Malheureusement, la taille des ensembles de données est généralement limitée.
-Une façon de contourner le problème est de créer artificiellement des données et de les ajouter à l'ensemble d'apprentissage.
+Une façon de contourner le problème est de créer artificiellement des données et de les ajouter à l'ensemble d'apprentissage \cite{Tanner1987}.
 
 Cette méthode est principalement utilisée pour un domaine : la reconnaissance d'objets.
 En effet, il est très facile de transformer les données existantes par des transformations, telles que des rotations, des translations ou des homothéties, paramétrées aléatoirement.
 On peut aussi le faire sur d'autres types de données en ajoutant du \emph{bruit blanc} sur une partie des entrées.
 \subsubsection{Arrêt Prématuré}
 Pour un modèle avec une capacité suffisante pour sur-apprendre, on observe généralement que tandis que l'\emph{erreur d'apprentissage} continue de diminuer, l'\emph{erreur d'entraînement} recommence à augmenter.
-Cela signifie que nous avons atteint un \emph{minimum local} sur les données de test, il convient alors d'arrêter l'apprentissage avant que l'\emph{erreur de généralisation} empire.
+Cela signifie que nous avons atteint un \emph{minimum local} sur les données de test, il convient alors d'arrêter l'apprentissage avant que l'\emph{erreur de généralisation} empire \cite{Prechelt1998}.
 \subsubsection{Dropout}
-La méthode \emph{Dropout} est une méthode assez particulière de régularisation, qui consiste à entraîner tour à tour des sous-réseaux de notre réseaux de neurones.
+La méthode \emph{Dropout} \cite{Srivastava2014} est une méthode assez particulière de régularisation, qui consiste à entraîner tour à tour des sous-réseaux de notre réseaux de neurones.
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[scale=0.20]{Images/Dropout.png}
@@ -1188,7 +1193,7 @@ Cela incite donc à une convergence vers un minimum local partagé par les diff�
 Ce minimum local est de façon générale un bien meilleur minimum que ceux propres aux sous-modèles.
 Cette méthode présente toutefois un inconvénient, elle est difficile à implémenter, mais est présente dans la plupart des librairies d'apprentissage profond.
 \section{Réseaux Convolutifs}
-Les réseaux de neurones convolutifs sont une famille particulière de réseaux de neurones, qui excelle en terme de performance dans le domaine de la vision par ordinateur.
+Les réseaux de neurones convolutifs \cite{Krizhevsky2012} sont une famille particulière de réseaux de neurones, qui excelle en terme de performance dans le domaine de la vision par ordinateur.
 Ils sont spécialisés dans le traitement de données ayant une structure en forme de grille, c'est à dire que les données sont liées spatialement ou temporellement.
 
 Voici des exemples de données ayant ce genre de structure :
@@ -1397,7 +1402,7 @@ Avec,
 	\item $n \in [\![0, W_K[\![$ et $(n + j \times s_W) \in [\![0, W_{I'}[\![$
 \end{itemize}
 \subsection{La Réduction de la Dimensionnalité}
-La \emph{réduction de la dimensionnalité} est un défi majeur en Statistiques et en Apprentissage Machine.
+La \emph{réduction de la dimensionnalité} \cite{Hinton2006} est un défi majeur en Statistiques et en Apprentissage Machine.
 
 Prenons un exemple pour illustrer le problème.
 Imaginons que nous souhaitons classifier des images issues d'Internet de dimensions $(3,256,256)$, en $1000$ classes distinctes.
@@ -1426,8 +1431,8 @@ Ici les dimensions d'entrées et de sorties sont comparables, nous pouvons donc 
 Une approche un peu plus réfléchie pourrait suggérer d'une part de ne pas réduire la dimension des données non pas pendant le pré-traitement, mais surtout d'autre part, d'éviter de la réduire d'un seul coup, mais plutôt petit à petit.
 
 \subsubsection{Pooling d'Information}
-Le \emph{pooling}, signifiant \emph{mise en commun}, consiste à résumer l'information apportée par les valeurs de sorties proches en une seule valeur.
-Il existe deux déclinaisons du \emph{pooling},
+Le \emph{pooling} \cite{Krizhevsky2012}, signifiant \emph{mise en commun}, consiste à résumer l'information apportée par les valeurs de sorties proches en une seule valeur.
+Il existe trois grandes déclinaisons du \emph{pooling},
 \begin{itemize}
 	\item Le \emph{max pooling}, qui calcule le maximum des valeurs données en entrée.
 	\item L'\emph{average pooling}, qui calcule la moyenne des valeurs données en entrée.
@@ -1438,7 +1443,7 @@ Soit $I$ un tenseur de dimensions $(C_I, H_I, W_I)$, et une fonction de \emph{po
 Alors $S$ sera de dimensions :
 $$(C_S, H_S, W_S) = (C_I, (H_I + p_H - H_K) / s_H + 1, (W_I + p_W - W_K) / s_W + 1))$$
 
-Ces deux déclinaisons de pooling sont utilisées dans des contextes assez différents.
+Ces trois déclinaisons de pooling sont utilisées dans des contextes assez différents.
 \paragraph{Max-Pooling}
 Le \emph{max pooling} est principalement utilisé pour réduire la dimension des données de façon spatiale, c'est une méthode robuste aux bruits ambiants, car elle ne transmet que l'information ayant le plus d'intensité.
 \begin{figure}[H]
@@ -1462,7 +1467,7 @@ Nous allons dans cette partie présenter quelques tâches liées à la vision pa
 \subsection{Classification}
 La classification est sans doute le problème le plus simple en matière de vision, il s'agit de prédire l'appartenance d'une image à une classe, généralement liée aux objets liés dans l'image.
 \subsubsection{Datasets}
-Un des premiers \emph{datasets} d'images pour la classification est le MNIST, composé de $70000$ images noir et blanc de $28 \times 28$ pixels, chacune contenant un chiffre manuscrit.
+Un des premiers \emph{datasets} d'images pour la classification est le MNIST \cite{LeCun2010}, composé de $70000$ images noir et blanc de $28 \times 28$ pixels, chacune contenant un chiffre manuscrit.
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[scale=0.3]{Images/MNIST_Digits.png}
@@ -1471,7 +1476,7 @@ Un des premiers \emph{datasets} d'images pour la classification est le MNIST, co
 \end{figure}
 Même si l'intérêt à reconnaître les chiffres est limité, ce \emph{dataset} a longtemps servi au niveau académique de \emph{benchmark} pour comparer les différents modèles.
 
-On citera aussi les \emph{datasets} CIFAR-10, CIFAR-100, et ImageNet.
+On citera aussi les \emph{datasets} CIFAR-10 \cite{Krizhevsky2009}, CIFAR-100 \cite{Krizhevsky2009a}, et ImageNet \cite{Krizhevsky2012a}.
 CIFAR-10 et CIFAR-100 sont composés chacun de $60000$ images RGB de $32 \times 32$ pixels, réparties en $10$ classes pour le premier et $100$ classes pour le second.
 \begin{figure}[H]
 	\begin{center}
@@ -1482,7 +1487,7 @@ CIFAR-10 et CIFAR-100 sont composés chacun de $60000$ images RGB de $32 \times 
 ImageNet contient une base de classification d'images contenant plus de $10$ millions d'URLs d'images de taille variable réparties en $1000$ classes. Les images sont majoritairement issues de sites comme Flickr.
 Ce \emph{dataset}, créé en $2009$, fait l'objet d'une compétition depuis $2010$, qui a permis de réaliser des progrès impressionnants en traitement d'images.
 \subsubsection{Architectures de Modèles}
-En $2011$, l'erreur de classification était de $25\%$. En $2012$, le réseau de neurones convolutifs AlexNet, composé de $8$ couches, atteignait alors $16\%$ d'erreur. En $2014$, GoogLeNet ($22$ couches), suivi de près par VGG-16 ($16$ couches), remportait la compétition avec une erreur de $6.7\%$ (respectivement $7.3\%$). En $2015$, ResNet, un réseau de $152$ couches, atteignait alors $3.6\%$. En moyenne, un humain non-entraîné réalise environ $10\%$ d'erreur et un humain entraîné $5\%$.
+En $2011$, l'erreur de classification était de $25\%$. En $2012$, le réseau de neurones convolutifs AlexNet \cite{Krizhevsky2012}, composé de $8$ couches, atteignait alors $16\%$ d'erreur. En $2014$, GoogLeNet ($22$ couches) \cite{Szegedy2015}, suivi de près par VGG-16 ($16$ couches) \cite{Simonyan2014}, remportait la compétition avec une erreur de $6.7\%$ (respectivement $7.3\%$). En $2015$, ResNet \cite{He2015}, un réseau de $152$ couches, atteignait alors $3.6\%$. En moyenne, un humain non-entraîné réalise environ $10\%$ d'erreur et un humain entraîné $5\%$.
 \subsection{Détection d'Objets}
 La détection d'objets consiste à prédire la classe et l'emplacement d'un ou plusieurs objets dans une image. L'emplacement d'un objet est généralement défini par une \emph{bounding box}, ou région d'intérêt, représentée par un rectangle entourant l'objet.
 \begin{figure}[H]
@@ -1493,11 +1498,11 @@ La détection d'objets consiste à prédire la classe et l'emplacement d'un ou p
 \end{figure}
 
 \subsubsection{Datasets}
-Le \emph{dataset} Pascal VOC est composé de $11530$ images contenant au total $27450$ régions d'intérêt décrivant $20$ classes.
+Le \emph{dataset} Pascal VOC \cite{Everingham2010} est composé de $11530$ images contenant au total $27450$ régions d'intérêt décrivant $20$ classes.
 
-ImageNet possède aussi une base de détection d'objets contenant environ $450000$ images contenant $475000$ objets référencés répartis en $200$ classes.
+ImageNet \cite{Krizhevsky2012a} possède aussi une base de détection d'objets contenant environ $450000$ images contenant $475000$ objets référencés répartis en $200$ classes.
 \subsubsection{Architectures de Modèles}
-Deux architectures remarquables sont les réseaux de type R-CNN et YOLO, l'une par ses performances exceptionnelles, l'autre par le compromis réalisé entre performances et vitesse d’exécution.
+Deux architectures remarquables sont les réseaux de type R-CNN \cite{Girshick2013} et YOLO \cite{Redmon2015}, l'une par ses performances exceptionnelles, l'autre par le compromis réalisé entre performances et vitesse d’exécution.
 
 Les architectures de type R-CNN se caractérisent par un schéma de fonctionnement divisé en deux parties, la première étant un réseau de neurones assurant la localisation potentielle d'objets, la seconde étant un autre réseau de neurones dédié à la classification de chacune des zones potentielles.
 
@@ -1514,12 +1519,12 @@ La segmentation répond à des besoins de précision plus élevés que la détec
 \end{figure}
 Un des avantages de la segmentation d'images par rapport à la détection d'objets, outre le gain potentiel de précision, est qu'il est possible à partir d'un masque de segmentation de produire des \emph{bounding boxes} en utilisant la polygonisation des masques. L'opération inverse n'est pas vraiment intéressante puisque les polygones sont des rectangles.
 \subsubsection{Datasets}
-Pascal VOC possède aussi une base de segmentation d'images contenant $2913$ images décrivant $20$ classes.
-Microsoft COCO (Common Objects in Context) contient $328000$ images décrivant $91$ classes.
+Pascal VOC \cite{Everingham2010} possède aussi une base de segmentation d'images contenant $2913$ images décrivant $20$ classes.
+Microsoft COCO (Common Objects in Context) \cite{Lin2014} contient $328000$ images décrivant $91$ classes.
 
 Ces deux \emph{datasets} possèdent la particularité de segmenter les images d'une part selon la classe mais aussi en fonction de l'instance, permettant ainsi de différencier deux objets de même nature au sein d'une image.
 \subsubsection{Architectures de Modèles}
-Deux architectures remarquables sont les réseaux de type FCN et DeconvNet, elles utilisent toutes les deux le principe de décomposer l'image en \emph{features} par convolutions successives, puis de reconstituer l'image en image segmentée en appliquant plusieurs couches de déconvolutions.
+Deux architectures remarquables sont les réseaux de type FCN \cite{Long2015} et DeconvNet \cite{Noh2015}, elles utilisent toutes les deux le principe de décomposer l'image en \emph{features} par convolutions successives, puis de reconstituer l'image en image segmentée en appliquant plusieurs couches de déconvolutions.
 
 Les architectures de type FCN reconstituent l'image en combinant les \emph{features} dé-convolutées avec les \emph{features} après \emph{pooling}.
 
@@ -1563,7 +1568,7 @@ Avec les progrès récents de l'apprentissage profond, permettant d'obtenir d'ex
 
 Cela permettrait d'établir de façon automatisée des cartes détaillées de la surface du globe, permettant une utilisation civile, militaire ou encore humanitaire, permettant ainsi de comparer les cartes avant et après une catastrophe naturelle.
 \subsection{Présentation des Données}
-SpaceNet est une base de données d'images satellite très haute résolution pour la détection et segmentation de bâtiments.
+SpaceNet \cite{DigitalGlobe2017} est une base de données d'images satellite très haute résolution pour la détection et segmentation de bâtiments.
 
 Elle est issue de la collaboration entre CosmiQ Works, DigitalGlobe et NVIDIA.
 C'est une des premières bases de données d'image très haute résolution disponible au grand public.
@@ -1708,7 +1713,7 @@ Il existe, pour le format GeoJSON, plusieurs types d'objets géométriques simpl
 \end{itemize}
 \paragraph{Labels issus d'OpenStreetMap}
 Les labels de SpaceNet, produit par l'Amazon Mechanical Turk, ne localisent que les bâtiments dans les images. Cependant d'autres informations directement observables depuis les images existent, comme par exemple les routes, ou encore les cours d'eau.
-C'est pourquoi il a été jugé intéressant de compléter les labels originels de SpaceNet par des labels issus d'OpenStreetMap.
+C'est pourquoi il a été jugé intéressant de compléter les labels originels de SpaceNet par des labels issus d'OpenStreetMap \cite{OpenStreetMap2017}.
 Ces labels sont disponibles au format GeoJSON et il est facile de les récupérer depuis l'API d'OpenStreetMap.
 Cependant ces labels ne sont pas de même qualité que ceux provenant du \emph{dataset} SpaceNet, il est important de garder à l'esprit que ces labels sont issus d'un projet communautaire, ils peuvent donc faire l'objet d'imprécisions, par exemple concernant la localisation des éléments géographiques, potentiellement due aux imprécisions de GPS amateurs, ou parfois tout simplement manquants, car personne n'a encore répertorié la zone géographique en question.
 \paragraph{Rasterisation des Labels}
@@ -1750,10 +1755,10 @@ La mémoire GPU coûte beaucoup plus cher, de manière générale, que la mémoi
 
 C'est pour toutes ces raisons que nous allons employer des \emph{frameworks} implémentant le calcul GPU.
 
-Nous utiliserons l'API de calcul GPU \emph{CUDA}, développé par NVIDIA.
+Nous utiliserons l'API de calcul GPU \emph{CUDA} \cite{NVIDIACorporation2010}, développé par NVIDIA.
 
 \subsubsection{Caffe}
-Le \emph{framework} utilisé dans les applications que nous avons développées s'appelle Caffe.
+Le \emph{framework} utilisé dans les applications que nous avons développées s'appelle Caffe \cite{Jia2014}.
 
 Il développé sous licence BSD par le \emph{Berkeley AI Research} et une communauté de contributeurs.
 
@@ -1772,7 +1777,7 @@ La segmentation réalisée est binaire, car cela revient à prédire pour chaque
 La seconde expérience exploite uniquement les données de la région de Las Vegas,  et utilise des labels provenant de SpaceNet et d'OpenStreetMap.
 La segmentation sera multi-classes, il faudra en effet prédire pour chaque pixel de l'image son appartenance à un bâtiment, ou une route, ou bien d'aucune de ces deux classes.
 
-Avant de présenter chacune des expériences et de comparer les modèles utilisés, nous allons d'abord présenter l'architecture ayant inspiré ces modèles, nommée DeconvNet.
+Avant de présenter chacune des expériences et de comparer les modèles utilisés, nous allons d'abord présenter l'architecture ayant inspiré ces modèles, nommée DeconvNet \cite{Noh2015}.
 
 \subsubsection{DeconvNet}
 
@@ -1817,7 +1822,7 @@ La couche de déconvolution réalise l'opération inverse, à partir d'une seule
 \paragraph{Architecture}
 Après avoir expliqué le fonctionnement des couches de déconvolution et d'\emph{unpooling}, nous allons présenter l'architecture de DeconvNet et expliquer certaines particularités.
 
-Voici le détail de l'architecture de DeconvNet, en omettant les couches de \emph{Batch Normalization} et d'activation ReLU présentes après chaque couche de convolution:
+Voici le détail de l'architecture de DeconvNet, en omettant les couches de \emph{Batch Normalization} \cite{Ioffe2015} et d'activation ReLU \cite{Glorot2011} présentes après chaque couche de convolution:
 \begin{center}
 	\begin{tabular}{|c|c|c|c|c|c|}
 	\hline 
@@ -1966,7 +1971,7 @@ Afin de produire et entraîner une version allégée de DeconvNet, nous avons d�
 En effet, les couches les plus gourmandes en matières de nombre de paramètres d'apprentissage sont les couches \emph{fc6} et \emph{deconv-fc6}, car ce sont des convolutions ayant des noyaux de dimensions $(4096, 512, 7, 7)$ et $(512, 4096, 7, 7)$, soit $102760448 \approx 1.02 \times 10^8$ paramètres à ajuster pour chacune de ces deux couches, ce qui représente environ $822$ Mo par couche.
 
 Nous avons donc défini plusieurs modèles allégés de DeconvNet dans l'optique de les comparer, la logique de leur conception est simple, on pouvait remarquer que DeconvNet était constitué de 11 blocs de couches, répartis en 5 blocs de convolution, 5 bloc de déconvolution et 1 bloc central.
-Nous avons donc décider de créer des modèles contenant 5 et 7 blocs, et nous avons remplacé les couches d'activation ReLU par des couches ELU, plus performantes.
+Nous avons donc décider de créer des modèles contenant 5 et 7 blocs, et nous avons remplacé les couches d'activation ReLU par des couches ELU \cite{Clevert2015}, plus performantes.
 
 Voici leur définitions:
 \begin{center}
@@ -2493,17 +2498,11 @@ J'ai pu aussi découvrir un nouvel état d'esprit, celui de travailler et de per
 
 C'est pour ces raisons que j'envisage de compléter ma formation d'ingénieur en mathématiques appliquées par un doctorat dans le domaine de l'\emph{Apprentissage Profond}.
 
-
-
-\chapter*{Bibliographie}
-\begin{itemize}
-	\item Deep Learning : \url{http://deeplearning.net/}
-	\item Deep Learning Book : \url{http://www.deeplearningbook.org/}
-	\item Neural Networks and Deep Learning : \url{http://neuralnetworksanddeeplearning.com/}
-\end{itemize}
+\bibliographystyle{unsrt}
+\bibliography{Rapport}
 \chapter*{Annexes}
 \section{Algorithme de Descente de Gradient : Adam}
-La méthode \emph{Adam}, signifiant \emph{Adaptative Moment Estimation}, est une amélioration de la méthode \emph{RMSProp}.\\
+La méthode \emph{Adam} \cite{Kingma2014}, signifiant \emph{Adaptative Moment Estimation}, est une amélioration de la méthode \emph{RMSProp}.\\
 Cette méthode utilise à la fois le concept de moyenne mobile ainsi que le concept d'utilisation des moments, c'est à dire d'utiliser aussi les gradients précédents :
 $$\theta_{k+1} = \theta_k - \alpha \nabla_\theta J(x,y,\theta_k) - \beta \nabla_\theta J(x,y,\theta_{k-1})$$
 
