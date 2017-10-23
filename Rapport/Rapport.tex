@@ -30,6 +30,20 @@ Création d'un Moteur de Recherche dans les Images Satellite}
 \tableofcontents
 	
 \chapter{Introduction}
+\section{Remerciements}
+Je tiens à remercier toutes les personnes ayant permis d'effectuer mon stage dans d'excellentes conditions et qui m'ont aidé dans mes recherches ainsi que la rédaction de ce rapport.
+
+J'adresse mes remerciements à mon maître de stage, Pierre Bruel, pour m'avoir accueilli très chaleureusement, son aide sans réserve et ses bons conseils en toutes circonstances.
+
+Je tiens aussi à remercier Maxime Pété, pour m'avoir permis de postuler dans cette entreprise, ainsi que de m'intégrer au sein de l'équipe.
+
+Je remercie également Cyrille Valladeau et Yannick Ott, pour avoir obtenu les ressources ayant permis le déroulement du stage dans les meilleures conditions.
+
+Je tiens à remercier Arnaud Mallen, Benoît du Rusquec, Léa Chanthapanya, Nicolas Mailley, Adrien Sornette, Otmane Lahlou et Sébastien Sannier, pour toute l'aide qu'ils ont pu m'apporter, leur accueil dans l'équipe et tous les bons moments.
+
+Enfin, je tiens à remercier mon professeur référent, Cecilia Zanni-Merk, pour m'avoir accompagné et conseillé tout au long de ce stage.
+
+
 \section{Présentation de l'Entreprise}
 \subsection{Le Groupe Thales}
 Le groupe Thales, historiquement fabricant d'électronique, est un acteur français majeur dans les secteurs de l'aéronautique, le spatial, la défense, la sécurité et le transport terrestre.
@@ -1741,7 +1755,7 @@ Nous utiliserons l'API de calcul GPU \emph{CUDA}, développé par NVIDIA.
 \subsubsection{Caffe}
 Le \emph{framework} utilisé dans les applications que nous avons développées s'appelle Caffe.
 
-Il développé sous license BSD par le \emph{Berkeley AI Research} et une communauté de contributeurs.
+Il développé sous licence BSD par le \emph{Berkeley AI Research} et une communauté de contributeurs.
 
 Il est très utilisé en milieu académique pour plusieurs raisons :
 \begin{itemize}
@@ -1784,7 +1798,7 @@ Voici un schéma décrivant l'opération d'\emph{unpooling} :
 		\caption{Couches de \emph{pooling} et d'\emph{unpooling}}
 	\end{center}
 \end{figure}
-Comme on peut le voir dans la couche de \emph{pooling}, l'activation la plus élévée, ici la plus sombre, est transmise dans la \emph{map de features}, ainsi que sa position dans la \emph{map des indices}. Alors lors de l'\emph{unpooling}, nous réutiliserons la \emph{map des indices} pour recréer la \emph{map de features} à ses dimensions précédentes.
+Comme on peut le voir dans la couche de \emph{pooling}, l'activation la plus élevée, ici la plus sombre, est transmise dans la \emph{map de features}, ainsi que sa position dans la \emph{map des indices}. Alors lors de l'\emph{unpooling}, nous réutiliserons la \emph{map des indices} pour recréer la \emph{map de features} à ses dimensions précédentes.
 
 \paragraph{Déconvolution}
 Une couche de convolution a effectue un produit matriciel entre un noyau et une fenêtre d'une \emph{map de  features}, qui grossièrement dit, revient calculer une moyenne pondérée sur un ensemble de valeurs spatialement proches.
@@ -1803,7 +1817,7 @@ La couche de déconvolution réalise l'opération inverse, à partir d'une seule
 \paragraph{Architecture}
 Après avoir expliqué le fonctionnement des couches de déconvolution et d'\emph{unpooling}, nous allons présenter l'architecture de DeconvNet et expliquer certaines particularités.
 
-Voici le détail de l'architecture de DeconvNet, en ommettant les couches de \emph{Batch Normalization} et d'activation ReLU présentes après chaque couche de convolution:
+Voici le détail de l'architecture de DeconvNet, en omettant les couches de \emph{Batch Normalization} et d'activation ReLU présentes après chaque couche de convolution:
 \begin{center}
 	\begin{tabular}{|c|c|c|c|c|c|}
 	\hline 
@@ -1952,7 +1966,9 @@ Afin de produire et entraîner une version allégée de DeconvNet, nous avons d�
 En effet, les couches les plus gourmandes en matières de nombre de paramètres d'apprentissage sont les couches \emph{fc6} et \emph{deconv-fc6}, car ce sont des convolutions ayant des noyaux de dimensions $(4096, 512, 7, 7)$ et $(512, 4096, 7, 7)$, soit $102760448 \approx 1.02 \times 10^8$ paramètres à ajuster pour chacune de ces deux couches, ce qui représente environ $822$ Mo par couche.
 
 Nous avons donc défini plusieurs modèles allégés de DeconvNet dans l'optique de les comparer, la logique de leur conception est simple, on pouvait remarquer que DeconvNet était constitué de 11 blocs de couches, répartis en 5 blocs de convolution, 5 bloc de déconvolution et 1 bloc central.
-Nous avons donc décider de créer des modèles contenant 5 et 7 blocs, en voici leur définitions :
+Nous avons donc décider de créer des modèles contenant 5 et 7 blocs, et nous avons remplacé les couches d'activation ReLU par des couches ELU, plus performantes.
+
+Voici leur définitions:
 \begin{center}
 	\begin{tabular}{|c|c|c|c|c|c|c|c|}
 	\hline 
@@ -2142,7 +2158,7 @@ Sur Paris, la différence est flagrante, Deconv5 réalise une segmentation à pe
 
 \subsubsection{Deuxième Expérience}
 Une analyse empirique de la première expérience laisse suggérer que les réseaux Deconv5 et Deconv7 n'arrivent pas à considérer l'image d'entrée dans son ensemble.
-En effet, commme on peut le voir, un grand bâtiment sur l'image n'est pas détecté comme un bloc unique de pixels, mais plutôt comme la réunion de plusieurs petits blocs.
+En effet, comme on peut le voir, un grand bâtiment sur l'image n'est pas détecté comme un bloc unique de pixels, mais plutôt comme la réunion de plusieurs petits blocs.
 
 Après réflexion, nous sommes arrivés à la conclusion que cela était dû au fait que le réseau ne zoomait pas assez.
 
@@ -2165,7 +2181,7 @@ Au lieu d'enlever des couches proche du \emph{centre de symétrie} du réseau, c
 Ainsi les modèles conçus réduisent plus rapidement la dimension de l'image en employant des couches de \emph{pooling} ayant un plus grand champ-récepteur.
 Nous avons aussi décider de diviser par 2 le nombre de \emph{features} calculées à chaque convolution, dans le but d’accélérer les calculs.
 
-Nous avons donc décider de créer deux modèles se différenciant sur le bloc central, en voici leur définitions :
+Nous avons donc décider de créer deux modèles se différenciant sur le bloc central, en omettant les couches de \emph{Batch Normalization} et d'activation ELU présentes après chaque couche de convolution  :
 
 \begin{center}
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
@@ -2331,7 +2347,7 @@ Nous avons vu différentes raisons motivant l'usage de la cartographie automatis
 
 Nous avons succinctement évoqué les motivations concernant le calcul sur GPU, et présenté le \emph{framework} d'apprentissage profond Caffe, utilisé pour nos modèles.
 
-Puis, nous avons présenté l'architecture DéconvNet,ayant inspiré nos modèles de segmentation.
+Puis, nous avons présenté l'architecture DeconvNet,ayant inspiré nos modèles de segmentation.
 
 Notre première expérience qui consistait à prédire des masques de segmentation des bâtiments sur l'ensemble des données de SpaceNet était satisfaisante, même si les modèles créés, Deconv5 et Deconv7, souffraient de vision tunnelisée.
 
@@ -2446,7 +2462,7 @@ Toutefois, le concept de recherche de similarités reste intéressant indépenda
 
 Ce travail met toutefois en exergue la capacité des réseaux de neurones à extraire de l'information d'images satellite sans même avoir appris sur ce genre d'images.
 \chapter{Conclusion}
-Dans ce rapport de Stage de Fin d'Études, nous avons pu aborder de nombreux sujets.
+Dans ce rapport de stage de fin d'études, nous avons pu aborder de nombreux sujets.
 
 Tout d'abord, le sujet de l'\emph{Imagerie Satellite}, dans lequel nous avons esquissé le fonctionnement d'un satellite de télédétection, ainsi qu'évoqué certaines particularités des images satellite.
 Ce chapitre nous a permis d'appréhender à quel point le domaine était complexe et de comprendre par la suite les raisonnements employés dans la suite.
@@ -2467,7 +2483,16 @@ La seconde application proposée portait sur la \emph{recherche de similarités}
 Cette première application découle d'une première idée de \emph{classification dynamique}, idée qui n'a pas aboutie.
 Cette application s'appuie la décomposition en \emph{features} opérée par un réseau de neurones, permettant de ne garder que l'information essentielle.
 Le champ d'application de la recherche de similarités est très vaste,
-on peut imaginer pouvoir repérer des anomalies dans les images lors de son traitement, et ainsi pouvoir les corriger.
+on peut imaginer pouvoir repérer des anomalies dans les images présente dans la chaîne de traitement, et ainsi pouvoir les corriger au cas par cas.
+
+Ce stage de fin d'études m'a beaucoup appris tant sur le plan professionnel que sur le plan personnel.
+
+J'ai beaucoup apprécié l'autonomie dont j'ai bénéficié, d'avoir eu la possibilité de proposer moi-même des domaines d'applications à explorer.
+Cette liberté et cette autonomie m'ont permis d'apprécier encore plus le travail de recherche effectué durant ce stage.
+J'ai pu aussi découvrir un nouvel état d'esprit, celui de travailler et de persévérer pour arriver au bout de ses recherches, non pas uniquement car l'objectif était fixé par la hiérarchie, mais parce que le domaine me passionnait.
+
+C'est pour ces raisons que j'envisage de compléter ma formation d'ingénieur en mathématiques appliquées par un doctorat dans le domaine de l'\emph{Apprentissage Profond}.
+
 
 
 \chapter*{Bibliographie}
