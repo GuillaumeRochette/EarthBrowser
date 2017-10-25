@@ -1,4 +1,6 @@
 \documentclass[a4paper, 11pt]{report}
+\usepackage{fancyref}
+\usepackage{natbib}
 \usepackage[utf8]{inputenc}
 \usepackage[french]{babel}
 \usepackage[T1]{fontenc}
@@ -11,7 +13,7 @@
 \usepackage{wasysym}
 \usepackage{dsfont}
 \usepackage{yhmath}
-\usepackage{natbib}
+
 \usepackage{hyperref}
 \usepackage{tabularx}
 \usepackage{colortbl}
@@ -49,34 +51,30 @@ Enfin, je tiens à remercier mon professeur référent, Cecilia Zanni-Merk, pour
 \subsection{Le Groupe Thales}
 Le groupe Thales, historiquement fabricant d'électronique, est un acteur français majeur dans les secteurs de l'aéronautique, le spatial, la défense, la sécurité et le transport terrestre.
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.5]{Images/Secteurs_Activites.png}
-		\caption{Secteurs d'activités de Thales}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.5]{Images/Secteurs_Activites.png}
+	\caption{Secteurs d'activités de Thales}
 \end{figure}
 Le groupe Thales est implanté dans $56$ pays et emploie $64000$ salariés, dont $34000$ collaborateurs répartis dans $70$ sites en France.
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.5]{Images/Chiffres_Cles.png}
-		\caption{Chiffres Clés du Groupe Thales}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.5]{Images/Chiffres_Cles.png}
+	\caption{Chiffres Clés du Groupe Thales}
 \end{figure}
 \subsection{Thales Services}
 Thales Services est une entreprise spécialisée dans les activités de conception, développement et maintenance de systèmes informatiques sécurisés.
 
 Elle est implantée sur tout le territoire français, chaque site ayant des spécialisations différentes.
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=1.0]{Images/TS_France.png}
-		\caption{Implantation de Thales Services en France}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.9]{Images/TS_France.png}
+	\caption{Implantation de Thales Services en France}
 \end{figure}
 Le groupe Thales, et par extension Thales Services, est organisé de façon \emph{matricielle}, c'est-à-dire par zones géographiques et par domaines d'activités.
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.7]{Images/Matrice_Thales_Services.png}
-		\caption{Organisation matricielle de Thales Services}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.7]{Images/Matrice_Thales_Services.png}
+	\caption{Organisation matricielle de Thales Services}
 \end{figure}
 Ce stage s'effectue dans le \emph{Centre de Compétences} \textbf{Logiciel Orienté Machine} de la \emph{Région Sud-Ouest}.
 \section{Objectifs du Stage}
@@ -106,7 +104,7 @@ Dans le troisième chapitre, nous définirons précisément le domaine de l'appr
 Dans le quatrième chapitre, nous ferons le lien entre apprentissage profond et imagerie spatiale, justifiant l'utilité d'appliquer le premier au second, ainsi que les applications réalisées au cours de ce stage permettant d'extraire des informations des images satellite. Les tâches que nous présenterons sont la segmentation d'images et la recherche de similarités.
 
 \chapter{L'Imagerie Satellite}
-Cette partie s'appuie sur l'ouvrage de référence en la matière \cite{CNES/ONERA/IGN2008}.
+Cette partie s'appuie sur l'ouvrage de référence en la matière \citep{CNES/ONERA/IGN2008}.
 
 De tout temps, l'humain a toujours souhaité pouvoir observer le monde, que ce soit à des fins militaires, scientifiques ou à simple but de contemplation.
 
@@ -124,12 +122,11 @@ Puis nous aborderons les différents mécanismes relatifs au contrôle de la tra
 \subsection{Capteurs Optiques}
 Selon leur longueur d'onde, les ondes électromagnétique portent des noms différents.
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.7]{Images/Spectre_Electromagnetique.png}
-		\caption{Domaines du spectre électromagnétique}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.7]{Images/Spectre_Electromagnetique.png}
+	\caption{Domaines du spectre électromagnétique}
 \end{figure}
-Le domaine \emph{optique} est la réunion du domaine du visible et de l'infrarouge (I.R.) \cite{Wikipedia2017d}.
+Le domaine \emph{optique} est la réunion du domaine du visible et de l'infrarouge (I.R.) \citep{Wikipedia2017}.
 Bien que les satellites puissent embarquer aussi d'autres types de capteurs, nous n'en parlerons pas, car cela n'a pas de rapport avec l'Imagerie Satellite.
 
 Par ailleurs, nous nous focaliserons uniquement sur les capteurs passifs, c'est-à-dire des capteurs qui ne font que mesurer le rayonnement d'un objet, contrairement aux capteurs actifs, comme les radars qui émettent un rayonnement et en observent l'écho sur l'objet.
@@ -139,12 +136,11 @@ Ce sont les premiers capteurs historiques utilisés pour l'imagerie satellite, u
 Le fonctionnement de ce type de capteur s'apparente au mécanisme des premiers scanners, c'est à dire une unique cellule de détection, qui nécessitait un double balayage selon les axes des lignes et des colonnes pour décrire la scène.
 En anglais, le terme \emph{whisk broom} désigne des balais à \emph{fouetter}, comme par exemple des plumeaux.
 
-Voici un schéma décrivant le fonctionnement d'un capteur de type \emph{whisk broom} \cite{Hillen2009a}:
+Voici un schéma décrivant le fonctionnement d'un capteur de type \emph{whisk broom} \citep{Hillen2009a}:
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.5]{Images/Whisk_Broom.jpg}
-		\caption{Capteur de type \emph{Whisk Broom}}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.5]{Images/Whisk_Broom.jpg}
+	\caption{Capteur de type \emph{Whisk Broom}}
 \end{figure}
 Les avantages d'un capteur \emph{whisk broom} sont les suivants :
 \begin{itemize}
@@ -165,12 +161,11 @@ Ainsi l'acquisition est simultanée pour les détecteurs composants une seule et
 
 Une image, composées de $m$ lignes et $n$ colonnes, est donc le résultat de $n$ acquisitions simultanées répétées à $m$ intervalles de temps suivant la trajectoire du satellite.
 
-Voici un schéma décrivant le fonctionnement d'un capteur de type \emph{push broom} \cite{Hillen2009}:
+Voici un schéma décrivant le fonctionnement d'un capteur de type \emph{push broom} \citep{Hillen2009}:
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.5]{Images/Push_Broom.jpg}
-		\caption{Capteur de type \emph{Push Broom}}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.5]{Images/Push_Broom.jpg}
+	\caption{Capteur de type \emph{Push Broom}}
 \end{figure}
 Les avantages d'un capteur \emph{push broom} sont les suivants :
 \begin{itemize}
@@ -190,10 +185,9 @@ Le fonctionnement de ce capteur est similaire à celui d'un appareil photographi
 Les cellules de détection sont réparties en forme de grille. Ainsi tous les pixels de l'image sont acquis de façon simultanée.
 Voici un schéma décrivant le fonctionnement d'un capteur de type \emph{matriciel} :
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.7]{Images/CCD_Sensor.png}
-		\caption{Capteur de type \emph{Matriciel}}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.7]{Images/CCD_Sensor.png}
+	\caption{Capteur de type \emph{Matriciel}}
 \end{figure}
 
 Les avantages d'un capteur \emph{matriciel} sont les suivants :
@@ -225,10 +219,9 @@ L'orbite \emph{héliosynchrone} signifie que le satellite est "synchronisé" ave
 
 On s'intéresse particulièrement aux orbites quasi-polaires héliosynchrones. En effet, le satellite se déplace presque selon une longitude et conserve un angle constant entre le plan d'orbite et la direction Terre-Soleil.
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.3]{Images/Orbite_Heliosynchrone.png}
-		\caption{Orbite Héliosynchrone}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.3]{Images/Orbite_Heliosynchrone.png}
+	\caption{Orbite Héliosynchrone}
 \end{figure}
 Ce type d'orbite est très intéressant pour l'imagerie spatiale car cela signifie que le satellite repasse à un point à la même heure de la journée, ce qui dans le cas d'un satellite d'observation nous permet de prendre des photographies avec une lumière ayant toujours le même angle d'incidence et donc un ensoleillement comparable.
 \subsubsection{Trace au Sol et Fauchée d'un Satellite}
@@ -236,17 +229,15 @@ La trace au sol est la projection de la trajectoire décrite par un satellite à
 
 La fauchée d'un satellite est la surface au sol couverte par la prise de vue du capteur optique.
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.5]{Images/Swath.png}
-		\caption{Fauchée d'un satellite}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.5]{Images/Swath.png}
+	\caption{Fauchée d'un satellite}
 \end{figure}
 Dans le cas d'une orbite quasi-polaire, la trace au sol recouvrira alors presque toute la surface de la Terre (sauf aux pôles), permettant de revisiter les zones de façon périodique et à la même d'heure grâce aux propriétés d'héliosynchronisme.
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.6]{Images/Trace_Sol_SPOT.jpg}
-		\caption{Trace au sol des satellites SPOT sur 24h}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.6]{Images/Trace_Sol_SPOT.jpg}
+	\caption{Trace au sol des satellites SPOT sur 24h}
 \end{figure}
 \section{Images Satellite}
 Après avoir détaillé les différents types de capteurs optiques et différentes orbites utilisées pour les satellites, nous allons à présent développer un peu plus en détail le produit, les \emph{images satellite}.
@@ -314,10 +305,9 @@ L'angle de visée est variable, permettant de re-photographier une zone sans avo
 
 Cependant pour pouvoir obtenir de "belles" images, afin de pouvoir les exploiter de façon optimale il faut re-projeter l'image pour se retrouver au \emph{nadir}, le \emph{nadir} étant le vecteur normal à la surface terrestre depuis le satellite. C'est donc le vecteur opposé du \emph{zénith}.
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.9]{Images/Nadir.png}
-		\caption{Nadir, Zénith et Horizons \cite{Wikipedia2017a}}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.9]{Images/Nadir.png}
+	\caption{Nadir, Zénith et Horizons \citep{Wikipedia2017a}}
 \end{figure}
 
 Le fait que l'angle de visée re-projeté soit pratiquement toujours le même permet d'unifier les traitements à appliquer sur l'image et simplifier son exploitation ultérieure.
@@ -326,8 +316,9 @@ Une image, et en particulier une image satellite, est constituée de bandes.
 
 Chaque bande contient la réponse impulsionnelle de la scène sur une longueur d'onde donnée.
 
-Voici les caractéristiques radiométriques du satellite Pléiades \cite{Wikipedia2017b}:
-\begin{center}
+Voici les caractéristiques radiométriques du satellite Pléiades \citep{Wikipedia2017b}:
+\begin{table}[H]
+	\centering
 	\begin{tabular}{|c|c|c|}
 	\hline
 	Couleur & Bande Spectrale & Résolution \\
@@ -343,7 +334,8 @@ Voici les caractéristiques radiométriques du satellite Pléiades \cite{Wikiped
 	Panchromatique & $480$-$830$nm & $0.5$m \\ 
 	\hline 
 	\end{tabular}
-\end{center}
+	\caption{Caractéristiques radiométriques du satellite Pléiades}
+\end{table}
 La bande panchromatique ne discrimine pas les couleurs, son domaine de sensibilité est similaire à la vision humaine, autour de $400$-$750$nm. Ce sont des images en noir et blanc.
 
 Comme nous pouvons le voir sur le tableau, toutes les bandes produites par le satellite Pléiades ne sont pas à la même résolution, les bandes \emph{multispectrales} sont à $2$m, tandis que la bande \emph{panchromatique} est à $0.5$m.
@@ -358,7 +350,7 @@ Le traitement appliqué s'appelle la fusion d'images et repose sur :
 
 \subsubsection{Prétraitement d'une Image Satellite}
 Un grand nombre de traitements interviennent dans la correction géométrique des images afin que le produit final puisse être superposable à une carte.
-Voici un récapitulatif des niveaux de traitements pour une image satellite de la famille SPOT \cite{Space2010}:
+Voici un récapitulatif des niveaux de traitements pour une image satellite de la famille SPOT \citep{Space2010}:
 \begin{itemize}
 	\item Niveau 1A : Correction des défauts radiométriques issus des écarts de sensibilité entre les détecteurs élémentaires.
 	\item Niveau 1B : Égalisation radiométrique et traitements géométriques relatifs aux variations d'altitude du satellite, à la rotation et à la courbure de la Terre, aux variations de l'angle de visée, etc.
@@ -377,7 +369,7 @@ C'est un domaine extrêmement complexe, où se mêlent des disciplines telles qu
 Ce chapitre a permis au lecteur de comprendre la nature d'une image satellite, permettra de comprendre par la suite, le raisonnement employé dans le quatrième chapitre portant sur les applications pratiques.
 
 \chapter{L'Apprentissage Machine}
-Cette partie s'appuie en partie sur l'ouvrage \cite{Goodfellow2016}.
+Cette partie s'appuie en partie sur l'ouvrage \citep{Goodfellow2016}.
 L'apprentissage machine permet d'accomplir des tâches traditionnellement compliquées pour les ordinateurs, mais considérées simples pour l'humain.
 En effet, l'humain apprend par exemple dès le plus jeune âge à discerner les contours sur une image, d'en décrire le contenu et même de visualiser un objet sous différents angles. Des algorithmes classiques ont du mal à produire des bons résultats sur ce genre de problèmes.
 À l'inverse, les ordinateurs possèdent une capacité très supérieure à l'humain pour résoudre des calculs complexes, ou des problèmes d'ordre combinatoire.
@@ -484,36 +476,32 @@ Si l'on considère que $P(x) = (P(x_i))_{i=1..q}$, alors on peut réécrire $J_0
 $$J_0(x,y) = \frac{1}{2} (P(x)-y)^T(P(x)-y)$$
 Voici le nuage de $10$ points à ajuster :
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.5]{Images/Fitting_Problem.png}
-		\caption{Nuage de $10$ points à ajuster}		
-	\end{center}
+	\centering
+	\includegraphics[scale=0.5]{Images/Fitting_Problem.png}
+	\caption{Nuage de $10$ points à ajuster}		
 \end{figure}
 			
 			
 Si nous choisissons un polynôme $P \in \mathbb{R}^1$, c'est à dire de la forme $P(z) = b + \theta z$, en minimisant le \emph{problème des moindres carrés}, nous obtenons la courbe suivante.
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.5]{Images/Underfitting.png}
-		\caption{Cas de sous-apprentissage}			
-	\end{center}
+	\centering
+	\includegraphics[scale=0.5]{Images/Underfitting.png}
+	\caption{Cas de sous-apprentissage}			
 \end{figure}
 Sans même faire d'études statistiques, on peut voir que le modèle ajuste mal les données.
 Si nous choisissons par contre un polynôme $P \in \mathbb{R}^9$, en minimisant le \emph{problème des moindres carrés}, nous obtenons la courbe suivante.
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.5]{Images/Overfitting.png}
-		\caption{Cas de sur-apprentissage}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.5]{Images/Overfitting.png}
+	\caption{Cas de sur-apprentissage}
 \end{figure}
 On peut s'apercevoir que même si la droite passe exactement par nos $10$ points, le modèle ne semblera pas ajuster d'éventuelles nouvelles données.
 			
 Enfin, si l'on choisit un polynôme $P \in \mathbb{R}^2$, nous ajustons tous les points du jeu de données et le modèle semble suffisamment simple pour généraliser de nouvelles données.
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.5]{Images/Good_Fitting.png}
-		\caption{Capacité du modèle adaptée}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.5]{Images/Good_Fitting.png}
+	\caption{Capacité du modèle adaptée}
 \end{figure}
 		
 \subsection{Régularisation}
@@ -526,10 +514,9 @@ Ce principe de parcimonie, ou de simplicité, consiste à ne pas utiliser d'hypo
 
 Ainsi pour résoudre notre problème, notre modèle doit être suffisamment performant sur un problème spécifique, mais doit être assez général pour produire des résultats corrects si l'on change quelques hypothèses.
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.5]{Images/Regularization.png}
-		\caption{Dilemme du choix entre deux modèles \cite{Wikipedia2017c}}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.375]{Images/Regularization.png}
+	\caption{Dilemme du choix entre deux modèles \citep{Wikipedia2017c}}
 \end{figure}
 Dans cet exemple, nous choisirons bien entendu la courbe verte, car le modèle vert est beaucoup plus simple et nous semble plus cohérent par rapport à nos données.
 Cette recherche d'un modèle optimal mais suffisamment simple peut se faire en ajoutant une composante à la mesure de performance.
@@ -675,7 +662,7 @@ Donc,
 $$\nabla_\theta J(x,y,\theta) = \frac{1}{n} \sum_{i=1}^{n}{\nabla_\theta J(x_i,y_i,\theta)}$$
 \			
 \subsubsection{Algorithme de Descente de Gradient Stochastique}
-La réflexion derrière la descente de gradient stochastique est que le gradient de l'ensemble est la moyenne des gradients des couples $(x,y)$ \cite{Bottou2010}.
+La réflexion derrière la descente de gradient stochastique est que le gradient de l'ensemble est la moyenne des gradients des couples $(x,y)$ \citep{Bottou2010}.
 
 D'après la Loi des Grands Nombres, $$\mathbb{E}(X) \approx \frac{1}{n} \sum_{i=1}^{n}{x_i}$$
 Avec $X$ une distribution, dont les données $x_i$ sont issues.
@@ -716,7 +703,7 @@ Nous avons défini clairement la notion d'apprentissage machine, évoqué diffé
 Ce chapitre permettra au lecteur de pouvoir saisir pleinement le concept et les motivations de l'apprentissage profond évoqué dans le chapitre suivant.
 
 \chapter{L'Apprentissage Profond}
-Cette partie s'appuie en partie sur les ouvrages de\cite{Goodfellow2016} et \cite{Nielsen2015}.
+Cette partie s'appuie en partie sur les ouvrages de\citep{Goodfellow2016} et \citep{Nielsen2015}.
 L'apprentissage profond se différencie de l'apprentissage machine classique particulièrement sur deux points :
 \begin{itemize}
 	\item Il existe des dizaines, voire des centaines de classes d'algorithmes d'apprentissage pour résoudre des tâches variées, et par extension des problèmes très variés, cependant dans le cas de l'apprentissage profond, même si il existe des différences, le principe utilisé reste globalement le même.
@@ -748,10 +735,9 @@ Un neurone artificiel est une application $f : \mathbb{R}^p \rightarrow \mathbb{
 
 Le réel $b$ s'appelle le biais, et le vecteur $w = (w_1, ..., w_p)$ s'appelle vecteur de poids.
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.6]{Images/Neuron.png}
-		\caption{Schéma de représentation d'un Neurone}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.6]{Images/Neuron.png}
+	\caption{Schéma de représentation d'un Neurone}
 \end{figure}
 Cette application est la composée de deux fonctions distinctes :
 \begin{itemize}
@@ -761,7 +747,7 @@ Cette application est la composée de deux fonctions distinctes :
 	\item Une fonction d'\emph{activation} $g : \mathbb{R} \rightarrow \mathbb{R}$, \emph{non-linéaire}.
 	      	      Des exemples :
 	      \begin{itemize}
-	      	\item \emph{ReLU} \cite{Glorot2011}, pour \emph{Rectified Linear Unit} : $g(z) = max(0,z)$
+	      	\item \emph{ReLU} \citep{Glorot2011}, pour \emph{Rectified Linear Unit} : $g(z) = max(0,z)$
 	      	\item \emph{Sigmoïde} : $g(z) = \frac{1}{1+e^{-z}}$
 	      	\item \emph{Tangente hyperbolique} : $g(z) = \tanh(z)$
 	      \end{itemize}
@@ -775,10 +761,9 @@ $$a = f_\theta(x) = g \circ h_\theta(x) = g(w^Tx + b)$$
 \subsection{Définition d'un Réseau de Neurones}
 Avec la définition précédente d'un neurone, nous pouvons alors schématiser un réseau de neurones de la façon suivante :
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.6]{Images/Neural_Network.png}
-		\caption{Schéma pédagogique de représentation d'un Réseau de Neurones}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.6]{Images/Neural_Network.png}
+	\caption{Schéma pédagogique de représentation d'un Réseau de Neurones}
 \end{figure}
 Ici, chaque cercle représente un neurone, équivalent à ceux définis précédemment.
 Toutefois, sur la première couche, appelée \emph{couche d'entrée}, les neurones produisent en sortie, le \emph{vecteur d'entrée} $x$, ici $x \in \mathbb{R}^6$.
@@ -786,10 +771,9 @@ On peut noter aussi que la dernière couche, appelée \emph{couche de sortie}, l
 
 Attention, la description faite ici, n'est qu'à but pédagogique. Dans le cas courant, on ne considère pas un réseau en individualisant chaque neurone, mais plutôt couche par couche :
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.4]{Images/Toy_Example.png}
-		\caption{Schéma courant de représentation d'un Réseau de Neurones}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.425]{Images/Toy_Example.png}
+	\caption{Schéma courant de représentation d'un Réseau de Neurones}
 \end{figure}
 
 Ainsi, pour décrire un réseau de neurones, nous considérons deux caractéristiques :
@@ -896,7 +880,7 @@ Ainsi,
 			
 \subsection{Rétro-propagation du Gradient}
 		
-L'algorithme de rétro-propagation \cite{Werbos1974} est souvent à tort considéré comme étant la méthode d'optimisation utilisée pour minimiser la fonction de perte.
+L'algorithme de rétro-propagation \citep{Werbos1974} est souvent à tort considéré comme étant la méthode d'optimisation utilisée pour minimiser la fonction de perte.
 C'est en effet le rôle d'une méthode de descente de gradient.
 
 Voici pour rappel une méthode générale de descente de gradient, vue dans la première partie :
@@ -1140,7 +1124,7 @@ Nous allons maintenant quitter cette partie plutôt calculatoire, pour s'intére
 \subsection{Théorème d'Approximation Universelle}
 Les réseaux de neurones permettent de représenter universellement n'importe quelle fonction, dans le sens où il existe un réseau de neurones, ayant une architecture donnée, des poids et biais donnés, pouvant approximer une fonction en particulier.
 
-Le \emph{Théorème d'Approximation Universelle} \cite{Hornik1991} nous dit qu'il existe un réseau suffisamment "grand" pour avoir la précision souhaitée sur les résultats.
+Le \emph{Théorème d'Approximation Universelle} \citep{Hornik1991} nous dit qu'il existe un réseau suffisamment "grand" pour avoir la précision souhaitée sur les résultats.
 
 Toutefois, ce théorème ne dit pas quelle sera la taille de ce réseau, mais en affirme seulement l'existence.
 \subsection{Techniques de Régularisation}
@@ -1154,7 +1138,7 @@ Certaines méthodes ajouteront des contraintes d'optimisation sur la fonction de
 Si les méthodes sont choisies avec soin, elles peuvent améliorer grandement la performance des réseaux de neurones profonds sur l'ensemble des données de test.
 \subsubsection{Pénalisation des Paramètres}
 La pénalisation des paramètres est une des premières formes de régularisation, utilisée depuis les débuts de l'apprentissage machine.
-Cette régularisation \cite{Ng2004} limite la capacité de modèles, tels que les réseaux de neurones, les régressions linéaires, polynomiales et logistiques, en ajoutant une composante de pénalisation des paramètres $\Omega(\theta)$ à la fonction de perte $J(x,y,\theta)$, tel que
+Cette régularisation \citep{Ng2004} limite la capacité de modèles, tels que les réseaux de neurones, les régressions linéaires, polynomiales et logistiques, en ajoutant une composante de pénalisation des paramètres $\Omega(\theta)$ à la fonction de perte $J(x,y,\theta)$, tel que
 $$J(x,y,\theta) = J_0(x,y,\theta) + \lambda \Omega(\theta)$$
 Avec $\lambda \geq 0$, un hyper-paramètre pondérant la contribution de la composante de pénalisation.
 Si $\lambda = 0$, il n'y a pas de régularisation.
@@ -1170,21 +1154,20 @@ Ainsi le poids $\elem{W}{k}{j}{i}$ aura tendance à diminuer par rapport à une 
 \subsubsection{Augmentation du Jeu de Données}
 Une des meilleures façons d'améliorer la capacité de généralisation d'un modèle, est de l'entraîner sur plus de données.
 Malheureusement, la taille des ensembles de données est généralement limitée.
-Une façon de contourner le problème est de créer artificiellement des données et de les ajouter à l'ensemble d'apprentissage \cite{Tanner1987}.
+Une façon de contourner le problème est de créer artificiellement des données et de les ajouter à l'ensemble d'apprentissage \citep{Tanner1987}.
 
 Cette méthode est principalement utilisée pour un domaine : la reconnaissance d'objets.
 En effet, il est très facile de transformer les données existantes par des transformations, telles que des rotations, des translations ou des homothéties, paramétrées aléatoirement.
 On peut aussi le faire sur d'autres types de données en ajoutant du \emph{bruit blanc} sur une partie des entrées.
 \subsubsection{Arrêt Prématuré}
 Pour un modèle avec une capacité suffisante pour sur-apprendre, on observe généralement que tandis que l'\emph{erreur d'apprentissage} continue de diminuer, l'\emph{erreur d'entraînement} recommence à augmenter.
-Cela signifie que nous avons atteint un \emph{minimum local} sur les données de test, il convient alors d'arrêter l'apprentissage avant que l'\emph{erreur de généralisation} empire \cite{Prechelt1998}.
+Cela signifie que nous avons atteint un \emph{minimum local} sur les données de test, il convient alors d'arrêter l'apprentissage avant que l'\emph{erreur de généralisation} empire \citep{Prechelt1998}.
 \subsubsection{Dropout}
-La méthode \emph{Dropout} \cite{Srivastava2014} est une méthode assez particulière de régularisation, qui consiste à entraîner tour à tour des sous-réseaux de notre réseaux de neurones.
+La méthode \emph{Dropout} \citep{Srivastava2014} est une méthode assez particulière de régularisation, qui consiste à entraîner tour à tour des sous-réseaux de notre réseaux de neurones.
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.20]{Images/Dropout.png}
-		\caption{Exemple d'application de la méthode de \emph{Dropout}}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.20]{Images/Dropout.png}
+	\caption{Exemple d'application de la méthode de \emph{Dropout}}
 \end{figure}
 Ainsi les différents sous-modèles se partagent les paramètres $\theta$ du modèle original.
 Il en résulte un modèle beaucoup plus robuste, car les différents sous-modèles entraînent une recherche de paramètres pour atteindre des minima différents.
@@ -1193,7 +1176,7 @@ Cela incite donc à une convergence vers un minimum local partagé par les diff�
 Ce minimum local est de façon générale un bien meilleur minimum que ceux propres aux sous-modèles.
 Cette méthode présente toutefois un inconvénient, elle est difficile à implémenter, mais est présente dans la plupart des librairies d'apprentissage profond.
 \section{Réseaux Convolutifs}
-Les réseaux de neurones convolutifs \cite{Krizhevsky2012} sont une famille particulière de réseaux de neurones, qui excelle en terme de performance dans le domaine de la vision par ordinateur.
+Les réseaux de neurones convolutifs \citep{Krizhevsky2012} sont une famille particulière de réseaux de neurones, qui excelle en terme de performance dans le domaine de la vision par ordinateur.
 Ils sont spécialisés dans le traitement de données ayant une structure en forme de grille, c'est à dire que les données sont liées spatialement ou temporellement.
 
 Voici des exemples de données ayant ce genre de structure :
@@ -1225,10 +1208,9 @@ $$(I*K)_{i,j} = \sum_{m}\sum_{n}{I_{m,n}K_{i-m,j-n}} = (K*I)_{i,j} = \sum_{m}\su
 L'image $K$ est appelée \emph{noyau}, ou \emph{kernel}, c'est l'équivalent d'un filtre pour les images.
 Voici un exemple d'application de la convolution sur une image :
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.25]{Images/Convolution.png}
-		\caption{Exemple de convolution entre une image $I$, $(8,3)$ et un noyau $K$, $(2,2)$}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.25]{Images/Convolution.png}
+	\caption{Exemple de convolution entre une image $I$, $(8,3)$ et un noyau $K$, $(2,2)$}
 \end{figure}
 Dans cet exemple de convolution entre une image $I$, $(8,3)$ et un noyau $K$, $(2,2)$, on peut remarquer tout d'abord, que l'image issue de la convolution est de forme $(6,2)$.
 
@@ -1276,10 +1258,9 @@ La convolution nous permet en effet cette interaction partielle, en effet la dim
 
 Voici à présent la représentation de l'interaction partielle dans un cas matriciel, plus illustratif qu'un simple cas vectoriel:
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.60]{Images/Convolution_Layer.png}
-		\caption{Représentation de l'interaction partielle}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.60]{Images/Convolution_Layer.png}
+	\caption{Représentation de l'interaction partielle}
 \end{figure}
 			
 \subsubsection{Le Partage des Paramètres et Invariance}
@@ -1402,7 +1383,7 @@ Avec,
 	\item $n \in [\![0, W_K[\![$ et $(n + j \times s_W) \in [\![0, W_{I'}[\![$
 \end{itemize}
 \subsection{La Réduction de la Dimensionnalité}
-La \emph{réduction de la dimensionnalité} \cite{Hinton2006} est un défi majeur en Statistiques et en Apprentissage Machine.
+La \emph{réduction de la dimensionnalité} \citep{Hinton2006} est un défi majeur en Statistiques et en Apprentissage Machine.
 
 Prenons un exemple pour illustrer le problème.
 Imaginons que nous souhaitons classifier des images issues d'Internet de dimensions $(3,256,256)$, en $1000$ classes distinctes.
@@ -1421,17 +1402,16 @@ La deuxième est plus beaucoup intéressante.
 
 Une approche plutôt naïve pourrait suggérer de transformer l'image de dimensions $(3, 256, 256)$ en niveaux de gris de dimensions $(1, 256, 256)$ puis de la \emph{redimensionner} en $(1, 32, 32)$, ce qui nous permet d'obtenir un tenseur d'entrée de dimension $(1024)$.
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.4]{Images/Lena.jpg}
-		\caption{Pré-traitement d'une image}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.4]{Images/Lena.jpg}
+	\caption{Pré-traitement d'une image}
 \end{figure}
 Ici les dimensions d'entrées et de sorties sont comparables, nous pouvons donc "choisir" plus facilement les combinaisons de variables à effectuer pour classifier les images. Toutefois la perte d'information, due aux pré-traitements appliqués aux données, est grande, ce qui aura un impact potentiel sur la performance de notre algorithme apprenant.
 
 Une approche un peu plus réfléchie pourrait suggérer d'une part de ne pas réduire la dimension des données non pas pendant le pré-traitement, mais surtout d'autre part, d'éviter de la réduire d'un seul coup, mais plutôt petit à petit.
 
 \subsubsection{Pooling d'Information}
-Le \emph{pooling} \cite{Krizhevsky2012}, signifiant \emph{mise en commun}, consiste à résumer l'information apportée par les valeurs de sorties proches en une seule valeur.
+Le \emph{pooling} \citep{Krizhevsky2012}, signifiant \emph{mise en commun}, consiste à résumer l'information apportée par les valeurs de sorties proches en une seule valeur.
 Il existe trois grandes déclinaisons du \emph{pooling},
 \begin{itemize}
 	\item Le \emph{max pooling}, qui calcule le maximum des valeurs données en entrée.
@@ -1447,10 +1427,9 @@ Ces trois déclinaisons de pooling sont utilisées dans des contextes assez diff
 \paragraph{Max-Pooling}
 Le \emph{max pooling} est principalement utilisé pour réduire la dimension des données de façon spatiale, c'est une méthode robuste aux bruits ambiants, car elle ne transmet que l'information ayant le plus d'intensité.
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.6]{Images/Pooling_Layer.png}
-		\caption{\emph{Max-pooling} sur une fenêtre $(2,2)$}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.6]{Images/Pooling_Layer.png}
+	\caption{\emph{Max-pooling} sur une fenêtre $(2,2)$}
 \end{figure}
 \paragraph{Average Pooling}
 L'\emph{average pooling} est principalement utilisé pour réduire la dimension des données au niveau des canaux, car elle permet de prendre en compte les valeurs des différentes \emph{features} et de les agréger.
@@ -1467,42 +1446,39 @@ Nous allons dans cette partie présenter quelques tâches liées à la vision pa
 \subsection{Classification}
 La classification est sans doute le problème le plus simple en matière de vision, il s'agit de prédire l'appartenance d'une image à une classe, généralement liée aux objets liés dans l'image.
 \subsubsection{Datasets}
-Un des premiers \emph{datasets} d'images pour la classification est le MNIST \cite{LeCun2010}, composé de $70000$ images noir et blanc de $28 \times 28$ pixels, chacune contenant un chiffre manuscrit.
+Un des premiers \emph{datasets} d'images pour la classification est le MNIST \citep{LeCun2010}, composé de $70000$ images noir et blanc de $28 \times 28$ pixels, chacune contenant un chiffre manuscrit.
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.3]{Images/MNIST_Digits.png}
-		\caption{Données issues de MNIST}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.3]{Images/MNIST_Digits.png}
+	\caption{Données issues de MNIST}
 \end{figure}
 Même si l'intérêt à reconnaître les chiffres est limité, ce \emph{dataset} a longtemps servi au niveau académique de \emph{benchmark} pour comparer les différents modèles.
 
-On citera aussi les \emph{datasets} CIFAR-10 \cite{Krizhevsky2009}, CIFAR-100 \cite{Krizhevsky2009a}, et ImageNet \cite{Krizhevsky2012a}.
+On citera aussi les \emph{datasets} CIFAR-10 \citep{Krizhevsky2009}, CIFAR-100 \citep{Krizhevsky2009a}, et ImageNet \citep{Krizhevsky2012a}.
 CIFAR-10 et CIFAR-100 sont composés chacun de $60000$ images RGB de $32 \times 32$ pixels, réparties en $10$ classes pour le premier et $100$ classes pour le second.
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.4]{Images/CIFAR-10.png}
-		\caption{Données issues de CIFAR-10}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.4]{Images/CIFAR-10.png}
+	\caption{Données issues de CIFAR-10}
 \end{figure}
 ImageNet contient une base de classification d'images contenant plus de $10$ millions d'URLs d'images de taille variable réparties en $1000$ classes. Les images sont majoritairement issues de sites comme Flickr.
 Ce \emph{dataset}, créé en $2009$, fait l'objet d'une compétition depuis $2010$, qui a permis de réaliser des progrès impressionnants en traitement d'images.
 \subsubsection{Architectures de Modèles}
-En $2011$, l'erreur de classification était de $25\%$. En $2012$, le réseau de neurones convolutifs AlexNet \cite{Krizhevsky2012}, composé de $8$ couches, atteignait alors $16\%$ d'erreur. En $2014$, GoogLeNet ($22$ couches) \cite{Szegedy2015}, suivi de près par VGG-16 ($16$ couches) \cite{Simonyan2014}, remportait la compétition avec une erreur de $6.7\%$ (respectivement $7.3\%$). En $2015$, ResNet \cite{He2015}, un réseau de $152$ couches, atteignait alors $3.6\%$. En moyenne, un humain non-entraîné réalise environ $10\%$ d'erreur et un humain entraîné $5\%$.
+En $2011$, l'erreur de classification était de $25\%$. En $2012$, le réseau de neurones convolutifs AlexNet \citep{Krizhevsky2012}, composé de $8$ couches, atteignait alors $16\%$ d'erreur. En $2014$, GoogLeNet ($22$ couches) \citep{Szegedy2015}, suivi de près par VGG-16 ($16$ couches) \citep{Simonyan2014}, remportait la compétition avec une erreur de $6.7\%$ (respectivement $7.3\%$). En $2015$, ResNet \citep{He2015}, un réseau de $152$ couches, atteignait alors $3.6\%$. En moyenne, un humain non-entraîné réalise environ $10\%$ d'erreur et un humain entraîné $5\%$.
 \subsection{Détection d'Objets}
 La détection d'objets consiste à prédire la classe et l'emplacement d'un ou plusieurs objets dans une image. L'emplacement d'un objet est généralement défini par une \emph{bounding box}, ou région d'intérêt, représentée par un rectangle entourant l'objet.
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.40625]{Images/Pascal_VOC_Detection.jpg}
-		\caption{Image et \emph{bounding boxes} issues de Pascal VOC}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.40625]{Images/Pascal_VOC_Detection.jpg}
+	\caption{Image et \emph{bounding boxes} issues de Pascal VOC}
 \end{figure}
 
 \subsubsection{Datasets}
-Le \emph{dataset} Pascal VOC \cite{Everingham2010} est composé de $11530$ images contenant au total $27450$ régions d'intérêt décrivant $20$ classes.
+Le \emph{dataset} Pascal VOC \citep{Everingham2010} est composé de $11530$ images contenant au total $27450$ régions d'intérêt décrivant $20$ classes.
 
-ImageNet \cite{Krizhevsky2012a} possède aussi une base de détection d'objets contenant environ $450000$ images contenant $475000$ objets référencés répartis en $200$ classes.
+ImageNet \citep{Krizhevsky2012a} possède aussi une base de détection d'objets contenant environ $450000$ images contenant $475000$ objets référencés répartis en $200$ classes.
 \subsubsection{Architectures de Modèles}
-Deux architectures remarquables sont les réseaux de type R-CNN \cite{Girshick2013} et YOLO \cite{Redmon2015}, l'une par ses performances exceptionnelles, l'autre par le compromis réalisé entre performances et vitesse d’exécution.
+Deux architectures remarquables sont les réseaux de type R-CNN \citep{Girshick2013} et YOLO \citep{Redmon2015}, l'une par ses performances exceptionnelles, l'autre par le compromis réalisé entre performances et vitesse d’exécution.
 
 Les architectures de type R-CNN se caractérisent par un schéma de fonctionnement divisé en deux parties, la première étant un réseau de neurones assurant la localisation potentielle d'objets, la seconde étant un autre réseau de neurones dédié à la classification de chacune des zones potentielles.
 
@@ -1512,19 +1488,18 @@ Comme pour la détection d'objets, la segmentation vise à identifier les objets
 La différence apparaît sur la sortie produite, dans le cas de la segmentation, cela consiste à prédire, pour chaque pixel de l'image, sa classe.
 La segmentation répond à des besoins de précision plus élevés que la détection d'objets, du fait de la prédiction d'un masque de la taille de l'image d'entrée.
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.4]{Images/Pascal_VOC_Segmentation.png}
-		\caption{Image et masque de classes issus de Pascal VOC}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.4]{Images/Pascal_VOC_Segmentation.png}
+	\caption{Image et masque de classes issus de Pascal VOC}
 \end{figure}
 Un des avantages de la segmentation d'images par rapport à la détection d'objets, outre le gain potentiel de précision, est qu'il est possible à partir d'un masque de segmentation de produire des \emph{bounding boxes} en utilisant la polygonisation des masques. L'opération inverse n'est pas vraiment intéressante puisque les polygones sont des rectangles.
 \subsubsection{Datasets}
-Pascal VOC \cite{Everingham2010} possède aussi une base de segmentation d'images contenant $2913$ images décrivant $20$ classes.
-Microsoft COCO (Common Objects in Context) \cite{Lin2014} contient $328000$ images décrivant $91$ classes.
+Pascal VOC \citep{Everingham2010} possède aussi une base de segmentation d'images contenant $2913$ images décrivant $20$ classes.
+Microsoft COCO (Common Objects in Context) \citep{Lin2014} contient $328000$ images décrivant $91$ classes.
 
 Ces deux \emph{datasets} possèdent la particularité de segmenter les images d'une part selon la classe mais aussi en fonction de l'instance, permettant ainsi de différencier deux objets de même nature au sein d'une image.
 \subsubsection{Architectures de Modèles}
-Deux architectures remarquables sont les réseaux de type FCN \cite{Long2015} et DeconvNet \cite{Noh2015}, elles utilisent toutes les deux le principe de décomposer l'image en \emph{features} par convolutions successives, puis de reconstituer l'image en image segmentée en appliquant plusieurs couches de déconvolutions.
+Deux architectures remarquables sont les réseaux de type FCN \citep{Long2015} et DeconvNet \citep{Noh2015}, elles utilisent toutes les deux le principe de décomposer l'image en \emph{features} par convolutions successives, puis de reconstituer l'image en image segmentée en appliquant plusieurs couches de déconvolutions.
 
 Les architectures de type FCN reconstituent l'image en combinant les \emph{features} dé-convolutées avec les \emph{features} après \emph{pooling}.
 
@@ -1568,7 +1543,7 @@ Avec les progrès récents de l'apprentissage profond, permettant d'obtenir d'ex
 
 Cela permettrait d'établir de façon automatisée des cartes détaillées de la surface du globe, permettant une utilisation civile, militaire ou encore humanitaire, permettant ainsi de comparer les cartes avant et après une catastrophe naturelle.
 \subsection{Présentation des Données}
-SpaceNet \cite{DigitalGlobe2017} est une base de données d'images satellite très haute résolution pour la détection et segmentation de bâtiments.
+SpaceNet \citep{DigitalGlobe2017} est une base de données d'images satellite très haute résolution pour la détection et segmentation de bâtiments.
 
 Elle est issue de la collaboration entre CosmiQ Works, DigitalGlobe et NVIDIA.
 C'est une des premières bases de données d'image très haute résolution disponible au grand public.
@@ -1592,7 +1567,8 @@ Les deux satellites proviennent de la famille WorldView, dont les images sont di
 
 WorldView-2 fut envoyé en orbite le 8 octobre 2009, tandis que WorldView-3 fut lancé le 13 août 2014.
 Les deux satellites ont des caractéristiques similaires, mais se différencient sur la résolution au sol des capteurs optiques :
-\begin{center}
+\begin{table}[H]
+	\centering
 	\begin{tabular}{|c|c|c|}
 	\hline 
 	Résolution & WorldView-2 & WorldView-3 \\ 
@@ -1601,11 +1577,13 @@ Les deux satellites ont des caractéristiques similaires, mais se différencient
 	\hline 
 	Bandes Multispectrales & 1.84m & 1.24m \\ 
 	\hline
-	\end{tabular}	
-\end{center}
+	\end{tabular}
+	\caption{Résolution des capteurs optiques des satellites WorldView}	
+\end{table}
 
 Les satellites WorldView-2 et WorldView-3 possèdent un capteur panchromatique et $8$ capteurs multispectraux, qui décrivent les couleurs suivantes :
-\begin{center}
+\begin{table}[H]
+	\centering
 	\begin{tabular}{|c|c|c|c|c|}
 	\hline 
 	Panchromatique & Côtier & Bleu & Vert & Jaune \\ 
@@ -1617,7 +1595,8 @@ Les satellites WorldView-2 et WorldView-3 possèdent un capteur panchromatique e
 	630-690nm & 705-745nm & 775-895nm & 860-1040nm & \\ 
 	\hline 
 	\end{tabular}
-\end{center}
+	\caption{Caractéristiques radiométriques des satellites WorldView}
+\end{table}
 
 Nous n'utiliserons que les données issues de la deuxième édition du SpaceNet Challenge, car les images multispectrales de la première édition n'ont pas été fusionnées avec la bande panchromatique laissant la résolution à 1.84m.
 
@@ -1632,14 +1611,14 @@ Par ailleurs, dans l'optique de rendre compatibles les modèles avec des donnée
 Les images multispectrales de la seconde édition font $650 \times 650$ pixels et ont une résolution au sol de 0.31m et sont encodées sur $16$ bits.
 
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.3]{Images/MUL_PAN.png}
-		\caption{Images (RGB, 8-bits, Correction $[2-98]\%$) extraites des zones Vegas, Paris, Shanghai et Khartoum}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.3]{Images/MUL_PAN.png}
+	\caption{Images (RGB, 8-bits, Correction $[2-98]\%$) extraites des zones Vegas, Paris, Shanghai et Khartoum}
 \end{figure}
 
 Voici la distribution des images en fonction des zones géographiques :
-\begin{center}
+\begin{table}[H]
+	\centering
 	 \begin{tabular}{|c|c|c|c|c|c|}
 	\hline 
 	Villes & Las Vegas & Paris & Shanghai & Khartoum & Total \\ 
@@ -1649,7 +1628,8 @@ Voici la distribution des images en fonction des zones géographiques :
 	Taille & 26.1Go & 7.8Go & 31.0Go & 6.8Go & 71.7Go \\ 
 	\hline 
 	\end{tabular}
- \end{center} 
+	\caption{Distribution des images selon les différentes zones géographiques}
+\end{table} 
 \subsubsection{Labels}
 \paragraph{Labels issus de SpaceNet}
 Le SpaceNet Challenge consiste à détecter les bâtiments visibles depuis les images satellites.
@@ -1713,7 +1693,7 @@ Il existe, pour le format GeoJSON, plusieurs types d'objets géométriques simpl
 \end{itemize}
 \paragraph{Labels issus d'OpenStreetMap}
 Les labels de SpaceNet, produit par l'Amazon Mechanical Turk, ne localisent que les bâtiments dans les images. Cependant d'autres informations directement observables depuis les images existent, comme par exemple les routes, ou encore les cours d'eau.
-C'est pourquoi il a été jugé intéressant de compléter les labels originels de SpaceNet par des labels issus d'OpenStreetMap \cite{OpenStreetMap2017}.
+C'est pourquoi il a été jugé intéressant de compléter les labels originels de SpaceNet par des labels issus d'OpenStreetMap \citep{OpenStreetMap2017}.
 Ces labels sont disponibles au format GeoJSON et il est facile de les récupérer depuis l'API d'OpenStreetMap.
 Cependant ces labels ne sont pas de même qualité que ceux provenant du \emph{dataset} SpaceNet, il est important de garder à l'esprit que ces labels sont issus d'un projet communautaire, ils peuvent donc faire l'objet d'imprécisions, par exemple concernant la localisation des éléments géographiques, potentiellement due aux imprécisions de GPS amateurs, ou parfois tout simplement manquants, car personne n'a encore répertorié la zone géographique en question.
 \paragraph{Rasterisation des Labels}
@@ -1723,10 +1703,9 @@ Mais pour réaliser de la segmentation d'images, il nous faut pouvoir produire u
 L'opération permettant de produire une image matricielle à partir d'une image vectorielle s'appelle rasterisation. Bien que l'opération ne soit pas bijective, car irréversible à cause de la résolution finie de l'image matricielle. Il existe une opération effectuant la transformation inverse, on parlera alors de polygonisation.
 L'opération de rasterisation consiste à produire, à partir des données vectorielles, ainsi que des dimensions et la résolution de l'image souhaitée, une image matricielle où chaque pixel prend une valeur selon si il est contenu ou non dans un polygone.
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.3]{Images/MUL_PAN_Label_Vegas.png}
-		\caption{Image et Masque de Segmentation produit par couplage des labels issus de SpaceNet et d'OpenStreetMap (Las Vegas)}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.3]{Images/MUL_PAN_Label_Vegas.png}
+	\caption{Image et Masque de Segmentation produit par couplage des labels issus de SpaceNet et d'OpenStreetMap (Las Vegas)}
 \end{figure}
 Les labels d'OpenStreetMap sont très libres au niveau des informations qu'ils contiennent, le champ \emph{properties}, donnant des informations sur l'objet décrit, n'est pas systématiquement présent ou partiellement renseigné. Il est donc difficile de catégoriser chaque donnée.
 
@@ -1755,10 +1734,10 @@ La mémoire GPU coûte beaucoup plus cher, de manière générale, que la mémoi
 
 C'est pour toutes ces raisons que nous allons employer des \emph{frameworks} implémentant le calcul GPU.
 
-Nous utiliserons l'API de calcul GPU \emph{CUDA} \cite{NVIDIACorporation2010}, développé par NVIDIA.
+Nous utiliserons l'API de calcul GPU \emph{CUDA} \citep{NVIDIACorporation2010}, développé par NVIDIA.
 
 \subsubsection{Caffe}
-Le \emph{framework} utilisé dans les applications que nous avons développées s'appelle Caffe \cite{Jia2014}.
+Le \emph{framework} utilisé dans les applications que nous avons développées s'appelle Caffe \citep{Jia2014}.
 
 Il développé sous licence BSD par le \emph{Berkeley AI Research} et une communauté de contributeurs.
 
@@ -1777,7 +1756,7 @@ La segmentation réalisée est binaire, car cela revient à prédire pour chaque
 La seconde expérience exploite uniquement les données de la région de Las Vegas,  et utilise des labels provenant de SpaceNet et d'OpenStreetMap.
 La segmentation sera multi-classes, il faudra en effet prédire pour chaque pixel de l'image son appartenance à un bâtiment, ou une route, ou bien d'aucune de ces deux classes.
 
-Avant de présenter chacune des expériences et de comparer les modèles utilisés, nous allons d'abord présenter l'architecture ayant inspiré ces modèles, nommée DeconvNet \cite{Noh2015}.
+Avant de présenter chacune des expériences et de comparer les modèles utilisés, nous allons d'abord présenter l'architecture ayant inspiré ces modèles, nommée DeconvNet \citep{Noh2015}.
 
 \subsubsection{DeconvNet}
 
@@ -1798,10 +1777,9 @@ Pour pallier à cela, H.Noh a créé le concept de couche d'\emph{unpooling}, pr
 L'idée est la suivante, si lors de l'opération de \emph{pooling}, nous retenons les indices des activations maximales, alors nous pouvons ensuite reconstruire une \emph{carte à trous} des activations dans la dimension originelle.
 Voici un schéma décrivant l'opération d'\emph{unpooling} :
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.3]{Images/Unpooling.png}
-		\caption{Couches de \emph{pooling} et d'\emph{unpooling}}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.3]{Images/Unpooling.png}
+	\caption{Couches de \emph{pooling} et d'\emph{unpooling}}
 \end{figure}
 Comme on peut le voir dans la couche de \emph{pooling}, l'activation la plus élevée, ici la plus sombre, est transmise dans la \emph{map de features}, ainsi que sa position dans la \emph{map des indices}. Alors lors de l'\emph{unpooling}, nous réutiliserons la \emph{map des indices} pour recréer la \emph{map de features} à ses dimensions précédentes.
 
@@ -1811,10 +1789,9 @@ Elle permet ainsi de calculer de nouvelles \emph{features} à partir d'une \emph
 La déconvolution effectue l'opération inverse, c'est-à-dire de partir d'une \emph{feature} pour produire une \emph{map de features}
 Voici un schéma décrivant la relation entre une convolution et une déconvolution :
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.3]{Images/Deconvolution.png}
-		\caption{Couches de convolution et de déconvolution}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.3]{Images/Deconvolution.png}
+	\caption{Couches de convolution et de déconvolution}
 \end{figure}
 Comme on peut le voir, la couche de convolution agrège des entrées voisines par une moyenne pondérée qui sera transmise à la couche suivante.
 La couche de déconvolution réalise l'opération inverse, à partir d'une seule entrée elle reconstitue le voisinage d'entrées.
@@ -1822,8 +1799,9 @@ La couche de déconvolution réalise l'opération inverse, à partir d'une seule
 \paragraph{Architecture}
 Après avoir expliqué le fonctionnement des couches de déconvolution et d'\emph{unpooling}, nous allons présenter l'architecture de DeconvNet et expliquer certaines particularités.
 
-Voici le détail de l'architecture de DeconvNet, en omettant les couches de \emph{Batch Normalization} \cite{Ioffe2015} et d'activation ReLU \cite{Glorot2011} présentes après chaque couche de convolution:
-\begin{center}
+Voici le détail de l'architecture de DeconvNet, en omettant les couches de \emph{Batch Normalization} \citep{Ioffe2015} et d'activation ReLU \citep{Glorot2011} présentes après chaque couche de convolution:
+\begin{table}[H]
+	\centering
 	\begin{tabular}{|c|c|c|c|c|c|}
 	\hline 
 	Couche & Noyau & Features & Stride & Pad & Dimensions en sortie \\ 
@@ -1873,7 +1851,7 @@ Voici le détail de l'architecture de DeconvNet, en omettant les couches de \emp
 	deconv-fc6 & $(7, 7)$ & 512 & 1 & 0 & $(512, 7, 7)$ \\
 	\hline
 	unpool5 & $(2, 2)$ & - & 2 & 0 & $(512, 14, 14)$ \\
-	\hline
+	\hline	
 	deconv5\_$1$ & $(3, 3)$ & 512 & 1 & 1 & $(512, 14, 14)$ \\
 	\hline
 	deconv5\_$2$ & $(3, 3)$ & 512 & 1 & 1 & $(512, 14, 14)$ \\
@@ -1886,15 +1864,18 @@ Voici le détail de l'architecture de DeconvNet, en omettant les couches de \emp
 	\hline
 	deconv4\_$2$ & $(3, 3)$ & 512 & 1 & 1 & $(512, 28, 28)$ \\
 	\hline
+	
+	\end{tabular} 
+\end{table}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|}
+	\hline 
+	Couche & Noyau & Features & Stride & Pad & Dimensions en sortie \\ 
+	\hline
+	
 	deconv4\_$3$ & $(3, 3)$ & 256 & 1 & 1 & $(256, 28, 28)$ \\
 	\hline
-%	\end{tabular} 
-%\end{center}
-%\begin{center}
-%	\begin{tabular}{|c|c|c|c|c|c|}
-%	\hline 
-%	Couche & Noyau & Features & Stride & Pad & Dimensions en sortie \\ 
-%	\hline
 	unpool3 & $(2, 2)$ & - & 2 & 0 & $(256, 56, 56)$ \\
 	\hline
 	deconv3\_$1$ & $(3, 3)$ & 256 & 1 & 1 & $(256, 56, 56)$ \\
@@ -1918,7 +1899,8 @@ Voici le détail de l'architecture de DeconvNet, en omettant les couches de \emp
 	Output & $(1, 1)$ & $X$ & 1 & 0 & $(X, 224, 224)$ \\
 	\hline
 	\end{tabular} 
-\end{center}
+	\caption{Détail de l'architecture DeconvNet}
+\end{table}
 On peut tout de suite remarquer que le réseau est symétrique, la couche \emph{fc7} étant le point central de cette symétrie.
 
 Comme évoqué précédemment, l'idée est dans un premier temps de décomposer l'image en \emph{map de features} par convolutions successives (et de \emph{pooling}), puis dans un second temps de reconstituer une version segmentée de l'image par déconvolution (et d'\emph{unpooling}).
@@ -1971,10 +1953,11 @@ Afin de produire et entraîner une version allégée de DeconvNet, nous avons d�
 En effet, les couches les plus gourmandes en matières de nombre de paramètres d'apprentissage sont les couches \emph{fc6} et \emph{deconv-fc6}, car ce sont des convolutions ayant des noyaux de dimensions $(4096, 512, 7, 7)$ et $(512, 4096, 7, 7)$, soit $102760448 \approx 1.02 \times 10^8$ paramètres à ajuster pour chacune de ces deux couches, ce qui représente environ $822$ Mo par couche.
 
 Nous avons donc défini plusieurs modèles allégés de DeconvNet dans l'optique de les comparer, la logique de leur conception est simple, on pouvait remarquer que DeconvNet était constitué de 11 blocs de couches, répartis en 5 blocs de convolution, 5 bloc de déconvolution et 1 bloc central.
-Nous avons donc décider de créer des modèles contenant 5 et 7 blocs, et nous avons remplacé les couches d'activation ReLU par des couches ELU \cite{Clevert2015}, plus performantes.
+Nous avons donc décider de créer des modèles contenant 5 et 7 blocs, et nous avons remplacé les couches d'activation ReLU par des couches ELU \citep{Clevert2015}, plus performantes.
 
 Voici leur définitions:
-\begin{center}
+\begin{table}[H]
+	\centering
 	\begin{tabular}{|c|c|c|c|c|c|c|c|}
 	\hline 
 	Couche & Noyau & Features & Stride & Pad & Dimensions en sortie & Deconv5 & Deconv7\\ 
@@ -2030,7 +2013,8 @@ Voici leur définitions:
 	Output & $(1, 1)$ & 2 & 1 & 0 & $(2, 224, 224)$ & \checkmark & \checkmark \\
 	\hline
 	\end{tabular} 
-\end{center}
+	\caption{Détails des architectures Deconv5 et Deconv7}
+\end{table}
 
 Comme nous pouvons le voir, les deux modèles possèdent un bloc central différent de DeconvNet.
 Dans DeconvNet, l'entrée était de dimension $(512, 7, 7)$, puis ramené à un vecteur de 4096 \emph{features} dans la couche $fc6$, ce qui dé-spatialisait entièrement l'information.
@@ -2054,20 +2038,18 @@ Nous avons fixé à $50000$ le nombre d'itérations lors de l'apprentissage, val
 \subparagraph{Graphes des Pertes}
 Voici le graphe des pertes du modèle Deconv5 :
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.6]{Images/Losses_Deconv5.png}
-		\caption{Graphe de la fonction de perte pour le modèle Deconv5}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.6]{Images/Losses_Deconv5.png}
+	\caption{Graphe de la fonction de perte pour le modèle Deconv5}
 \end{figure}
 L'écart entre l'erreur d'apprentissage et l'erreur de test est faible, on peut donc conclure qu'il n'y a peu ou pas de sur-apprentissage.
 De plus l'erreur ne varie pas de façon particulièrement erratique, ce qui est signe d'un bon apprentissage.
 
 Voici le graphe des pertes du modèle Deconv7 :
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.6]{Images/Losses_Deconv7.png}
-		\caption{Graphe de la fonction de perte pour le modèle Deconv7}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.6]{Images/Losses_Deconv7.png}
+	\caption{Graphe de la fonction de perte pour le modèle Deconv7}
 \end{figure}
 Ici l'écart entre l'erreur d'apprentissage et l'erreur de test est grande, ce qui laisse supposer du sur-apprentissage.
 De plus l'erreur varie de façon erratique, signe d'un mauvais apprentissage.
@@ -2085,7 +2067,8 @@ Pour Deconv5, l'itération 46500 semble être la meilleure.
 La précision globale est de $0.892154$, ce qui signifie qu'environ $\frac{9}{10}$ des pixels sont correctement classifiés.
 
 La matrice de confusion est la suivante :
-\begin{center}
+\begin{table}[H]
+	\centering
 	\begin{tabularx}{0.5\textwidth}{c|c c|}
 		Réel/Prédit & Bâtiment & Absence \\
 		\hhline{---}
@@ -2093,7 +2076,8 @@ La matrice de confusion est la suivante :
 		Absence & 0.114 & 0.886 \cellcolor[gray]{.8}\\
 		\hhline{~--}
 	\end{tabularx}
-\end{center}
+	\caption{Matrice de confusion du modèle Deconv5 à l'itération 46500}
+\end{table}
 
 
 Pour Deconv7, l'itération 47000 semble être la meilleure.
@@ -2101,7 +2085,8 @@ Pour Deconv7, l'itération 47000 semble être la meilleure.
 La précision globale est de $0.911284$.
 
 La matrice de confusion est la suivante :
-\begin{center}
+\begin{table}[H]
+	\centering
 	\begin{tabularx}{0.5\textwidth}{c|c c|}
 		Réel/Prédit & Bâtiment & Absence \\
 		\hhline{---}
@@ -2109,7 +2094,8 @@ La matrice de confusion est la suivante :
 		Absence & 0.080381 & 0.919619 \cellcolor[gray]{.8}\\
 		\hhline{~--}
 	\end{tabularx}
-\end{center}
+	\caption{Matrice de confusion du modèle Deconv7 à l'itération 47000}
+\end{table}
 
 On remarque ici que le modèle a tendance à mieux classifier l'absence de bâtiments que la présence de bâtiments.
 
@@ -2131,31 +2117,27 @@ En haut à droite, la \emph{map} de probabilités de Deconv7, représentée comm
 En bas à droite, le masque de segmentation de Deconv7, obtenu en récupérant l'\emph{argmax} de la \emph{map} de probabilité.
 
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.225]{Images/Deconvs_Vegas.png}
-		\caption{Inférences de Deconv5 et Deconv7 sur Vegas}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.225]{Images/Deconvs_Vegas.png}
+	\caption{Inférences de Deconv5 et Deconv7 sur Vegas}
 \end{figure}
 
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.225]{Images/Deconvs_Paris.png}
-		\caption{Inférences de Deconv5 et Deconv7 sur Paris}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.225]{Images/Deconvs_Paris.png}
+	\caption{Inférences de Deconv5 et Deconv7 sur Paris}
 \end{figure}
 
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.225]{Images/Deconvs_Shanghai.png}
-		\caption{Inférences de Deconv5 et Deconv7 sur Shanghai}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.225]{Images/Deconvs_Shanghai.png}
+	\caption{Inférences de Deconv5 et Deconv7 sur Shanghai}
 \end{figure}
 
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.225]{Images/Deconvs_Khartoum.png}
-		\caption{Inférences de Deconv5 et Deconv7 sur Khartoum}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.225]{Images/Deconvs_Khartoum.png}
+	\caption{Inférences de Deconv5 et Deconv7 sur Khartoum}
 \end{figure}
 
 On s'aperçoit sur chacun des exemples, que Deconv5 réussit systématiquement mieux que Deconv7, ce qui va dans le sens des suppositions émises dans l'analyse des résultats.
@@ -2188,63 +2170,65 @@ Nous avons aussi décider de diviser par 2 le nombre de \emph{features} calculé
 
 Nous avons donc décider de créer deux modèles se différenciant sur le bloc central, en omettant les couches de \emph{Batch Normalization} et d'activation ELU présentes après chaque couche de convolution  :
 
-\begin{center}
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
-\hline 
-Couche & \multicolumn{2}{c|}{Noyau} & \multicolumn{2}{c|}{Features} & \multicolumn{2}{c|}{Pad} & \multicolumn{2}{c|}{Stride} & \multicolumn{2}{c|}{Dimensions en sortie}\\ 
-\hline 
-Input & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{$(4, 224, 224)$}\\ 
-\hline 
-conv1\_$1$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{32} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(32, 224, 224)$}\\ 
-\hline
-conv1\_$2$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{32} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(32, 224, 224)$}\\ 
-\hline 
-pool1 & \multicolumn{2}{c|}{$(4, 4)$} & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{4} & \multicolumn{2}{c|}{0} & \multicolumn{2}{c|}{$(32, 56, 56)$}\\ 
-\hline 
-conv2\_$1$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{64} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(64, 56, 56)$}\\ 
-\hline
-conv2\_$2$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{64} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(64, 56, 56)$}\\ 
-\hline 
-pool2 & \multicolumn{2}{c|}{$(4, 4)$} & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{4} & \multicolumn{2}{c|}{0} & \multicolumn{2}{c|}{$(64, 14, 14)$}\\ 
-\hline 
-conv3\_$1$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{128} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(128, 14, 14)$}\\ 
-\hline
-conv3\_$2$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{128} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(128, 14, 14)$}\\ 
-\hline
-conv3\_$3$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{128} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(128, 14, 14)$}\\ 
-\hline 
-pool3 & \multicolumn{2}{c|}{$(2, 2)$} & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{2} & \multicolumn{2}{c|}{0} & \multicolumn{2}{c|}{$(128, 7, 7)$}\\ 
-\hline 
-conv4\_$1$ & $(3,3)$ & $(7, 7)$ & \multicolumn{2}{c|}{256} & 1 & 0 & 1 & 1 & $(256, 7, 7)$ & $(256, 1, 1)$ \\
-\hline
-conv4\_$2$ & $(3,3)$ & $(1, 1)$ & \multicolumn{2}{c|}{256} & 1 & 0 & 1 & 1 & $(256, 7, 7)$ & $(256, 1, 1)$ \\
-\hline
-deconv4\_$3$ & $(3,3)$ & $(7, 7)$ & \multicolumn{2}{c|}{128} & 1 & 0 & 1 & 1 & $(128, 7, 7)$ & $(128, 7, 7)$ \\
-\hline
-unpool3 & \multicolumn{2}{c|}{$(2, 2)$} & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{2} & \multicolumn{2}{c|}{0} & \multicolumn{2}{c|}{$(128, 14, 14)$}\\ 
-\hline
-deconv3\_$1$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{128} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(128, 14, 14)$}\\ 
-\hline
-deconv3\_$2$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{128} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(128, 14, 14)$}\\ 
-\hline
-deconv3\_$3$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{64} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(64, 14, 14)$}\\ 
-\hline
-unpool2 & \multicolumn{2}{c|}{$(4, 4)$} & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{4} & \multicolumn{2}{c|}{0} & \multicolumn{2}{c|}{$(64, 56, 56)$}\\ 
-\hline
-deconv2\_$1$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{64} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(64, 56, 56)$}\\ 
-\hline
-deconv2\_$2$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{32} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(32, 56, 56)$}\\ 
-\hline
-unpool1 & \multicolumn{2}{c|}{$(4, 4)$} & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{4} & \multicolumn{2}{c|}{0} & \multicolumn{2}{c|}{$(32, 224, 224)$}\\ 
-\hline
-deconv1\_$1$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{32} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(32, 224, 224)$}\\ 
-\hline
-deconv1\_$2$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{32} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(32, 224, 224)$}\\ 
-\hline
-Output & \multicolumn{2}{c|}{$(1, 1)$} & \multicolumn{2}{c|}{3} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{0} & \multicolumn{2}{c|}{$(3, 224, 224)$}\\ 
-\hline
-\end{tabular} 
-\end{center}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+	\hline 
+	Couche & \multicolumn{2}{c|}{Noyau} & \multicolumn{2}{c|}{Features} & \multicolumn{2}{c|}{Pad} & \multicolumn{2}{c|}{Stride} & \multicolumn{2}{c|}{Dimensions en sortie}\\ 
+	\hline 
+	Input & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{$(4, 224, 224)$}\\ 
+	\hline 
+	conv1\_$1$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{32} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(32, 224, 224)$}\\ 
+	\hline
+	conv1\_$2$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{32} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(32, 224, 224)$}\\ 
+	\hline 
+	pool1 & \multicolumn{2}{c|}{$(4, 4)$} & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{4} & \multicolumn{2}{c|}{0} & \multicolumn{2}{c|}{$(32, 56, 56)$}\\ 
+	\hline 
+	conv2\_$1$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{64} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(64, 56, 56)$}\\ 
+	\hline
+	conv2\_$2$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{64} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(64, 56, 56)$}\\ 
+	\hline 
+	pool2 & \multicolumn{2}{c|}{$(4, 4)$} & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{4} & \multicolumn{2}{c|}{0} & \multicolumn{2}{c|}{$(64, 14, 14)$}\\ 
+	\hline 
+	conv3\_$1$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{128} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(128, 14, 14)$}\\ 
+	\hline
+	conv3\_$2$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{128} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(128, 14, 14)$}\\ 
+	\hline
+	conv3\_$3$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{128} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(128, 14, 14)$}\\ 
+	\hline 
+	pool3 & \multicolumn{2}{c|}{$(2, 2)$} & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{2} & \multicolumn{2}{c|}{0} & \multicolumn{2}{c|}{$(128, 7, 7)$}\\ 
+	\hline 
+	conv4\_$1$ & $(3,3)$ & $(7, 7)$ & \multicolumn{2}{c|}{256} & 1 & 0 & 1 & 1 & $(256, 7, 7)$ & $(256, 1, 1)$ \\
+	\hline
+	conv4\_$2$ & $(3,3)$ & $(1, 1)$ & \multicolumn{2}{c|}{256} & 1 & 0 & 1 & 1 & $(256, 7, 7)$ & $(256, 1, 1)$ \\
+	\hline
+	deconv4\_$3$ & $(3,3)$ & $(7, 7)$ & \multicolumn{2}{c|}{128} & 1 & 0 & 1 & 1 & $(128, 7, 7)$ & $(128, 7, 7)$ \\
+	\hline
+	unpool3 & \multicolumn{2}{c|}{$(2, 2)$} & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{2} & \multicolumn{2}{c|}{0} & \multicolumn{2}{c|}{$(128, 14, 14)$}\\ 
+	\hline
+	deconv3\_$1$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{128} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(128, 14, 14)$}\\ 
+	\hline
+	deconv3\_$2$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{128} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(128, 14, 14)$}\\ 
+	\hline
+	deconv3\_$3$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{64} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(64, 14, 14)$}\\ 
+	\hline
+	unpool2 & \multicolumn{2}{c|}{$(4, 4)$} & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{4} & \multicolumn{2}{c|}{0} & \multicolumn{2}{c|}{$(64, 56, 56)$}\\ 
+	\hline
+	deconv2\_$1$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{64} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(64, 56, 56)$}\\ 
+	\hline
+	deconv2\_$2$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{32} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(32, 56, 56)$}\\ 
+	\hline
+	unpool1 & \multicolumn{2}{c|}{$(4, 4)$} & \multicolumn{2}{c|}{-} & \multicolumn{2}{c|}{4} & \multicolumn{2}{c|}{0} & \multicolumn{2}{c|}{$(32, 224, 224)$}\\ 
+	\hline
+	deconv1\_$1$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{32} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(32, 224, 224)$}\\ 
+	\hline
+	deconv1\_$2$ & \multicolumn{2}{c|}{$(3, 3)$} & \multicolumn{2}{c|}{32} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{$(32, 224, 224)$}\\ 
+	\hline
+	Output & \multicolumn{2}{c|}{$(1, 1)$} & \multicolumn{2}{c|}{3} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c|}{0} & \multicolumn{2}{c|}{$(3, 224, 224)$}\\ 
+	\hline
+	\end{tabular}
+	\caption{Détails des architectures ZoomNet et ZoomNet2}
+\end{table}
 Les différences par rapport à la première expérience sont l'utilisation de couche de \emph{pooling} ayant un noyau $(4, 4)$ et un pas de déplacement de 4, permettant de réduire rapidement les dimensions des \emph{map de features}.
 
 Les différences entre les deux modèles se font au niveau du bloc central, dans l'un, l'information reste spatialisée, nous opérons seulement deux convolutions $(3, 3)$ comme dans l'expérience précédente et dans l'autre, nous reprenons un bloc similaire à celui de DeconvNet.
@@ -2254,20 +2238,18 @@ Les hyper-paramètres restent les même par rapport à l'expérience précédent
 \subparagraph{Graphes des Pertes}
 Voici le graphe des pertes du modèle ZoomNet :
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.6]{Images/Losses_ZoomNet.png}
-		\caption{Graphe de la fonction de perte pour le modèle ZoomNet}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.6]{Images/Losses_ZoomNet.png}
+	\caption{Graphe de la fonction de perte pour le modèle ZoomNet}
 \end{figure}
 L'écart entre l'erreur d'apprentissage et l'erreur de test reste faible avant l'itération 40000, on peut donc conclure qu'il n'y a peu ou pas de sur-apprentissage avant 40000 itérations.
 De plus l'erreur varie de façon peu erratique, ce qui est signe d'un bon apprentissage.
 
 Voici le graphe des pertes du modèle ZoomNet2 :
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.6]{Images/Losses_ZoomNet2.png}
-		\caption{Graphe de la fonction de perte pour le modèle ZoomNet2}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.6]{Images/Losses_ZoomNet2.png}
+	\caption{Graphe de la fonction de perte pour le modèle ZoomNet2}
 \end{figure}
 L'écart entre l'erreur d'apprentissage et l'erreur de test est faible, on peut donc conclure qu'il n'y a peu ou pas de sur-apprentissage.
 De plus l'erreur ne varie pas de façon particulièrement erratique, ce qui est signe d'un bon apprentissage.
@@ -2281,7 +2263,8 @@ Pour ZoomNet, l'itération 37000 semble être la meilleure.
 La précision globale est de $0.83479$.
 
 La matrice de confusion est la suivante :
-\begin{center}
+\begin{table}[H]
+	\centering
 	\begin{tabularx}{0.5\textwidth}{c|c c c|}
 		Réel/Prédit & Bâtiment & Route & Absence \\
 		\hhline{----}
@@ -2290,7 +2273,8 @@ La matrice de confusion est la suivante :
 		Absence & \multicolumn{2}{c}{0.176} & 0.824 \cellcolor[gray]{.8}\\
 		\hhline{~---}
 	\end{tabularx}
-\end{center}
+	\caption{Matrice de confusion du modèle ZoomNet à l'itération 37000}
+\end{table}
 
 La matrice de confusion n'est pas complète, car Caffe ne produit pas l'ensemble des informations lors de l'évaluation du modèle.
 
@@ -2301,7 +2285,8 @@ Pour ZoomNet2, l'itération 34000 semble être la meilleure.
 La précision globale est de $0.777292$.
 
 La matrice de confusion est la suivante :
-\begin{center}
+\begin{table}[H]
+	\centering
 	\begin{tabularx}{0.5\textwidth}{c|c c c|}
 		Réel/Prédit & Bâtiment & Route & Absence \\
 		\hhline{----}
@@ -2310,17 +2295,17 @@ La matrice de confusion est la suivante :
 		Absence & \multicolumn{2}{c}{0.25} & 0.75 \cellcolor[gray]{.8}\\
 		\hhline{~---}
 	\end{tabularx}
-\end{center}
+	\caption{Matrice de confusion du modèle ZoomNet2 à l'itération 34000}
+\end{table}
 
 De ces deux modèles, le premier semble plus performant que le second, ce qui indique peut être que garder l'information spatialisée sur le bloc central est important.
 \subparagraph{Exemples de Résultats}
 Nous allons à présent comparer les résultats produits par ZoomNet et ZoomNet2.
 
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.225]{Images/ZoomNets_1983.png}
-		\caption{Inférences de ZoomNet et ZoomNet2}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.225]{Images/ZoomNets_1983.png}
+	\caption{Inférences de ZoomNet et ZoomNet2}
 \end{figure}
 
 En haut à gauche, l'image de SpaceNet, bandes RGB, corrigée 8bits.
@@ -2338,10 +2323,9 @@ En bas à droite, le masque de segmentation de ZoomNet2, obtenu en récupérant 
 On voit pour cette image, que le résultat est beaucoup plus "propre" pour le premier modèle que le second, il y a moins bruit de segmentation sur la sortie, c'est à dire de petites tâches n'ayant pas lieu d'être.
 
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.225]{Images/ZoomNets_5000.png}
-		\caption{Inférences de ZoomNet et ZoomNet2}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.225]{Images/ZoomNets_5000.png}
+	\caption{Inférences de ZoomNet et ZoomNet2}
 \end{figure}
 
 Pour cet exemple, le résultat semble toujours meilleur dans le cas où l'information reste spatialisée, en effet, le contour des bâtiments est beaucoup plus précis, même dans les cas où les bâtiments sont collés. Il y aussi moins d'artefacts sur la route.
@@ -2418,10 +2402,9 @@ Les dimensions de l'image sont $(4, 14029, 14012)$, la résolution est de 0.5m, 
 Nous n’utiliserons que 3 des 4 bandes disponibles, les bandes Rouge, Vert et Bleu, car le modèle VGG-16 n'a été entraîné que sur des images RGB.
 
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.9]{Images/CommerceCity.png}
-		\caption{Image (RGB, 8bits, Correction $[2-98]\%$) de Commerce City}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.8]{Images/CommerceCity.png}
+	\caption{Image (RGB, 8bits, Correction $[2-98]\%$) de Commerce City}
 \end{figure}
 
 L'image a été découpée en 47742 \emph{patchs} de dimensions $(3, 64, 64)$, interpolés aux dimensions $(3, 32, 32)$, puis décomposés en \emph{features} à différents niveaux par le premier modèle, entraîné sur CIFAR-10.
@@ -2431,17 +2414,15 @@ Nous avons ensuite calculé la matrice des corrélations des 47742 décompositio
 L'image en haut à gauche est l'image de référence, puis de gauche à de droite et de haut en bas, sont les 8 images les plus corrélées.
 
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.9]{Images/CommerceCity_Correlation_1.png}
-		\caption{Exemples de corrélation de \emph{patchs} décomposés en \emph{features} de bas niveau}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.9]{Images/CommerceCity_Correlation_1.png}
+	\caption{Exemples de corrélation de \emph{patchs} décomposés en \emph{features} de bas niveau}
 \end{figure}
 
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[scale=0.9]{Images/CommerceCity_Correlation_2.png}
-		\caption{Exemples de corrélation de \emph{patchs} décomposés en \emph{features} de haut niveau}
-	\end{center}
+	\centering
+	\includegraphics[scale=0.9]{Images/CommerceCity_Correlation_2.png}
+	\caption{Exemples de corrélation de \emph{patchs} décomposés en \emph{features} de haut niveau}
 \end{figure}
 
 Comme on peut le remarquer sur les deux figures, les images sont globalement similaires.
@@ -2498,11 +2479,11 @@ J'ai pu aussi découvrir un nouvel état d'esprit, celui de travailler et de per
 
 C'est pour ces raisons que j'envisage de compléter ma formation d'ingénieur en mathématiques appliquées par un doctorat dans le domaine de l'\emph{Apprentissage Profond}.
 
-\bibliographystyle{unsrt}
+\bibliographystyle{plainnat}
 \bibliography{Rapport}
 \chapter*{Annexes}
 \section{Algorithme de Descente de Gradient : Adam}
-La méthode \emph{Adam} \cite{Kingma2014}, signifiant \emph{Adaptative Moment Estimation}, est une amélioration de la méthode \emph{RMSProp}.\\
+La méthode \emph{Adam} \citep{Kingma2014}, signifiant \emph{Adaptative Moment Estimation}, est une amélioration de la méthode \emph{RMSProp}.\\
 Cette méthode utilise à la fois le concept de moyenne mobile ainsi que le concept d'utilisation des moments, c'est à dire d'utiliser aussi les gradients précédents :
 $$\theta_{k+1} = \theta_k - \alpha \nabla_\theta J(x,y,\theta_k) - \beta \nabla_\theta J(x,y,\theta_{k-1})$$
 
